@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	
+	<xs:complexType name="titleType">
+  		<xs:attribute name="value" type="xs:string" use="required"/>
+	</xs:complexType>
+
+	<xs:complexType name="messageType">
+  		<xs:attribute name="value" type="xs:string" use="required"/>
+	</xs:complexType>
+	
+	<xs:element name="viewMetaData">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="title" type="titleType" maxOccurs="1" minOccurs="0"/>
+				<xs:element name="message" type="messageType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>	
+	</xs:element>
+</xs:schema>

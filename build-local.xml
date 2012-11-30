@@ -1,0 +1,509 @@
+
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!--
+     General purpose build script for web applications and web services,
+     including enhanced support for deploying directly to a Tomcat 7
+     based server.
+
+     This build script assumes that the source code of your web application
+     is organized into the following subdirectories underneath the source
+     code directory from which you execute the build script:
+
+        docs                 Static documentation files to be copied to
+                             the "docs" subdirectory of your distribution.
+
+        src                  Java source code (and associated resource files)
+                             to be compiled to the "WEB-INF/classes"
+                             subdirectory of your web application.
+
+        web                  Static HTML, JSP, and other content (such as
+                             image files), including the WEB-INF subdirectory
+                             and its configuration file contents.
+
+     $Id: build.xml.txt 1200125 2011-11-10 04:05:48Z kkolinko $
+-->
+
+
+<!-- A "project" describes a set of targets that may be requested
+     when Ant is executed.  The "default" attribute defines the
+     target which is executed if no specific target is requested,
+     and the "basedir" attribute defines the current working directory
+     from which Ant executes the requested task.  This is normally
+     set to the current working directory.
+-->
+
+	<project name="primary" default="usage" basedir=".">
+
+<!-- ===================== Property Definitions =========================== -->
+<!--
+
+  Each of the following properties are used in the build script.
+  Values for these properties are set by the first place they are
+  defined, from the following list:
+
+  * Definitions on the "ant" command line (ant -Dfoo=bar compile).
+
+  * Definitions from a "build.properties" file in the top level
+    source directory of this application.
+
+  * Definitions from a "build.properties" file in the developer's
+    home directory.
+
+  * Default definitions in this build.xml file.
+
+  You will note below that property values can be composed based on the
+  contents of previously defined properties.  This is a powerful technique
+  that helps you minimize the number of changes required when your development
+  environment is modified.  Note that property composition is allowed within
+  "build.properties" files as well as in the "build.xml" script.
+
+-->
+
+  <property file="build.properties"/>
+  <property file="${basedir}/build.properties"/>
+
+
+<!-- ==================== File and Directory Names ======================== -->
+<!--
+
+  These properties generally define file and directory names (or paths) that
+  affect where the build process stores its outputs.
+
+  app.name             Base name of this application, used to
+                       construct filenames and directories.
+                       Defaults to "myapp".
+
+  app.path             Context path to which this application should be
+                       deployed (defaults to "/" plus the value of the
+                       "app.name" property).
+
+  app.version          Version number of this iteration of the application.
+
+  build.home           The directory into which the "prepare" and
+                       "compile" targets will generate their output.
+                       Defaults to "build".
+
+  catalina.home        The directory in which you have installed
+                       a binary distribution of Tomcat 6.  This will
+                       be used by the "deploy" target.
+
+  dist.home            The name of the base directory in which
+                       distribution files are created.
+                       Defaults to "dist".
+
+  manager.password     The login password of a user that is assigned the
+                       "manager-script" role (so that he or she can execute
+                       commands via the "/manager" web application)
+
+  manager.url          The URL of the "/manager" web application on the
+                       Tomcat installation to which we will deploy web
+                       applications and web services.
+
+  manager.username     The login username of a user that is assigned the
+                       "manager-script" role (so that he or she can execute
+                       commands via the "/manager" web application)
+
+-->
+
+	<property name="app.name"      value="primary"/>
+	<property name="app.path"      value="/${app.name}"/>
+	<property name="app.version"   value="0.1-dev"/>
+	<property name="dist.home"     value="${basedir}/dist"/>
+	<property name="docs.home"     value="${basedir}/docs"/>
+	<property name="src.home"      value="${basedir}/src"/>
+	<property name="web.home"      value="${basedir}/web"/>
+	<property name="build.home"    value="${basedir}/build"/>
+	
+<!-- ==================== External Dependencies =========================== -->
+<!--
+
+  Use property values to define the locations of external JAR files on which
+  your application will depend.  In general, these values will be used for
+  two purposes:
+  * Inclusion on the classpath that is passed to the Javac compiler
+  * Being copied into the "/WEB-INF/lib" directory during execution
+    of the "deploy" target.
+
+  Because we will automatically include all of the Java classes that Tomcat 6
+  exposes to web applications, we will not need to explicitly list any of those
+  dependencies.  You only need to worry about external dependencies for JAR
+  files that you are going to include inside your "/WEB-INF/lib" directory.
+
+-->
+
+<!-- Dummy external dependency -->
+<!--
+  <property name="foo.jar"
+           value="/path/to/foo.jar"/>
+-->
+
+
+<!-- ==================== Compilation Classpath =========================== -->
+<!--
+
+  Rather than relying on the CLASSPATH environment variable, Ant includes
+  features that makes it easy to dynamically construct the classpath you
+  need for each compilation.  The example below constructs the compile
+  classpath to include the servlet.jar file, as well as the other components
+  that Tomcat makes available to web applications automatically, plus anything
+  that you explicitly added.
+
+-->
+
+  <path id="compile.classpath">
+
+    <!-- Include all JAR files that will be included in /WEB-INF/lib -->
+    <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+	<!--
+	    <pathelement location="${foo.jar}"/>
+	-->
+
+    <!-- Include all elements that Tomcat exposes to applications -->
+    <fileset dir="${catalina.home}/bin">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement location="${catalina.home}/lib"/>
+    <fileset dir="${catalina.home}/lib">
+      <include name="*.jar"/>
+    </fileset>
+  	<pathelement location="${basedir}/lib"/>
+	<fileset dir="${basedir}/lib">
+  		<include name="*.jar"/>
+	</fileset>
+  	
+  </path>
+
+
+<!-- ================== Custom Ant Task Definitions ======================= -->
+<!--
+
+  These properties define custom tasks for the Ant build tool that interact
+  with the "/manager" web application installed with Tomcat 6.  Before they
+  can be successfully utilized, you must perform the following steps:
+
+  - Copy the file "lib/catalina-ant.jar" from your Tomcat 6
+    installation into the "lib" directory of your Ant installation.
+
+  - Create a "build.properties" file in your application's top-level
+    source directory (or your user login home directory) that defines
+    appropriate values for the "manager.password", "manager.url", and
+    "manager.username" properties described above.
+
+  For more information about the Manager web application, and the functionality
+  of these tasks, see <http://localhost:8080/tomcat-docs/manager-howto.html>.
+
+-->
+
+  <taskdef resource="org/apache/catalina/ant/catalina.tasks"
+           classpathref="compile.classpath"/>
+
+
+<!--  ==================== Compilation Control Options ==================== -->
+
+<!--
+
+  These properties control option settings on the Javac compiler when it
+  is invoked using the <javac> task.
+
+  compile.debug        Should compilation include the debug option?
+
+  compile.deprecation  Should compilation include the deprecation option?
+
+  compile.optimize     Should compilation include the optimize option?
+
+-->
+
+  <property name="compile.debug"       value="true"/>
+  <property name="compile.deprecation" value="false"/>
+  <property name="compile.optimize"    value="true"/>
+
+
+
+<!-- ==================== Usage Target ======================== -->
+
+    <target name="usage">
+        <echo message=""/>
+        <echo message="${app.name} build file"/>
+        <echo message="-----------------------------------"/>
+        <echo message=""/>
+        <echo message="Available targets are:"/>
+        <echo message=""/>
+    	<echo message="clean     --> Remove existing build file to start from scratch"/>
+        <echo message="build     --> Build the application"/>
+        <echo message="deploy    --> Deploy application as directory"/>
+        <echo message="deploywar --> Deploy application as a WAR file"/>
+        <echo message="install   --> Install application in Tomcat"/>
+        <echo message="reload    --> Reload application in Tomcat"/>
+        <echo message="start     --> Start Tomcat application"/>
+        <echo message="stop      --> Stop Tomcat application"/>
+        <echo message="list      --> List Tomcat applications"/>
+        <echo message=""/>
+    </target>
+
+
+<!-- ==================== All Target ====================================== -->
+
+<!--
+
+  The "all" target is a shortcut for running the "clean" target followed
+  by the "compile" target, to force a complete recompile.
+
+-->
+
+  <target name="all" depends="clean,build,dist,deploy"
+   description="Clean build and dist directories, then compile"/>
+
+<!-- ==================== Clean Target ==================================== -->
+<!--
+
+  The "clean" target deletes any previous "build" and "dist" directory,
+  so that you can be ensured the application can be built from scratch.
+
+-->
+
+	<target name="clean" description="Delete old build and dist directories">
+		<delete dir="${build.home}"/>
+		<delete dir="${dist.home}"/>
+		<delete dir="${deploy.path}/${app.name}"/>
+		<delete file ="${deploy.path}/${app.name}.war"/>
+	</target>
+
+<!-- ==================== Build Target ======================== -->
+
+	  <target name="build" depends="" description="Compile Java sources">
+
+	  	<!-- make web-inf directory -->
+	    <mkdir dir="${build.home}/WEB-INF/classes"/>
+	  	
+	    <!-- Copy web.xml, servlet-context.xml -->
+	    <copy file="${basedir}/web.xml" todir="${build.home}/WEB-INF/"/>
+	  	
+	  	<!--<copy file="${basedir}/src/root-context.xml" todir="${build.home}/WEB-INF/"/>
+	  	<copy file="${basedir}/servlet-context.xml" todir="${build.home}/WEB-INF/"/>-->
+	  	
+	  	<!-- make lib directory and copy additional jar files needed for project -->
+	  	<mkdir  dir="${build.home}/WEB-INF/lib"/>
+	  	<copy todir="${build.home}/WEB-INF/lib">
+	      <fileset dir="${basedir}/lib">
+  	   	    <exclude name="servlet-api.jar"/>
+		  </fileset>	
+	    </copy>
+	  	
+	    <!-- Compile Java classes as necessary -->
+	    <javac srcdir="${src.home}"
+	          destdir="${build.home}/WEB-INF/classes"
+	            debug="${compile.debug}"
+	      deprecation="${compile.deprecation}"
+	         optimize="${compile.optimize}"
+	    	 includeantruntime="false">
+	        <classpath refid="compile.classpath"/>
+	    </javac>
+
+	  	<!--<copy file="${basedir}/WebServlet.java" todir="${build.home}/WEB-INF/classes/"/>-->
+	  	
+	  	<mkdir  dir="${build.home}/WEB-INF/web"/>
+	  	<copy todir="${build.home}/WEB-INF/web">
+	      <fileset dir="${web.home}"/>
+	    </copy>
+
+	  	<mkdir  dir="${build.home}/WEB-INF/xsd"/>
+	  	<copy todir="${build.home}/WEB-INF/xsd">
+	      <fileset dir="${basedir}/xsd"/>
+	    </copy>
+	      	
+	  	<mkdir  dir="${build.home}/WEB-INF/xml"/>
+	  	<copy todir="${build.home}/WEB-INF/xml">
+	      <fileset dir="${basedir}/xml"/>
+	    </copy>
+	  	
+	  	<mkdir  dir="${build.home}/WEB-INF/xsl"/>
+	  	<copy todir="${build.home}/WEB-INF/xsl">
+	      <fileset dir="${basedir}/xsl"/>
+	    </copy>
+	  	
+	  </target>
+
+<!-- ==================== Deploy Target ===================================== -->
+
+    <target name="deploy" depends="build" description="Deploy application">
+        
+    	<!--<copy todir="${deploy.path}/${app.name}" preservelastmodified="true">
+            <fileset dir="${build.home}">
+                <include name="**/*.*"/>
+            </fileset>
+        </copy>-->
+
+    	<copy file="${dist.home}/${app.name}.war" todir="${deploy.path}"/>
+    </target>
+
+<!-- ==================== Dist Target (WAR FILE) ===================================== -->
+<!--
+
+  The "dist" target creates a binary distribution of your application
+  in a directory structure ready to be archived in a tar.gz or zip file.
+  Note that this target depends on two others:
+
+  * "compile" so that the entire web application (including external
+    dependencies) will have been assembled
+
+  * "javadoc" so that the application Javadocs will have been created
+
+-->
+
+  <target name="dist" depends="build" description="Create binary distribution">
+
+    <!-- Copy documentation subdirectories 
+    <mkdir   dir="${dist.home}/docs"/>
+    <copy    todir="${dist.home}/docs">
+      <fileset dir="${docs.home}"/>
+    </copy>  -->
+
+    <!-- Create application JAR file 
+    <jar jarfile="${dist.home}/${app.name}-${app.version}.war"
+         basedir="${build.home}"/> -->
+  	
+  	<jar jarfile="${dist.home}/${app.name}.war"
+  	         basedir="${build.home}"/>
+  	
+
+    <!-- Copy additional files to ${dist.home} as necessary -->
+
+  </target>
+
+
+
+<!-- ==================== Javadoc Target ================================== -->
+<!--
+
+  The "javadoc" target creates Javadoc API documentation for the Java
+  classes included in your application.  Normally, this is only required
+  when preparing a distribution release, but is available as a separate
+  target in case the developer wants to create Javadocs independently.
+
+-->
+
+  <target name="javadoc" depends="build"
+   description="Create Javadoc API documentation">
+    <mkdir          dir="${dist.home}/docs/api"/>
+    <javadoc sourcepath="${src.home}"
+                destdir="${dist.home}/docs/api"
+           packagenames="*">
+      <classpath refid="compile.classpath"/>
+    </javadoc>
+  </target>
+
+<!-- ============================================================== -->
+<!-- Tomcat tasks - remove these if you don't have Tomcat installed -->
+<!-- ============================================================== -->
+
+	<!-- We need the Catalina jars for Tomcat for other app servers - check the docs -->
+   <path id="catalina-ant-classpath">
+        <fileset dir="${appserver.lib}">
+            <include name="catalina-ant.jar"/>
+        	<include name="tomcat-coyote.jar"/>
+        	<include name="tomcat-util.jar"/>
+        	<include name="tomcat-juli.jar"/>
+        </fileset>
+    </path>
+
+    <taskdef name="install" classname="org.apache.catalina.ant.DeployTask">
+        <classpath refid="catalina-ant-classpath"/>
+    </taskdef>
+    <taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask">
+        <classpath refid="catalina-ant-classpath"/>
+    </taskdef>
+    <taskdef name="list" classname="org.apache.catalina.ant.ListTask">
+        <classpath refid="catalina-ant-classpath"/>
+    </taskdef>
+    <taskdef name="start" classname="org.apache.catalina.ant.StartTask">
+        <classpath refid="catalina-ant-classpath"/>
+    </taskdef>
+    <taskdef name="stop" classname="org.apache.catalina.ant.StopTask">
+        <classpath refid="catalina-ant-classpath"/>
+    </taskdef>
+
+    <target name="install" description="Install application in Tomcat">
+        <install url="${tomcat.manager.url}"
+                 username="${tomcat.manager.username}"
+                 password="${tomcat.manager.password}"
+                 path="/${app.name}"
+                 war="file://${dist.home}"/>
+    </target>
+
+    <target name="reload" description="Reload application in Tomcat">
+        <reload url="${tomcat.manager.url}"
+                 username="${tomcat.manager.username}"
+                 password="${tomcat.manager.password}"
+                 path="/${app.name}"/>
+    </target>
+
+    <target name="start" description="Start Tomcat application">
+        <start url="${tomcat.manager.url}"
+                 username="${tomcat.manager.username}"
+                 password="${tomcat.manager.password}"
+                 path="/${app.name}"/>
+    </target>
+
+    <target name="stop" description="Stop Tomcat application">
+        <stop url="${tomcat.manager.url}"
+                 username="${tomcat.manager.username}"
+                 password="${tomcat.manager.password}"
+                 path="/${app.name}"/>
+    </target>
+
+    <target name="list" description="List Tomcat applications">
+        <list url="${tomcat.manager.url}"
+                 username="${tomcat.manager.username}"
+                 password="${tomcat.manager.password}"/>
+    </target>
+
+	<target name="remove" description="Remove application on servlet container">
+		<undeploy url="${manager.url}"
+		     username="${manager.username}"
+		     password="${manager.password}"
+		     path="${app.path}"/>
+	</target>	
+<!-- End Tomcat tasks -->
+		
+		
+		
+<!-- Create java classes from xsd using extjs -->
+
+	<target name="generate-sql-classes">
+		<java classname="com.sun.tools.internal.xjc.XJCFacade">
+			<arg value="-p" />
+	        <arg value="com.modnaut.common.properties"/>
+			<arg value="-d"/>
+	    	<arg value="src"/>
+	        <arg value="xsd/sqlmetadata.xsd" />
+	    </java>
+	</target>
+		
+
+	<target name="generate-view-classes">
+	    <java classname="com.sun.tools.internal.xjc.XJCFacade">
+	        <arg value="-p" />
+	        <arg value="com.modnaut.common.properties"/>
+			<arg value="-d"/>
+	    	<arg value="src"/>
+	        <arg value="xsd/viewmetadata.xsd" />
+	    </java>
+	</target>		
+		
+</project>
