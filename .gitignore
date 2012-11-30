@@ -4,3 +4,7 @@
 *.jar
 *.war
 *.ear
+
+# Package Folders #
+build/
+dist/
