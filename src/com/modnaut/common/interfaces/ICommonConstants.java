@@ -1,6 +1,6 @@
 package com.modnaut.common.interfaces;
 
-public interface CommonConstants 
+public interface ICommonConstants 
 {
     public static final String LETTER_A = "A";
     public static final String LETTER_B = "B";
