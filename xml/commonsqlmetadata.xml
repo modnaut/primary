@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sqlMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/sqlmetadata.xsd">
 	<query id="1" name="GET_USER_LIST" action="SELECT" type="QUERY">
-		<statement value="Select * From Users"/>
-		<!-- <parameters>
-			<parameter id="0" name="userId" value=""/>
-		</parameters>-->
+		<statement value="Select UserName, FirstName, LastName, EmailAddress From Users Where UserId = ?"/>
+		<parameters>
+			<parameter id="1" name="userId" value=""/>
+		</parameters>
 	</query>
 	<query id="2" name="GET_ALL_USERS_ALPHABETICALLY" action="SELECT" type="SP">
 		<statement value="GetAllUsersAlphabetically()"/>

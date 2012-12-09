@@ -1,33 +1,26 @@
 package com.modnaut.common.utilities;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-import com.modnaut.common.database.SQLQueries;
+import com.modnaut.common.database.JdbcConnection;
+import com.modnaut.common.database.SqlQueries;
+import com.modnaut.common.properties.Parameters;
 import com.modnaut.common.properties.Query;
 import com.modnaut.common.properties.StatementType;
 
 public class UtilityDatabaseMethods {
-
-	// constants
-	private static final String MYSQL_URL = "jdbc:mysql://localhost:3306/common";
-	private static final String MYSQL_USER = "root";
-	private static final String MYSQL_PASSWORD = "Mkyyxz2g";
+    
 	private static final String SP = "SP";
 	private static final String CALL = "CALL ";
-
+	
 	public static ArrayList<String[]> getJustData(String queryName, String queryFile) {
-
-		try {
-			System.out.println("Loading driver...");
-			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("Driver loaded!");
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Cannot find the driver in the classpath!", e);
-		}
 
 		Connection con = null;
 		Statement st = null;
@@ -36,10 +29,10 @@ public class UtilityDatabaseMethods {
 		ArrayList<String[]> data = new ArrayList<String[]>();
 
 		try {
-			con = DriverManager.getConnection(MYSQL_URL, MYSQL_USER, MYSQL_PASSWORD);
+			con = JdbcConnection.getConnection();
 			st = con.createStatement();
 
-			Query q = SQLQueries.getQuery(queryName, queryFile);
+			Query q = SqlQueries.getQuery(queryName, queryFile);
 
 			StatementType statement = q.getStatement();
 
@@ -73,4 +66,66 @@ public class UtilityDatabaseMethods {
 
 		return data;
 	}
+	
+
+	public static ArrayList<String[]> getJustData(String queryName, HashMap<String, String> parms, String queryFile) {
+
+		Connection con = JdbcConnection.getConnection();
+		
+		PreparedStatement st = null;
+		ResultSet rs = null;
+
+		ArrayList<String[]> data = new ArrayList<String[]>();
+
+
+		try {
+			
+		    	Query q = SqlQueries.getQuery(queryName, queryFile);
+		    	StatementType statement = q.getStatement();
+
+		    	if (q.getType().equals(SP)) 
+		    	    st = con.prepareStatement(CALL + statement.getValue());
+			else
+			    st = con.prepareStatement(statement.getValue());
+ 
+		    	
+		    	Iterator it = parms.entrySet().iterator();
+		    	while (it.hasNext()) {
+
+		    	    Map.Entry entry = (Map.Entry) it.next();
+		    	    String key =  (String)entry.getKey();
+		    	    
+		    	   		    	    
+		    	    String value = (String)entry.getValue();
+		    	    
+		    	    st.setString(1, value);
+		    	}
+
+		    	rs = st.executeQuery();
+		    	
+		    	while (rs.next()) {
+		    	    	
+				String[] t = {rs.getString(1), rs.getString(2)};
+				data.add(t);
+
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (st != null) {
+					st.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		return data;
+	}
+
 }

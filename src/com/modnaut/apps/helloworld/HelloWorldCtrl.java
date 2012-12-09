@@ -1,6 +1,7 @@
 package com.modnaut.apps.helloworld;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,18 +12,17 @@ import com.modnaut.common.utilities.UtilityDatabaseMethods;
 
 public class HelloWorldCtrl extends FrameworkCtrl {
 
-    private static final String XML_FILE = "helloWorld";
+    private static final String XML_FILE = "helloworld";
     private static final String GET_USER_LIST = "GET_USER_LIST";
     HttpServletResponse res;
     
     public HelloWorldCtrl() {
-
+	viewMetaData = unmarshall(XML_FILE);
     }
 
     public void printout(HttpServletResponse res) {
-	
+
 	this.res = res;
-	viewMetaData = unmarshall(XML_FILE);
 	
 	try {
 	    if (viewMetaData != null) {
@@ -30,10 +30,13 @@ public class HelloWorldCtrl extends FrameworkCtrl {
 	    }
 	    
 	    String userList = ICommonConstants.NONE;
-	    ArrayList<String[]> data = UtilityDatabaseMethods.getJustData(GET_USER_LIST, ICommonConstants.COMMON);
+	    HashMap<String, String> parms = new HashMap<String, String>();
+	    parms.put("UserId", "1");
+	   
+	    ArrayList<String[]> data = UtilityDatabaseMethods.getJustData(GET_USER_LIST, parms, ICommonConstants.COMMON);
 	    
 	    //NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
-//	    ArrayList<String[]> data = UtilityDatabaseMethods.getJustData("GET_ALL_USERS_ALPHABETICALLY", ICommonConstants.COMMON);
+	    //ArrayList<String[]> data = UtilityDatabaseMethods.getJustData("GET_ALL_USERS_ALPHABETICALLY", ICommonConstants.COMMON);
 	    if (data != null) {
 		for (int i = 0; data.size() > i; i++) {
 		    String[] d = (String[]) data.get(i);
