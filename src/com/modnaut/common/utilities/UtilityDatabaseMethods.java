@@ -10,8 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.modnaut.common.database.JdbcConnection;
-import com.modnaut.common.database.SqlQueries;
-import com.modnaut.common.properties.Parameters;
+import com.modnaut.common.database.SQLQueries;
 import com.modnaut.common.properties.Query;
 import com.modnaut.common.properties.StatementType;
 
@@ -32,7 +31,7 @@ public class UtilityDatabaseMethods {
 			con = JdbcConnection.getConnection();
 			st = con.createStatement();
 
-			Query q = SqlQueries.getQuery(queryName, queryFile);
+			Query q = SQLQueries.getQuery(queryName, queryFile);
 
 			StatementType statement = q.getStatement();
 
@@ -80,7 +79,7 @@ public class UtilityDatabaseMethods {
 
 		try {
 			
-		    	Query q = SqlQueries.getQuery(queryName, queryFile);
+		    	Query q = SQLQueries.getQuery(queryName, queryFile);
 		    	StatementType statement = q.getStatement();
 
 		    	if (q.getType().equals(SP)) 
