@@ -13,7 +13,7 @@ import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.Query;
 import com.modnaut.common.properties.SqlMetaData;
 
-public class SqlQueries {
+public class SQLQueries {
 	
 	// constants
     private static final String XML_EXTENSION = ".xml";
@@ -60,6 +60,7 @@ public class SqlQueries {
 		
 
 		allQueries.put(fileName, hashMap);
+		
 	} catch (JAXBException e) {
 		System.out.println("Could not unmarshall " + fileName + " SqlMetaData.");
 	} catch (NullPointerException npe) {
