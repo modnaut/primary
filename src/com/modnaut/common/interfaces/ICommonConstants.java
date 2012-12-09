@@ -62,5 +62,5 @@ public interface ICommonConstants
     public static final String PLUS = "+";
     public static final String COMMA = ",";
     
-    public static final String COMMON = "commonsqlmetadata";	
+    public static final String COMMON = "CommonSqlMetaData";	
 }

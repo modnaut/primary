@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sqlMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/sqlmetadata.xsd">
+<sqlMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/SqlMetaData.xsd">
 	<query id="1" name="GET_USER_LIST" action="SELECT" type="QUERY">
 		<statement value="Select UserName, FirstName, LastName, EmailAddress From Users Where UserId = ?"/>
 		<parameters>

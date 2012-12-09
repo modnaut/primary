@@ -45,9 +45,9 @@ public class FrameworkCtrl {
 	    String filePath = classLoader.getResource("../../WEB-INF").getPath();
 	    
 
-	    File xsltFile = new File(filePath.replace("%20", " ") + "/xsl/simple.xsl");
+	    File xsltFile = new File(filePath.replace("%20", " ") + "/xsl/Simple.xsl");
 	    
-	    File xmlFile = new File(filePath.replace("%20", " ") + "web/helloworld/xml/helloworld.xml");
+	    File xmlFile = new File(filePath.replace("%20", " ") + "web/helloworld/xml/HelloWorld.xml");
 
     
 	    Source xmlSource = new StreamSource(xmlFile);

@@ -12,7 +12,7 @@ import com.modnaut.common.utilities.UtilityDatabaseMethods;
 
 public class HelloWorldCtrl extends FrameworkCtrl {
 
-    private static final String XML_FILE = "helloworld";
+    private static final String XML_FILE = "HelloWorld";
     private static final String GET_USER_LIST = "GET_USER_LIST";
     HttpServletResponse res;
     
