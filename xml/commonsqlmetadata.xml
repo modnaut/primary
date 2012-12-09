@@ -6,4 +6,7 @@
 			<parameter id="0" name="userId" value=""/>
 		</parameters>-->
 	</query>
+	<query id="2" name="GET_ALL_USERS_ALPHABETICALLY" action="SELECT" type="SP">
+		<statement value="GetAllUsersAlphabetically()"/>
+	</query>
 </sqlMetaData>
