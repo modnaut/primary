@@ -5,13 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.Query;
 import com.modnaut.common.properties.SqlMetaData;
+import com.modnaut.common.utilities.JAXBCache;
 
 public class SQLQueries {
 	
@@ -45,10 +42,7 @@ public class SQLQueries {
 		HashMap<String, Query> hashMap = new HashMap<String, Query>();
 			
 		File file = new File(filePath + fileName + XML_EXTENSION);
-		JAXBContext jaxbContext = JAXBContext.newInstance(SqlMetaData.class);
-
-		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		SqlMetaData sqlmetadata = (SqlMetaData) jaxbUnmarshaller.unmarshal(file);
+		SqlMetaData sqlmetadata = (SqlMetaData) JAXBCache.unmarshal(SqlMetaData.class, file);
 
 		List<Query> queryList = sqlmetadata.getQuery();
 		if (queryList != null) {
@@ -61,8 +55,6 @@ public class SQLQueries {
 
 		allQueries.put(fileName, hashMap);
 		
-	} catch (JAXBException e) {
-		System.out.println("Could not unmarshall " + fileName + " SqlMetaData.");
 	} catch (NullPointerException npe) {
 		System.out.println("Could not find SqlMetaData file: " + filePath + fileName + XML_EXTENSION);
 	} catch (Exception e) {

@@ -3,8 +3,6 @@ package com.modnaut.common.framework;
 import java.io.File;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -13,6 +11,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import com.modnaut.common.properties.ViewMetaData;
+import com.modnaut.common.utilities.JAXBCache;
 
 public class FrameworkCtrl {
     
@@ -26,10 +25,7 @@ public class FrameworkCtrl {
 	    String filePath = classLoader.getResource("../web/helloworld/xml").getPath();
 	    
 	    File file = new File(filePath  + xmlFile + ".xml");
-	    JAXBContext jaxbContext = JAXBContext.newInstance(ViewMetaData.class);
-		
-	    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-	    viewMetaData = (ViewMetaData) jaxbUnmarshaller.unmarshal(file);
+	    viewMetaData = (ViewMetaData) JAXBCache.unmarshal(ViewMetaData.class, file);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
