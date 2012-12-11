@@ -20,7 +20,7 @@ public class HelloWorldCtrl extends FrameworkCtrl {
 	viewMetaData = unmarshall(XML_FILE);
     }
 
-    public void printout(HttpServletResponse res) {
+    public void defaultAction(HttpServletResponse res) {
 
 	this.res = res;
 	
