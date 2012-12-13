@@ -11,8 +11,8 @@ import java.util.Map;
 
 import com.modnaut.common.database.JdbcConnection;
 import com.modnaut.common.database.SqlQueries;
-import com.modnaut.common.properties.Query;
-import com.modnaut.common.properties.StatementType;
+import com.modnaut.common.properties.sqlMetaData.Query;
+import com.modnaut.common.properties.sqlMetaData.StatementType;
 
 public class UtilityDatabaseMethods {
     

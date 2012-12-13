@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.modnaut.common.framework.FrameworkCtrl;
 import com.modnaut.common.interfaces.ICommonConstants;
-import com.modnaut.common.properties.MessageType;
+//import com.modnaut.common.properties.MessageType;
 import com.modnaut.common.utilities.UtilityDatabaseMethods;
 
 public class HelloWorldCtrl extends FrameworkCtrl {
@@ -48,9 +48,9 @@ public class HelloWorldCtrl extends FrameworkCtrl {
 		}
 	    }
 
-	    MessageType m = new MessageType();
-	    m.setValue("This is our user list: " + userList + ".... and more to come..");
-	    viewMetaData.getMessage().add(m);
+//	    MessageType m = new MessageType();
+//	    m.setValue("This is our user list: " + userList + ".... and more to come..");
+//	    viewMetaData.getMessage().add(m);
 	    
 	    marshall(res);    
 
