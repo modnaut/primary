@@ -496,7 +496,7 @@
 	<target name="generate-sqlquery-classes">
 		<java classname="com.sun.tools.internal.xjc.XJCFacade">
 			<arg value="-p" />
-	        <arg value="com.modnaut.common.properties.sqlMetaData"/>
+	        <arg value="com.modnaut.common.properties.sqlmetadata"/>
 			<arg value="-d"/>
 	    	<arg value="src"/>
 	        <arg value="xsd/SqlMetaData.xsd" />
@@ -507,7 +507,7 @@
 	<target name="generate-view-classes">
 	    <java classname="com.sun.tools.internal.xjc.XJCFacade">
 	        <arg value="-p" />
-	        <arg value="com.modnaut.common.properties.viewMetaData"/>
+	        <arg value="com.modnaut.common.properties.viewmetadata"/>
 			<arg value="-d"/>
 	    	<arg value="src"/>
 	        <arg value="xsd/ViewMetaData.xsd" />

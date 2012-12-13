@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.modnaut.common.interfaces.ICommonConstants;
-import com.modnaut.common.properties.sqlMetaData.Query;
-import com.modnaut.common.properties.sqlMetaData.SqlMetaData;
+import com.modnaut.common.properties.sqlmetadata.Query;
+import com.modnaut.common.properties.sqlmetadata.SqlMetaData;
 import com.modnaut.common.utilities.JAXBCache;
 
 public class SqlQueries {

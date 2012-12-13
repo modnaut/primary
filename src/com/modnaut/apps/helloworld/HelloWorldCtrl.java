@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.modnaut.common.framework.FrameworkCtrl;
 import com.modnaut.common.interfaces.ICommonConstants;
-//import com.modnaut.common.properties.MessageType;
 import com.modnaut.common.utilities.UtilityDatabaseMethods;
+//import com.modnaut.common.properties.MessageType;
 
 public class HelloWorldCtrl extends FrameworkCtrl {
 

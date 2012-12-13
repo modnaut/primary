@@ -10,7 +10,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import com.modnaut.common.properties.viewMetaData.ViewMetaData;
+import com.modnaut.common.properties.viewmetadata.ViewMetaData;
 import com.modnaut.common.utilities.JAXBCache;
 
 public class FrameworkCtrl {
