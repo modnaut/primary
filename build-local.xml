@@ -493,6 +493,8 @@
 <!-- Create java classes from xsd using extjs -->
 
 	<target name="generate-sqlquery-classes">
+		<mkdir dir="src/com/modnaut/common/properties/sqlmetadata"/>
+		<delete dir="src/com/modnaut/common/properties/sqlmetadata"/>
 		<java classname="com.sun.tools.internal.xjc.XJCFacade">
 			<arg value="-p" />
 	        <arg value="com.modnaut.common.properties.sqlmetadata"/>
@@ -504,6 +506,8 @@
 		
 
 	<target name="generate-view-classes">
+		<mkdir dir="src/com/modnaut/common/properties/viewmetadata"/>
+		<delete dir="src/com/modnaut/common/properties/viewmetadata"/>
 	    <java classname="com.sun.tools.internal.xjc.XJCFacade">
 	        <arg value="-p" />
 	        <arg value="com.modnaut.common.properties.viewmetadata"/>
