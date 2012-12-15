@@ -1,7 +1,8 @@
 *.class
 build-local.properties
-*.project
-*.settings
+
+#*.project#
+#*.settings#
 
 # Package Files #
 #*.jar#

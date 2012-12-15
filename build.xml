@@ -181,8 +181,8 @@
     <fileset dir="${catalina.home}/lib">
       <include name="*.jar"/>
     </fileset>
-  	<pathelement location="${basedir}/lib"/>
-	<fileset dir="${basedir}/lib">
+  	<pathelement location="${basedir}/web/WEB-INF/lib"/>
+	<fileset dir="${basedir}/web/WEB-INF/lib">
   		<include name="*.jar"/>
 	</fileset>
   	
@@ -500,7 +500,7 @@
 	        <arg value="com.modnaut.common.properties.sqlmetadata"/>
 			<arg value="-d"/>
 	    	<arg value="src"/>
-	        <arg value="xsd/SqlMetaData.xsd" />
+	        <arg value="web/WEB-INF/xsd/SqlMetaData.xsd" />
 	    </java>
 	</target>
 		
@@ -513,7 +513,7 @@
 	        <arg value="com.modnaut.common.properties.viewmetadata"/>
 			<arg value="-d"/>
 	    	<arg value="src"/>
-	        <arg value="xsd/ViewMetaData.xsd" />
+	        <arg value="web/WEB-INF/xsd/ViewMetaData.xsd" />
 	    </java>
 	</target>	
 		

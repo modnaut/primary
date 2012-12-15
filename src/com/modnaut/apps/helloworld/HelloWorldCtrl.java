@@ -52,6 +52,8 @@ public class HelloWorldCtrl extends FrameworkCtrl {
 //	    m.setValue("This is our user list: " + userList + ".... and more to come..");
 //	    viewMetaData.getMessage().add(m);
 	    
+	    System.out.println("THis is a test" );
+	    
 	    marshall(res);    
 
 	 } catch (Exception e) {

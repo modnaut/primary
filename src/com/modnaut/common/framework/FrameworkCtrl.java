@@ -11,7 +11,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import com.modnaut.common.properties.viewmetadata.ViewMetaData;
-import com.modnaut.common.utilities.JAXBCache;
+import com.modnaut.common.utilities.JaxbCache_X;
 
 public class FrameworkCtrl {
     
@@ -25,7 +25,7 @@ public class FrameworkCtrl {
 	    String filePath = classLoader.getResource("../web/helloworld/xml").getPath();
 	    
 	    File file = new File(filePath  + xmlFile + ".xml");
-	    viewMetaData = (ViewMetaData) JAXBCache.unmarshal(ViewMetaData.class, file);
+	    viewMetaData = (ViewMetaData) JaxbCache_X.unmarshal(ViewMetaData.class, file);
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
