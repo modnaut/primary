@@ -22,7 +22,7 @@ public class FrameworkCtrl {
 	try {
 	    
 	    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-	    String filePath = classLoader.getResource("../web/helloworld/xml").getPath();
+	    String filePath = classLoader.getResource("../views/helloworld/xml").getPath();
 	    
 	    File file = new File(filePath  + xmlFile + ".xml");
 	    viewMetaData = (ViewMetaData) JaxbCache.unmarshal(ViewMetaData.class, file);
@@ -47,7 +47,7 @@ public class FrameworkCtrl {
 
 	    File xsltFile = new File(filePath.replace("%20", " ") + "/xsl/Simple.xsl");
 	    
-	    File xmlFile = new File(filePath.replace("%20", " ") + "web/helloworld/xml/HelloWorld.xml");
+	    File xmlFile = new File(filePath.replace("%20", " ") + "views/helloworld/xml/HelloWorld.xml");
 
     
 	    Source xmlSource = new StreamSource(xmlFile);

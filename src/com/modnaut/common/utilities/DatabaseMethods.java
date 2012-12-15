@@ -14,7 +14,7 @@ import com.modnaut.common.database.SqlQueries;
 import com.modnaut.common.properties.sqlmetadata.Query;
 import com.modnaut.common.properties.sqlmetadata.StatementType;
 
-public class UtilityDatabaseMethods {
+public class DatabaseMethods {
     
 	private static final String SP = "SP";
 	private static final String CALL = "CALL ";

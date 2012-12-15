@@ -30,33 +30,34 @@ public class SqlQueries {
 			loadFile(file);
 		}
 	}
-
+	
 	private static void loadFile(String fileName) {
+	
+	    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+	    String filePath = classLoader.getResource("../xml").getPath();
 
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		String filePath = classLoader.getResource("../xml").getPath();
+	    try {
+		
+		allQueries = new HashMap<String, HashMap<String, Query>>();
+		HashMap<String, Query> hashMap = new HashMap<String, Query>();
 
-		try {
-			allQueries = new HashMap<String, HashMap<String, Query>>();
-			HashMap<String, Query> hashMap = new HashMap<String, Query>();
+		File file = new File(filePath + fileName + XML_EXTENSION);
+		SqlMetaData sqlmetadata = JaxbCache.unmarshal(SqlMetaData.class, file);
 
-			File file = new File(filePath + fileName + XML_EXTENSION);
-			SqlMetaData sqlmetadata = JaxbCache.unmarshal(SqlMetaData.class, file);
+		List<Query> queryList = sqlmetadata.getQuery();
+		if (queryList != null) {
+		    for (int i = 0; queryList.size() > i; i++) {
+			Query q = queryList.get(i);
+			hashMap.put(q.getName(), q);
+		    }
+		}
 
-			List<Query> queryList = sqlmetadata.getQuery();
-			if (queryList != null) {
-				for (int i = 0; queryList.size() > i; i++) {
-					Query q = queryList.get(i);
-					hashMap.put(q.getName(), q);
-				}
-			}
-
-			allQueries.put(fileName, hashMap);
+		allQueries.put(fileName, hashMap);
 
 		} catch (NullPointerException npe) {
-			System.out.println("Could not find SqlMetaData file: " + filePath + fileName + XML_EXTENSION);
+		    System.out.println("Could not find SqlMetaData file: " + filePath + fileName + XML_EXTENSION);
 		} catch (Exception e) {
-			e.printStackTrace();
+		    e.printStackTrace();
 		}
 	}
 

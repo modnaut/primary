@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.modnaut.common.framework.FrameworkCtrl;
 import com.modnaut.common.interfaces.ICommonConstants;
-import com.modnaut.common.utilities.UtilityDatabaseMethods;
+import com.modnaut.common.utilities.DatabaseMethods;
 //import com.modnaut.common.properties.MessageType;
 
 public class HelloWorldCtrl extends FrameworkCtrl {
@@ -33,7 +33,7 @@ public class HelloWorldCtrl extends FrameworkCtrl {
 	    HashMap<String, String> parms = new HashMap<String, String>();
 	    parms.put("UserId", "1");
 	   
-	    ArrayList<String[]> data = UtilityDatabaseMethods.getJustData(GET_USER_LIST, parms, ICommonConstants.COMMON);
+	    ArrayList<String[]> data = DatabaseMethods.getJustData(GET_USER_LIST, parms, ICommonConstants.COMMON);
 	    
 	    //NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
 	    //ArrayList<String[]> data = UtilityDatabaseMethods.getJustData("GET_ALL_USERS_ALPHABETICALLY", ICommonConstants.COMMON);
@@ -51,9 +51,7 @@ public class HelloWorldCtrl extends FrameworkCtrl {
 //	    MessageType m = new MessageType();
 //	    m.setValue("This is our user list: " + userList + ".... and more to come..");
 //	    viewMetaData.getMessage().add(m);
-	    
-	    System.out.println("THis is a test" );
-	    
+
 	    marshall(res);    
 
 	 } catch (Exception e) {
