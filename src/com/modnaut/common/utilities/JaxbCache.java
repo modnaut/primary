@@ -14,7 +14,7 @@ import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 
 
 
-public class JaxbCache_X {
+public class JaxbCache {
 
 	private static GenericKeyedObjectPool<Class, JAXBContext> JAXB_CONTEXT_POOL = new GenericKeyedObjectPool<Class, JAXBContext>(new JaxbContextFactory(), new ModnautPoolConfig());
 	private static GenericKeyedObjectPool<PoolKey, Marshaller> MARSHALLER_POOL = new GenericKeyedObjectPool<PoolKey, Marshaller>(new MarshallerFactory(), new ModnautPoolConfig());
