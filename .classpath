@@ -34,5 +34,8 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/xercesSamples.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/jaxb-api.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/jaxb-impl.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/jaxb-xjc.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

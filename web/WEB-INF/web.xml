@@ -3,6 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.js</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 	  <servlet-name>WebServlet</servlet-name>
 	  <servlet-class>com.modnaut.common.servlet.WebServlet</servlet-class>
@@ -12,7 +17,6 @@
  		<servlet-name>WebServlet</servlet-name>
  		<url-pattern>/</url-pattern>
  	</servlet-mapping>
-
 
 
 	<resource-ref>

@@ -26,7 +26,7 @@ public class HelloWorldCtrl extends FrameworkCtrl {
 	
 	try {
 	    if (viewMetaData != null) {
-		System.out.println(viewMetaData.getTitle().getValue());
+//		System.out.println(viewMetaData.getTitle().getValue());
 	    }
 	    
 	    String userList = ICommonConstants.NONE;

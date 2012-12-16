@@ -415,106 +415,21 @@
     </javadoc>
   </target>
 
-<!-- ============================================================== -->
-<!-- Tomcat tasks - remove these if you don't have Tomcat installed -->
-<!-- ============================================================== -->
 
-	<!-- We need the Catalina jars for Tomcat for other app servers - check the docs -->
-   <path id="catalina-ant-classpath">
-        <fileset dir="${appserver.lib}">
-            <include name="catalina-ant.jar"/>
-        	<include name="tomcat-coyote.jar"/>
-        	<include name="tomcat-util.jar"/>
-        	<include name="tomcat-juli.jar"/>
-        </fileset>
-    </path>
-
-    <taskdef name="install" classname="org.apache.catalina.ant.DeployTask">
-        <classpath refid="catalina-ant-classpath"/>
-    </taskdef>
-    <taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask">
-        <classpath refid="catalina-ant-classpath"/>
-    </taskdef>
-    <taskdef name="list" classname="org.apache.catalina.ant.ListTask">
-        <classpath refid="catalina-ant-classpath"/>
-    </taskdef>
-    <taskdef name="start" classname="org.apache.catalina.ant.StartTask">
-        <classpath refid="catalina-ant-classpath"/>
-    </taskdef>
-    <taskdef name="stop" classname="org.apache.catalina.ant.StopTask">
-        <classpath refid="catalina-ant-classpath"/>
-    </taskdef>
-
-    <target name="install" description="Install application in Tomcat">
-        <install url="${tomcat.manager.url}"
-                 username="${tomcat.manager.username}"
-                 password="${tomcat.manager.password}"
-                 path="/${app.name}"
-                 war="file://${dist.home}"/>
-    </target>
-
-    <target name="reload" description="Reload application in Tomcat">
-        <reload url="${tomcat.manager.url}"
-                 username="${tomcat.manager.username}"
-                 password="${tomcat.manager.password}"
-                 path="/${app.name}"/>
-    </target>
-
-    <target name="start" description="Start Tomcat application">
-        <start url="${tomcat.manager.url}"
-                 username="${tomcat.manager.username}"
-                 password="${tomcat.manager.password}"
-                 path="/${app.name}"/>
-    </target>
-
-    <target name="stop" description="Stop Tomcat application">
-        <stop url="${tomcat.manager.url}"
-                 username="${tomcat.manager.username}"
-                 password="${tomcat.manager.password}"
-                 path="/${app.name}"/>
-    </target>
-
-    <target name="list" description="List Tomcat applications">
-        <list url="${tomcat.manager.url}"
-                 username="${tomcat.manager.username}"
-                 password="${tomcat.manager.password}"/>
-    </target>
-
-	<target name="remove" description="Remove application on servlet container">
-		<undeploy url="${manager.url}"
-		     username="${manager.username}"
-		     password="${manager.password}"
-		     path="${app.path}"/>
-	</target>	
-<!-- End Tomcat tasks -->
-		
 		
 		
 <!-- Create java classes from xsd using extjs -->
 
+	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" classpathref="compile.classpath"/>
+		
+
 	<target name="generate-sqlquery-classes">
-		<mkdir dir="src/com/modnaut/common/properties/sqlmetadata"/>
-		<delete dir="src/com/modnaut/common/properties/sqlmetadata"/>
-		<java classname="com.sun.tools.internal.xjc.XJCFacade">
-			<arg value="-p" />
-	        <arg value="com.modnaut.common.properties.sqlmetadata"/>
-			<arg value="-d"/>
-	    	<arg value="src"/>
-	        <arg value="web/WEB-INF/xsd/SqlMetaData.xsd" />
-	    </java>
+		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/SqlMetaData.xsd" destdir="src" package="com.modnaut.common.properties.sqlmetadata"/>
 	</target>
 		
 
 	<target name="generate-view-classes">
-		<mkdir dir="src/com/modnaut/common/properties/viewmetadata"/>
-		<delete dir="src/com/modnaut/common/properties/viewmetadata"/>
-	    <java classname="com.sun.tools.internal.xjc.XJCFacade">
-	        <arg value="-p" />
-	        <arg value="com.modnaut.common.properties.viewmetadata"/>
-			<arg value="-d"/>
-	    	<arg value="src"/>
-	        <arg value="web/WEB-INF/xsd/ViewMetaData.xsd" />
-	    </java>
+		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/ViewMetaData.xsd" destdir="src" package="com.modnaut.common.properties.viewmetadata"/>
 	</target>	
 		
 
