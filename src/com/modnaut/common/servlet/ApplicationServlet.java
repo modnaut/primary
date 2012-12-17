@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,15 +16,29 @@ import org.apache.commons.lang3.StringUtils;
 import com.modnaut.common.interfaces.ICommonConstants;
 
 
-
-public class WebServlet extends HttpServlet {
+@WebServlet("/")
+public class ApplicationServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
   
+    
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ApplicationServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+    
     public void init (ServletConfig  config) throws ServletException {
 	super.init (config);
     }
     
+    
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
 	response.setContentType("text/html");
@@ -69,6 +84,10 @@ public class WebServlet extends HttpServlet {
 	}
     }
 
+    
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	doGet(request, response);
     }
