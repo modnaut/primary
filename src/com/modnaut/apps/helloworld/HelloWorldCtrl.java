@@ -33,8 +33,8 @@ public class HelloWorldCtrl extends FrameworkCtrl {
 	    HashMap<String, String> parms = new HashMap<String, String>();
 	    parms.put("UserId", "1");
 	   
-	    ArrayList<String[]> data = DatabaseMethods.getJustData(GET_USER_LIST, parms, ICommonConstants.COMMON);
-	    
+	    ArrayList<String[]> data = DatabaseMethods.getJustData(GET_USER_LIST, parms, null, ICommonConstants.COMMON);
+
 	    //NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
 	    //ArrayList<String[]> data = DatabaseMethods.getJustData("GET_USER_LIST", ICommonConstants.COMMON);
 	    if (data != null && data.size() > 0) {
