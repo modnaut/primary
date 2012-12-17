@@ -36,8 +36,8 @@ public class HelloWorldCtrl extends FrameworkCtrl {
 	    ArrayList<String[]> data = DatabaseMethods.getJustData(GET_USER_LIST, parms, ICommonConstants.COMMON);
 	    
 	    //NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
-	    //ArrayList<String[]> data = UtilityDatabaseMethods.getJustData("GET_ALL_USERS_ALPHABETICALLY", ICommonConstants.COMMON);
-	    if (data != null) {
+	    //ArrayList<String[]> data = DatabaseMethods.getJustData("GET_USER_LIST", ICommonConstants.COMMON);
+	    if (data != null && data.size() > 0) {
 		for (int i = 0; data.size() > i; i++) {
 		    String[] d = (String[]) data.get(i);
 		    

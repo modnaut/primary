@@ -3,7 +3,7 @@
 	<query id="1" name="GET_USER_LIST" action="SELECT" type="QUERY">
 		<statement value="Select UserName, FirstName, LastName, EmailAddress From Users Where UserId = ?"/>
 		<parameters>
-			<parameter id="1" name="userId" value=""/>
+			<parameter id="1" name="UserId" value=""/>
 		</parameters>
 	</query>
 	<query id="2" name="GET_ALL_USERS_ALPHABETICALLY" action="SELECT" type="SP">
