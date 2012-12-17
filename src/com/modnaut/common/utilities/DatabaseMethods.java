@@ -117,7 +117,7 @@ public class DatabaseMethods {
 		{
 		    Parameter parameter = (Parameter) parameterList.get(i);
 		    if (parms.containsKey(parameter.getName())) {
-			st.setString(i + 1, parms.get(parameter.getName()));
+			st.setString(parameter.getId().intValue(), parms.get(parameter.getName()));
 		    }
 		    else {
 			st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
