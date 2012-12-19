@@ -2,6 +2,7 @@ package com.modnaut.common.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 import javax.servlet.ServletConfig;
@@ -15,66 +16,70 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 
-
 @WebServlet("/")
 public class ApplicationServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-  
-    
+    private static String realPath = "";
+
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ApplicationServlet() {
-        super();
-        // TODO Auto-generated constructor stub
+	super();
     }
 
-    
-    public void init (ServletConfig  config) throws ServletException {
-	super.init (config);
+    public void init(ServletConfig config) throws ServletException {
+	realPath = config.getServletContext().getRealPath("/");
+	super.init(config);
     }
-    
-    
+
+    public static String getRealPath() {
+	return realPath;
+    }
+
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
 	response.setContentType("text/html");
 
-        //no paramater
+	// no paramater
 	Class noparams[] = {};
-	
-	Class paramHttpRes[] = new Class[1];
-	paramHttpRes[0] = HttpServletResponse.class;
-	
+
+	Class params[] = { HttpServletRequest.class, HttpServletResponse.class };
+
 	try {
-	    
+
 	    String className = StringUtils.trimToEmpty(request.getParameter("class"));
 	    String methodName = StringUtils.trimToEmpty(request.getParameter("method"));
-	    
-	    if (!className.equals(ICommonConstants.NONE) && !methodName.equals(ICommonConstants.NONE)) {
-		Class c = Class.forName(className);
-		Object o = c.newInstance();
-        
-        	Method method = c.getDeclaredMethod(methodName, paramHttpRes);
-        	method.invoke(o, response);
-	    }
-	    else {
 
-		Class c = Class.forName("com.modnaut.apps.helloworld.HelloWorldCtrl");
-		Object o = c.newInstance();
-        
-		//Method method = c.getDeclaredMethod(StringUtils.trimToEmpty(methodName.replace('"', ' ')), paramHttpRes);
-        	Method method = c.getDeclaredMethod("defaultAction", paramHttpRes);
-        	method.invoke(o, response);
-	    }	
-    
+	    if (!className.equals(ICommonConstants.NONE) && !methodName.equals(ICommonConstants.NONE)) {
+		Class clazz = Class.forName(className);
+
+		Object instance;
+		Constructor constructor = clazz.getConstructor(params);
+		if (constructor != null)
+		    instance = constructor.newInstance(request, response);
+		else
+		    instance = clazz.newInstance();
+
+		Method method = clazz.getDeclaredMethod(methodName);
+		method.invoke(instance, request, response);
+	    } else {
+
+		Class clazz = Class.forName("com.modnaut.apps.helloworld.HelloWorldCtrl");
+		Object instance = clazz.getConstructor(params).newInstance(request, response);
+
+		Method method = clazz.getDeclaredMethod("defaultAction");
+		method.invoke(instance, request, response);
+	    }
+
 	} catch (Exception e) {
-	   
+
 	    e.printStackTrace();
-	    
+
 	    PrintWriter pw = response.getWriter();
 	    pw.println("<html>");
 	    pw.println("<body>");
@@ -84,7 +89,6 @@ public class ApplicationServlet extends HttpServlet {
 	}
     }
 
-    
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */

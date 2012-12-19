@@ -1,68 +1,52 @@
 package com.modnaut.common.framework;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Iterator;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
+
+import org.apache.commons.io.FileUtils;
 
 import com.modnaut.common.properties.viewmetadata.ViewMetaData;
-import com.modnaut.common.utilities.JaxbCache;
+import com.modnaut.common.servlet.ApplicationServlet;
+import com.modnaut.common.utilities.JaxbPool;
 
 public class FrameworkCtrl {
-    
-    public ViewMetaData viewMetaData;
-  
-    public ViewMetaData unmarshall(String xmlFile) {
-	
+
+    protected HttpServletRequest request;
+    protected HttpServletResponse response;
+
+    public FrameworkCtrl(HttpServletRequest request, HttpServletResponse response) {
+	this.request = request;
+	this.response = response;
+    }
+
+    protected ViewMetaData viewMetaData;
+
+    protected ViewMetaData unmarshall(String xmlFileName) {
 	try {
-	    
-	    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-	    String filePath = classLoader.getResource("../views/helloworld/xml").getPath();
-	    
-	    File file = new File(filePath  + xmlFile + ".xml");
-	    viewMetaData = (ViewMetaData) JaxbCache.unmarshal(ViewMetaData.class, file);
+	    Collection<File> files = FileUtils.listFiles(new File(ApplicationServlet.getRealPath() + "WEB-INF/views"), null, true);
+	    String absoluteFilePath = "";
+	    Iterator<File> iterator = files.iterator();
+	    while (iterator.hasNext()) {
+		File file = (File) iterator.next();
+		if (file.getName().equals(xmlFileName))
+		    absoluteFilePath = file.getAbsolutePath();
+	    }
+	    if (!absoluteFilePath.isEmpty()) {
+		File file = new File(absoluteFilePath);
+		viewMetaData = (ViewMetaData) JaxbPool.unmarshal(ViewMetaData.class, file);
+	    }
 	} catch (Exception e) {
 	    e.printStackTrace();
 	}
-	
+
 	return viewMetaData;
     }
-    
-    public void marshall(HttpServletResponse res) {
-	try {
-	    //JAXBContext context = JAXBContext.newInstance(ViewMetaData.class);
-			
-	    //Marshaller m = context.createMarshaller();
-	    //m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-	    //m.marshal(viewMetaData, res.getOutputStream());	
-	    
-	    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-	    String filePath = classLoader.getResource("../../WEB-INF").getPath();
-	    
 
-	    File xsltFile = new File(filePath.replace("%20", " ") + "/xsl/Simple.xsl");
-	    
-	    File xmlFile = new File(filePath.replace("%20", " ") + "views/helloworld/xml/HelloWorld.xml");
+    public void marshall(ViewMetaData viewMetaData) {
 
-    
-	    Source xmlSource = new StreamSource(xmlFile);
-	    Source xsltSource = new StreamSource(xsltFile);
-
-	    // create an instance of TransformerFactory
-	    TransformerFactory transFact = TransformerFactory.newInstance();
-	    Transformer trans = transFact.newTransformer(xsltSource);
-	    Result result = new StreamResult(res.getOutputStream());
-
-	    
-	    trans.transform(xmlSource, result); 
-	    
-	 } catch (Exception e) {
-	     e.printStackTrace();
-	 }
-    }    
+    }
 }

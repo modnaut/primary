@@ -8,7 +8,7 @@ import java.util.List;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.sqlmetadata.Query;
 import com.modnaut.common.properties.sqlmetadata.SqlMetaData;
-import com.modnaut.common.utilities.JaxbCache;
+import com.modnaut.common.utilities.JaxbPool;
 
 public class SqlQueries {
 
@@ -42,7 +42,7 @@ public class SqlQueries {
 		HashMap<String, Query> hashMap = new HashMap<String, Query>();
 
 		File file = new File(filePath + fileName + XML_EXTENSION);
-		SqlMetaData sqlmetadata = JaxbCache.unmarshal(SqlMetaData.class, file);
+		SqlMetaData sqlmetadata = JaxbPool.unmarshal(SqlMetaData.class, file);
 
 		List<Query> queryList = sqlmetadata.getQuery();
 		if (queryList != null) {

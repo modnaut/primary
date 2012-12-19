@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
-	<title value="This is our first screen"/>
-	<message value="Yep, it worked!" />
+	<viewport>
+		<item xsi:type="Panel">
+			<text id="test" stringId="Hello World"/>
+		</item>
+	</viewport>
 </viewMetaData>
 
