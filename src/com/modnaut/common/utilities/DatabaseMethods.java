@@ -218,74 +218,75 @@ public class DatabaseMethods {
 	return row_count;
     }
 	
-	public static int insertDataReturnId(String queryName, HashMap<String, String> parms, Connection con, String queryFile) {
-	    
-	    //use a prepared statement for sql queries and sps that have input and output parameters.
-	    PreparedStatement st = null;
-	    ResultSet rs = null;
-	    int row_id = 0;
-	    
-	    try {
-		
-		if (con == null)
-		    con = JdbcConnection.getConnection();
-		
-		Query q = SqlQueries.getQuery(queryName, queryFile);
-		StatementType statement = q.getStatement();
-		String statementString = statement.getValue();
-			
-		if (q.getType().equals(SP))
-			statementString = CALL + statementString;
-
-		//tells the database to give access to any rows affected for retrieval after statment has been executed.
-		st = con.prepareStatement(statementString, Statement.RETURN_GENERATED_KEYS);
 	
-		//grab parameters from sqlmetadata file.  If parameters exist in passed in hashmap, values of the hashmap are used.  
-		//If they do not exist, the value set the sqlmetadata file will be used.
-		Parameters parameters = q.getParameters();
-		List parameterList = parameters.getParameter();
-		for (int i = 0; parameterList.size() > i; i++)
-		{
-		    Parameter parameter = (Parameter) parameterList.get(i);
-		    if (parms.containsKey(parameter.getName())) {
-			st.setString(parameter.getId().intValue(), parms.get(parameter.getName()));
-		    }
-		    else {
-			st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
-		    }
-		}
-
-		//first execute the statement
-		int affectedRows = st.executeUpdate();
-	        if (affectedRows == 0) {
-	            throw new SQLException("Creating user failed, no rows affected.");
-	        }
-
-	        //second grab the generatedkeys (ie: row id )
-		rs = st.getGeneratedKeys();
-		if (rs.next()) {
-	            row_id = rs.getInt(1);
-	        } else {
-	            throw new SQLException("Insert failed, no generated key obtained.");
-	        }
-
-	    } catch (Exception ex) {
-		ex.printStackTrace();
-	    } finally {
-		try {
-		    if (st != null) {
-			st.close();
-		    }
+    public static int insertDataReturnId(String queryName, HashMap<String, String> parms, Connection con, String queryFile) {
+	    
+	//use a prepared statement for sql queries and sps that have input and output parameters.
+	PreparedStatement st = null;
+	ResultSet rs = null;
+	int row_id = 0;
+	    
+	try {
 		
-		    if (con != null) {
-			con.close();
-		    }
+	    if (con == null)
+		con = JdbcConnection.getConnection();
+		
+	    Query q = SqlQueries.getQuery(queryName, queryFile);
+	    StatementType statement = q.getStatement();
+	    String statementString = statement.getValue();
 			
-		} catch (Exception ex) {
-		    ex.printStackTrace();
+	    if (q.getType().equals(SP))
+		statementString = CALL + statementString;
+
+	    //tells the database to give access to any rows affected for retrieval after statment has been executed.
+	    st = con.prepareStatement(statementString, Statement.RETURN_GENERATED_KEYS);
+	
+	    //grab parameters from sqlmetadata file.  If parameters exist in passed in hashmap, values of the hashmap are used.  
+	    //If they do not exist, the value set the sqlmetadata file will be used.
+	    Parameters parameters = q.getParameters();
+	    List parameterList = parameters.getParameter();
+	    for (int i = 0; parameterList.size() > i; i++)
+	    {
+		Parameter parameter = (Parameter) parameterList.get(i);
+		if (parms.containsKey(parameter.getName())) {
+		    st.setString(parameter.getId().intValue(), parms.get(parameter.getName()));
+		}
+		else {
+		    st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
 		}
 	    }
- 
-	    return row_id;	    
+
+	    //first execute the statement
+	    int affectedRows = st.executeUpdate();
+	    if (affectedRows == 0) {
+		throw new SQLException("Creating user failed, no rows affected.");
+	    }
+
+	    //second grab the generatedkeys (ie: row id )
+	    rs = st.getGeneratedKeys();
+	    if (rs.next()) {
+		row_id = rs.getInt(1);
+	    } else {
+		throw new SQLException("Insert failed, no generated key obtained.");
+	    }
+
+	} catch (Exception ex) {
+	    ex.printStackTrace();
+	} finally {
+	    try {
+		if (st != null) {
+		    st.close();
+		}
+		
+		if (con != null) {
+		    con.close();
+		}
+		
+	    } catch (Exception ex) {
+		ex.printStackTrace();
+	    }
 	}
+ 
+	return row_id;	    
+    }
 }

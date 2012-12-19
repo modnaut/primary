@@ -42,4 +42,23 @@
               url="jdbc:mysql://localhost:3306/common"
               maxActive="15" 
               maxIdle="3"/>
+              
+              
+
+
+   <!--  <Manager className='org.apache.catalina.session.PersistentManager'
+     saveOnRestart='false' minIdelSwap='0' maxIdleSwap='0'  maxIdleBackup='1'> 
+    <Store className="org.apache.catalina.session.JDBCStore" 
+    driverName="com.mysql.jdbc.Driver"
+    connectionURL="jdbc:mysql://localhost:3306/common?user=root&amp;password=Mkyyxz2g" 
+    sessionTable="sessions" 
+    sessionIdCol="session_id"
+    sessionDataCol="session_data"
+    sessionValidCol="valid_session" 
+    sessionMaxInactiveCol="max_inactive"
+    sessionLastAccessedCol="last_access"
+    sessionAppCol='app_name' />
+     </Manager>  -->
+
+
 </Context>
