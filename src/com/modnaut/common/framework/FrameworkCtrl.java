@@ -1,6 +1,7 @@
 package com.modnaut.common.framework;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -12,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import com.modnaut.common.properties.viewmetadata.ViewMetaData;
 import com.modnaut.common.servlet.ApplicationServlet;
 import com.modnaut.common.utilities.JaxbPool;
+import com.modnaut.common.utilities.XslPool;
 
 public class FrameworkCtrl {
 
@@ -46,7 +48,7 @@ public class FrameworkCtrl {
 	return viewMetaData;
     }
 
-    public void marshall(ViewMetaData viewMetaData) {
-
+    public void marshall(ViewMetaData viewMetaData) throws IOException, Exception {
+	XslPool.marshalAndTransform(viewMetaData, response.getOutputStream(), "ViewMetaData.xsl", null);
     }
 }

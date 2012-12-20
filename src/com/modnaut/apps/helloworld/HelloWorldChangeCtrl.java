@@ -1,6 +1,6 @@
 package com.modnaut.apps.helloworld;
 
-import java.io.PrintWriter;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,50 +14,38 @@ import com.modnaut.common.utilities.DatabaseMethods;
 
 public class HelloWorldChangeCtrl extends FrameworkCtrl {
 
-	
-	/*
-	 * Testing changes to a class while also re-naming this class.
-	 * 
-	 * 
-	 */
-	
     private static final String XML_FILE = "HelloWorld.xml";
     private static final String GET_ALL_USERS_ALPHABETICALLY = "GET_ALL_USERS_ALPHABETICALLY";
 
     public HelloWorldChangeCtrl(HttpServletRequest request, HttpServletResponse response) {
-    	
-    	super(request, response);
-		unmarshall(XML_FILE);
+	super(request, response);
+	unmarshall(XML_FILE);
     }
 
     public void defaultAction() {
-    	try {
+	try {
 
-    		String userList = ICommonConstants.NONE;
+	    String userList = ICommonConstants.NONE;
 
-    		// NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
-    		ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
+	    // NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
+	    ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
 
-    		PrintWriter writer = response.getWriter();
-    		if (data != null) {
-    			for (String[] row : data) {
-    				userList += row[0] + ICommonConstants.COMMA;
-    				for (int j = 0; row.length > j; j++) {
-    					writer.println(row[j]);
-    				}
-    			}
-    			
-    			
-    			writer.println(userList);
-    		}
+	    // PrintWriter writer = response.getWriter();
+	    PrintStream writer = System.out;
+	    if (data != null) {
+		for (String[] row : data) {
+		    userList += row[0] + ICommonConstants.COMMA;
+		    for (int j = 0; row.length > j; j++) {
+			writer.println(row[j]);
+		    }
+		}
+		writer.println(userList);
+	    }
 
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
-    }
-    
-    private void testMethod()
-    {
-    	
+	    marshall(viewMetaData);
+
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
     }
 }

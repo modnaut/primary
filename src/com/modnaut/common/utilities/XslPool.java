@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.util.JAXBSource;
-import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
@@ -73,7 +72,7 @@ public class XslPool {
     }
 
     public static void marshalAndTransform(Object input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters) throws Exception {
-	Result result = new StreamResult(outputStream);
+	TRANSFORMER_POOL.clear();
 	PoolKey key = new PoolKey(xslFileName);
 	Transformer transformer = TRANSFORMER_POOL.borrowObject(key);
 	if (parameters != null) {

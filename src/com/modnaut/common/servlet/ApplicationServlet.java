@@ -73,7 +73,7 @@ public class ApplicationServlet extends HttpServlet {
 		Object instance = clazz.getConstructor(params).newInstance(request, response);
 
 		Method method = clazz.getDeclaredMethod("defaultAction");
-		method.invoke(instance, request, response);
+		method.invoke(instance);
 	    }
 
 	} catch (Exception e) {
