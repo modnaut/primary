@@ -74,8 +74,7 @@
   "build.properties" files as well as in the "build.xml" script.
 
 -->
-
-  <property file="build.properties"/>
+  <property file="build-local.properties"/>
   <property file="${basedir}/build.properties"/>
 
 
@@ -182,8 +181,8 @@
     <fileset dir="${catalina.home}/lib">
       <include name="*.jar"/>
     </fileset>
-  	<pathelement location="${basedir}/lib"/>
-	<fileset dir="${basedir}/lib">
+  	<pathelement location="${basedir}/web/WEB-INF/lib"/>
+	<fileset dir="${basedir}/web/WEB-INF/lib">
   		<include name="*.jar"/>
 	</fileset>
   	
@@ -244,33 +243,20 @@
         <echo message=""/>
         <echo message="Available targets are:"/>
         <echo message=""/>
-    	<echo message="clean     --> Remove existing build file to start from scratch"/>
-        <echo message="build     --> Build the application"/>
-        <echo message="deploy    --> Deploy application as directory"/>
-        <echo message="deploywar --> Deploy application as a WAR file"/>
-        <echo message="install   --> Install application in Tomcat"/>
-        <echo message="reload    --> Reload application in Tomcat"/>
-        <echo message="start     --> Start Tomcat application"/>
-        <echo message="stop      --> Stop Tomcat application"/>
         <echo message="list      --> List Tomcat applications"/>
         <echo message=""/>
     </target>
 
 
-<!-- ==================== Mysql Target ====================================== -->
-
-<!--
-
-   Deletes existing mysql database structure then re-builds based on modnaut-database.sql script.
--->
-
-	<target name="generate-mysql-structure" 
+	
+<!-- ==================== Mysql Structure Target ======================== -->		
+	<target name="generate-mysql-structure"
 		description="deletes and rebuilds mysql database structure">
 		<sql
 		    driver="com.mysql.jdbc.Driver"
 		    url="jdbc:mysql://localhost:3306/"
-		    userid="root"
-		    password="Mkyyxz2g" >
+		    userid="modnaut00"
+		    password="zp4X263tTSv06On">
 		    <transaction src="sql/modnaut-database.sql"/>
 		</sql>
 	</target>

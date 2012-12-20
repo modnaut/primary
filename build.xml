@@ -438,8 +438,8 @@
 		<sql
 		    driver="com.mysql.jdbc.Driver"
 		    url="jdbc:mysql://localhost:3306/"
-		    userid="root"
-		    password="Mkyyxz2g" >
+		    userid="modnaut00"
+		    password="zp4X263tTSv06On">
 		    <transaction src="sql/modnaut-database.sql"/>
 		</sql>
 	</target>
