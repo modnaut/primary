@@ -66,7 +66,7 @@ public class ApplicationServlet extends HttpServlet {
 		    instance = clazz.newInstance();
 
 		Method method = clazz.getDeclaredMethod(methodName);
-		method.invoke(instance, request, response);
+		method.invoke(instance);
 	    } else {
 
 		Class clazz = Class.forName("com.modnaut.apps.helloworld.HelloWorldChangeCtrl");

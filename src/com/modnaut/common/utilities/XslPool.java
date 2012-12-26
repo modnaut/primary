@@ -71,7 +71,7 @@ public class XslPool {
 	}
     }
 
-    public static void marshalAndTransform(Object input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters) throws Exception {
+    public static void transform(Source input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters) throws Exception {
 	TRANSFORMER_POOL.clear();
 	PoolKey key = new PoolKey(xslFileName);
 	Transformer transformer = TRANSFORMER_POOL.borrowObject(key);
@@ -81,10 +81,7 @@ public class XslPool {
 	    }
 	}
 	try {
-	    Marshaller marshaller = JaxbPool.getMarshaller(input.getClass());
-	    JAXBSource source = new JAXBSource(marshaller, input);
-	    transformer.transform(source, new StreamResult(outputStream));
-	    JaxbPool.returnMarshaller(marshaller, input.getClass());
+	    transformer.transform(input, new StreamResult(outputStream));
 	    transformer.reset();// reset to be sure parameters aren't retained
 	    TRANSFORMER_POOL.returnObject(key, transformer);
 	} catch (Exception e) {
@@ -97,5 +94,12 @@ public class XslPool {
 	    }
 	    throw new RuntimeException(e);
 	}
+    }
+
+    public static void marshalAndTransform(Object input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters) throws Exception {
+	Marshaller marshaller = JaxbPool.getMarshaller(input.getClass());
+	JAXBSource source = new JAXBSource(marshaller, input);
+	transform(source, outputStream, xslFileName, parameters);
+	JaxbPool.returnMarshaller(marshaller, input.getClass());
     }
 }
