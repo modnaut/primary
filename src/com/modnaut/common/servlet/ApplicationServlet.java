@@ -26,16 +26,16 @@ public class ApplicationServlet extends HttpServlet {
      * @see HttpServlet#HttpServlet()
      */
     public ApplicationServlet() {
-	super();
+    	super();
     }
 
     public void init(ServletConfig config) throws ServletException {
-	realPath = config.getServletContext().getRealPath("/");
-	super.init(config);
+    	realPath = config.getServletContext().getRealPath("/");
+    	super.init(config);
     }
 
     public static String getRealPath() {
-	return realPath;
+    	return realPath;
     }
 
     /**
@@ -43,57 +43,56 @@ public class ApplicationServlet extends HttpServlet {
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-	response.setContentType("text/html");
-
-	// no paramater
-	Class noparams[] = {};
-
-	Class params[] = { HttpServletRequest.class, HttpServletResponse.class };
-
-	try {
-
-	    String className = StringUtils.trimToEmpty(request.getParameter("class"));
-	    String methodName = StringUtils.trimToEmpty(request.getParameter("method"));
-
-	    if (!className.equals(ICommonConstants.NONE) && !methodName.equals(ICommonConstants.NONE)) {
-		Class clazz = Class.forName(className);
-
-		Object instance;
-		Constructor constructor = clazz.getConstructor(params);
-		if (constructor != null)
-		    instance = constructor.newInstance(request, response);
-		else
-		    instance = clazz.newInstance();
-
-		Method method = clazz.getDeclaredMethod(methodName);
-		method.invoke(instance);
-	    } else {
-
-		Class clazz = Class.forName("com.modnaut.apps.helloworld.HelloWorldChangeCtrl");
-		Object instance = clazz.getConstructor(params).newInstance(request, response);
-
-		Method method = clazz.getDeclaredMethod("defaultAction");
-		method.invoke(instance);
-	    }
-
-	} catch (Exception e) {
-
-	    e.printStackTrace();
-
-	    PrintWriter pw = response.getWriter();
-	    pw.println("<html>");
-	    pw.println("<body>");
-	    pw.println("<p> An error occurred while trying to load this page. Please try again.</p>");
-	    pw.println("</body>");
-	    pw.println("</html>");
-	}
+		response.setContentType("text/html");
+	
+		// no paramater
+		Class noparams[] = {};
+	
+		Class params[] = { HttpServletRequest.class, HttpServletResponse.class };
+	
+		try {
+	
+		    String className = StringUtils.trimToEmpty(request.getParameter("class"));
+		    String methodName = StringUtils.trimToEmpty(request.getParameter("method"));
+	
+		    if (!className.equals(ICommonConstants.NONE) && !methodName.equals(ICommonConstants.NONE)) {
+		    	Class clazz = Class.forName(className);
+	
+		    	Object instance;
+		    	Constructor constructor = clazz.getConstructor(params);
+		    	if (constructor != null)
+		    		instance = constructor.newInstance(request, response);
+		    	else
+		    		instance = clazz.newInstance();
+	
+		    	Method method = clazz.getDeclaredMethod(methodName);
+		    	method.invoke(instance);
+		    } else {
+	
+				Class clazz = Class.forName("com.modnaut.apps.helloworld.HelloWorldChangeCtrl");
+				Object instance = clazz.getConstructor(params).newInstance(request, response);
+		
+				Method method = clazz.getDeclaredMethod("defaultAction");
+				method.invoke(instance);
+		    }
+	
+		} catch (Exception e) {
+	
+		    e.printStackTrace();
+	
+		    PrintWriter pw = response.getWriter();
+		    pw.println("<html>");
+		    pw.println("<body>");
+		    pw.println("<p> An error occurred while trying to load this page. Please try again.</p>");
+		    pw.println("</body>");
+		    pw.println("</html>");
+		}
     }
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	doGet(request, response);
+    	doGet(request, response);
     }
-
 }

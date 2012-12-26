@@ -38,21 +38,21 @@ public class SqlQueries {
 
 	    try {
 		
-		allQueries = new HashMap<String, HashMap<String, Query>>();
-		HashMap<String, Query> hashMap = new HashMap<String, Query>();
+	    	allQueries = new HashMap<String, HashMap<String, Query>>();
+	    	HashMap<String, Query> hashMap = new HashMap<String, Query>();
 
-		File file = new File(filePath + fileName + XML_EXTENSION);
-		SqlMetaData sqlmetadata = JaxbPool.unmarshal(SqlMetaData.class, file);
+	    	File file = new File(filePath + fileName + XML_EXTENSION);
+	    	SqlMetaData sqlmetadata = JaxbPool.unmarshal(SqlMetaData.class, file);
 
-		List<Query> queryList = sqlmetadata.getQuery();
-		if (queryList != null) {
-		    for (int i = 0; queryList.size() > i; i++) {
-			Query q = queryList.get(i);
-			hashMap.put(q.getName(), q);
-		    }
-		}
+	    	List<Query> queryList = sqlmetadata.getQuery();
+	    	if (queryList != null) {
+	    		for (int i = 0; queryList.size() > i; i++) {
+	    			Query q = queryList.get(i);
+	    			hashMap.put(q.getName(), q);
+	    		}
+	    	}
 
-		allQueries.put(fileName, hashMap);
+	    	allQueries.put(fileName, hashMap);
 
 		} catch (NullPointerException npe) {
 		    System.out.println("Could not find SqlMetaData file: " + filePath + fileName + XML_EXTENSION);

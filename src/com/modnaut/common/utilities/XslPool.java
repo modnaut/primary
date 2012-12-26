@@ -30,10 +30,10 @@ public class XslPool {
 	@Override
 	public boolean equals(Object o) {
 	    if (this == o)
-		return true;
+	    	return true;
 
 	    if (o == null || getClass() != o.getClass())
-		return false;
+	    	return false;
 
 	    PoolKey poolKey = (PoolKey) o;
 
@@ -49,13 +49,13 @@ public class XslPool {
     }
 
     private static class TransformerFactory extends BaseKeyedPoolableObjectFactory<PoolKey, Transformer> {
-	@Override
-	public Transformer makeObject(PoolKey key) throws TransformerConfigurationException {
-	    javax.xml.transform.TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
-	    Source xsltSource = new StreamSource(ApplicationServlet.getRealPath() + "WEB-INF\\xsl\\" + key.xslFileName);
-	    Transformer transformer = factory.newTransformer(xsltSource);
-	    return transformer;
-	}
+		@Override
+		public Transformer makeObject(PoolKey key) throws TransformerConfigurationException {
+		    javax.xml.transform.TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
+		    Source xsltSource = new StreamSource(ApplicationServlet.getRealPath() + "WEB-INF\\xsl\\" + key.xslFileName);
+		    Transformer transformer = factory.newTransformer(xsltSource);
+		    return transformer;
+		}
     }
 
     private static class ModnautPoolConfig extends GenericKeyedObjectPool.Config {
@@ -72,34 +72,35 @@ public class XslPool {
     }
 
     public static void transform(Source input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters) throws Exception {
-	TRANSFORMER_POOL.clear();
-	PoolKey key = new PoolKey(xslFileName);
-	Transformer transformer = TRANSFORMER_POOL.borrowObject(key);
-	if (parameters != null) {
-	    for (String parameter : parameters.keySet()) {
-		transformer.setParameter(parameter, parameters.get(parameter));
-	    }
-	}
-	try {
-	    transformer.transform(input, new StreamResult(outputStream));
-	    transformer.reset();// reset to be sure parameters aren't retained
-	    TRANSFORMER_POOL.returnObject(key, transformer);
-	} catch (Exception e) {
-	    try {
-		// if an exception occurred during transformation, invalidate
-		// the transformer in case it's the cause of the problem
-		TRANSFORMER_POOL.invalidateObject(key, transformer);
-	    } catch (RuntimeException i) {
-		throw new RuntimeException(i);
-	    }
-	    throw new RuntimeException(e);
-	}
+		TRANSFORMER_POOL.clear();
+		PoolKey key = new PoolKey(xslFileName);
+		Transformer transformer = TRANSFORMER_POOL.borrowObject(key);
+		if (parameters != null) {
+		    for (String parameter : parameters.keySet()) {
+		    	transformer.setParameter(parameter, parameters.get(parameter));
+		    }
+		}
+		try {
+		    transformer.transform(input, new StreamResult(outputStream));
+		    transformer.reset();// reset to be sure parameters aren't retained
+		    TRANSFORMER_POOL.returnObject(key, transformer);
+		} catch (Exception e) {
+		    try {
+		    	// if an exception occurred during transformation, invalidate
+		    	// the transformer in case it's the cause of the problem
+		    	TRANSFORMER_POOL.invalidateObject(key, transformer);
+		    } catch (RuntimeException i) {
+		    	throw new RuntimeException(i);
+		    }
+		    
+		    throw new RuntimeException(e);
+		}
     }
 
     public static void marshalAndTransform(Object input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters) throws Exception {
-	Marshaller marshaller = JaxbPool.getMarshaller(input.getClass());
-	JAXBSource source = new JAXBSource(marshaller, input);
-	transform(source, outputStream, xslFileName, parameters);
-	JaxbPool.returnMarshaller(marshaller, input.getClass());
+		Marshaller marshaller = JaxbPool.getMarshaller(input.getClass());
+		JAXBSource source = new JAXBSource(marshaller, input);
+		transform(source, outputStream, xslFileName, parameters);
+		JaxbPool.returnMarshaller(marshaller, input.getClass());
     }
 }
