@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
-	<viewport>
+	<items>
 		<item xsi:type="Panel">
+			<Layout xsi:type="AccordionLayout" align="left" pack="center" />
+			<title id="titleMe" stringId="panel \n title"/>
 			<text id="test" stringId="Hello World"/>
 		</item>
-	</viewport>
+	</items>
 </viewMetaData>
 

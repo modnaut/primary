@@ -15,42 +15,49 @@ import com.modnaut.common.servlet.ApplicationServlet;
 import com.modnaut.common.utilities.JaxbPool;
 import com.modnaut.common.utilities.XslPool;
 
-public class FrameworkCtrl {
+public class FrameworkCtrl
+{
 
-    protected HttpServletRequest request;
-    protected HttpServletResponse response;
+	protected HttpServletRequest request;
+	protected HttpServletResponse response;
 
-    public FrameworkCtrl(HttpServletRequest request, HttpServletResponse response) {
-    	this.request = request;
-    	this.response = response;
-    }
+	public FrameworkCtrl(HttpServletRequest request, HttpServletResponse response)
+	{
+		this.request = request;
+		this.response = response;
+	}
 
-    protected ViewMetaData viewMetaData;
+	protected ViewMetaData viewMetaData;
 
-    protected ViewMetaData unmarshall(String xmlFileName) {
-		try {
-		    Collection<File> files = FileUtils.listFiles(new File(ApplicationServlet.getRealPath() + "WEB-INF/views"), null, true);
-		    String absoluteFilePath = "";
-		    Iterator<File> iterator = files.iterator();
-
-		    while (iterator.hasNext()) {
-		    	File file = (File) iterator.next();
-		    	if (file.getName().equals(xmlFileName))
-		    		absoluteFilePath = file.getAbsolutePath();
-		    }
-		    
-	    	if (!absoluteFilePath.isEmpty()) {
-	    		File file = new File(absoluteFilePath);
-	    		viewMetaData = (ViewMetaData) JaxbPool.unmarshal(ViewMetaData.class, file);
-	    	}
-		} catch (Exception e) {
-		    e.printStackTrace();
+	protected ViewMetaData unmarshall(String xmlFileName)
+	{
+		try
+		{
+			Collection<File> files = FileUtils.listFiles(new File(ApplicationServlet.getRealPath() + "WEB-INF/views"), null, true);
+			String absoluteFilePath = "";
+			Iterator<File> iterator = files.iterator();
+			while (iterator.hasNext())
+			{
+				File file = (File) iterator.next();
+				if (file.getName().equals(xmlFileName))
+					absoluteFilePath = file.getAbsolutePath();
+			}
+			if (!absoluteFilePath.isEmpty())
+			{
+				File file = new File(absoluteFilePath);
+				viewMetaData = (ViewMetaData) JaxbPool.unmarshal(ViewMetaData.class, file);
+			}
 		}
-	
-		return viewMetaData;
-    }
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 
-    public void marshall(ViewMetaData viewMetaData) throws IOException, Exception {
-    	XslPool.marshalAndTransform(viewMetaData, response.getOutputStream(), "ViewMetaData.xsl", null);
-    }
+		return viewMetaData;
+	}
+
+	public void marshall(ViewMetaData viewMetaData) throws IOException, Exception
+	{
+		XslPool.marshalAndTransform(viewMetaData, response.getOutputStream(), "ViewMetaData.xsl", null, true);
+	}
 }

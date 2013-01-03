@@ -10,7 +10,7 @@
 	</xs:element>
 	<xs:complexType name="Text">
 		<xs:attribute name="id" type="xs:string"/>
-		<xs:attribute name="stringId" type="xs:string"/>		
+		<xs:attribute name="stringId" type="xs:string"/>
 	</xs:complexType>
 	<xs:complexType name="Viewport">
 		<xs:sequence>
@@ -22,14 +22,122 @@
 			<xs:element name="item" type="Item" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="Item">
+	<xs:complexType name="Item" abstract="true">
 		<xs:attribute name="width" type="xs:int"/>
 		<xs:attribute name="height" type="xs:int"/>
 	</xs:complexType>
+	<xs:complexType name="AbstractLayout" abstract="true">
+		<xs:attribute name="itemCls" type="xs:string"/>
+		<xs:attribute name="reserveScrollbar" type="xs:boolean"/>
+	</xs:complexType>
+		<xs:complexType name="AutoLayout">
+		<xs:complexContent>
+			<xs:extension base="AbstractLayout"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AnchorLayout">
+		<xs:complexContent>
+			<xs:extension base="AbstractLayout">
+				<xs:attribute name="defaultAnchor" type="xs:string"/>
+				<xs:attribute name="manageOverflow" type="xs:int"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AbsoluteLayout">
+		<xs:complexContent>
+			<xs:extension base="AnchorLayout">
+				<xs:attribute name="ignoreOnContentChange" type="xs:boolean"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BoxLayout" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="AbstractLayout">
+				<xs:attribute name="pack">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="start"/>
+							<xs:enumeration value="center"/>
+							<xs:enumeration value="end"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="padding" type="xs:string"/>
+				<xs:attribute name="constrainAlign" type="xs:boolean"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HBoxLayout">
+		<xs:complexContent>
+			<xs:extension base="BoxLayout">
+				<xs:attribute name="align" use="optional">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="top"/>
+							<xs:enumeration value="middle"/>
+							<xs:enumeration value="bottom"/>
+							<xs:enumeration value="stretch"/>
+							<xs:enumeration value="stretchmax"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="VBoxLayout">
+		<xs:complexContent>
+			<xs:extension base="BoxLayout">
+				<xs:attribute name="align" use="optional">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="left"/>
+							<xs:enumeration value="center"/>
+							<xs:enumeration value="right"/>
+							<xs:enumeration value="stretch"/>
+							<xs:enumeration value="stretchmax"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AccordionLayout">
+		<xs:complexContent>
+			<xs:extension base="VBoxLayout">
+				<xs:attribute name="activeOnTop" type="xs:boolean" use="optional"/>
+				<xs:attribute name="animate" type="xs:boolean"/>
+				<xs:attribute name="collapseFirst" type="xs:boolean"/>
+				<xs:attribute name="fill" type="xs:boolean"/>
+				<xs:attribute name="hideCollapseTool" type="xs:boolean"/>
+				<xs:attribute name="multi" type="xs:boolean"/>
+				<xs:attribute name="titleCollapse" type="xs:boolean"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ColumnLayout">
+		<xs:complexContent>
+			<xs:extension base="AbstractLayout">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+		<xs:complexType name="FitLayout">
+		<xs:complexContent>
+			<xs:extension base="AbstractLayout">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+		<xs:complexType name="CenterLayout">
+		<xs:complexContent>
+			<xs:extension base="FitLayout">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
 	<xs:complexType name="Container">
 		<xs:complexContent>
 			<xs:extension base="Item">
 				<xs:sequence>
+					<xs:element name="Layout" type="AbstractLayout" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="ItemSet" type="ItemSet" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
 			</xs:extension>
@@ -39,9 +147,9 @@
 		<xs:complexContent>
 			<xs:extension base="Container">
 				<xs:sequence>
+					<xs:element name="title" type="Text" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="text" type="Text" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
-				<xs:attribute name="title" type="xs:string"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

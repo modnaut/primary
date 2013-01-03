@@ -1,24 +1,34 @@
 package com.modnaut.common.framework;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.stream.StreamSource;
 
+import com.modnaut.common.properties.application.Applications;
+import com.modnaut.common.servlet.ApplicationServlet;
+import com.modnaut.common.utilities.JaxbPool;
 import com.modnaut.common.utilities.XslPool;
 
-public class ApplicationCtrl {
+public class ApplicationCtrl
+{
 
-    private HttpServletRequest request;
-    private HttpServletResponse response;
+	private HttpServletRequest request;
+	private HttpServletResponse response;
 
-    public ApplicationCtrl(HttpServletRequest request, HttpServletResponse response) {
-	this.request = request;
-	this.response = response;
-    }
+	public ApplicationCtrl(HttpServletRequest request, HttpServletResponse response)
+	{
+		this.request = request;
+		this.response = response;
+	}
 
-    public void defaultAction() throws IOException, Exception {
-	XslPool.transform(new StreamSource(), response.getOutputStream(), "Application.xsl", null);
-    }
+	public void defaultAction() throws IOException, Exception
+	{
+		Applications apps = JaxbPool.unmarshal(Applications.class, new File(ApplicationServlet.getRealPath() + "WEB-INF/xml/application.xml"));
+		HashMap<String, Object> parms = new HashMap<String, Object>();
+		parms.put("applicationId", 1);
+		XslPool.marshalAndTransform(apps, response.getOutputStream(), "Application.xsl", parms, false);
+	}
 }

@@ -1,3 +1,4 @@
+use common;
 DELIMITER // 
 CREATE PROCEDURE GetAllUsersAlphabetically() 
 BEGIN 
