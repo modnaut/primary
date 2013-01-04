@@ -429,7 +429,20 @@
 		
 
 	<target name="generate-view-classes">
-		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/ViewMetaData.xsd" destdir="src" package="com.modnaut.common.properties.viewmetadata"/>
+		<delete file="web/WEB-INF/xsd/String.episode"/>
+		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/String.xsd" destdir="src" package="com.modnaut.common.properties.string">
+			<arg value="-extension"/>
+			<arg value="-episode"/>
+			<arg value="web/WEB-INF/xsd/String.episode"/>
+		</xjc>
+		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/Application.xsd" destdir="src" package="com.modnaut.common.properties.application">
+			<arg value="-extension"/>
+			<arg value="-b"/>
+			<arg value="web/WEB-INF/xsd/String.episode"/>
+		</xjc>
+		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/ViewMetaData.xsd" destdir="src" package="com.modnaut.common.properties.viewmetadata">
+		</xjc>
+		<delete file="web/WEB-INF/xsd/String.episode"/>
 	</target>	
 		
 
