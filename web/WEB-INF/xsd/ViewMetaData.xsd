@@ -30,7 +30,7 @@
 		<xs:attribute name="itemCls" type="xs:string"/>
 		<xs:attribute name="reserveScrollbar" type="xs:boolean"/>
 	</xs:complexType>
-		<xs:complexType name="AutoLayout">
+	<xs:complexType name="AutoLayout">
 		<xs:complexContent>
 			<xs:extension base="AbstractLayout"/>
 		</xs:complexContent>
@@ -50,18 +50,36 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:simpleType name="LayoutPack">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="start"/>
+			<xs:enumeration value="center"/>
+			<xs:enumeration value="end"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="HBoxLayoutAlign">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="top"/>
+			<xs:enumeration value="middle"/>
+			<xs:enumeration value="bottom"/>
+			<xs:enumeration value="stretch"/>
+			<xs:enumeration value="stretchmax"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VBoxLayoutAlign">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="center"/>
+			<xs:enumeration value="right"/>
+			<xs:enumeration value="stretch"/>
+			<xs:enumeration value="stretchmax"/>
+		</xs:restriction>
+	</xs:simpleType>
+
 	<xs:complexType name="BoxLayout" abstract="true">
 		<xs:complexContent>
 			<xs:extension base="AbstractLayout">
-				<xs:attribute name="pack">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="start"/>
-							<xs:enumeration value="center"/>
-							<xs:enumeration value="end"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
+				<xs:attribute name="pack" type="LayoutPack"/>
 				<xs:attribute name="padding" type="xs:string"/>
 				<xs:attribute name="constrainAlign" type="xs:boolean"/>
 			</xs:extension>
@@ -70,34 +88,14 @@
 	<xs:complexType name="HBoxLayout">
 		<xs:complexContent>
 			<xs:extension base="BoxLayout">
-				<xs:attribute name="align" use="optional">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="top"/>
-							<xs:enumeration value="middle"/>
-							<xs:enumeration value="bottom"/>
-							<xs:enumeration value="stretch"/>
-							<xs:enumeration value="stretchmax"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
+				<xs:attribute name="align" use="optional" type="HBoxLayoutAlign"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="VBoxLayout">
 		<xs:complexContent>
 			<xs:extension base="BoxLayout">
-				<xs:attribute name="align" use="optional">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="left"/>
-							<xs:enumeration value="center"/>
-							<xs:enumeration value="right"/>
-							<xs:enumeration value="stretch"/>
-							<xs:enumeration value="stretchmax"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
+				<xs:attribute name="align" use="optional" type="VBoxLayoutAlign"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -116,47 +114,135 @@
 	</xs:complexType>
 	<xs:complexType name="ColumnLayout">
 		<xs:complexContent>
-			<xs:extension base="AbstractLayout">
-			</xs:extension>
+			<xs:extension base="AbstractLayout"/>
 		</xs:complexContent>
 	</xs:complexType>
-		<xs:complexType name="FitLayout">
+	<xs:complexType name="FitLayout">
 		<xs:complexContent>
-			<xs:extension base="AbstractLayout">
-			</xs:extension>
+			<xs:extension base="AbstractLayout"/>
 		</xs:complexContent>
 	</xs:complexType>
-		<xs:complexType name="CenterLayout">
+	<xs:complexType name="CenterLayout">
 		<xs:complexContent>
-			<xs:extension base="FitLayout">
-			</xs:extension>
+			<xs:extension base="FitLayout"/>
 		</xs:complexContent>
 	</xs:complexType>
-
+	<xs:complexType name="Listener">
+	</xs:complexType>
+	<xs:complexType name="ImageSpec">
+	</xs:complexType>
+	<xs:simpleType name="Region">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="north"/>
+			<xs:enumeration value="south"/>
+			<xs:enumeration value="east"/>
+			<xs:enumeration value="west"/>
+			<xs:enumeration value="center"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="Container">
 		<xs:complexContent>
 			<xs:extension base="Item">
 				<xs:sequence>
 					<xs:element name="Layout" type="AbstractLayout" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="ItemSet" type="ItemSet" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
+				<xs:attribute name="autoScroll" type="xs:boolean" default="false"/>
+				<xs:attribute name="border" type="xs:string"/>
+				<xs:attribute name="cls" type="xs:string"/>
+				<xs:attribute name="columnWidth" type="xs:string"/>
+				<xs:attribute name="html" type="xs:string"/>
+				<xs:attribute name="id" type="xs:string"/>
+				<xs:attribute name="margin" type="xs:string"/>
+				<xs:attribute name="minHeight" type="xs:int"/>
+				<xs:attribute name="maxHeight" type="xs:int"/>
+				<xs:attribute name="minWidth" type="xs:int"/>
+				<xs:attribute name="maxWidth" type="xs:int"/>
+				<xs:attribute name="padding" type="xs:string"/>
+				<xs:attribute name="region" type="Region"/>
+				<xs:attribute name="resizable" type="xs:boolean"/>
+				<xs:attribute name="shrinkWrap" type="xs:boolean"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:simpleType name="CollapseMode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="header"/>
+			<xs:enumeration value="mini"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="HeaderPosition">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="top"/>
+			<xs:enumeration value="bottom"/>
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="right"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TitleAlign">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="center"/>
+			<xs:enumeration value="right"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="Panel">
 		<xs:complexContent>
 			<xs:extension base="Container">
 				<xs:sequence>
+					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="title" type="Text" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="text" type="Text" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
+				<xs:attribute name="animCollapse" type="xs:boolean"/>
+				<xs:attribute name="bodyPadding" type="xs:string"/>
+				<xs:attribute name="collapseMode" type="CollapseMode"/>
+				<xs:attribute name="collapsed" type="xs:boolean"/>
+				<xs:attribute name="collapsible" type="xs:boolean"/>
+				<xs:attribute name="headerPosition" type="HeaderPosition"/>
+				<xs:attribute name="hideCollapseTool" type="xs:boolean"/>
+				<xs:attribute name="hideHeader" type="xs:boolean"/>
+				<xs:attribute name="iconCls" type="xs:string"/>
+				<xs:attribute name="titleAlign" type="TitleAlign"/>
+				<xs:attribute name="titleCollapse" type="xs:boolean"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="Grid">
+	<xs:complexType name="Column">
+	</xs:complexType>
+	<xs:simpleType name="Scroll">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="none"/>
+			<xs:enumeration value="both"/>
+			<xs:enumeration value="horizontal"/>
+			<xs:enumeration value="vertical"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="TablePanel" abstract="true">
 		<xs:complexContent>
 			<xs:extension base="Panel">
-				<xs:sequence/>
+				<xs:sequence>
+					<xs:element name="column" type="Column" minOccurs="1" maxOccurs="unbounded"/>
+					<xs:element name="emptyText" type="Text" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="allowDeselect" type="xs:boolean"/>
+				<xs:attribute name="columnLines" type="xs:boolean"/>
+				<xs:attribute name="disableSelection" type="xs:boolean"/>
+				<xs:attribute name="enableColumnHide" type="xs:boolean" default="true"/>
+				<xs:attribute name="enableColumnMove" type="xs:boolean" default="true"/>
+				<xs:attribute name="enableColumnResize" type="xs:boolean" default="true"/>
+				<xs:attribute name="enableLocking" type="xs:boolean" default="false"/>
+				<xs:attribute name="hideHeaders" type="xs:boolean"/>
+				<xs:attribute name="rowLines" type="xs:boolean" default="true"/>
+				<xs:attribute name="scroll" type="Scroll"/>
+				<xs:attribute name="sortableColumns" type="xs:boolean"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GridPanel">
+		<xs:complexContent>
+			<xs:extension base="TablePanel">
+				<xs:attribute name="animate" type="xs:boolean"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
