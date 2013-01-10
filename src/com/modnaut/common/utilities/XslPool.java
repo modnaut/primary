@@ -138,11 +138,21 @@ public class XslPool
 
 		if (prettyPrintJson)
 		{
-			Gson gson = new GsonBuilder().setPrettyPrinting().create();
-			JsonParser jsonParser = new JsonParser();
-			JsonElement jsonElement = jsonParser.parse(baos.toString());
-			String prettyJsonString = gson.toJson(jsonElement);
-			outputStream.write(prettyJsonString.getBytes());
+			String json = baos.toString();
+			try
+			{
+				Gson gson = new GsonBuilder().setPrettyPrinting().create();
+				JsonParser jsonParser = new JsonParser();
+				JsonElement jsonElement = jsonParser.parse(json);
+				String prettyJsonString = gson.toJson(jsonElement);
+				outputStream.write(prettyJsonString.getBytes());
+			}
+			catch (Exception e)
+			{
+				System.out.println(json);
+				e.printStackTrace();
+				outputStream.write(json.getBytes());
+			}
 		}
 	}
 }

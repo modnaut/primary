@@ -20,6 +20,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Item" abstract="true">
+		<xs:attribute name="id" type="xs:string"/>
 		<xs:attribute name="width" type="xs:int"/>
 		<xs:attribute name="height" type="xs:int"/>
 	</xs:complexType>
@@ -148,7 +149,6 @@
 				<xs:attribute name="cls" type="xs:string"/>
 				<xs:attribute name="columnWidth" type="xs:string"/>
 				<xs:attribute name="html" type="xs:string"/>
-				<xs:attribute name="id" type="xs:string"/>
 				<xs:attribute name="margin" type="xs:string"/>
 				<xs:attribute name="minHeight" type="xs:int"/>
 				<xs:attribute name="maxHeight" type="xs:int"/>
@@ -606,12 +606,15 @@
 	</xs:complexType>
 	<xs:complexType name="Image">
 		<xs:complexContent>
-<xs:extension base="Item">
-	<xs:sequence>
-		<xs:element name="altText" type="str:String" minOccurs="0" maxOccurs="1"/>
-		<xs:element name="image" type="ImageSpec" minOccurs="1" maxOccurs="1"/>
-	</xs:sequence>
-</xs:extension>
+			<xs:extension base="Item">
+				<xs:sequence>
+					<xs:element name="altText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="image" type="ImageSpec" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
 		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AbstractStore" abstract="true">
+		
 	</xs:complexType>
 </xs:schema>

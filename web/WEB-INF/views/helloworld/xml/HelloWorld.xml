@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
 	<items>
-		<item xsi:type="Panel">
-			<Layout xsi:type="AnchorLayout"/>
+		<item xsi:type="Panel" width="100" height="50">
+			<Layout xsi:type="AutoLayout"/>
 			<title stringCD="danny"/>
-		</item>
-		<item xsi:type="Button" enableToggle="true" arrowAlign="bottom"/>
-		<item xsi:type="DateField">
 		</item>
 	</items>
 </viewMetaData>
