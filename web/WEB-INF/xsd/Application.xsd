@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:str="String">
-	<xs:import schemaLocation="String.xsd" namespace="String"/>
+	<xs:import namespace="String" schemaLocation="String.xsd"/>
 	<xs:element name="applications">
 		<xs:complexType>
 			<xs:sequence>

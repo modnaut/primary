@@ -441,6 +441,9 @@
 			<arg value="web/WEB-INF/xsd/String.episode"/>
 		</xjc>
 		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/ViewMetaData.xsd" destdir="src" package="com.modnaut.common.properties.viewmetadata">
+		  	<arg value="-extension"/>
+			<arg value="-b"/>
+			<arg value="web/WEB-INF/xsd/String.episode"/>
 		</xjc>
 		<delete file="web/WEB-INF/xsd/String.episode"/>
 	</target>	

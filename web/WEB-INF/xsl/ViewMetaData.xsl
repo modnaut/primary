@@ -17,7 +17,9 @@
 	<xsl:template match="items" name="items">
 		<xsl:for-each select="item">
 			{
+				<xsl:message><xsl:copy-of select="."/></xsl:message>
 				<xsl:apply-templates select="."/>
+				_d: false
 			}
 			<xsl:if test="position() != last()">,</xsl:if>
 		</xsl:for-each>
@@ -26,14 +28,18 @@
 		<xsl:if test="layout">
 			layout: {
 				type: "<xsl:value-of select="layout/@type"/>"
-			}
+			},
 		</xsl:if>
 	</xsl:template>
 	<xsl:template match="item[@xsi:type='Panel']">
 		xtype: "panel",
 		<xsl:call-template name="layout"/>
 		<xsl:if test="title">
-			title: <xsl:value-of select="mn:wrap-string(title/@stringId)"/>
+			title: <xsl:value-of select="mn:wrap-string(title/@stringCD)"/>,
 		</xsl:if>
+	</xsl:template>
+	<xsl:template match="item[@xsi:type='Button']">
+		xtype: "button",
+
 	</xsl:template>
 </xsl:stylesheet>

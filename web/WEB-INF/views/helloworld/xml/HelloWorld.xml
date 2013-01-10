@@ -2,9 +2,11 @@
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
 	<items>
 		<item xsi:type="Panel">
-			<Layout xsi:type="AccordionLayout" align="left" pack="center" />
-			<title id="titleMe" stringId="panel \n title"/>
-			<text id="test" stringId="Hello World"/>
+			<Layout xsi:type="AnchorLayout"/>
+			<title stringCD="danny"/>
+		</item>
+		<item xsi:type="Button" enableToggle="true" arrowAlign="bottom"/>
+		<item xsi:type="DateField">
 		</item>
 	</items>
 </viewMetaData>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:str="String">
+	<xs:import namespace="String" schemaLocation="String.xsd"/>
 	<xs:element name="viewMetaData">
 		<xs:complexType>
 			<xs:choice>
@@ -8,10 +9,6 @@
 			</xs:choice>
 		</xs:complexType>
 	</xs:element>
-	<xs:complexType name="Text">
-		<xs:attribute name="id" type="xs:string"/>
-		<xs:attribute name="stringId" type="xs:string"/>
-	</xs:complexType>
 	<xs:complexType name="Viewport">
 		<xs:sequence>
 			<xs:element name="item" type="Item" minOccurs="0" maxOccurs="unbounded"/>
@@ -28,7 +25,7 @@
 	</xs:complexType>
 	<xs:complexType name="AbstractLayout" abstract="true">
 		<xs:attribute name="itemCls" type="xs:string"/>
-		<xs:attribute name="reserveScrollbar" type="xs:boolean"/>
+		<xs:attribute name="reserveScrollbar" type="xs:boolean" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="AutoLayout">
 		<xs:complexContent>
@@ -38,15 +35,15 @@
 	<xs:complexType name="AnchorLayout">
 		<xs:complexContent>
 			<xs:extension base="AbstractLayout">
-				<xs:attribute name="defaultAnchor" type="xs:string"/>
-				<xs:attribute name="manageOverflow" type="xs:int"/>
+				<xs:attribute name="defaultAnchor" type="xs:string" default="100%"/>
+				<xs:attribute name="manageOverflow" type="xs:int" default="2"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="AbsoluteLayout">
 		<xs:complexContent>
 			<xs:extension base="AnchorLayout">
-				<xs:attribute name="ignoreOnContentChange" type="xs:boolean"/>
+				<xs:attribute name="ignoreOnContentChange" type="xs:boolean" default="true"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -75,40 +72,39 @@
 			<xs:enumeration value="stretchmax"/>
 		</xs:restriction>
 	</xs:simpleType>
-
 	<xs:complexType name="BoxLayout" abstract="true">
 		<xs:complexContent>
 			<xs:extension base="AbstractLayout">
-				<xs:attribute name="pack" type="LayoutPack"/>
-				<xs:attribute name="padding" type="xs:string"/>
-				<xs:attribute name="constrainAlign" type="xs:boolean"/>
+				<xs:attribute name="pack" type="LayoutPack" default="start"/>
+				<xs:attribute name="padding" type="xs:string" default="0"/>
+				<xs:attribute name="constrainAlign" type="xs:boolean" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="HBoxLayout">
 		<xs:complexContent>
 			<xs:extension base="BoxLayout">
-				<xs:attribute name="align" use="optional" type="HBoxLayoutAlign"/>
+				<xs:attribute name="align" type="HBoxLayoutAlign" default="top"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="VBoxLayout">
 		<xs:complexContent>
 			<xs:extension base="BoxLayout">
-				<xs:attribute name="align" use="optional" type="VBoxLayoutAlign"/>
+				<xs:attribute name="align" type="VBoxLayoutAlign" default="left"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="AccordionLayout">
 		<xs:complexContent>
 			<xs:extension base="VBoxLayout">
-				<xs:attribute name="activeOnTop" type="xs:boolean" use="optional"/>
-				<xs:attribute name="animate" type="xs:boolean"/>
-				<xs:attribute name="collapseFirst" type="xs:boolean"/>
-				<xs:attribute name="fill" type="xs:boolean"/>
-				<xs:attribute name="hideCollapseTool" type="xs:boolean"/>
-				<xs:attribute name="multi" type="xs:boolean"/>
-				<xs:attribute name="titleCollapse" type="xs:boolean"/>
+				<xs:attribute name="activeOnTop" type="xs:boolean" default="false"/>
+				<xs:attribute name="animate" type="xs:boolean" default="true"/>
+				<xs:attribute name="collapseFirst" type="xs:boolean" default="true"/>
+				<xs:attribute name="fill" type="xs:boolean" default="true"/>
+				<xs:attribute name="hideCollapseTool" type="xs:boolean" default="false"/>
+				<xs:attribute name="multi" type="xs:boolean" default="false"/>
+				<xs:attribute name="titleCollapse" type="xs:boolean" default="true"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -127,10 +123,9 @@
 			<xs:extension base="FitLayout"/>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="Listener">
-	</xs:complexType>
-	<xs:complexType name="ImageSpec">
-	</xs:complexType>
+	<xs:complexType name="Listener"/>
+	<xs:complexType name="Menu"/>
+	<xs:complexType name="ImageSpec"/>
 	<xs:simpleType name="Region">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="north"/>
@@ -161,11 +156,19 @@
 				<xs:attribute name="maxWidth" type="xs:int"/>
 				<xs:attribute name="padding" type="xs:string"/>
 				<xs:attribute name="region" type="Region"/>
-				<xs:attribute name="resizable" type="xs:boolean"/>
-				<xs:attribute name="shrinkWrap" type="xs:boolean"/>
+				<xs:attribute name="resizable" type="xs:boolean" default="false"/>
+				<xs:attribute name="shrinkWrap" type="xs:int" default="2"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:simpleType name="CollapseDirection">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="top"/>
+			<xs:enumeration value="bottom"/>
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="right"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="CollapseMode">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="header"/>
@@ -192,24 +195,25 @@
 			<xs:extension base="Container">
 				<xs:sequence>
 					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="title" type="Text" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
-				<xs:attribute name="animCollapse" type="xs:boolean"/>
+				<xs:attribute name="animCollapse" type="xs:boolean" default="true"/>
 				<xs:attribute name="bodyPadding" type="xs:string"/>
+				<xs:attribute name="collapseDirection" type="CollapseDirection"/>
+				<xs:attribute name="collapseFirst" type="xs:boolean" default="true"/>
 				<xs:attribute name="collapseMode" type="CollapseMode"/>
-				<xs:attribute name="collapsed" type="xs:boolean"/>
-				<xs:attribute name="collapsible" type="xs:boolean"/>
-				<xs:attribute name="headerPosition" type="HeaderPosition"/>
-				<xs:attribute name="hideCollapseTool" type="xs:boolean"/>
-				<xs:attribute name="hideHeader" type="xs:boolean"/>
+				<xs:attribute name="collapsed" type="xs:boolean" default="false"/>
+				<xs:attribute name="collapsible" type="xs:boolean" default="false"/>
+				<xs:attribute name="headerPosition" type="HeaderPosition" default="top"/>
+				<xs:attribute name="hideCollapseTool" type="xs:boolean" default="false"/>
+				<xs:attribute name="hideHeader" type="xs:boolean" default="false"/>
 				<xs:attribute name="iconCls" type="xs:string"/>
-				<xs:attribute name="titleAlign" type="TitleAlign"/>
-				<xs:attribute name="titleCollapse" type="xs:boolean"/>
+				<xs:attribute name="titleAlign" type="TitleAlign" default="left"/>
+				<xs:attribute name="titleCollapse" type="xs:boolean" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="Column">
-	</xs:complexType>
+	<xs:complexType name="Column"/>
 	<xs:simpleType name="Scroll">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="none"/>
@@ -223,27 +227,391 @@
 			<xs:extension base="Panel">
 				<xs:sequence>
 					<xs:element name="column" type="Column" minOccurs="1" maxOccurs="unbounded"/>
-					<xs:element name="emptyText" type="Text" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="emptyText" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
-				<xs:attribute name="allowDeselect" type="xs:boolean"/>
-				<xs:attribute name="columnLines" type="xs:boolean"/>
-				<xs:attribute name="disableSelection" type="xs:boolean"/>
+				<xs:attribute name="allowDeselect" type="xs:boolean" default="false"/>
+				<xs:attribute name="columnLines" type="xs:boolean" default="false"/>
+				<xs:attribute name="disableSelection" type="xs:boolean" default="false"/>
 				<xs:attribute name="enableColumnHide" type="xs:boolean" default="true"/>
 				<xs:attribute name="enableColumnMove" type="xs:boolean" default="true"/>
 				<xs:attribute name="enableColumnResize" type="xs:boolean" default="true"/>
 				<xs:attribute name="enableLocking" type="xs:boolean" default="false"/>
-				<xs:attribute name="hideHeaders" type="xs:boolean"/>
+				<xs:attribute name="hideHeaders" type="xs:boolean" default="false"/>
 				<xs:attribute name="rowLines" type="xs:boolean" default="true"/>
-				<xs:attribute name="scroll" type="Scroll"/>
-				<xs:attribute name="sortableColumns" type="xs:boolean"/>
+				<xs:attribute name="scroll" type="Scroll" default="both"/>
+				<xs:attribute name="sortableColumns" type="xs:boolean" default="true"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="GridPanel">
 		<xs:complexContent>
 			<xs:extension base="TablePanel">
-				<xs:attribute name="animate" type="xs:boolean"/>
 			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="TabPosition">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="top"/>
+			<xs:enumeration value="bottom"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="TabPanel">
+		<xs:complexContent>
+			<xs:extension base="Panel">
+				<xs:attribute name="activeTab" type="xs:string" default="0"/>
+				<xs:attribute name="deferredRender" type="xs:boolean" default="true"/>
+				<xs:attribute name="minTabWidth" type="xs:int"/>
+				<xs:attribute name="maxTabWidth" type="xs:int"/>
+				<xs:attribute name="plain" type="xs:boolean" default="false"/>
+				<xs:attribute name="removePanelHeader" type="xs:boolean" default="true"/>
+				<xs:attribute name="tabPosition" type="TabPosition" default="top"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="ArrowAlign">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="right"/>
+			<xs:enumeration value="bottom"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="IconAlign">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="top"/>
+			<xs:enumeration value="right"/>
+			<xs:enumeration value="bottom"/>
+			<xs:enumeration value="left"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ButtonScale">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="small"/>
+			<xs:enumeration value="medium"/>
+			<xs:enumeration value="large"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TextAlign">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="center"/>
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="right"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Button">
+		<xs:complexContent>
+			<xs:extension base="Item">
+				<xs:sequence>
+					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="menu" type="Menu" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="text" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="tooltip" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="allowDepress" type="xs:boolean" default="true"/>
+				<xs:attribute name="arrowAlign" type="ArrowAlign" default="right"/>
+				<xs:attribute name="border" type="xs:string"/>
+				<xs:attribute name="disabled" type="xs:boolean" default="false"/>
+				<xs:attribute name="enableToggle" type="xs:boolean" default="false"/>
+				<xs:attribute name="handleMouseEvents" type="xs:boolean" default="true"/>
+				<xs:attribute name="iconAlign" type="IconAlign" default="left"/>
+				<xs:attribute name="iconCls" type="xs:string"/>
+				<xs:attribute name="menuAlign" type="xs:string" default="tl-bl?">
+					<xs:annotation>
+						<xs:documentation>
+							See Ext.Element.alignTo
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="overflowText" type="xs:string"/>
+				<xs:attribute name="pressed" type="xs:boolean" default="false"/>
+				<xs:attribute name="scale" type="ButtonScale" default="small"/>
+				<xs:attribute name="shrinkWrap" type="xs:int" default="3"/>
+				<xs:attribute name="tabIndex" type="xs:int"/>
+				<xs:attribute name="textAlign" type="TextAlign" default="center"/>
+				<xs:attribute name="toggleGroup" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="LabelAlign">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="top"/>
+			<xs:enumeration value="right"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="MsgTarget">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="qtip"/>
+			<xs:enumeration value="title"/>
+			<xs:enumeration value="under"/>
+			<xs:enumeration value="side"/>
+			<xs:enumeration value="none"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="AbstractField" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="Item">
+				<xs:sequence>
+					<xs:element name="activeError" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="fieldLabel" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="invalidText" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="autoFitErrors" type="xs:boolean" default="true"/>
+				<xs:attribute name="disabled" type="xs:boolean" default="false"/>
+				<xs:attribute name="hideEmptyLabel" type="xs:boolean" default="true"/>
+				<xs:attribute name="hideLabel" type="xs:boolean" default="false"/>
+				<xs:attribute name="labelAlign" type="LabelAlign" default="left"/>
+				<xs:attribute name="labelPad" type="xs:int" default="5"/>
+				<xs:attribute name="labelSeparator" type="xs:string" default=":"/>
+				<xs:attribute name="labelWidth" type="xs:int" default="100"/>
+				<xs:attribute name="preventMark" type="xs:boolean" default="false"/>
+				<xs:attribute name="readOnly" type="xs:boolean" default="false"/>
+				<xs:attribute name="submitValue" type="xs:boolean" default="true"/>
+				<xs:attribute name="tabIndex" type="xs:int"/>
+				<xs:attribute name="validateOnBlur" type="xs:boolean" default="true"/>
+				<xs:attribute name="validateOnChange" type="xs:boolean" default="true"/>
+				<xs:attribute name="value" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="BoxLabelAlign">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="before"/>
+			<xs:enumeration value="after"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Checkbox">
+		<xs:complexContent>
+			<xs:extension base="AbstractField">
+				<xs:sequence>
+					<xs:element name="boxLabel" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="boxLabelAlign" type="BoxLabelAlign" default="after"/>
+				<xs:attribute name="checked" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Radio">
+		<xs:complexContent>
+			<xs:extension base="Checkbox"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DisplayField">
+		<xs:complexContent>
+			<xs:extension base="AbstractField"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HiddenField">
+		<xs:complexContent>
+			<xs:extension base="AbstractField"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="VType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="alpha"/>
+			<xs:enumeration value="alphanum"/>
+			<xs:enumeration value="email"/>
+			<xs:enumeration value="url"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="TextField">
+		<xs:complexContent>
+			<xs:extension base="AbstractField">
+				<xs:sequence>
+					<xs:element name="blankText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="emptyText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="minLengthText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="maxLengthText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="regexText" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="allowBlank" type="xs:boolean" default="true"/>
+				<xs:attribute name="allowOnlyWhitespace" type="xs:boolean" default="true"/>
+				<xs:attribute name="disableKeyFilter" type="xs:boolean" default="false"/>
+				<xs:attribute name="enforceMaxLength" type="xs:boolean" default="false"/>
+				<xs:attribute name="grow" type="xs:boolean" default="false"/>
+				<xs:attribute name="growMin" type="xs:int" default="30"/>
+				<xs:attribute name="growMax" type="xs:int" default="800"/>
+				<xs:attribute name="minLength" type="xs:int"/>
+				<xs:attribute name="maxLength" type="xs:int"/>
+				<xs:attribute name="regex" type="xs:string"/>
+				<xs:attribute name="selectOnFocus" type="xs:boolean" default="false"/>
+				<xs:attribute name="vtype" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TextArea">
+		<xs:complexContent>
+			<xs:extension base="TextField">
+				<xs:attribute name="cols" type="xs:int" default="20"/>
+				<xs:attribute name="enterIsSpecial" type="xs:boolean" default="false"/>
+				<xs:attribute name="preventScrollbars" type="xs:boolean" default="false"/>
+				<xs:attribute name="rows" type="xs:int" default="4"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TriggerField" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="AbstractField">
+				<xs:attribute name="editable" type="xs:boolean" default="true"/>
+				<xs:attribute name="hideTrigger" type="xs:boolean" default="false"/>
+				<xs:attribute name="selectOnFocus" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="FileField">
+		<xs:complexContent>
+			<xs:extension base="TriggerField">
+				<xs:sequence>
+					<xs:element name="buttonText" type="str:String"/>
+				</xs:sequence>
+				<xs:attribute name="buttonMargin" type="xs:int" default="3"/>
+				<xs:attribute name="buttonOnly" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PickerField" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="TriggerField">
+				<xs:attribute name="matchFieldWidth" type="xs:boolean" default="true"/>
+				<xs:attribute name="pickerAlign" type="xs:string" default="tl-bl?"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="QueryMode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="remote"/>
+			<xs:enumeration value="local"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TriggerAction">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="all"/>
+			<xs:enumeration value="query"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ComboBox">
+		<xs:complexContent>
+			<xs:extension base="PickerField">
+				<xs:sequence>
+					<xs:element name="valueNotFoundText" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="autoSelect" type="xs:boolean" default="true"/>
+				<xs:attribute name="displayField" type="xs:string"/>
+				<xs:attribute name="forceSelection" type="xs:boolean" default="false"/>
+				<xs:attribute name="growToLongestValue" type="xs:boolean" default="true"/>
+				<xs:attribute name="minChars" type="xs:int"/>
+				<xs:attribute name="multiSelect" type="xs:boolean" default="false"/>
+				<xs:attribute name="pageSize" type="xs:int" default="0"/>
+				<xs:attribute name="queryCaching" type="xs:boolean" default="true"/>
+				<xs:attribute name="queryDelay" type="xs:int"/>
+				<xs:attribute name="queryMode" type="QueryMode" default="remote"/>
+				<xs:attribute name="queryParam" type="xs:string" default="query"/>
+				<xs:attribute name="selectOnTab" type="xs:boolean" default="true"/>
+				<xs:attribute name="triggerAction" type="TriggerAction" default="all"/>
+				<xs:attribute name="typeAhead" type="xs:boolean" default="false"/>
+				<xs:attribute name="typeAheadDelay" type="xs:int" default="250"/>
+				<xs:attribute name="valueField" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TimeField">
+		<xs:complexContent>
+			<xs:extension base="PickerField">
+				<xs:sequence>
+					<xs:element name="minText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="maxText" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="format" type="xs:string" default="g:i A"/>
+				<xs:attribute name="increment" type="xs:int" default="15"/>
+				<xs:attribute name="minValue" type="xs:string"/>
+				<xs:attribute name="maxValue" type="xs:string"/>
+				<xs:attribute name="pickerMaxHeight" type="xs:int" default="300"/>
+				<xs:attribute name="selectOnTab" type="xs:boolean" default="true"/>
+				<xs:attribute name="snapToIncrement" type="xs:boolean" default="false"/>
+				<xs:attribute name="submitFormat" type="xs:string" default="g:i A"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DateField">
+		<xs:complexContent>
+			<xs:extension base="PickerField">
+				<xs:sequence>
+					<xs:element name="disabledDate" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="disabledDateText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="disabledDay" type="xs:int" minOccurs="0" maxOccurs="7"/>
+					<xs:element name="disabledDaysText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="minText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="maxText" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="format" type="xs:string" default="m/d/Y"/>
+				<xs:attribute name="minValue" type="xs:string"/>
+				<xs:attribute name="maxValue" type="xs:string"/>
+				<xs:attribute name="showToday" type="xs:boolean" default="true"/>
+				<xs:attribute name="startDay" type="xs:int" default="0"/>
+				<xs:attribute name="submitFormat" type="xs:string" default="g:i A"/>
+				<xs:attribute name="useString" type="xs:boolean"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NumberField">
+		<xs:complexContent>
+			<xs:extension base="TriggerField">
+				<xs:sequence>
+					<xs:element name="minText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="maxText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="nanText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="negativeText" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="allowDecimals" type="xs:boolean" default="true"/>
+				<xs:attribute name="autoStripChars" type="xs:boolean" default="false"/>
+				<xs:attribute name="decimalPrecison" type="xs:int" default="2"/>
+				<xs:attribute name="decimalSeparator" type="xs:string" default="."/>
+				<xs:attribute name="minValue" type="xs:float"/>
+				<xs:attribute name="maxValue" type="xs:float"/>
+				<xs:attribute name="step" type="xs:float" default="1"/>
+				<xs:attribute name="submitLocaleSeparator" type="xs:boolean" default="true"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Slider">
+		<xs:complexContent>
+			<xs:extension base="AbstractField">
+				<xs:attribute name="animate" type="xs:boolean" default="true"/>
+				<xs:attribute name="clickToChange" type="xs:boolean" default="true"/>
+				<xs:attribute name="constrainThumbs" type="xs:boolean" default="true"/>
+				<xs:attribute name="decimalPrecision" type="xs:int" default="0"/>
+				<xs:attribute name="disableRounding" type="xs:boolean" default="false"/>
+				<xs:attribute name="increment" type="xs:float" default="0"/>
+				<xs:attribute name="keyIncrement" type="xs:float" default="1"/>
+				<xs:attribute name="minValue" type="xs:float"/>
+				<xs:attribute name="maxValue" type="xs:float"/>
+				<xs:attribute name="useTips" type="xs:boolean" default="true"/>
+				<xs:attribute name="verical" type="xs:boolean" default="false"/>
+				<xs:attribute name="zeroBasedSnapping" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HTMLEditor">
+		<xs:complexContent>
+			<xs:extension base="Item">
+				<xs:attribute name="enableAlignments" type="xs:boolean" default="true"/>
+				<xs:attribute name="enableColors" type="xs:boolean" default="true"/>
+				<xs:attribute name="enableFonts" type="xs:boolean" default="true"/>
+				<xs:attribute name="enableFontSize" type="xs:boolean" default="true"/>
+				<xs:attribute name="enableFormat" type="xs:boolean" default="true"/>
+				<xs:attribute name="enableLinks" type="xs:boolean" default="true"/>
+				<xs:attribute name="enableLists" type="xs:boolean" default="true"/>
+				<xs:attribute name="enableSourceEdit" type="xs:boolean" default="true"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Image">
+		<xs:complexContent>
+<xs:extension base="Item">
+	<xs:sequence>
+		<xs:element name="altText" type="str:String" minOccurs="0" maxOccurs="1"/>
+		<xs:element name="image" type="ImageSpec" minOccurs="1" maxOccurs="1"/>
+	</xs:sequence>
+</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 </xs:schema>
