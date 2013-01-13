@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" xmlns:str="String">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:str="String" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="String" schemaLocation="String.xsd"/>
 	<xs:element name="viewMetaData">
 		<xs:complexType>
@@ -76,9 +76,9 @@
 	<xs:complexType name="BoxLayout" abstract="true">
 		<xs:complexContent>
 			<xs:extension base="AbstractLayout">
+				<xs:attribute name="constrainAlign" type="xs:boolean" default="false"/>
 				<xs:attribute name="pack" type="LayoutPack" default="start"/>
 				<xs:attribute name="padding" type="xs:string" default="0"/>
-				<xs:attribute name="constrainAlign" type="xs:boolean" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -126,7 +126,10 @@
 	</xs:complexType>
 	<xs:complexType name="Listener"/>
 	<xs:complexType name="Menu"/>
-	<xs:complexType name="ImageSpec"/>
+	<xs:complexType name="ImageSpec">
+		<xs:attribute name="path" type="xs:string" use="required"/>
+		<xs:attribute name="external" type="xs:boolean" default="false"/>
+	</xs:complexType>
 	<xs:simpleType name="Region">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="north"/>
@@ -139,11 +142,6 @@
 	<xs:complexType name="Container">
 		<xs:complexContent>
 			<xs:extension base="Item">
-				<xs:sequence>
-					<xs:element name="Layout" type="AbstractLayout" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
-				</xs:sequence>
 				<xs:attribute name="autoScroll" type="xs:boolean" default="false"/>
 				<xs:attribute name="border" type="xs:string"/>
 				<xs:attribute name="cls" type="xs:string"/>
@@ -194,8 +192,11 @@
 		<xs:complexContent>
 			<xs:extension base="Container">
 				<xs:sequence>
-					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="Layout" type="AbstractLayout" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
 				<xs:attribute name="animCollapse" type="xs:boolean" default="true"/>
 				<xs:attribute name="bodyPadding" type="xs:string"/>
@@ -226,7 +227,6 @@
 		<xs:complexContent>
 			<xs:extension base="Panel">
 				<xs:sequence>
-					<xs:element name="column" type="Column" minOccurs="1" maxOccurs="unbounded"/>
 					<xs:element name="emptyText" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
 				<xs:attribute name="allowDeselect" type="xs:boolean" default="false"/>
@@ -245,8 +245,7 @@
 	</xs:complexType>
 	<xs:complexType name="GridPanel">
 		<xs:complexContent>
-			<xs:extension base="TablePanel">
-			</xs:extension>
+			<xs:extension base="TablePanel"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:simpleType name="TabPosition">
@@ -387,12 +386,15 @@
 				</xs:sequence>
 				<xs:attribute name="boxLabelAlign" type="BoxLabelAlign" default="after"/>
 				<xs:attribute name="checked" type="xs:boolean" default="false"/>
+				<xs:attribute name="inputValue" type="xs:string"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="Radio">
 		<xs:complexContent>
-			<xs:extension base="Checkbox"/>
+			<xs:extension base="Checkbox">
+				<xs:attribute name="radioGroupName" type="xs:string" use="required"/>
+			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="DisplayField">
@@ -614,7 +616,5 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="AbstractStore" abstract="true">
-		
-	</xs:complexType>
+	<xs:complexType name="AbstractStore" abstract="true"/>
 </xs:schema>

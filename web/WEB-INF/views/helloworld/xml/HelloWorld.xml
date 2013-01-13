@@ -1,9 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
 	<items>
-		<item xsi:type="Panel" width="100" height="50">
-			<Layout xsi:type="AutoLayout"/>
+		<item xsi:type="TabPanel" width="100" height="50" id="top" titleAlign="center" tabPosition="bottom" plain="true">
 			<title stringCD="danny"/>
+			<icon path="silk/wrench.png"/>
+			<items>
+				<item xsi:type="Panel">
+					<title stringCD="tab 1"/>
+					<items>
+						<item xsi:type="Button">
+							<text stringCD="button Text"/>
+							<tooltip stringCD="button tool tip"/>
+						</item>
+						<item xsi:type="Checkbox" checked="true">
+							<activeError stringCD="error on checkbox"/>
+							<fieldLabel stringCD="checkbox field label"/>
+							<boxLabel stringCD="checkbox box label"/>
+						</item>
+						<item xsi:type="Radio" radioGroupName="size" checked="true">
+							<boxLabel stringCD="radio 1"/>
+						</item>
+						<item xsi:type="Radio" radioGroupName="size" value="true" inputValue="second one">
+							<boxLabel stringCD="label 2"/>
+						</item>
+					</items>
+				</item>
+				<item xsi:type="Panel" id="dannytab">
+					<title stringCD="tab 2"/>
+				</item>
+			</items>
 		</item>
 	</items>
 </viewMetaData>
