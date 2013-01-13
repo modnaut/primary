@@ -39,6 +39,26 @@
 		</xsl:choose>
 	</xsl:function>
 	
+	<xsl:function name="mn:eval-attribute">
+		<xsl:param name="node" as="node()"/>
+		<xsl:param name="attributeName" as="xs:string"/>
+		<xsl:param name="extraString" as="xs:string"/>
+		<xsl:choose>
+			<xsl:when test="$node">
+				<xsl:variable name="attributeValue" select="$node/@*[name() = $attributeName]"/>
+				<xsl:choose>
+					<xsl:when test="$attributeValue != '' ">
+						<xsl:variable name="colon" select="':'"/>
+						<xsl:sequence select="concat($attributeName,$colon,$attributeValue,$extraString)"/>
+					</xsl:when>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:sequence select=" '' "/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	
 	<xsl:function name="mn:childString">
 		<xsl:param name="node" as="node()"/>
 		<xsl:param name="elementName" as="xs:string"/>

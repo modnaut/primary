@@ -192,11 +192,11 @@
 		<xs:complexContent>
 			<xs:extension base="Container">
 				<xs:sequence>
-					<xs:element name="Layout" type="AbstractLayout" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="layout" type="AbstractLayout" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
 				<xs:attribute name="animCollapse" type="xs:boolean" default="true"/>
 				<xs:attribute name="bodyPadding" type="xs:string"/>
@@ -264,6 +264,38 @@
 				<xs:attribute name="plain" type="xs:boolean" default="false"/>
 				<xs:attribute name="removePanelHeader" type="xs:boolean" default="true"/>
 				<xs:attribute name="tabPosition" type="TabPosition" default="top"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:attributeGroup name="Labelable">
+		<xs:attribute name="autoFitErrors" type="xs:boolean" default="true"/>
+		<xs:attribute name="hideEmptyLabel" type="xs:boolean" default="true"/>
+		<xs:attribute name="hideLabel" type="xs:boolean" default="false"/>
+		<xs:attribute name="labelAlign" type="LabelAlign" default="left"/>
+		<xs:attribute name="labelPad" type="xs:int" default="5"/>
+		<xs:attribute name="labelSeparator" type="xs:string" default=":"/>
+		<xs:attribute name="labelWidth" type="xs:int" default="100"/>
+		<xs:attribute name="msgTarget" type="MsgTarget" default="qtip"/>
+		<xs:attribute name="preventMark" type="xs:boolean" default="false"/>
+	</xs:attributeGroup>
+	<xs:complexType name="CheckboxGroup">
+		<xs:complexContent>
+			<xs:extension base="Container">
+				<xs:sequence>
+					<xs:element name="activeError" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="blankText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="fieldLabel" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="layout" type="AbstractLayout" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attributeGroup ref="Labelable"/>
+				<xs:attribute name="allowBlank" type="xs:boolean" default="true"/>
+				<xs:attribute name="columns" type="xs:string"/>
+				<xs:attribute name="disabled" type="xs:boolean" default="false"/>
+				<xs:attribute name="submitValue" type="xs:boolean" default="true"/>
+				<xs:attribute name="validateOnChange" type="xs:boolean" default="true"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -354,15 +386,8 @@
 					<xs:element name="fieldLabel" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="invalidText" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
-				<xs:attribute name="autoFitErrors" type="xs:boolean" default="true"/>
+				<xs:attributeGroup ref="Labelable"/>
 				<xs:attribute name="disabled" type="xs:boolean" default="false"/>
-				<xs:attribute name="hideEmptyLabel" type="xs:boolean" default="true"/>
-				<xs:attribute name="hideLabel" type="xs:boolean" default="false"/>
-				<xs:attribute name="labelAlign" type="LabelAlign" default="left"/>
-				<xs:attribute name="labelPad" type="xs:int" default="5"/>
-				<xs:attribute name="labelSeparator" type="xs:string" default=":"/>
-				<xs:attribute name="labelWidth" type="xs:int" default="100"/>
-				<xs:attribute name="preventMark" type="xs:boolean" default="false"/>
 				<xs:attribute name="readOnly" type="xs:boolean" default="false"/>
 				<xs:attribute name="submitValue" type="xs:boolean" default="true"/>
 				<xs:attribute name="tabIndex" type="xs:int"/>
@@ -421,8 +446,8 @@
 				<xs:sequence>
 					<xs:element name="blankText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="emptyText" type="str:String" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="minLengthText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="maxLengthText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="minLengthText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="regexText" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
 				<xs:attribute name="allowBlank" type="xs:boolean" default="true"/>
@@ -519,8 +544,8 @@
 		<xs:complexContent>
 			<xs:extension base="PickerField">
 				<xs:sequence>
-					<xs:element name="minText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="maxText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="minText" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
 				<xs:attribute name="format" type="xs:string" default="g:i A"/>
 				<xs:attribute name="increment" type="xs:int" default="15"/>
@@ -541,8 +566,8 @@
 					<xs:element name="disabledDateText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="disabledDay" type="xs:int" minOccurs="0" maxOccurs="7"/>
 					<xs:element name="disabledDaysText" type="str:String" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="minText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="maxText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="minText" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
 				<xs:attribute name="format" type="xs:string" default="m/d/Y"/>
 				<xs:attribute name="minValue" type="xs:string"/>
@@ -558,8 +583,8 @@
 		<xs:complexContent>
 			<xs:extension base="TriggerField">
 				<xs:sequence>
-					<xs:element name="minText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="maxText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="minText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="nanText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="negativeText" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>

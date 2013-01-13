@@ -84,4 +84,18 @@
 		<xsl:value-of select="mn:attribute(., 'tabPosition', ',')"/>
 		xtype: "tabpanel"
 	</xsl:template>
+	
+	
+	<xsl:template match="item[@xsi:type='CheckboxGroup']">
+		<xsl:message><xsl:copy-of select="."/></xsl:message>
+		<xsl:call-template name="Container"/>
+		<xsl:call-template name="Labelable"/>
+		<xsl:value-of select="mn:attribute(., 'allowBlank', ',')"/>
+		<xsl:value-of select="mn:childString(., 'blankText', ',')"/>
+		<xsl:value-of select="mn:eval-attribute(., 'columns', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'submitValue', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'validateOnChange', ',')"/>
+		xtype: "checkboxgroup"
+	</xsl:template>
 </xsl:stylesheet>

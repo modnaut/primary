@@ -25,22 +25,27 @@
 		xtype: "button"
 	</xsl:template>
 	
-	<xsl:template name="AbstractField">
+	<xsl:template name="Labelable">
 		<xsl:value-of select="mn:childString(., 'activeError', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'autoFitErrors', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
 		<xsl:value-of select="mn:childString(., 'fieldLabel', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hideEmptyLabel', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hideLabel', ',')"/>
-		<xsl:value-of select="mn:childString(., 'invalidText', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'labelAlign', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'labelPad', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'labelSeparator', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'labelWidth', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'msgTarget', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'preventMark', ',')"/>
+	</xsl:template>
+	
+	<xsl:template name="AbstractField">
+		<xsl:call-template name="Labelable"/>
+		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
+		<xsl:value-of select="mn:childString(., 'invalidText', ',')"/>
 		<xsl:if test="@id != '' and @radioGroupName = ''">
 			name: <xsl:value-of select="mn:wrap-string(@id)"/>,
 		</xsl:if>
-		<xsl:value-of select="mn:attribute(., 'preventMark', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'readOnly', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'submitValue', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'tabIndex', ',')"/>

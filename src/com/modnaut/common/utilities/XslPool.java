@@ -64,7 +64,7 @@ public class XslPool
 		public Transformer makeObject(PoolKey key) throws TransformerConfigurationException
 		{
 			javax.xml.transform.TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
-			Source xsltSource = new StreamSource(ApplicationServlet.getRealPath() + "WEB-INF\\xsl\\" + key.xslFileName);
+			Source xsltSource = new StreamSource(ApplicationServlet.getRealPath() + "WEB-INF/xsl/" + key.xslFileName);
 			Transformer transformer = factory.newTransformer(xsltSource);
 			return transformer;
 		}
