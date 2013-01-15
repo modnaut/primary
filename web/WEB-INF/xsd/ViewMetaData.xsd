@@ -278,6 +278,12 @@
 		<xs:attribute name="msgTarget" type="MsgTarget" default="qtip"/>
 		<xs:attribute name="preventMark" type="xs:boolean" default="false"/>
 	</xs:attributeGroup>
+	<xs:attributeGroup name="Field">
+		<xs:attribute name="disabled" type="xs:boolean" default="false"/>
+		<xs:attribute name="submitValue" type="xs:boolean" default="true"/>
+		<xs:attribute name="validateOnChange" type="xs:boolean" default="true"/>
+		<xs:attribute name="value" type="xs:string"/>
+	</xs:attributeGroup>
 	<xs:complexType name="CheckboxGroup">
 		<xs:complexContent>
 			<xs:extension base="Container">
@@ -290,12 +296,10 @@
 					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
+				<xs:attributeGroup ref="Field"/>
 				<xs:attributeGroup ref="Labelable"/>
 				<xs:attribute name="allowBlank" type="xs:boolean" default="true"/>
 				<xs:attribute name="columns" type="xs:string"/>
-				<xs:attribute name="disabled" type="xs:boolean" default="false"/>
-				<xs:attribute name="submitValue" type="xs:boolean" default="true"/>
-				<xs:attribute name="validateOnChange" type="xs:boolean" default="true"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -386,14 +390,11 @@
 					<xs:element name="fieldLabel" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="invalidText" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
+				<xs:attributeGroup ref="Field"/>
 				<xs:attributeGroup ref="Labelable"/>
-				<xs:attribute name="disabled" type="xs:boolean" default="false"/>
 				<xs:attribute name="readOnly" type="xs:boolean" default="false"/>
-				<xs:attribute name="submitValue" type="xs:boolean" default="true"/>
 				<xs:attribute name="tabIndex" type="xs:int"/>
 				<xs:attribute name="validateOnBlur" type="xs:boolean" default="true"/>
-				<xs:attribute name="validateOnChange" type="xs:boolean" default="true"/>
-				<xs:attribute name="value" type="xs:string"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -455,10 +456,10 @@
 				<xs:attribute name="disableKeyFilter" type="xs:boolean" default="false"/>
 				<xs:attribute name="enforceMaxLength" type="xs:boolean" default="false"/>
 				<xs:attribute name="grow" type="xs:boolean" default="false"/>
-				<xs:attribute name="growMin" type="xs:int" default="30"/>
 				<xs:attribute name="growMax" type="xs:int" default="800"/>
-				<xs:attribute name="minLength" type="xs:int"/>
+				<xs:attribute name="growMin" type="xs:int" default="30"/>
 				<xs:attribute name="maxLength" type="xs:int"/>
+				<xs:attribute name="minLength" type="xs:int"/>
 				<xs:attribute name="regex" type="xs:string"/>
 				<xs:attribute name="selectOnFocus" type="xs:boolean" default="false"/>
 				<xs:attribute name="vtype" type="xs:string"/>
@@ -523,7 +524,7 @@
 				</xs:sequence>
 				<xs:attribute name="autoSelect" type="xs:boolean" default="true"/>
 				<xs:attribute name="displayField" type="xs:string"/>
-				<xs:attribute name="forceSelection" type="xs:boolean" default="false"/>
+				<xs:attribute name="forceSelection" type="xs:boolean" default="true"/>
 				<xs:attribute name="growToLongestValue" type="xs:boolean" default="true"/>
 				<xs:attribute name="minChars" type="xs:int"/>
 				<xs:attribute name="multiSelect" type="xs:boolean" default="false"/>
@@ -549,8 +550,8 @@
 				</xs:sequence>
 				<xs:attribute name="format" type="xs:string" default="g:i A"/>
 				<xs:attribute name="increment" type="xs:int" default="15"/>
-				<xs:attribute name="minValue" type="xs:string"/>
 				<xs:attribute name="maxValue" type="xs:string"/>
+				<xs:attribute name="minValue" type="xs:string"/>
 				<xs:attribute name="pickerMaxHeight" type="xs:int" default="300"/>
 				<xs:attribute name="selectOnTab" type="xs:boolean" default="true"/>
 				<xs:attribute name="snapToIncrement" type="xs:boolean" default="false"/>
@@ -562,20 +563,20 @@
 		<xs:complexContent>
 			<xs:extension base="PickerField">
 				<xs:sequence>
-					<xs:element name="disabledDate" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-					<xs:element name="disabledDateText" type="str:String" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="disabledDay" type="xs:int" minOccurs="0" maxOccurs="7"/>
+					<xs:element name="disabledDatesText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="disabledDaysText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="maxText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="minText" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
+				<xs:attribute name="disabledDates" type="xs:string"/>
+				<xs:attribute name="disabledDays" type="xs:string"/>
 				<xs:attribute name="format" type="xs:string" default="m/d/Y"/>
 				<xs:attribute name="minValue" type="xs:string"/>
 				<xs:attribute name="maxValue" type="xs:string"/>
 				<xs:attribute name="showToday" type="xs:boolean" default="true"/>
 				<xs:attribute name="startDay" type="xs:int" default="0"/>
 				<xs:attribute name="submitFormat" type="xs:string" default="g:i A"/>
-				<xs:attribute name="useString" type="xs:boolean"/>
+				<xs:attribute name="useStrict" type="xs:boolean"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -592,8 +593,8 @@
 				<xs:attribute name="autoStripChars" type="xs:boolean" default="false"/>
 				<xs:attribute name="decimalPrecison" type="xs:int" default="2"/>
 				<xs:attribute name="decimalSeparator" type="xs:string" default="."/>
-				<xs:attribute name="minValue" type="xs:float"/>
 				<xs:attribute name="maxValue" type="xs:float"/>
+				<xs:attribute name="minValue" type="xs:float"/>
 				<xs:attribute name="step" type="xs:float" default="1"/>
 				<xs:attribute name="submitLocaleSeparator" type="xs:boolean" default="true"/>
 			</xs:extension>
@@ -609,8 +610,8 @@
 				<xs:attribute name="disableRounding" type="xs:boolean" default="false"/>
 				<xs:attribute name="increment" type="xs:float" default="0"/>
 				<xs:attribute name="keyIncrement" type="xs:float" default="1"/>
-				<xs:attribute name="minValue" type="xs:float"/>
 				<xs:attribute name="maxValue" type="xs:float"/>
+				<xs:attribute name="minValue" type="xs:float"/>
 				<xs:attribute name="useTips" type="xs:boolean" default="true"/>
 				<xs:attribute name="verical" type="xs:boolean" default="false"/>
 				<xs:attribute name="zeroBasedSnapping" type="xs:boolean" default="false"/>

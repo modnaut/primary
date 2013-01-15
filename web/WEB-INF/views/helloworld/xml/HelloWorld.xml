@@ -10,7 +10,7 @@
 							<text stringCD="button Text"/>
 							<tooltip stringCD="button tool tip"/>
 						</item>
-						<item xsi:type="CheckboxGroup" allowBlank="false" columns="[1,2,3]">
+						<item xsi:type="CheckboxGroup" allowBlank="false" columns="[1,2,3]" disabled="true">
 							<blankText stringCD="select 1 damnit!"/>
 							<fieldLabel stringCD="checkbox group"/>
 							<items>
