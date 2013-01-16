@@ -26,7 +26,7 @@ public class ApplicationCtrl
 
 	public void defaultAction() throws IOException, Exception
 	{
-		Applications apps = JaxbPool.unmarshal(Applications.class, new File(ApplicationServlet.getRealPath() + "WEB-INF/xml/application.xml"));
+		Applications apps = JaxbPool.unmarshal(Applications.class, new File(ApplicationServlet.getRealPath() + "WEB-INF/xml/Application.xml"));
 		HashMap<String, Object> parms = new HashMap<String, Object>();
 		parms.put("applicationId", 1);
 		XslPool.marshalAndTransform(apps, response.getOutputStream(), "Application.xsl", parms, false);
