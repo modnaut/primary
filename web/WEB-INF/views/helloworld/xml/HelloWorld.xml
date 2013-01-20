@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
 	<items>
-		<item xsi:type="TabPanel" width="100" height="50" id="top" titleAlign="center" tabPosition="bottom" plain="true">
+		<item xsi:type="TabPanel" width="100" height="50" id="top" titleAlign="center" tabPosition="bottom" plain="true" activeTab="1">
 			<icon path="silk/wrench.png"/>
 			<items>
 				<item xsi:type="Panel">
@@ -31,8 +31,41 @@
 					</items>
 					<title stringCD="tab 1"/>
 				</item>
-				<item xsi:type="Panel" id="dannytab">
+				<item xsi:type="GridPanel" id="dannytab">
 					<title stringCD="tab 2"/>
+					<column dataIndex="userId">
+						<text stringCD="User ID"/>
+					</column>
+					<column dataIndex="userName">
+						<text stringCD="Username"/>
+					</column>
+					<column dataIndex="email">
+						<text stringCD="Email Address"/>
+					</column>
+					<column dataIndex="firstName">
+						<text stringCD="First Name"/>
+					</column>
+					<column dataIndex="lastName">
+						<text stringCD="Last Name"/>
+					</column>
+					<store xsi:type="Store">
+						<model>
+							<field name="userId" type="int"/>
+							<field name="userName" type="string"/>
+							<field name="email" type="string"/>
+							<field name="firstName" type="string"/>
+							<field name="lastName" type="string"/>
+						</model>
+						<data>
+							<record>
+								<field name="userId" dataIndex="0"/>
+								<field name="userName" dataIndex="1"/>
+								<field name="email" dataIndex="2"/>
+								<field name="firstName" dataIndex="3"/>
+								<field name="lastName" dataIndex="4"/>
+							</record>
+						</data>
+					</store>
 				</item>
 			</items>
 			<title stringCD="danny"/>

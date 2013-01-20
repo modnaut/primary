@@ -50,28 +50,6 @@
 		xtype: "panel"
 	</xsl:template>
 	
-	<xsl:template name="TablePanel">
-		<xsl:call-template name="Panel"/>
-		<xsl:value-of select="mn:attribute(., 'allowDeselect', ',')"/>
-		columns: [
-		],
-		<xsl:value-of select="mn:attribute(., 'columnLines', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'disableSelection', ',')"/>
-		<xsl:value-of select="mn:childString(., 'emptyText', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'enableColumnHide', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'enableColumnMove', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'enableColumnResize', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'enableLocking', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'hideHeaders', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'rowLines', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'scroll', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'sortableColumns', ',')"/>
-	</xsl:template>
-	
-	<xsl:template match="item[@xsi:type='GridPanel']">
-		<xsl:call-template name="TablePanel"/>
-		xtype: "grid"
-	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='TabPanel']">
 		<xsl:call-template name="Panel"/>

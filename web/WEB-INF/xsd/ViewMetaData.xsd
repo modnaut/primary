@@ -154,7 +154,14 @@
 				<xs:attribute name="maxWidth" type="xs:int"/>
 				<xs:attribute name="padding" type="xs:string"/>
 				<xs:attribute name="region" type="Region"/>
-				<xs:attribute name="resizable" type="xs:boolean" default="false"/>
+				<xs:attribute name="resizable" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>
+							For containers resizable defualts to false,
+							but for grid columns it defaults to true.
+						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 				<xs:attribute name="shrinkWrap" type="xs:int" default="2"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -214,7 +221,37 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="Column"/>
+	<xs:simpleType name="Align">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="center"/>
+			<xs:enumeration value="right"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Column">
+		<xs:complexContent>
+			<xs:extension base="Container">
+				<xs:sequence>
+					<xs:element name="column" type="Column" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="emptyCellText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="menuText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="text" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="tooltip" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="align" type="Align" default="left"/>
+				<xs:attribute name="dataIndex" type="xs:string"/>
+				<xs:attribute name="draggable" type="xs:boolean" default="true"/>
+				<xs:attribute name="groupable" type="xs:boolean" default="true"/>
+				<xs:attribute name="hideable" type="xs:boolean" default="true"/>
+				<xs:attribute name="lockable" type="xs:boolean" default="true"/>
+				<xs:attribute name="locked" type="xs:boolean" default="false"/>
+				<xs:attribute name="menuDisabled" type="xs:boolean" default="false"/>
+				<xs:attribute name="sealed" type="xs:boolean" default="false"/>
+				<xs:attribute name="sortable" type="xs:boolean" default="true"/>
+				<xs:attribute name="tdCls" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:simpleType name="Scroll">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="none"/>
@@ -227,7 +264,9 @@
 		<xs:complexContent>
 			<xs:extension base="Panel">
 				<xs:sequence>
+					<xs:element name="column" type="Column" minOccurs="1" maxOccurs="unbounded"/>
 					<xs:element name="emptyText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="store" type="AbstractStore" minOccurs="1" maxOccurs="1"/>
 				</xs:sequence>
 				<xs:attribute name="allowDeselect" type="xs:boolean" default="false"/>
 				<xs:attribute name="columnLines" type="xs:boolean" default="false"/>
@@ -642,5 +681,53 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="AbstractStore" abstract="true"/>
+	<xs:simpleType name="DataType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="auto"/>
+			<xs:enumeration value="string"/>
+			<xs:enumeration value="int"/>
+			<xs:enumeration value="float"/>
+			<xs:enumeration value="boolean"/>
+			<xs:enumeration value="date"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Field">
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="type" type="DataType" default="auto"/>
+	</xs:complexType>
+	<xs:complexType name="Model">
+		<xs:sequence>
+			<xs:element name="field" type="Field" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="idProperty" type="xs:string" default="id"/>
+	</xs:complexType>
+	<xs:complexType name="AbstractStore" abstract="true">
+		<xs:sequence>
+			<xs:element name="model" type="Model" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RecordField">
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="value" type="xs:string"/>
+		<xs:attribute name="dataIndex" type="xs:int"/>
+	</xs:complexType>
+	<xs:complexType name="Record">
+		<xs:sequence>
+			<xs:element name="field" type="RecordField" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RecordSet">
+		<xs:sequence>
+			<xs:element name="record" type="Record" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Store">
+		<xs:complexContent>
+			<xs:extension base="AbstractStore">
+				<xs:sequence>
+					<xs:element name="data" type="RecordSet" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 </xs:schema>
