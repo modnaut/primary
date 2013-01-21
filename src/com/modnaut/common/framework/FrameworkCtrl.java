@@ -60,4 +60,9 @@ public class FrameworkCtrl
 	{
 		XslPool.marshalAndTransform(viewMetaData, response.getOutputStream(), "ViewMetaData.xsl", null, true);
 	}
+
+	protected String getParameter(String name)
+	{
+		return this.request.getParameter(name);
+	}
 }
