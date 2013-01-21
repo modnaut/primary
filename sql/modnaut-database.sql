@@ -34,11 +34,22 @@ INSERT INTO `application` (`ApplicationID`, `Name`) VALUES
 -- Dumping structure for procedure common.GetAllUsersAlphabetically
 DROP PROCEDURE IF EXISTS `GetAllUsersAlphabetically`;
 DELIMITER //
-CREATE DEFINER=`modnaut00`@`%` PROCEDURE `GetAllUsersAlphabetically`()
+CREATE DEFINER=`modnaut00`@`%` PROCEDURE `GetAllUsersAlphabetically`() 
 BEGIN 
-SELECT * FROM Common.users ORDER BY LastName; 
+SELECT UserId, UserName, FirstName, LastName, EmailAddress, UserPassword FROM Common.users ORDER BY LastName; 
 END//
 DELIMITER ;
+
+-- Dumping structure for procedure common.GetUser
+DROP PROCEDURE IF EXISTS `GetUser`;
+DELIMITER // 
+CREATE PROCEDURE GetUser(
+	IN EmailParm VARCHAR(255),
+	IN UserPasswordParm VARCHAR(255)) 
+BEGIN 
+SELECT UserId, FirstName, LastName, EmailAddress, UserPassword FROM Common.users WHERE IFNULL(EmailParm, EmailAddress) = EmailAddress AND IFNULL(UserPasswordParm, UserPassword) = UserPassword ORDER BY LastName; 
+END // 
+DELIMITER ; 
 
 
 -- Dumping structure for table common.language
@@ -104,17 +115,19 @@ CREATE TABLE IF NOT EXISTS `users` (
   `FirstName` varchar(50) NOT NULL,
   `LastName` varchar(50) NOT NULL,
   `EmailAddress` varchar(100) NOT NULL,
+  `UserPassword` varchar(100) NOT NULL,
   PRIMARY KEY (`UserId`),
   UNIQUE KEY `EmailAddress` (`EmailAddress`),
   UNIQUE KEY `UserName` (`UserName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.users: ~3 rows (approximately)
+-- The password for everyone is 'password'
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`) VALUES
-	(1, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com'),
-	(2, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com'),
-	(3, 'bdalgaard22', 'Ben', 'Dalgaard', 'bdalgaard@modnaut.com');
+INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`) VALUES
+	(1, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A='),
+	(2, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A='),
+	(3, 'bdalgaard22', 'Ben', 'Dalgaard', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
