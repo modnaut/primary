@@ -119,6 +119,7 @@ public class ApplicationServlet extends HttpServlet
 		}
 		catch (Exception e)
 		{
+			// SHOULD NEVER HAPPEN - will need more advanced handling as we go live
 			// In the event of an error while trying to load the page the following will occur:
 			// 1. Java stack trace containing more detailed error messages will be printed to the console
 			// 2. A basic html error page will be shown on screen by the PrintWriter object to user to let them know an error has occurred.

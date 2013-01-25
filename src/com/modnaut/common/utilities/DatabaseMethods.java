@@ -23,6 +23,14 @@ import com.modnaut.common.properties.sqlmetadata.Query;
 import com.modnaut.common.properties.sqlmetadata.StatementType;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLDataException;
 
+/**
+ * 
+ * @author Ben Dalgaard
+ * @date 1/9/2013
+ * 
+ *       Class that contains all methods for accessing and modifying the database. But also helps defeat intergalactic forces that have threatened to take over the human
+ *       race. Just checking to make sure you are reading... update this comment with your own.
+ */
 public class DatabaseMethods
 {
 	private static final Logger logger = LoggerFactory.getLogger("com.modnaut.common.utilities.DatabaseMethods");
@@ -30,21 +38,53 @@ public class DatabaseMethods
 	private static final String SP = "SP";
 	private static final String CALL = "CALL ";
 
+	/**
+	 * Overload method for getJustData
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @return
+	 */
 	public static ArrayList<String[]> getJustData(String queryName, String queryFile)
 	{
 		return getJustData(queryName, queryFile, null, null);
 	}
 
+	/**
+	 * Overload method for getJustData
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param parms
+	 * @return
+	 */
 	public static ArrayList<String[]> getJustData(String queryName, String queryFile, HashMap<String, String> parms)
 	{
 		return getJustData(queryName, queryFile, parms, null);
 	}
 
+	/**
+	 * Overload method for getJustData
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param con
+	 * @return
+	 */
 	public static ArrayList<String[]> getJustData(String queryName, String queryFile, Connection con)
 	{
 		return getJustData(queryName, queryFile, null, con);
 	}
 
+	/**
+	 * Overload method for getJustData
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param parms
+	 * @param con
+	 * @return
+	 */
 	public static ArrayList<String[]> getJustData(String queryName, String queryFile, HashMap<String, String> parms, Connection con)
 	{
 		// use a prepared statement for sql queries and sps that have input and output parameters.
@@ -95,6 +135,17 @@ public class DatabaseMethods
 			else
 			{
 				// TODO - need to replace parameters for Stored Procedures, even if user did not pass them in...
+				Parameters parameters = q.getParameters();
+				List<Parameter> parameterList = parameters.getParameter();
+
+				if (parameterList != null)
+				{
+					for (int i = 0; parameterList.size() > i; i++)
+					{
+						Parameter parameter = parameterList.get(i);
+						st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+					}
+				}
 			}
 
 			logger.debug(st.toString());
@@ -152,6 +203,7 @@ public class DatabaseMethods
 	}
 
 	/**
+	 * Overload method for getJustDataFirstRow
 	 * 
 	 * @param queryName
 	 * @param queryFile
@@ -163,6 +215,7 @@ public class DatabaseMethods
 	}
 
 	/**
+	 * Overload method for getJustDataFirstRow
 	 * 
 	 * @param queryName
 	 * @param queryFile
@@ -175,6 +228,7 @@ public class DatabaseMethods
 	}
 
 	/**
+	 * Overload method for getJustDataFirstRow
 	 * 
 	 * @param queryName
 	 * @param queryFile
@@ -187,6 +241,7 @@ public class DatabaseMethods
 	}
 
 	/**
+	 * Method for getting the first row of data from the database. Returns a string array.
 	 * 
 	 * @param queryName
 	 * @param queryFile
@@ -246,6 +301,17 @@ public class DatabaseMethods
 			else
 			{
 				// TODO - need to replace parameters for Stored Procedures, even if user did not pass them in...
+				Parameters parameters = q.getParameters();
+				List<Parameter> parameterList = parameters.getParameter();
+
+				if (parameterList != null)
+				{
+					for (int i = 0; parameterList.size() > i; i++)
+					{
+						Parameter parameter = parameterList.get(i);
+						st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+					}
+				}
 			}
 
 			logger.debug(st.toString());
@@ -302,21 +368,53 @@ public class DatabaseMethods
 		return data;
 	}
 
+	/**
+	 * Overload method for updateData
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @return
+	 */
 	public static int updateData(String queryName, String queryFile)
 	{
 		return updateData(queryName, queryFile, null, null);
 	}
 
+	/**
+	 * Overload method for updateData
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param parms
+	 * @return
+	 */
 	public static int updateData(String queryName, String queryFile, HashMap<String, String> parms)
 	{
 		return updateData(queryName, queryFile, parms, null);
 	}
 
+	/**
+	 * Overload method for updateData
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param con
+	 * @return
+	 */
 	public static int updateData(String queryName, String queryFile, Connection con)
 	{
 		return updateData(queryName, queryFile, null, con);
 	}
 
+	/**
+	 * Makes updates to data base. Returns integer values of rows affected.
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param parms
+	 * @param con
+	 * @return
+	 */
 	public static int updateData(String queryName, String queryFile, HashMap<String, String> parms, Connection con)
 	{
 		// use a prepared statement for sql queries and sps that have input and output parameters.
@@ -363,6 +461,17 @@ public class DatabaseMethods
 			else
 			{
 				// TODO - need to replace parameters for Stored Procedures, even if user did not pass them in...
+				Parameters parameters = q.getParameters();
+				List<Parameter> parameterList = parameters.getParameter();
+
+				if (parameterList != null)
+				{
+					for (int i = 0; parameterList.size() > i; i++)
+					{
+						Parameter parameter = parameterList.get(i);
+						st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+					}
+				}
 			}
 
 			// executeUpdate() automatically returns row count affected. If none were affected, zero is returned.
@@ -403,21 +512,53 @@ public class DatabaseMethods
 		return row_count;
 	}
 
+	/**
+	 * Overload method for insertDataReturnId
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @return
+	 */
 	public static int insertDataReturnId(String queryName, String queryFile)
 	{
 		return insertDataReturnId(queryName, queryFile);
 	}
 
+	/**
+	 * Overload method for insertDataReturnId
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param parms
+	 * @return
+	 */
 	public static int insertDataReturnId(String queryName, String queryFile, HashMap<String, String> parms)
 	{
 		return insertDataReturnId(queryName, queryFile, parms);
 	}
 
+	/**
+	 * Overload method for insertDataReturnId
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param con
+	 * @return
+	 */
 	public static int insertDataReturnId(String queryName, String queryFile, Connection con)
 	{
 		return insertDataReturnId(queryName, queryFile, con);
 	}
 
+	/**
+	 * Inserts new data into database and returns the the id (row number) of the row just inserted
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param parms
+	 * @param con
+	 * @return
+	 */
 	public static int insertDataReturnId(String queryName, String queryFile, HashMap<String, String> parms, Connection con)
 	{
 		// use a prepared statement for sql queries and sps that have input and output parameters.
@@ -459,6 +600,20 @@ public class DatabaseMethods
 					}
 					else
 					{
+						st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+					}
+				}
+			}
+			else
+			{
+				Parameters parameters = q.getParameters();
+				List<Parameter> parameterList = parameters.getParameter();
+
+				if (parameterList != null)
+				{
+					for (int i = 0; parameterList.size() > i; i++)
+					{
+						Parameter parameter = parameterList.get(i);
 						st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
 					}
 				}

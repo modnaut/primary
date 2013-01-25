@@ -39,6 +39,16 @@ public interface ICommonConstants
 	public static final String EIGHT = "8";
 	public static final String NINE = "9";
 	public static final String TEN = "10";
+	public static final String ELEVE = "11";
+	public static final String TWELVE = "12";
+	public static final String THIRTEEN = "13";
+	public static final String FOURTEEN = "14";
+	public static final String FIFTEEN = "15";
+	public static final String SIXTEEN = "16";
+	public static final String SEVENTEEN = "17";
+	public static final String EIGHTEEN = "18";
+	public static final String NINETEEN = "19";
+	public static final String TWENTY = "20";
 
 	public static final String LEFT_BRACES = "{";
 	public static final String RIGHT_BRACES = "}";
