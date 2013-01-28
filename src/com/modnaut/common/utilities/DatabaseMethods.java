@@ -28,8 +28,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLDataException;
  * @author Ben Dalgaard
  * @date 1/9/2013
  * 
- *       Class that contains all methods for accessing and modifying the database. But also helps defeat intergalactic forces that have threatened to take over the human
- *       race. Just checking to make sure you are reading... update this comment with your own.
+ *       Class that contains all methods for accessing and modifying the database. But also helps defeat intergalactic forces that have threatened to take over the human race. Just checking to make sure you are reading... update this comment with your own.
  */
 public class DatabaseMethods
 {
@@ -134,16 +133,19 @@ public class DatabaseMethods
 			}
 			else
 			{
-				// TODO - need to replace parameters for Stored Procedures, even if user did not pass them in...
+				// Need to replace parameters for Stored Procedures, even if developer did not pass them in...
 				Parameters parameters = q.getParameters();
-				List<Parameter> parameterList = parameters.getParameter();
-
-				if (parameterList != null)
+				if (parameters != null)
 				{
-					for (int i = 0; parameterList.size() > i; i++)
+					List<Parameter> parameterList = parameters.getParameter();
+
+					if (parameterList != null)
 					{
-						Parameter parameter = parameterList.get(i);
-						st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+						for (int i = 0; parameterList.size() > i; i++)
+						{
+							Parameter parameter = parameterList.get(i);
+							st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+						}
 					}
 				}
 			}
@@ -300,16 +302,19 @@ public class DatabaseMethods
 			}
 			else
 			{
-				// TODO - need to replace parameters for Stored Procedures, even if user did not pass them in...
+				// Need to replace parameters for Stored Procedures, even if developer did not pass them in...
 				Parameters parameters = q.getParameters();
-				List<Parameter> parameterList = parameters.getParameter();
-
-				if (parameterList != null)
+				if (parameters != null)
 				{
-					for (int i = 0; parameterList.size() > i; i++)
+					List<Parameter> parameterList = parameters.getParameter();
+
+					if (parameterList != null)
 					{
-						Parameter parameter = parameterList.get(i);
-						st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+						for (int i = 0; parameterList.size() > i; i++)
+						{
+							Parameter parameter = parameterList.get(i);
+							st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+						}
 					}
 				}
 			}
@@ -460,16 +465,19 @@ public class DatabaseMethods
 			}
 			else
 			{
-				// TODO - need to replace parameters for Stored Procedures, even if user did not pass them in...
+				// Need to replace parameters for Stored Procedures, even if developer did not pass them in...
 				Parameters parameters = q.getParameters();
-				List<Parameter> parameterList = parameters.getParameter();
-
-				if (parameterList != null)
+				if (parameters != null)
 				{
-					for (int i = 0; parameterList.size() > i; i++)
+					List<Parameter> parameterList = parameters.getParameter();
+
+					if (parameterList != null)
 					{
-						Parameter parameter = parameterList.get(i);
-						st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+						for (int i = 0; parameterList.size() > i; i++)
+						{
+							Parameter parameter = parameterList.get(i);
+							st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+						}
 					}
 				}
 			}
