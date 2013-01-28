@@ -260,5 +260,17 @@
 		    <transaction src="sql/modnaut-database.sql"/>
 		</sql>
 	</target>
+	<target name="generate-mysql-procedures"
+			description="Runs mysql procedures.  Seperate so that we can define a row delimeter without changing modnaut-database.sql">
+			<sql
+			    driver="com.mysql.jdbc.Driver"
+			    url="jdbc:mysql://localhost:3306/"
+			    userid="modnaut00"
+			    password="zp4X263tTSv06On"
+				delimiterType="row">
+				<transaction src="sql/GetAllUsersAlphabetically.sql"/>
+			    <transaction src="sql/GetUser.sql"/>
+			</sql>
+		</target>
 		
 </project>

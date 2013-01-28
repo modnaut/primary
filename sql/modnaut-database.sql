@@ -31,27 +31,6 @@ INSERT INTO `application` (`ApplicationID`, `Name`) VALUES
 /*!40000 ALTER TABLE `application` ENABLE KEYS */;
 
 
--- Dumping structure for procedure common.GetAllUsersAlphabetically
-DROP PROCEDURE IF EXISTS `GetAllUsersAlphabetically`;
-DELIMITER //
-CREATE DEFINER=`modnaut00`@`%` PROCEDURE `GetAllUsersAlphabetically`() 
-BEGIN 
-SELECT UserId, UserName, FirstName, LastName, EmailAddress, UserPassword FROM Common.users ORDER BY LastName; 
-END//
-DELIMITER ;
-
--- Dumping structure for procedure common.GetUser
-DROP PROCEDURE IF EXISTS `GetUser`;
-DELIMITER // 
-CREATE PROCEDURE GetUser(
-	IN EmailParm VARCHAR(255),
-	IN UserPasswordParm VARCHAR(255)) 
-BEGIN 
-SELECT UserId, FirstName, LastName, EmailAddress, UserPassword FROM Common.users WHERE IFNULL(EmailParm, EmailAddress) = EmailAddress AND IFNULL(UserPasswordParm, UserPassword) = UserPassword ORDER BY LastName; 
-END // 
-DELIMITER ; 
-
-
 -- Dumping structure for table common.language
 DROP TABLE IF EXISTS `language`;
 CREATE TABLE IF NOT EXISTS `language` (
