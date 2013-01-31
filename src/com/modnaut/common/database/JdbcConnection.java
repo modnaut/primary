@@ -8,13 +8,23 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+/**
+ * 
+ * @author Jamie Lynn
+ * @date 1/9/2013
+ * 
+ *       Database is configured as a JNDI resource in both context.xml, which stores the database connection properties,
+ *       and web.xml which stores a reference to the information in context.xml and so that it can be accessed by java.
+ *       Creates a datasource object based on the above to get a pooled dconnection to the mysql database.
+ * 
+ */
 public class JdbcConnection
 {
-	// constants
-	private static final String MYSQL_URL = "jdbc:mysql://localhost:3306/common";
-	private static final String MYSQL_USER = "root";
-	private static final String MYSQL_PASSWORD = "Mkyyxz2g";
-
+	/**
+	 * Uses datasource to get and return a pooled connection.
+	 * 
+	 * @return
+	 */
 	public static Connection getConnection()
 	{
 		Connection con = null;
@@ -23,11 +33,13 @@ public class JdbcConnection
 		{
 			Context initCtx = new InitialContext();
 			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+
+			// grabs database settings (username, password, etc) from the context.xml file
+			// based on the res-ref-name in web.xml (ie: 'jdbc/modnaut')
 			DataSource ds = (DataSource) envCtx.lookup("jdbc/modnaut");
 
 			try
 			{
-
 				con = ds.getConnection();
 			}
 			catch (SQLException s)
@@ -39,20 +51,6 @@ public class JdbcConnection
 		catch (NamingException n)
 		{
 			n.printStackTrace();
-			// try {
-			// System.out.println("Loading driver...");
-			// Class.forName("com.mysql.jdbc.Driver");
-			// System.out.println("Driver loaded!");
-			// } catch (ClassNotFoundException ex) {
-			// throw new RuntimeException("Cannot find the driver in the classpath!", ex);
-			// }
-			//
-			// try {
-			// con = DriverManager.getConnection(MYSQL_URL, MYSQL_USER, MYSQL_PASSWORD);
-			//
-			// } catch (Exception ex) {
-			// ex.printStackTrace();
-			// }
 		}
 
 		return con;

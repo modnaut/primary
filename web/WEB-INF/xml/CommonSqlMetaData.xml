@@ -7,7 +7,7 @@
 		</parameters>
 	</query>
 	<query id="2" name="GET_ALL_USERS_ALPHABETICALLY" action="SELECT" type="SP">
-		<statement value="GetAllUsersAlphabetically()"/>
+		<statement value="Common.GetAllUsersAlphabetically()"/>
 	</query>
 	<query id="3" name="INSERT_USER" action="ACTION" type="QUERY">
 		<statement value="INSERT INTO users (UserName, FirstName, LastName, EmailAddress) 
@@ -17,6 +17,13 @@
 			<parameter id="2" name="FirstName" value=""/>
 			<parameter id="3" name="LastName" value=""/>
 			<parameter id="4" name="EmailAddress" value=""/>
+		</parameters>
+	</query>
+	<query id="4" name="GET_USER" action="SELECT" type="SP">
+		<statement value="Common.GetUser(?, ?)"/>
+		<parameters>
+			<parameter id="1" name="Email" value=""/>
+			<parameter id="2" name="Password" value=""/>
 		</parameters>
 	</query>
 </sqlMetaData>
