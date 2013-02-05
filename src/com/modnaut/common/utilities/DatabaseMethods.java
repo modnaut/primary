@@ -76,7 +76,7 @@ public class DatabaseMethods
 	}
 
 	/**
-	 * Overload method for getJustData
+	 * Method for retrieving data (w/out column names) from database.
 	 * 
 	 * @param queryName
 	 * @param queryFile
@@ -676,5 +676,311 @@ public class DatabaseMethods
 		}
 
 		return row_id;
+	}
+
+	/**
+	 * Overload method for getData
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @return
+	 */
+	public static ArrayList<String[]> getData(String queryName, String queryFile)
+	{
+		return getJustData(queryName, queryFile, null, null);
+	}
+
+	/**
+	 * Overload method for getData
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param parms
+	 * @return
+	 */
+	public static ArrayList<String[]> getData(String queryName, String queryFile, HashMap<String, String> parms)
+	{
+		return getJustData(queryName, queryFile, parms, null);
+	}
+
+	/**
+	 * Overload method for getData
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param con
+	 * @return
+	 */
+	public static ArrayList<String[]> getData(String queryName, String queryFile, Connection con)
+	{
+		return getJustData(queryName, queryFile, null, con);
+	}
+
+	/**
+	 * Method for retrieving data (w/column names) from database.
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param parms
+	 * @param con
+	 * @return
+	 */
+	public static ArrayList<String[]> getData(String queryName, String queryFile, HashMap<String, String> parms, Connection con)
+	{
+		// use a prepared statement for sql queries and sps that have input and output parameters.
+		PreparedStatement st = null;
+		ResultSet rs = null;
+
+		ArrayList<String[]> data = new ArrayList<String[]>();
+		boolean was_connection_passed = true;
+
+		try
+		{
+			if (con == null)
+			{
+				con = JdbcConnection.getConnection();
+				was_connection_passed = false;
+			}
+
+			Query q = SqlQueries.getQuery(queryName, queryFile);
+			StatementType statement = q.getStatement();
+			String statementString = statement.getValue();
+
+			if (q.getType().equals(SP))
+			{
+				statementString = CALL + statementString;
+			}
+
+			st = con.prepareStatement(statementString);
+
+			if (parms != null)
+			{
+				// grab parameters from sqlmetadata file. If parameters exist in passed in hashmap, values of the hashmap are used.
+				// If they do not exist, the value set the sqlmetadata file will be used.
+				Parameters parameters = q.getParameters();
+				List<Parameter> parameterList = parameters.getParameter();
+				for (int i = 0; parameterList.size() > i; i++)
+				{
+					Parameter parameter = parameterList.get(i);
+					if (parms.containsKey(parameter.getName()))
+					{
+						st.setString(parameter.getId().intValue(), parms.get(parameter.getName()));
+					}
+					else
+					{
+						st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+					}
+				}
+			}
+			else
+			{
+				// Need to replace parameters for Stored Procedures, even if developer did not pass them in...
+				Parameters parameters = q.getParameters();
+				if (parameters != null)
+				{
+					List<Parameter> parameterList = parameters.getParameter();
+
+					if (parameterList != null)
+					{
+						for (int i = 0; parameterList.size() > i; i++)
+						{
+							Parameter parameter = parameterList.get(i);
+							st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+						}
+					}
+				}
+			}
+
+			logger.debug(st.toString());
+			rs = st.executeQuery();
+
+			while (rs.next())
+			{
+				// metadata output of ResultSetObject, allows for retrieving information about the statement dynamically
+				// without having to know exactly what the statement is. Puts results into a string array and then a final array to be returned.
+				ResultSetMetaData rsmd = rs.getMetaData();
+				String[] dataRow = new String[rsmd.getColumnCount()];
+				String[] columnRow = new String[rsmd.getColumnCount()];
+
+				for (int i = 0; columnRow.length > i; i++)
+				{
+					columnRow[i] = rsmd.getColumnName(i + 1);
+				}
+				data.add(columnRow);
+
+				for (int i = 0; dataRow.length > i; i++)
+				{
+					dataRow[i] = rs.getString(i + 1);
+				}
+				data.add(dataRow);
+			}
+		}
+		catch (MySQLDataException ex)
+		{
+			logger.error(ex.getMessage());
+			logger.error(st.toString());
+			ex.printStackTrace();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (st != null)
+				{
+					st.close();
+				}
+
+				if (con != null && !was_connection_passed)
+				{
+					con.close();
+				}
+
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+
+		return data;
+	}
+
+	/**
+	 * Method for retrieving column names of table from database.
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @param parms
+	 * @param con
+	 * @return
+	 */
+	public static ArrayList<String[]> getColumnNames(String queryName, String queryFile, HashMap<String, String> parms, Connection con)
+	{
+		// use a prepared statement for sql queries and sps that have input and output parameters.
+		PreparedStatement st = null;
+		ResultSet rs = null;
+
+		ArrayList<String[]> data = new ArrayList<String[]>();
+		boolean was_connection_passed = true;
+
+		try
+		{
+			if (con == null)
+			{
+				con = JdbcConnection.getConnection();
+				was_connection_passed = false;
+			}
+
+			Query q = SqlQueries.getQuery(queryName, queryFile);
+			StatementType statement = q.getStatement();
+			String statementString = statement.getValue();
+
+			if (q.getType().equals(SP))
+			{
+				statementString = CALL + statementString;
+			}
+
+			st = con.prepareStatement(statementString);
+
+			if (parms != null)
+			{
+				// grab parameters from sqlmetadata file. If parameters exist in passed in hashmap, values of the hashmap are used.
+				// If they do not exist, the value set the sqlmetadata file will be used.
+				Parameters parameters = q.getParameters();
+				List<Parameter> parameterList = parameters.getParameter();
+				for (int i = 0; parameterList.size() > i; i++)
+				{
+					Parameter parameter = parameterList.get(i);
+					if (parms.containsKey(parameter.getName()))
+					{
+						st.setString(parameter.getId().intValue(), parms.get(parameter.getName()));
+					}
+					else
+					{
+						st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+					}
+				}
+			}
+			else
+			{
+				// Need to replace parameters for Stored Procedures, even if developer did not pass them in...
+				Parameters parameters = q.getParameters();
+				if (parameters != null)
+				{
+					List<Parameter> parameterList = parameters.getParameter();
+
+					if (parameterList != null)
+					{
+						for (int i = 0; parameterList.size() > i; i++)
+						{
+							Parameter parameter = parameterList.get(i);
+							st.setString(parameter.getId().intValue(), StringUtils.trimToEmpty(parameter.getValue()));
+						}
+					}
+				}
+			}
+
+			logger.debug(st.toString());
+			rs = st.executeQuery();
+
+			// We will only return the first row
+			if (rs.next())
+			{
+				// metadata output of ResultSetObject, allows for retrieving information about the statement dynamically
+				// without having to know exactly what the statement is. Puts results into a string array and then a final array to be returned.
+				ResultSetMetaData rsmd = rs.getMetaData();
+				String[] columnRow = new String[rsmd.getColumnCount()];
+
+				for (int i = 0; columnRow.length > i; i++)
+				{
+					columnRow[i] = rsmd.getColumnName(i + 1);
+				}
+				data.add(columnRow);
+			}
+		}
+		catch (MySQLDataException ex)
+		{
+			logger.error(ex.getMessage());
+			logger.error(st.toString());
+			ex.printStackTrace();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (st != null)
+				{
+					st.close();
+				}
+
+				if (con != null && !was_connection_passed)
+				{
+					con.close();
+				}
+
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+
+		return data;
 	}
 }
