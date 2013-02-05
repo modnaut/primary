@@ -687,7 +687,7 @@ public class DatabaseMethods
 	 */
 	public static ArrayList<String[]> getData(String queryName, String queryFile)
 	{
-		return getJustData(queryName, queryFile, null, null);
+		return getData(queryName, queryFile, null, null);
 	}
 
 	/**
@@ -700,7 +700,7 @@ public class DatabaseMethods
 	 */
 	public static ArrayList<String[]> getData(String queryName, String queryFile, HashMap<String, String> parms)
 	{
-		return getJustData(queryName, queryFile, parms, null);
+		return getData(queryName, queryFile, parms, null);
 	}
 
 	/**
@@ -713,7 +713,7 @@ public class DatabaseMethods
 	 */
 	public static ArrayList<String[]> getData(String queryName, String queryFile, Connection con)
 	{
-		return getJustData(queryName, queryFile, null, con);
+		return getData(queryName, queryFile, null, con);
 	}
 
 	/**
@@ -801,10 +801,10 @@ public class DatabaseMethods
 				// without having to know exactly what the statement is. Puts results into a string array and then a final array to be returned.
 				ResultSetMetaData rsmd = rs.getMetaData();
 				String[] dataRow = new String[rsmd.getColumnCount()];
-				String[] columnRow = new String[rsmd.getColumnCount()];
 
 				if (add_column_names == true)
 				{
+					String[] columnRow = new String[rsmd.getColumnCount()];
 					for (int i = 0; columnRow.length > i; i++)
 					{
 						columnRow[i] = rsmd.getColumnName(i + 1);
