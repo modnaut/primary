@@ -794,6 +794,7 @@ public class DatabaseMethods
 			logger.debug(st.toString());
 			rs = st.executeQuery();
 
+			boolean add_column_names = true;
 			while (rs.next())
 			{
 				// metadata output of ResultSetObject, allows for retrieving information about the statement dynamically
@@ -802,11 +803,16 @@ public class DatabaseMethods
 				String[] dataRow = new String[rsmd.getColumnCount()];
 				String[] columnRow = new String[rsmd.getColumnCount()];
 
-				for (int i = 0; columnRow.length > i; i++)
+				if (add_column_names == true)
 				{
-					columnRow[i] = rsmd.getColumnName(i + 1);
+					for (int i = 0; columnRow.length > i; i++)
+					{
+						columnRow[i] = rsmd.getColumnName(i + 1);
+					}
+					data.add(columnRow);
+
+					add_column_names = false;
 				}
-				data.add(columnRow);
 
 				for (int i = 0; dataRow.length > i; i++)
 				{
