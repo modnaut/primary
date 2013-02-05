@@ -110,3 +110,24 @@ INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddres
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+
+-- Dumping structure for table common.session
+DROP TABLE IF EXISTS `Session`;
+CREATE TABLE IF NOT EXISTS `Session` (
+	`SessionId` BIGINT(19) NOT NULL,
+	`SessionObject` BLOB NOT NULL,
+	`LastModifiedDate` TIMESTAMP,
+	PRIMARY KEY (`SessionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping structure for table common.session
+DROP TABLE IF EXISTS `UserSession`;
+CREATE TABLE IF NOT EXISTS `UserSession` (
+	`UserId` INT(10) NOT NULL,
+	`SessionId` BIGINT(19) NOT NULL,
+	KEY `FK__user` (`UserId`),
+	KEY `FK__session` (`SessionId`),
+	CONSTRAINT `FK__user` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`),
+	CONSTRAINT `FK__session` FOREIGN KEY (`SessionId`) REFERENCES `Session` (`SessionId`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;

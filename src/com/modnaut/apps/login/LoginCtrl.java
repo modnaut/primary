@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import com.modnaut.common.framework.ApplicationCtrl;
 import com.modnaut.common.framework.FrameworkCtrl;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.DatabaseMethods;
+import com.modnaut.common.utilities.SessionMethods;
 
 public class LoginCtrl extends FrameworkCtrl
 {
@@ -53,6 +55,25 @@ public class LoginCtrl extends FrameworkCtrl
 	{
 		super(request, response);
 		// unmarshall(XML_FILE); No Unmarshalling. We will redirect to the Main Page or an Invalid Login page.
+
+		HttpSession session = request.getSession();
+
+		if (session.getAttribute("sessionId") != null)
+		{
+			long session_id = (long) session.getAttribute("sessionId");
+			logger.debug("session has been set already: " + session_id);
+			// TODO - Get from database.
+			// TODO - deSerialize Session object.
+		}
+		else
+		{
+			long new_id = SessionMethods.generateSessionId();
+			session.setAttribute("sessionId", new_id);
+			logger.debug("session has NOT been set: " + new_id);
+			// TODO - create new Session object.
+			// TODO - Insert into database.
+
+		}
 	}
 
 	public void defaultAction() throws IOException

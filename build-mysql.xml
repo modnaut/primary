@@ -270,6 +270,7 @@
 				delimiterType="row">
 				<transaction src="sql/GetAllUsersAlphabetically.sql"/>
 			    <transaction src="sql/GetUser.sql"/>
+				<transaction src="sql/GetUserSession.sql"/>
 			</sql>
 		</target>
 		
