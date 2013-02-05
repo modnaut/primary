@@ -3,6 +3,7 @@ package com.modnaut.common.utilities;
 import java.io.File;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.HashMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -36,46 +37,35 @@ public class JaxbPool
 	private static GenericKeyedObjectPool<JaxbPoolKey, Unmarshaller> UNMARSHALLER_POOL = new GenericKeyedObjectPool<JaxbPoolKey, Unmarshaller>(new UnmarshallerFactory(), new JaxbPoolConfig());
 
 	/**
-	 * An enum of pool keys to be reused internally so that we don't constantly create JaxbPoolKey objects that are used once and then garbage collected
+	 * A HashMap of pool keys to be reused internally so that we don't constantly create JaxbPoolKey objects that are used once and then garbage collected
 	 * 
 	 */
-	private enum JAXB_POOL_KEYS
+	private static HashMap<Class, JaxbPoolKey> POOL_KEYS = new HashMap<Class, JaxbPoolKey>()
 	{
-		SQL_META_DATA(SqlMetaData.class), VIEW_META_DATA(ViewMetaData.class), APPLICATIONS(Applications.class);
-
-		private JaxbPoolKey poolKey;
-
-		private JAXB_POOL_KEYS(Class clazz)
 		{
-			poolKey = new JaxbPoolKey(clazz);
-		}
-
-		public JaxbPoolKey getPoolKey()
-		{
-			return poolKey;
-		}
-
-		/**
-		 * Returns the enum member for the Class passed in
-		 * 
-		 * @param clazz
-		 * @return the enum member for the passed Class, or null if none exists
-		 */
-		public static JAXB_POOL_KEYS fromClass(Class clazz)
-		{
-			JAXB_POOL_KEYS returnMember = null;
-			if (clazz != null)
+			try
 			{
-				for (JAXB_POOL_KEYS member : JAXB_POOL_KEYS.values())
-				{
-					if (member.getPoolKey().getClazz() == clazz)
-					{
-						returnMember = member;
-						break;
-					}
-				}
+				put(ViewMetaData.class, new JaxbPoolKey(ViewMetaData.class));
 			}
-			return returnMember;
+			catch (Exception e)
+			{
+			}
+
+			try
+			{
+				put(SqlMetaData.class, new JaxbPoolKey(SqlMetaData.class));
+			}
+			catch (Exception e)
+			{
+			}
+
+			try
+			{
+				put(Applications.class, new JaxbPoolKey(Applications.class));
+			}
+			catch (Exception e)
+			{
+			}
 		}
 	};
 
@@ -228,17 +218,12 @@ public class JaxbPool
 
 		if (clazz != null)
 		{
-			JAXB_POOL_KEYS enumMember = JAXB_POOL_KEYS.fromClass(clazz);
-			if (enumMember != null) {
-				poolKey = enumMember.getPoolKey();
-				LOGGER.debug("Got JAXB_POOL_KEYS enum member " + enumMember.name());
+			poolKey = POOL_KEYS.get(clazz);
+			if (poolKey == null)
+			{
+				poolKey = new JaxbPoolKey(clazz);
+				POOL_KEYS.put(clazz, poolKey);
 			}
-		}
-
-		if (poolKey == null)
-		{
-			LOGGER.warn("Creating JaxbPoolKey on the fly for Class: " + clazz.getCanonicalName());
-			poolKey = new JaxbPoolKey(clazz);
 		}
 
 		return poolKey;

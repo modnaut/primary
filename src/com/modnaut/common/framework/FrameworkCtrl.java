@@ -4,16 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.jxpath.JXPathContext;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.viewmetadata.ViewMetaData;
 import com.modnaut.common.servlet.ApplicationServlet;
 import com.modnaut.common.utilities.JaxbPool;
+import com.modnaut.common.utilities.VmdMethods;
 import com.modnaut.common.utilities.XslPool;
 
 /**
@@ -21,9 +24,7 @@ import com.modnaut.common.utilities.XslPool;
  * @author Jamie Lynn
  * @date 1/9/2013
  * 
- *       Used by all java classes that produce output. Takes request sent in from servlet, performs unmarshalling
- *       which allows the injection of data, searching on sub objects, etc and then marshalling which puts all the pieces
- *       together and sets the response to the final output result.
+ *       Used by all java classes that produce output. Takes request sent in from servlet, performs unmarshalling which allows the injection of data, searching on sub objects, etc and then marshalling which puts all the pieces together and sets the response to the final output result.
  * 
  */
 public class FrameworkCtrl
@@ -34,6 +35,7 @@ public class FrameworkCtrl
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
 	protected ViewMetaData viewMetaData;
+	protected JXPathContext jxPathContext;
 
 	/**
 	 * 
@@ -47,8 +49,7 @@ public class FrameworkCtrl
 	}
 
 	/**
-	 * Unmarshalls xmlfile into a viewmetadata object that will be used by the java classes to manipulate, mold, break down
-	 * into smaller sub objects and inject data.
+	 * Unmarshalls xmlfile into a viewmetadata object that will be used by the java classes to manipulate, mold, break down into smaller sub objects and inject data.
 	 * 
 	 * @param xmlFileName
 	 * @return
@@ -70,6 +71,8 @@ public class FrameworkCtrl
 			{
 				File file = new File(absoluteFilePath);
 				viewMetaData = (ViewMetaData) JaxbPool.unmarshal(ViewMetaData.class, file);
+				if (viewMetaData != null)
+					jxPathContext = JXPathContext.newContext(viewMetaData);
 			}
 		}
 		catch (Exception e)
@@ -93,9 +96,7 @@ public class FrameworkCtrl
 	}
 
 	/**
-	 * Returns a specific value from request based on name of the value in the request. For example, if the attribute name of a
-	 * html element on screen is 'username', then it will return the value of this html element. Can also be used to retrieve the
-	 * value off a url that contains parameters and hidden values on screen.
+	 * Returns a specific value from request based on name of the value in the request. For example, if the attribute name of a html element on screen is 'username', then it will return the value of this html element. Can also be used to retrieve the value off a url that contains parameters and hidden values on screen.
 	 * 
 	 * @param name
 	 * @return
@@ -103,5 +104,20 @@ public class FrameworkCtrl
 	protected String getParameter(String name)
 	{
 		return this.request.getParameter(name);
+	}
+
+	protected Object findById(String id)
+	{
+		return VmdMethods.getSingleById(viewMetaData, jxPathContext, id);
+	}
+
+	protected List findMultipleById(String id)
+	{
+		return VmdMethods.getMultipleById(viewMetaData, jxPathContext, id);
+	}
+
+	protected boolean populateData(String id, List data)
+	{
+		return VmdMethods.populateData(viewMetaData, jxPathContext, id, data);
 	}
 }

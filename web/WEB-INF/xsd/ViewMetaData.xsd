@@ -19,8 +19,18 @@
 			<xs:element name="item" type="Item" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
+	<xs:simpleType name="HideMode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="display"/>
+			<xs:enumeration value="visibility"/>
+			<xs:enumeration value="offsets"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="Item" abstract="true">
 		<xs:attribute name="id" type="xs:string"/>
+		<xs:attribute name="flex" type="xs:int"/>
+		<xs:attribute name="hidden" type="xs:boolean"/>
+		<xs:attribute name="hideMode" type="HideMode"/>
 		<xs:attribute name="width" type="xs:int"/>
 		<xs:attribute name="height" type="xs:int"/>
 	</xs:complexType>
@@ -249,6 +259,7 @@
 				<xs:attribute name="sealed" type="xs:boolean" default="false"/>
 				<xs:attribute name="sortable" type="xs:boolean" default="true"/>
 				<xs:attribute name="tdCls" type="xs:string"/>
+				<xs:attribute name="type" type="DataType" default="auto"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -266,7 +277,10 @@
 				<xs:sequence>
 					<xs:element name="column" type="Column" minOccurs="1" maxOccurs="unbounded"/>
 					<xs:element name="emptyText" type="str:String" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="store" type="AbstractStore" minOccurs="1" maxOccurs="1"/>
+					<xs:choice>
+						<xs:element name="store" type="AbstractStore" minOccurs="1" maxOccurs="1"/>
+						<xs:element name="records" type="RecordSet" minOccurs="1" maxOccurs="1"/>
+					</xs:choice>
 				</xs:sequence>
 				<xs:attribute name="allowDeselect" type="xs:boolean" default="false"/>
 				<xs:attribute name="columnLines" type="xs:boolean" default="false"/>
@@ -681,6 +695,10 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="Parameter">
+		<xs:attribute name="name" type="xs:string"/>
+		<xs:attribute name="value" type="xs:string"/>
+	</xs:complexType>
 	<xs:simpleType name="DataType">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="auto"/>
@@ -709,7 +727,7 @@
 	<xs:complexType name="RecordField">
 		<xs:attribute name="name" type="xs:string"/>
 		<xs:attribute name="value" type="xs:string"/>
-		<xs:attribute name="dataIndex" type="xs:int"/>
+		<xs:attribute name="populationIndex" type="xs:int"/>
 	</xs:complexType>
 	<xs:complexType name="Record">
 		<xs:sequence>
@@ -729,5 +747,21 @@
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="JsonStore">
+		<xs:complexContent>
+			<xs:extension base="AbstractStore">
+				<xs:sequence>
+					<xs:element name="proxy" type="Proxy" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Proxy">
+		<xs:sequence>
+			<xs:element name="extraParam" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="class" type="xs:string" use="required"/>
+		<xs:attribute name="method" type="xs:string" use="required"/>
 	</xs:complexType>
 </xs:schema>

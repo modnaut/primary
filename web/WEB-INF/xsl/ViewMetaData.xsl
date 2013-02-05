@@ -34,6 +34,9 @@
 		<xsl:if test="@id != '' ">
 			itemId: <xsl:value-of select="mn:wrap-string(@id)"/>,
 		</xsl:if>
+		<xsl:value-of select="mn:attribute(., 'flex', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'hidden', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'hideMode', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'width', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'height', ',')"/>
 	</xsl:template>

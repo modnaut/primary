@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
 	<items>
-		<item xsi:type="TabPanel" width="100" height="50" id="top" titleAlign="center" tabPosition="bottom" plain="true" activeTab="1">
+		<item xsi:type="TabPanel" width="100" height="50" id="top" titleAlign="center" tabPosition="bottom" plain="true" activeTab="3">
 			<icon path="silk/wrench.png"/>
 			<items>
 				<item xsi:type="Panel">
@@ -33,38 +33,108 @@
 				</item>
 				<item xsi:type="GridPanel" id="dannytab">
 					<title stringCD="tab 2"/>
-					<column dataIndex="userId">
+					<column dataIndex="userId" width="50">
 						<text stringCD="User ID"/>
 					</column>
-					<column dataIndex="userName">
+					<column dataIndex="userName" flex="1">
 						<text stringCD="Username"/>
 					</column>
-					<column dataIndex="email">
-						<text stringCD="Email Address"/>
-					</column>
-					<column dataIndex="firstName">
+					<column dataIndex="firstName" flex="1">
 						<text stringCD="First Name"/>
 					</column>
-					<column dataIndex="lastName">
+					<column dataIndex="lastName" flex="1">
 						<text stringCD="Last Name"/>
+					</column>
+					<column dataIndex="email" flex="1">
+						<text stringCD="Email Address"/>
+					</column>
+					<column dataIndex="password" flex="1">
+						<text stringCD="Password"/>
 					</column>
 					<store xsi:type="Store">
 						<model>
 							<field name="userId" type="int"/>
 							<field name="userName" type="string"/>
-							<field name="email" type="string"/>
 							<field name="firstName" type="string"/>
 							<field name="lastName" type="string"/>
+							<field name="email" type="string"/>
+							<field name="password" type="string"/>
 						</model>
 						<data>
 							<record>
-								<field name="userId" dataIndex="0"/>
-								<field name="userName" dataIndex="1"/>
-								<field name="email" dataIndex="2"/>
-								<field name="firstName" dataIndex="3"/>
-								<field name="lastName" dataIndex="4"/>
+								<field name="userId"/>
+								<field name="userName"/>
+								<field name="firstName"/>
+								<field name="lastName"/>
+								<field name="email"/>
+								<field name="password"/>
 							</record>
 						</data>
+					</store>
+				</item>
+				<item xsi:type="GridPanel" id="dannytab2">
+					<title stringCD="tab 3"/>
+					<column dataIndex="userId" type="int">
+						<text stringCD="User ID"/>
+					</column>
+					<column dataIndex="userName" type="string">
+						<text stringCD="Username"/>
+					</column>
+					<column dataIndex="firstName" type="string">
+						<text stringCD="First Name"/>
+					</column>
+					<column dataIndex="lastName" type="string">
+						<text stringCD="Last Name"/>
+					</column>
+					<column dataIndex="email" type="string">
+						<text stringCD="email"/>
+					</column>
+					<column dataIndex="password" type="string">
+						<text stringCD="Password"/>
+					</column>
+					<records>
+						<record>
+							<field name="userId"/>
+							<field name="userName"/>
+							<field name="firstName"/>
+							<field name="lastName"/>
+							<field name="email"/>
+							<field name="password"/>
+						</record>
+					</records>
+				</item>
+				<item xsi:type="GridPanel" id="dannytab4">
+					<title stringCD="tab 4"/>
+					<column dataIndex="userId" type="int">
+						<text stringCD="User ID"/>
+					</column>
+					<column dataIndex="userName" type="string">
+						<text stringCD="Username"/>
+					</column>
+					<column dataIndex="firstName" type="string">
+						<text stringCD="First Name"/>
+					</column>
+					<column dataIndex="lastName" type="string">
+						<text stringCD="Last Name"/>
+					</column>
+					<column dataIndex="email" type="string">
+						<text stringCD="email"/>
+					</column>
+					<column dataIndex="password" type="string">
+						<text stringCD="Password"/>
+					</column>
+					<store xsi:type="JsonStore">
+						<model>
+							<field name="userId" type="int"/>
+							<field name="userName" type="string"/>
+							<field name="firstName" type="string"/>
+							<field name="lastName" type="string"/>
+							<field name="email" type="string"/>
+							<field name="password" type="string"/>
+						</model>
+						<proxy class="com.modnaut.apps.helloworld.HelloWorldChangeCtrl" method="getUsers">
+							<extraParam name="testParam" value="5"/>
+						</proxy>
 					</store>
 				</item>
 			</items>

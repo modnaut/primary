@@ -42,46 +42,27 @@ public class XslPool
 	private static GenericKeyedObjectPool<XslPoolKey, Transformer> TRANSFORMER_POOL = new GenericKeyedObjectPool<XslPoolKey, Transformer>(new TransformerFactory(), new XslPoolConfig());
 
 	/**
-	 * An enum of pool keys to be reused internally so that we don't constantly create JaxbPoolKey objects that are used once and then garbage collected
+	 * A HashMap of pool keys to be reused internally so that we don't constantly create JaxbPoolKey objects that are used once and then garbage collected
 	 * 
 	 */
-	private enum XSL_POOL_KEYS
+	private static HashMap<String, XslPoolKey> POOL_KEYS = new HashMap<String, XslPoolKey>()
 	{
-		APPLICATION("Application.xsl"), VIEW_META_DATA("ViewMetaData.xsl");
-
-		private XslPoolKey poolKey;
-
-		private XSL_POOL_KEYS(String xslFileName)
 		{
-			poolKey = new XslPoolKey(xslFileName);
-		}
-
-		public XslPoolKey getPoolKey()
-		{
-			return poolKey;
-		}
-
-		/**
-		 * Returns the enum member for the XSL file name passed in
-		 * 
-		 * @param clazz
-		 * @return the enum member for the passed XSL file name, or null if none exists
-		 */
-		public static XSL_POOL_KEYS fromString(String xslFileName)
-		{
-			XSL_POOL_KEYS returnMember = null;
-			if (xslFileName != null)
+			try
 			{
-				for (XSL_POOL_KEYS member : XSL_POOL_KEYS.values())
-				{
-					if (member.getPoolKey().xslFileName.equals(xslFileName))
-					{
-						returnMember = member;
-						break;
-					}
-				}
+				put("ViewMetaData.xsl", new XslPoolKey("ViewMetaData.xsl"));
 			}
-			return returnMember;
+			catch (Exception e)
+			{
+			}
+
+			try
+			{
+				put("Application.xsl", new XslPoolKey("Application.xsl"));
+			}
+			catch (Exception e)
+			{
+			}
 		}
 	};
 
@@ -191,18 +172,12 @@ public class XslPool
 
 		if (xslFileName != null)
 		{
-			XSL_POOL_KEYS enumMember = XSL_POOL_KEYS.fromString(xslFileName);
-			if (enumMember != null)
+			poolKey = POOL_KEYS.get(xslFileName);
+			if (poolKey == null)
 			{
-				poolKey = enumMember.getPoolKey();
-				LOGGER.debug("Got XSL_POOL_KEYS enum member " + enumMember.name());
+				poolKey = new XslPoolKey(xslFileName);
+				POOL_KEYS.put(xslFileName, poolKey);
 			}
-		}
-
-		if (poolKey == null)
-		{
-			LOGGER.warn("Creating XslPoolKey on the fly for XSL: " + xslFileName);
-			poolKey = new XslPoolKey(xslFileName);
 		}
 
 		return poolKey;

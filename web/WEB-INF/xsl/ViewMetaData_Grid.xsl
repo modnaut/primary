@@ -17,6 +17,7 @@
 		<xsl:value-of select="mn:attribute(., 'rowLines', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'scroll', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'sortableColumns', ',')"/>
+		<xsl:call-template name="Store"/>
 	</xsl:template>
 	
 	<xsl:template name="Columns">
@@ -29,6 +30,8 @@
 					<xsl:value-of select="mn:attribute(., 'draggable', ',')"/>
 					<xsl:value-of select="mn:childString(., 'emptyCellText', ',')"/>
 					<xsl:value-of select="mn:attribute(., 'groupable', ',')"/>
+					<xsl:value-of select="mn:attribute(., 'flex', ',')"/>
+					<xsl:value-of select="mn:attribute(., 'hidden', ',')"/>
 					<xsl:value-of select="mn:attribute(., 'hideable', ',')"/>
 					<xsl:value-of select="mn:attribute(., 'lockable', ',')"/>
 					<xsl:value-of select="mn:attribute(., 'locked', ',')"/>
@@ -39,11 +42,99 @@
 					<xsl:value-of select="mn:attribute(., 'tdCls', ',')"/>
 					<xsl:value-of select="mn:childString(., 'text', ',')"/>
 					<xsl:value-of select="mn:childString(., 'tooltip', ',')"/>
+					<xsl:value-of select="mn:attribute(., 'width', ',')"/>
 					<xsl:value-of select="mn:attribute(., 'dataIndex', '')"/>
 				}<xsl:call-template name="comma-delimit"/>
 				</xsl:for-each>
 			],
 		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="Store">
+		store: {
+			fields: [
+				<xsl:choose>
+					<xsl:when test="store">
+						<xsl:for-each select="store/model/field">
+							{
+								name: <xsl:value-of select="mn:wrap-string(@name)"/>
+								<xsl:if test="@type != '' ">
+									,type: <xsl:value-of select="mn:wrap-string(@type)"/>
+								</xsl:if>
+							}
+							<xsl:call-template name="comma-delimit"/>
+						</xsl:for-each>
+					</xsl:when>
+					<xsl:otherwise><!--Shortcut for grids, no need to define a model, we'll pull the fields from the columns-->
+						<xsl:for-each select="column">
+							{
+								name: <xsl:value-of select="mn:wrap-string(@dataIndex)"/>
+								<xsl:if test="@type != '' ">
+									,type: <xsl:value-of select="mn:wrap-string(@type)"/>
+								</xsl:if>
+							}
+							<xsl:call-template name="comma-delimit"/>
+						</xsl:for-each>
+					</xsl:otherwise>
+				</xsl:choose>
+			],
+			<xsl:choose>
+				<xsl:when test="store[@xsi:type = 'JsonStore' ]">
+					autoLoad: true,
+					proxy: {
+						type: "ajax",
+						url: "ApplicationServlet",
+						extraParams: {
+							class: "<xsl:value-of select="store[@xsi:type = 'JsonStore' ]/proxy/@class"/>",
+							method: "<xsl:value-of select="store[@xsi:type = 'JsonStore' ]/proxy/@method"/>"
+							<xsl:if test="store[@xsi:type = 'JsonStore' ]/proxy/extraParam">
+								,
+								<xsl:for-each select="store[@xsi:type = 'JsonStore' ]/proxy/extraParam">
+									"<xsl:value-of select="@name"/>" : <xsl:value-of select="mn:wrap-string(@value)"/>
+									<xsl:call-template name="comma-delimit"/>
+								</xsl:for-each>
+							</xsl:if>
+						},
+						reader: {
+							root: "data",
+							type: "json"
+						}
+					}
+				</xsl:when>
+				<xsl:otherwise>
+					data: [
+						<xsl:choose>
+							<xsl:when test="store">
+								<xsl:apply-templates select="store/data"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:apply-templates select="records"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					]
+				</xsl:otherwise>
+			</xsl:choose>
+		},
+	</xsl:template>
+	
+	<xsl:template match="data">
+		<xsl:call-template name="RecordSet"/>
+	</xsl:template>
+	
+	<xsl:template match="records">
+		<xsl:call-template name="RecordSet"/>
+	</xsl:template>
+	
+	<xsl:template name="RecordSet">
+		<xsl:for-each select="record">
+			{
+				<xsl:for-each select="field">
+					<xsl:value-of select="@name"/> : <xsl:value-of select="mn:wrap-string(@value)"/>
+					<xsl:call-template name="comma-delimit"/>
+				</xsl:for-each>
+			}
+			<xsl:call-template name="comma-delimit"/>
+		</xsl:for-each>
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='GridPanel']">

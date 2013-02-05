@@ -60,6 +60,10 @@ public class HelloWorldChangeCtrl extends FrameworkCtrl
 				logger.info(userList);
 			}
 
+			populateData("dannytab2", data);
+
+			populateData("dannytab", data);
+
 			marshall(viewMetaData);
 
 		}
@@ -68,5 +72,10 @@ public class HelloWorldChangeCtrl extends FrameworkCtrl
 			logger.error("This a Logback ERROR meesage.  There was an error in default action of this class.");
 			e.printStackTrace();
 		}
+	}
+
+	public void getUsers() throws Exception
+	{
+		response.getWriter().print("{data: []}");
 	}
 }
