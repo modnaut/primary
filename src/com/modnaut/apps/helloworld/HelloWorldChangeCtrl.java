@@ -76,6 +76,18 @@ public class HelloWorldChangeCtrl extends FrameworkCtrl
 
 	public void getUsers() throws Exception
 	{
-		response.getWriter().print("{data: []}");
+		// NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
+		ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
+
+		// data.add(0, new String[] { "UserId", "UserName", "FirstName", "LastName", "EmailAddress", "UserPassword" });
+
+		try
+		{
+			Thread.sleep(5000);
+		}
+		catch (Exception e)
+		{
+		}
+		marshallGridJson(data, false);
 	}
 }

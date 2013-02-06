@@ -243,6 +243,13 @@
 			<xs:extension base="Container">
 				<xs:sequence>
 					<xs:element name="column" type="Column" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="editor" minOccurs="0" maxOccurs="1">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="item" type="Item" minOccurs="1" maxOccurs="1"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
 					<xs:element name="emptyCellText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="menuText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="text" type="str:String" minOccurs="0" maxOccurs="1"/>
@@ -262,6 +269,37 @@
 				<xs:attribute name="type" type="DataType" default="auto"/>
 			</xs:extension>
 		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ActionColumn">
+			<xs:complexContent>
+				<xs:extension base="Column">
+				</xs:extension>
+			</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BooleanColumn">
+			<xs:complexContent>
+				<xs:extension base="Column">
+					<xs:sequence>
+						<xs:element name="falseText" type="str:String" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="trueText" type="str:String" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="undefinedText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="DateColumn">
+			<xs:complexContent>
+				<xs:extension base="Column">
+					<xs:attribute name="format" type="xs:string"/>
+				</xs:extension>
+			</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NumberColumn">
+			<xs:complexContent>
+				<xs:extension base="Column">
+					<xs:attribute name="format" type="xs:string"/>
+				</xs:extension>
+			</xs:complexContent>
 	</xs:complexType>
 	<xs:simpleType name="Scroll">
 		<xs:restriction base="xs:string">
@@ -298,7 +336,43 @@
 	</xs:complexType>
 	<xs:complexType name="GridPanel">
 		<xs:complexContent>
-			<xs:extension base="TablePanel"/>
+			<xs:extension base="TablePanel">
+				<xs:sequence>
+					<xs:element name="plugin" type="GridPlugin" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GridPlugin" abstract="true"/>
+	<xs:simpleType name="GridEditingTriggerEvent">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="cellclick"/>
+			<xs:enumeration value="celldblclick"/>
+			<xs:enumeration value="cellfocus"/>
+			<xs:enumeration value="rowfocus"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="GridEditingPlugin" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="GridPlugin">
+				<xs:attribute name="clicksToEdit" type="xs:int" default="2"/>
+				<xs:attribute name="pluginId" type="xs:string"/>
+				<xs:attribute name="triggerEvent" type="GridEditingTriggerEvent"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CellEditing">
+		<xs:complexContent>
+			<xs:extension base="GridEditingPlugin"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RowEditing">
+		<xs:complexContent>
+			<xs:extension base="GridEditingPlugin">
+				<xs:attribute name="autoCancel" type="xs:boolean" default="true"/>
+				<xs:attribute name="clicksToMoveEditor" type="xs:int"/>
+				<xs:attribute name="errorSummary" type="xs:boolean" default="true"/>
+			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:simpleType name="TabPosition">
@@ -721,7 +795,7 @@
 	</xs:complexType>
 	<xs:complexType name="AbstractStore" abstract="true">
 		<xs:sequence>
-			<xs:element name="model" type="Model" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="model" type="Model" minOccurs="0" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="RecordField">

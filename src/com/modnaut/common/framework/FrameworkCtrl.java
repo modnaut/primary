@@ -2,6 +2,7 @@ package com.modnaut.common.framework;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -12,6 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.jxpath.JXPathContext;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.viewmetadata.ViewMetaData;
 import com.modnaut.common.servlet.ApplicationServlet;
@@ -92,7 +97,46 @@ public class FrameworkCtrl
 	 */
 	public void marshall(ViewMetaData viewMetaData) throws IOException, Exception
 	{
-		XslPool.marshalAndTransform(viewMetaData, response.getOutputStream(), VIEW_META_DATA_FILE, null, true);
+		XslPool.marshalAndTransform(viewMetaData, response.getOutputStream(), VIEW_META_DATA_FILE, null);
+	}
+
+	public void marshallGridJson(ArrayList<String[]> data) throws IOException
+	{
+		marshallGridJson(data, true);
+	}
+
+	public void marshallGridJson(ArrayList<String[]> data, boolean useSqlColumnNames) throws IOException
+	{
+		String[] columnNames = null;
+		if (useSqlColumnNames)
+			columnNames = data.remove(0);
+		else
+		{
+			columnNames = new String[data.get(0).length];
+			for (int i = 0; i < columnNames.length; i++)
+				columnNames[i] = "column" + i;
+		}
+
+		marshallGridJson(data, columnNames);
+	}
+
+	public void marshallGridJson(ArrayList<String[]> data, String[] columnNames) throws IOException
+	{
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		JsonObject responseObject = new JsonObject();
+		JsonArray responseArray = new JsonArray();
+		responseObject.add("data", responseArray);
+
+		for (String[] rowData : data)
+		{
+			JsonObject row = new JsonObject();
+			responseArray.add(row);
+			for (int i = 0; i < rowData.length; i++)
+				row.addProperty(columnNames[i], rowData[i]);
+		}
+
+		String prettyJsonString = gson.toJson(responseObject);
+		response.getOutputStream().write(prettyJsonString.getBytes());
 	}
 
 	/**

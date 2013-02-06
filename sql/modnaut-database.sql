@@ -3,7 +3,7 @@
 -- Server version:               5.5.28 - MySQL Community Server (GPL)
 -- Server OS:                    Win64
 -- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-01-03 00:54:23
+-- Date/time:                    2013-02-06 00:28:59
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -50,6 +50,20 @@ INSERT INTO `language` (`LanguageID`, `Name`, `LocalName`, `FlagFileName`, `IsoL
 /*!40000 ALTER TABLE `language` ENABLE KEYS */;
 
 
+-- Dumping structure for table common.session
+DROP TABLE IF EXISTS `session`;
+CREATE TABLE IF NOT EXISTS `session` (
+  `SessionId` bigint(19) NOT NULL,
+  `SessionObject` blob NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`SessionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.session: ~0 rows (approximately)
+/*!40000 ALTER TABLE `session` DISABLE KEYS */;
+/*!40000 ALTER TABLE `session` ENABLE KEYS */;
+
+
 -- Dumping structure for table common.string
 DROP TABLE IF EXISTS `string`;
 CREATE TABLE IF NOT EXISTS `string` (
@@ -75,8 +89,8 @@ CREATE TABLE IF NOT EXISTS `stringvalue` (
   `Value` varchar(5000) NOT NULL,
   KEY `FK__string` (`StringID`),
   KEY `FK__language` (`LanguageID`),
-  CONSTRAINT `FK__language` FOREIGN KEY (`languageID`) REFERENCES `language` (`languageID`),
-  CONSTRAINT `FK__string` FOREIGN KEY (`stringID`) REFERENCES `string` (`StringID`)
+  CONSTRAINT `FK__language` FOREIGN KEY (`LanguageID`) REFERENCES `language` (`LanguageID`),
+  CONSTRAINT `FK__string` FOREIGN KEY (`StringID`) REFERENCES `string` (`StringID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.stringvalue: ~1 rows (approximately)
@@ -95,39 +109,34 @@ CREATE TABLE IF NOT EXISTS `users` (
   `LastName` varchar(50) NOT NULL,
   `EmailAddress` varchar(100) NOT NULL,
   `UserPassword` varchar(100) NOT NULL,
+  `HireDate` datetime DEFAULT NULL,
   PRIMARY KEY (`UserId`),
   UNIQUE KEY `EmailAddress` (`EmailAddress`),
   UNIQUE KEY `UserName` (`UserName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.users: ~3 rows (approximately)
--- The password for everyone is 'password'
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`) VALUES
-	(1, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A='),
-	(2, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A='),
-	(3, 'bdalgaard22', 'Ben', 'Dalgaard', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=');
+INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`, `HireDate`) VALUES
+	(1, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51'),
+	(2, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51'),
+	(3, 'bdalgaard22', 'Ben', 'Dalgaard', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
-/*!40014 SET FOREIGN_KEY_CHECKS=1 */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 
 
--- Dumping structure for table common.session
-DROP TABLE IF EXISTS `Session`;
-CREATE TABLE IF NOT EXISTS `Session` (
-	`SessionId` BIGINT(19) NOT NULL,
-	`SessionObject` BLOB NOT NULL,
-	`LastModifiedDate` TIMESTAMP,
-	PRIMARY KEY (`SessionId`)
+-- Dumping structure for table common.usersession
+DROP TABLE IF EXISTS `usersession`;
+CREATE TABLE IF NOT EXISTS `usersession` (
+  `UserId` int(10) NOT NULL,
+  `SessionId` bigint(19) NOT NULL,
+  KEY `FK__user` (`UserId`),
+  KEY `FK__session` (`SessionId`),
+  CONSTRAINT `FK__user` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`),
+  CONSTRAINT `FK__session` FOREIGN KEY (`SessionId`) REFERENCES `session` (`SessionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping structure for table common.session
-DROP TABLE IF EXISTS `UserSession`;
-CREATE TABLE IF NOT EXISTS `UserSession` (
-	`UserId` INT(10) NOT NULL,
-	`SessionId` BIGINT(19) NOT NULL,
-	KEY `FK__user` (`UserId`),
-	KEY `FK__session` (`SessionId`),
-	CONSTRAINT `FK__user` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`),
-	CONSTRAINT `FK__session` FOREIGN KEY (`SessionId`) REFERENCES `Session` (`SessionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+-- Dumping data for table common.usersession: ~0 rows (approximately)
+/*!40000 ALTER TABLE `usersession` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usersession` ENABLE KEYS */;
+/*!40014 SET FOREIGN_KEY_CHECKS=1 */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -17,10 +17,6 @@ import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.modnaut.common.servlet.ApplicationServlet;
 
 /**
@@ -240,7 +236,7 @@ public class XslPool
 	 * @param prettyPrintJson
 	 * @throws Exception
 	 */
-	public static void marshalAndTransform(Object input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters, boolean prettyPrintJson) throws Exception
+	public static void marshalAndTransform(Object input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters) throws Exception
 	{
 		// create jaxb context and instantiate the marshaller - will be borrowed from existing jaxbPool
 		Marshaller marshaller = JaxbPool.getMarshaller(input.getClass());
@@ -248,28 +244,6 @@ public class XslPool
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		transform(source, baos, xslFileName, parameters);
 		JaxbPool.returnMarshaller(marshaller, input.getClass());
-
-		if (prettyPrintJson)
-		{
-			String json = baos.toString();
-			try
-			{
-				Gson gson = new GsonBuilder().setPrettyPrinting().create();
-				JsonParser jsonParser = new JsonParser();
-				JsonElement jsonElement = jsonParser.parse(json);
-				String prettyJsonString = gson.toJson(jsonElement);
-				outputStream.write(prettyJsonString.getBytes());
-			}
-			catch (Exception e)
-			{
-				LOGGER.info(json);
-				LOGGER.error("Failed to pretty print JSON", e);
-				outputStream.write(json.getBytes());
-			}
-		}
-		else
-		{
-			outputStream.write(baos.toByteArray());
-		}
+		outputStream.write(baos.toByteArray());
 	}
 }
