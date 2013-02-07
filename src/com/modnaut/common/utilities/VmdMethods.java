@@ -6,7 +6,9 @@ import org.apache.commons.jxpath.JXPathContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.viewmetadata.AbstractStore;
+import com.modnaut.common.properties.viewmetadata.ComboBox;
 import com.modnaut.common.properties.viewmetadata.GridPanel;
 import com.modnaut.common.properties.viewmetadata.Record;
 import com.modnaut.common.properties.viewmetadata.RecordField;
@@ -77,10 +79,35 @@ public class VmdMethods
 		return found;
 	}
 
+	public static boolean populateData(ViewMetaData viewMetaData, JXPathContext context, String id, String data)
+	{
+		boolean found = false;
+
+		List elements = getMultipleById(viewMetaData, context, id);
+		if (elements.size() > 0)
+		{
+			found = true;
+			for (Object element : elements)
+			{
+				LOGGER.info("populating data on " + element.getClass().getCanonicalName());
+				populateData(element, data);
+			}
+		}
+		return found;
+	}
+
 	public static void populateData(Object element, List data)
 	{
 		if (element instanceof GridPanel)
 			populateGrid((GridPanel) element, data);
+		else if (element instanceof ComboBox)
+			populateComboBox((ComboBox) element, data);
+	}
+
+	public static void populateData(Object element, String data)
+	{
+		if (element instanceof ComboBox)
+			populateComboBox((ComboBox) element, data);
 	}
 
 	public static void populateGrid(GridPanel gridPanel, List<Object[]> data)
@@ -128,11 +155,57 @@ public class VmdMethods
 					if (populationIndex == null)// if populationIndex not in XML, just use index of field within the record
 						populationIndex = i;
 					if (i < recordData.length)
-						newField.setValue((String) recordData[populationIndex]);
+						newField.setValue(recordData[populationIndex].toString());
 					newRecord.getField().add(newField);
 				}
 				records.add(newRecord);
 			}
 		}
+	}
+
+	public static void populateComboBox(ComboBox element, List<Object[]> data)
+	{
+		String displayFieldName = element.getDisplayField();
+		if (displayFieldName == null)
+			displayFieldName = "text";
+
+		String valueFieldName = element.getValueField();
+		if (valueFieldName == null)
+			valueFieldName = displayFieldName;
+
+		RecordSet records = element.getRecords();
+		if (records == null)
+		{
+			AbstractStore abstractStore = element.getStore();
+			if (abstractStore != null && abstractStore instanceof Store)
+			{
+				Store store = (Store) abstractStore;
+				records = store.getData();
+			}
+		}
+
+		if (records != null)
+		{
+			for (Object[] row : data)
+			{
+				Record record = new Record();
+				RecordField valueField = new RecordField();
+				valueField.setName(valueFieldName);
+				valueField.setValue(row[0].toString());
+				record.getField().add(valueField);
+				RecordField displayField = new RecordField();
+				displayField.setName(displayFieldName);
+				displayField.setValue(row[1].toString());
+				record.getField().add(displayField);
+				if (row.length > 2 && row[2].toString().equals(ICommonConstants.LETTER_Y))
+					record.setSelected(true);
+				records.getRecord().add(record);
+			}
+		}
+	}
+
+	public static void populateComboBox(ComboBox element, String data)
+	{
+		element.setValue(data);
 	}
 }

@@ -648,9 +648,13 @@
 			<xs:extension base="PickerField">
 				<xs:sequence>
 					<xs:element name="valueNotFoundText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:choice>
+						<xs:element name="store" type="AbstractStore" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="records" type="RecordSet" minOccurs="0" maxOccurs="1"/>
+					</xs:choice>
 				</xs:sequence>
 				<xs:attribute name="autoSelect" type="xs:boolean" default="true"/>
-				<xs:attribute name="displayField" type="xs:string"/>
+				<xs:attribute name="displayField" type="xs:string" default="text"/>
 				<xs:attribute name="forceSelection" type="xs:boolean" default="true"/>
 				<xs:attribute name="growToLongestValue" type="xs:boolean" default="true"/>
 				<xs:attribute name="minChars" type="xs:int"/>
@@ -807,6 +811,7 @@
 		<xs:sequence>
 			<xs:element name="field" type="RecordField" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="selected" type="xs:boolean" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="RecordSet">
 		<xs:sequence>

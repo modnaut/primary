@@ -164,4 +164,9 @@ public class FrameworkCtrl
 	{
 		return VmdMethods.populateData(viewMetaData, jxPathContext, id, data);
 	}
+
+	protected boolean populateData(String id, String data)
+	{
+		return VmdMethods.populateData(viewMetaData, jxPathContext, id, data);
+	}
 }
