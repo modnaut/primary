@@ -3,7 +3,7 @@
 	<query id="1" name="GET_USER_LIST" action="SELECT" type="QUERY">
 		<statement value="Select UserName, FirstName, LastName, EmailAddress From Users Where UserId = ?"/>
 		<parameters>
-			<parameter id="1" name="UserId" value=""/>
+			<parameter id="1" name="UserId" type="INT" value=""/>
 		</parameters>
 	</query>
 	<query id="2" name="GET_ALL_USERS_ALPHABETICALLY" action="SELECT" type="SP">
@@ -13,36 +13,36 @@
 		<statement value="INSERT INTO users (UserName, FirstName, LastName, EmailAddress) 
 						  VALUES (?, ?, ?, ?)"/>
 		<parameters>
-			<parameter id="1" name="UserName" value=""/>
-			<parameter id="2" name="FirstName" value=""/>
-			<parameter id="3" name="LastName" value=""/>
-			<parameter id="4" name="EmailAddress" value=""/>
+			<parameter id="1" name="UserName" type="VARCHAR" value=""/>
+			<parameter id="2" name="FirstName" type="VARCHAR" value=""/>
+			<parameter id="3" name="LastName" type="VARCHAR" value=""/>
+			<parameter id="4" name="EmailAddress" type="VARCHAR" value=""/>
 		</parameters>
 	</query>
 	<query id="4" name="GET_USER" action="SELECT" type="SP">
 		<statement value="Common.GetUser(?, ?)"/>
 		<parameters>
-			<parameter id="1" name="Email" value=""/>
-			<parameter id="2" name="Password" value=""/>
+			<parameter id="1" name="Email" type="VARCHAR" value=""/>
+			<parameter id="2" name="Password" type="VARCHAR" value=""/>
 		</parameters>
 	</query>
 	<query id="5" name="INSERT_SESSION" action="ACTION" type="QUERY">
 		<statement value="INSERT INTO Common.Session(SessionId, SessionObject, LastModifiedDate) VALUES (?, ?, CURRENT_TIMESTAMP())"/>
 		<parameters>
-			<parameter id="1" name="SessionId" value=""/>
+			<parameter id="1" name="SessionId" type="INT" value=""/>
 			<parameter id="2" name="SessionObject" value="" type="OBJECT"/>
 		</parameters>
 	</query>
 	<query id="6" name="GET_SESSION" action="SELECT" type="QUERY">
 		<statement value="SELECT SessionObject, LastModifiedDate FROM Common.Session WHERE SessionId = ?"/>
 		<parameters>
-			<parameter id="1" name="SessionId" value=""/>
+			<parameter id="1" name="SessionId" type="INT" value=""/>
 		</parameters>
 	</query>
 	<query id="7" name="GET_USER_SESSION" action="SELECT" type="QUERY">
 		<statement value="Common.GetUserSession(?)"/>
 		<parameters>
-			<parameter id="1" name="UserId" value=""/>
+			<parameter id="1" name="UserId" type="INT" value=""/>
 		</parameters>
 	</query>
 </sqlMetaData>

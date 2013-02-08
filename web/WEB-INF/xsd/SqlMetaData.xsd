@@ -1,28 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	
-	<xs:element name="parameter">
-		<xs:complexType>
-			<xs:attribute name="id" type="xs:integer" use="required"/>
-			<xs:attribute name="name" type="xs:string" use="required"/>
-			<xs:attribute name="value" type="xs:string" use="required"/>
-			<xs:attribute name="type" type="xs:string" use="optional"/>
-		</xs:complexType>
-	</xs:element>
-	
-	<xs:element name="parameters">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">	
+	<xs:element name="sqlMetaData">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="query" maxOccurs="unbounded"/>
 			</xs:sequence>
-		</xs:complexType>
+		</xs:complexType>	
 	</xs:element>
-
-
-	<xs:complexType name="statementType">
-  		<xs:attribute name="value" type="xs:string" use="required"/>
-	</xs:complexType>
-
 	<xs:element name="query">
 		<xs:complexType>
 			<xs:sequence>
@@ -31,18 +15,75 @@
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:integer" use="required"/>
 			<xs:attribute name="name" type="xs:string" use="required"/>
-			<xs:attribute name="action" type="xs:string" use="required"/>
-			<xs:attribute name="type" type="xs:string" use="required"/>
-			<xs:attribute name="connection" type="xs:string" use="optional"/>
+			<xs:attribute name="action" type="actionType" use="required"/>
+			<xs:attribute name="type" type="queryType" use="required"/>
+			<xs:attribute name="connection" type="connectionType" use="optional"/>
 		</xs:complexType>		
 	</xs:element>
-	
-	<xs:element name="sqlMetaData">
+	<xs:element name="parameters">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="query" maxOccurs="unbounded"/>
+				<xs:element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
-		</xs:complexType>	
+		</xs:complexType>
 	</xs:element>
-	
+	<xs:element name="parameter">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:integer" use="required"/>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="value" type="xs:string" use="required"/>
+			<xs:attribute name="type" type="parameterType" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="statementType">
+  		<xs:attribute name="value" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:simpleType name="queryType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SP"/>
+			<xs:enumeration value="QUERY"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="actionType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SELECT"/>
+			<xs:enumeration value="ACTION"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="parameterType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="TINYINT"/>
+			<xs:enumeration value="SMALLINT"/>
+			<xs:enumeration value="MEDIUMINT"/>
+			<xs:enumeration value="INT"/>
+			<xs:enumeration value="BIGINT"/>
+			<xs:enumeration value="BIT"/>
+			<xs:enumeration value="FLOAT"/>
+			<xs:enumeration value="DOUBLE"/>
+			<xs:enumeration value="DECIMAL"/>
+			<xs:enumeration value="CHAR"/>
+			<xs:enumeration value="VARCHAR"/>
+			<xs:enumeration value="TINYTEXT"/>
+			<xs:enumeration value="TEXT"/>
+			<xs:enumeration value="MEDIUMTEXT"/>
+			<xs:enumeration value="LONGTEXT"/>
+			<xs:enumeration value="BINARY"/>
+			<xs:enumeration value="VARBINARY"/>
+			<xs:enumeration value="TINYBLOB"/>
+			<xs:enumeration value="BLOB"/>
+			<xs:enumeration value="MEDIUMBLOB"/>
+			<xs:enumeration value="LONGBLOB"/>
+			<xs:enumeration value="DATE"/>
+			<xs:enumeration value="TIME"/>
+			<xs:enumeration value="YEAR"/>
+			<xs:enumeration value="DATETIME"/>
+			<xs:enumeration value="TIMESTAMP"/>
+			<xs:enumeration value="OBJECT"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="connectionType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="MYSQL"/>
+		</xs:restriction>
+	</xs:simpleType>	
 </xs:schema>
