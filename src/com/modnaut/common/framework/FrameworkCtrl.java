@@ -169,4 +169,9 @@ public class FrameworkCtrl
 	{
 		return VmdMethods.populateData(viewMetaData, jxPathContext, id, data);
 	}
+
+	protected void deleteElement(String id)
+	{
+		VmdMethods.deleteElement(viewMetaData, jxPathContext, id);
+	}
 }

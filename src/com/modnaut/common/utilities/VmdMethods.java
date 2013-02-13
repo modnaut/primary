@@ -14,12 +14,23 @@ import com.modnaut.common.properties.viewmetadata.Record;
 import com.modnaut.common.properties.viewmetadata.RecordField;
 import com.modnaut.common.properties.viewmetadata.RecordSet;
 import com.modnaut.common.properties.viewmetadata.Store;
+import com.modnaut.common.properties.viewmetadata.TextField;
 import com.modnaut.common.properties.viewmetadata.ViewMetaData;
+
+/**
+ * @author Danny Cohn
+ * 
+ */
 
 public class VmdMethods
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(VmdMethods.class);
 
+	/**
+	 * @param viewMetaData
+	 * @param id
+	 * @return
+	 */
 	public static List getMultipleById(ViewMetaData viewMetaData, String id)
 	{
 		long start = System.currentTimeMillis();
@@ -29,6 +40,12 @@ public class VmdMethods
 		return getMultipleById(viewMetaData, context, id);
 	}
 
+	/**
+	 * @param viewMetaData
+	 * @param context
+	 * @param id
+	 * @return
+	 */
 	public static List getMultipleById(ViewMetaData viewMetaData, JXPathContext context, String id)
 	{
 		long start = System.currentTimeMillis();
@@ -38,6 +55,11 @@ public class VmdMethods
 		return list;
 	}
 
+	/**
+	 * @param viewMetaData
+	 * @param id
+	 * @return
+	 */
 	public static Object getSingleById(ViewMetaData viewMetaData, String id)
 	{
 		long start = System.currentTimeMillis();
@@ -47,6 +69,12 @@ public class VmdMethods
 		return getSingleById(viewMetaData, context, id);
 	}
 
+	/**
+	 * @param viewMetaData
+	 * @param context
+	 * @param id
+	 * @return
+	 */
 	public static Object getSingleById(ViewMetaData viewMetaData, JXPathContext context, String id)
 	{
 		long start = System.currentTimeMillis();
@@ -56,12 +84,25 @@ public class VmdMethods
 		return object;
 	}
 
+	/**
+	 * @param viewMetaData
+	 * @param id
+	 * @param data
+	 * @return
+	 */
 	public static boolean populateData(ViewMetaData viewMetaData, String id, List data)
 	{
 		JXPathContext context = JXPathContext.newContext(viewMetaData);
 		return populateData(viewMetaData, context, id, data);
 	}
 
+	/**
+	 * @param viewMetaData
+	 * @param context
+	 * @param id
+	 * @param data
+	 * @return
+	 */
 	public static boolean populateData(ViewMetaData viewMetaData, JXPathContext context, String id, List data)
 	{
 		boolean found = false;
@@ -79,6 +120,13 @@ public class VmdMethods
 		return found;
 	}
 
+	/**
+	 * @param viewMetaData
+	 * @param context
+	 * @param id
+	 * @param data
+	 * @return
+	 */
 	public static boolean populateData(ViewMetaData viewMetaData, JXPathContext context, String id, String data)
 	{
 		boolean found = false;
@@ -96,6 +144,10 @@ public class VmdMethods
 		return found;
 	}
 
+	/**
+	 * @param element
+	 * @param data
+	 */
 	public static void populateData(Object element, List data)
 	{
 		if (element instanceof GridPanel)
@@ -104,12 +156,22 @@ public class VmdMethods
 			populateComboBox((ComboBox) element, data);
 	}
 
+	/**
+	 * @param element
+	 * @param data
+	 */
 	public static void populateData(Object element, String data)
 	{
 		if (element instanceof ComboBox)
 			populateComboBox((ComboBox) element, data);
+		if (element instanceof TextField)
+			populateTextField((TextField) element, data);
 	}
 
+	/**
+	 * @param gridPanel
+	 * @param data
+	 */
 	public static void populateGrid(GridPanel gridPanel, List<Object[]> data)
 	{
 		AbstractStore abstractStore = gridPanel.getStore();
@@ -134,6 +196,10 @@ public class VmdMethods
 		}
 	}
 
+	/**
+	 * @param recordSet
+	 * @param data
+	 */
 	public static void populateRecordSet(RecordSet recordSet, List<Object[]> data)
 	{
 		List<Record> records = recordSet.getRecord();
@@ -163,6 +229,10 @@ public class VmdMethods
 		}
 	}
 
+	/**
+	 * @param element
+	 * @param data
+	 */
 	public static void populateComboBox(ComboBox element, List<Object[]> data)
 	{
 		String displayFieldName = element.getDisplayField();
@@ -204,8 +274,38 @@ public class VmdMethods
 		}
 	}
 
+	/**
+	 * @param element
+	 * @param data
+	 */
 	public static void populateComboBox(ComboBox element, String data)
 	{
 		element.setValue(data);
+	}
+
+	/**
+	 * @param element
+	 * @param data
+	 */
+	public static void populateTextField(TextField element, String data)
+	{
+		// do something here
+	}
+
+	/**
+	 * @param viewMetaData
+	 * @param context
+	 * @param id
+	 */
+	public static void deleteElement(ViewMetaData viewMetaData, JXPathContext context, String id)
+	{
+		long start = System.currentTimeMillis();
+
+		List elements = getMultipleById(viewMetaData, context, id);
+		if (elements.size() > 0)
+			context.removeAll("//*[@id='" + id + "']");
+
+		long end = System.currentTimeMillis();
+		LOGGER.info("deleteElement deleted " + id + " with count of " + elements.size() + " from page took " + (end - start));
 	}
 }
