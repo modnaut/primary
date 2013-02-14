@@ -297,11 +297,9 @@ public class VmdMethods
 	{
 		long start = System.currentTimeMillis();
 
-		List elements = getMultipleById(viewMetaData, context, id);
-		if (elements.size() > 0)
-			context.removeAll("//*[@id='" + id + "']");
+		context.removeAll("//*[@id='" + id + "']");
 
 		long end = System.currentTimeMillis();
-		LOGGER.info("deleteElement deleted " + id + " with count of " + elements.size() + " from page took " + (end - start));
+		LOGGER.info("deleteElement deleted " + id + " from page took " + (end - start));
 	}
 }
