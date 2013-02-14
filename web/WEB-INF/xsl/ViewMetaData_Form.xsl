@@ -247,7 +247,9 @@
 				},
 			</xsl:when>
 			<xsl:when test="store">
-				<xsl:call-template name="Store"/>
+				<xsl:for-each select="store">
+					<xsl:apply-templates select="."/>,
+				</xsl:for-each>
 			</xsl:when>
 		</xsl:choose>
 

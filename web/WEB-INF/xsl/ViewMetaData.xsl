@@ -6,6 +6,7 @@
 	<xsl:include href="ViewMetaData_Functions.xsl"/>
 	<xsl:include href="ViewMetaData_Layout.xsl"/>
 	<xsl:include href="ViewMetaData_Container.xsl"/>
+	<xsl:include href="ViewMetaData_Data.xsl"/>
 	<xsl:include href="ViewMetaData_Form.xsl"/>
 	<xsl:include href="ViewMetaData_Grid.xsl"/>
 	

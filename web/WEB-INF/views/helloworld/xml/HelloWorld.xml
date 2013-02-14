@@ -1,68 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
 	<items>
-		<item xsi:type="TabPanel" width="100" height="50" id="top" titleAlign="center" tabPosition="bottom" plain="true" activeTab="3">
+		<item xsi:type="TabPanel" width="100" height="50" id="top" titleAlign="center" tabPosition="bottom" plain="true" activeTab="0">
 			<icon path="silk/wrench.png"/>
 			<items>
+				
 				<item xsi:type="Panel">
 					<items>
-						<item xsi:type="ComboBox" displayField="name" valueField="userId" id="gt" multiSelect="true">
-							<records>
-								<record selected="true">
-									<field name="userId" value="0"/>
-									<field name="name" value="danny"/>
-								</record>
-								<record selected="true">
-									<field name="userId" value="1"/>
-									<field name="name" value="jamie"/>
-								</record>
-								<record>
-									<field name="userId" value="2"/>
-									<field name="name" value="ben"/>
-								</record>
-							</records>
-
+						<item xsi:type="TextField" id="userName" value="dcohn">
+							<fieldLabel stringCD="User Name"/>
 						</item>
 					</items>
 					<title stringCD="tab1"/>
 				</item>
+
 				<item xsi:type="GridPanel" id="dannytab4">
 					<title stringCD="tab 4"/>
-					<column type="int">
+					<column dataIndex="UserId" type="int">
 						<text stringCD="User ID"/>
 					</column>
-					<column type="string">
+					<column dataIndex="UserName">
 						<editor>
 							<item xsi:type="TextField" allowBlank="false"></item>
 						</editor>
 						<text stringCD="Username"/>
 					</column>
-					<column type="string">
+					<column type="string" dataIndex="FirstName">
 						<text stringCD="First Name"/>
 					</column>
-					<column type="string">
+					<column type="string" dataIndex="LastName">
 						<text stringCD="Last Name"/>
 					</column>
-					<column type="string">
+					<column type="string" dataIndex="EmailAddress">
 						<text stringCD="email"/>
 					</column>
-					<column type="string">
+					<column type="string" dataIndex="UserPassword">
 						<editor>
 							<item xsi:type="ComboBox"></item>
 						</editor>
 						<text stringCD="Password"/>
 					</column>
-					<column xsi:type="DateColumn" type="date">
+					<column xsi:type="DateColumn" type="date" dataIndex="HireDate">
 						<editor>
 							<item xsi:type="DateField"></item>
 						</editor>
 						<text stringCD="Hire Date"/>
 					</column>
-					<store xsi:type="JsonStore">
-						<proxy class="com.modnaut.apps.helloworld.HelloWorldChangeCtrl" method="getUsers">
+					
+					
+					<store xsi:type="Store">
+						<model idProperty="userId">
+							<field name="UserId" type="int"/>
+							<field name="UserName" type="string"/>
+							<field name="FirstName" type="string"/>
+							<field name="LastName" type="string"/>
+							<field name="EmailAddress" type="string"/>
+							<field name="UserPassword" type="string"/>
+							<field name="HireDate" type="date"/>
+						</model>
+						<data>
+							<record>
+								<field name="UserId"/>
+								<field name="UserName"/>
+								<field name="FirstName"/>
+								<field name="LastName"/>
+								<field name="EmailAddress"/>
+								<field name="UserPassword"/>
+								<field name="HireDate"/>
+							</record>
+						</data>
+						<!--
+						<proxy xsi:type="AjaxProxy" class="com.modnaut.apps.helloworld.HelloWorldChangeCtrl" method="getUsers">
 							<extraParam name="testParam" value="5"/>
 						</proxy>
+						-->
 					</store>
+					<!--
+					
+-->
 					<plugin xsi:type="RowEditing" clicksToEdit="1"></plugin>
 				</item>
 			</items>

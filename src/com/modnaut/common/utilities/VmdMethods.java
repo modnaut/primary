@@ -6,7 +6,6 @@ import org.apache.commons.jxpath.JXPathContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.viewmetadata.AbstractStore;
 import com.modnaut.common.properties.viewmetadata.ComboBox;
 import com.modnaut.common.properties.viewmetadata.GridPanel;
@@ -176,18 +175,15 @@ public class VmdMethods
 	{
 		AbstractStore abstractStore = gridPanel.getStore();
 		RecordSet recordSet = null;
-		if (abstractStore != null)
+		if (abstractStore instanceof Store)
 		{
-			if (abstractStore instanceof Store)
-			{
-				Store store = (Store) abstractStore;
-				recordSet = store.getData();
-			}
+			Store store = (Store) abstractStore;
+			recordSet = store.getData();
 		}
 
 		if (recordSet == null)
 		{
-			recordSet = gridPanel.getRecords();
+			recordSet = gridPanel.getData();
 		}
 
 		if (recordSet != null)
@@ -235,43 +231,43 @@ public class VmdMethods
 	 */
 	public static void populateComboBox(ComboBox element, List<Object[]> data)
 	{
-		String displayFieldName = element.getDisplayField();
-		if (displayFieldName == null)
-			displayFieldName = "text";
-
-		String valueFieldName = element.getValueField();
-		if (valueFieldName == null)
-			valueFieldName = displayFieldName;
-
-		RecordSet records = element.getRecords();
-		if (records == null)
-		{
-			AbstractStore abstractStore = element.getStore();
-			if (abstractStore != null && abstractStore instanceof Store)
-			{
-				Store store = (Store) abstractStore;
-				records = store.getData();
-			}
-		}
-
-		if (records != null)
-		{
-			for (Object[] row : data)
-			{
-				Record record = new Record();
-				RecordField valueField = new RecordField();
-				valueField.setName(valueFieldName);
-				valueField.setValue(row[0].toString());
-				record.getField().add(valueField);
-				RecordField displayField = new RecordField();
-				displayField.setName(displayFieldName);
-				displayField.setValue(row[1].toString());
-				record.getField().add(displayField);
-				if (row.length > 2 && row[2].toString().equals(ICommonConstants.LETTER_Y))
-					record.setSelected(true);
-				records.getRecord().add(record);
-			}
-		}
+		// String displayFieldName = element.getDisplayField();
+		// if (displayFieldName == null)
+		// displayFieldName = "text";
+		//
+		// String valueFieldName = element.getValueField();
+		// if (valueFieldName == null)
+		// valueFieldName = displayFieldName;
+		//
+		// RecordSet records = element.getRecords();
+		// if (records == null)
+		// {
+		// AbstractStore abstractStore = element.getStore();
+		// if (abstractStore != null && abstractStore instanceof Store)
+		// {
+		// Store store = (Store) abstractStore;
+		// records = store.getData();
+		// }
+		// }
+		//
+		// if (records != null)
+		// {
+		// for (Object[] row : data)
+		// {
+		// Record record = new Record();
+		// RecordField valueField = new RecordField();
+		// valueField.setName(valueFieldName);
+		// valueField.setValue(row[0].toString());
+		// record.getField().add(valueField);
+		// RecordField displayField = new RecordField();
+		// displayField.setName(displayFieldName);
+		// displayField.setValue(row[1].toString());
+		// record.getField().add(displayField);
+		// if (row.length > 2 && row[2].toString().equals(ICommonConstants.LETTER_Y))
+		// record.setSelected(true);
+		// records.getRecord().add(record);
+		// }
+		// }
 	}
 
 	/**

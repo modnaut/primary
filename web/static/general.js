@@ -3,4 +3,4 @@ Ext.Loader.setPath({
 	'Ext.ux': 'static/extjs/ux'
 });
 
-Ext.require('Ext.ux.layout.Center');
+Ext.require(['Ext.ux.layout.Center', 'Ext.ux.data.PagingMemoryProxy']);

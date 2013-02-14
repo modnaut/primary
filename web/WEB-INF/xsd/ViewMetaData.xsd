@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by Danny Cohn (Independent Consultant) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:str="String" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:import namespace="String" schemaLocation="String.xsd"/>
 	<xs:element name="viewMetaData">
@@ -271,35 +272,34 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="ActionColumn">
-			<xs:complexContent>
-				<xs:extension base="Column">
-				</xs:extension>
-			</xs:complexContent>
+		<xs:complexContent>
+			<xs:extension base="Column"/>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="BooleanColumn">
-			<xs:complexContent>
-				<xs:extension base="Column">
-					<xs:sequence>
-						<xs:element name="falseText" type="str:String" minOccurs="0" maxOccurs="1"/>
-						<xs:element name="trueText" type="str:String" minOccurs="0" maxOccurs="1"/>
-						<xs:element name="undefinedText" type="str:String" minOccurs="0" maxOccurs="1"/>
-					</xs:sequence>
-				</xs:extension>
-			</xs:complexContent>
+		<xs:complexContent>
+			<xs:extension base="Column">
+				<xs:sequence>
+					<xs:element name="falseText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="trueText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="undefinedText" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="DateColumn">
-			<xs:complexContent>
-				<xs:extension base="Column">
-					<xs:attribute name="format" type="xs:string"/>
-				</xs:extension>
-			</xs:complexContent>
+		<xs:complexContent>
+			<xs:extension base="Column">
+				<xs:attribute name="format" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="NumberColumn">
-			<xs:complexContent>
-				<xs:extension base="Column">
-					<xs:attribute name="format" type="xs:string"/>
-				</xs:extension>
-			</xs:complexContent>
+		<xs:complexContent>
+			<xs:extension base="Column">
+				<xs:attribute name="format" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:simpleType name="Scroll">
 		<xs:restriction base="xs:string">
@@ -317,7 +317,7 @@
 					<xs:element name="emptyText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:choice>
 						<xs:element name="store" type="AbstractStore" minOccurs="1" maxOccurs="1"/>
-						<xs:element name="records" type="RecordSet" minOccurs="1" maxOccurs="1"/>
+						<xs:element name="data" type="RecordSet" minOccurs="1" maxOccurs="1"/>
 					</xs:choice>
 				</xs:sequence>
 				<xs:attribute name="allowDeselect" type="xs:boolean" default="false"/>
@@ -650,7 +650,7 @@
 					<xs:element name="valueNotFoundText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:choice>
 						<xs:element name="store" type="AbstractStore" minOccurs="0" maxOccurs="1"/>
-						<xs:element name="records" type="RecordSet" minOccurs="0" maxOccurs="1"/>
+						<xs:element name="data" type="RecordSet" minOccurs="0" maxOccurs="1"/>
 					</xs:choice>
 				</xs:sequence>
 				<xs:attribute name="autoSelect" type="xs:boolean" default="true"/>
@@ -797,10 +797,35 @@
 		</xs:sequence>
 		<xs:attribute name="idProperty" type="xs:string" default="id"/>
 	</xs:complexType>
+	<xs:simpleType name="BatchUpdateMode">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="complete"/>
+			<xs:enumeration value="operation"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SortDirection">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ASC"/>
+			<xs:enumeration value="DESC"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="AbstractStore" abstract="true">
 		<xs:sequence>
 			<xs:element name="model" type="Model" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="proxy" type="AbstractProxy" minOccurs="0" maxOccurs="1"/>
 		</xs:sequence>
+		<xs:attribute name="autoDestroy" type="xs:boolean" default="true"/>
+		<xs:attribute name="autoLoad" type="xs:boolean"/>
+		<xs:attribute name="autoSync" type="xs:boolean" default="false"/>
+		<xs:attribute name="batchUpdateMode" type="BatchUpdateMode" default="operation"/>
+		<xs:attribute name="defaultSortDirection" type="SortDirection" default="ASC"/>
+		<xs:attribute name="filterOnLoad" type="xs:boolean" default="true"/>
+		<xs:attribute name="modelName" type="xs:string" use="optional"/>
+		<xs:attribute name="remoteFilter" type="xs:boolean" default="false"/>
+		<xs:attribute name="remoteSort" type="xs:boolean" default="false"/>
+		<xs:attribute name="sortOnLoad" type="xs:boolean" default="true"/>
+		<xs:attribute name="storeId" type="xs:string"/>
 	</xs:complexType>
 	<xs:complexType name="RecordField">
 		<xs:attribute name="name" type="xs:string"/>
@@ -818,29 +843,80 @@
 			<xs:element name="record" type="Record" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
+	<xs:complexType name="ExistingStore">
+		<xs:complexContent>
+			<xs:extension base="AbstractStore">
+				<xs:attribute name="sourceStoreId" type="xs:string" use="required"/>
+				<xs:attribute name="clone" type="xs:boolean" default="false"/>
+				<xs:attribute name="watchForChanges" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="Store">
 		<xs:complexContent>
 			<xs:extension base="AbstractStore">
 				<xs:sequence>
 					<xs:element name="data" type="RecordSet" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
+				<xs:attribute name="buffered" type="xs:boolean" default="false"/>
+				<xs:attribute name="clearOnPageLoad" type="xs:boolean" default="true"/>
+				<xs:attribute name="clearRemovedOnLoad" type="xs:boolean" default="true"/>
+				<xs:attribute name="groupDir" type="SortDirection" default="ASC"/>
+				<xs:attribute name="groupField" type="xs:string"/>
+				<xs:attribute name="leadingBufferZone" type="xs:int" default="200"/>
+				<xs:attribute name="pageSize" type="xs:int" default="25"/>
+				<xs:attribute name="purgePageCount" type="xs:int" default="5"/>
+				<xs:attribute name="remoteGroup" type="xs:boolean" default="false"/>
+				<xs:attribute name="sortOnFilter" type="xs:boolean" default="true"/>
+				<xs:attribute name="trailingBufferZone" type="xs:int" default="25"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="JsonStore">
+	<xs:complexType name="AbstractProxy" abstract="true"/>
+	<xs:complexType name="ServerProxy" abstract="true">
 		<xs:complexContent>
-			<xs:extension base="AbstractStore">
+			<xs:extension base="AbstractProxy">
 				<xs:sequence>
-					<xs:element name="proxy" type="Proxy" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="extraParam" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
+				<xs:attribute name="directionParam" type="xs:string" default="dir"/>
+				<xs:attribute name="filterParam" type="xs:string" default="filter"/>
+				<xs:attribute name="groupDirectionParam" type="xs:string" default="groupDir"/>
+				<xs:attribute name="groupParam" type="xs:string" default="group"/>
+				<xs:attribute name="idParam" type="xs:string" default="id"/>
+				<xs:attribute name="limit" type="xs:string" default="limit"/>
+				<xs:attribute name="noCache" type="xs:boolean" default="true"/>
+				<xs:attribute name="pageParam" type="xs:string" default="page"/>
+				<xs:attribute name="simpleGroupMode" type="xs:boolean" default="false"/>
+				<xs:attribute name="simpleSortMode" type="xs:boolean" default="false"/>
+				<xs:attribute name="sortParam" type="xs:string" default="sort"/>
+				<xs:attribute name="startParam" type="xs:string" default="start"/>
+				<xs:attribute name="timeout" type="xs:int" default="30000"/>
+				<xs:attribute name="url" type="xs:string" default="ApplicationServlet"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="Proxy">
-		<xs:sequence>
-			<xs:element name="extraParam" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="class" type="xs:string" use="required"/>
-		<xs:attribute name="method" type="xs:string" use="required"/>
+	<xs:complexType name="AjaxProxy">
+		<xs:complexContent>
+			<xs:extension base="ServerProxy">
+				<xs:attribute name="class" type="xs:string" use="required"/>
+				<xs:attribute name="method" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ClientProxy" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="AbstractProxy"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="MemoryProxy">
+		<xs:complexContent>
+			<xs:extension base="ClientProxy"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PagingMemoryProxy">
+		<xs:complexContent>
+			<xs:extension base="MemoryProxy"/>
+		</xs:complexContent>
 	</xs:complexType>
 </xs:schema>

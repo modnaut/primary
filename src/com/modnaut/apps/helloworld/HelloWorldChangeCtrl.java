@@ -1,6 +1,5 @@
 package com.modnaut.apps.helloworld;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,24 +44,32 @@ public class HelloWorldChangeCtrl extends FrameworkCtrl
 			// NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
 			ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
 
-			// PrintWriter writer = response.getWriter();
-			PrintStream writer = System.out;
-			if (data != null)
-			{
-				for (String[] row : data)
-				{
-					userList += row[0] + ICommonConstants.COMMA;
-					for (int j = 0; row.length > j; j++)
-					{
-						logger.info(row[j]);
-					}
-				}
-				logger.info(userList);
-			}
+			// if (data != null)
+			// {
+			// for (String[] row : data)
+			// {
+			// userList += row[0] + ICommonConstants.COMMA;
+			// for (int j = 0; row.length > j; j++)
+			// {
+			// logger.info(row[j]);
+			// }
+			// }
+			// logger.info(userList);
+			// }
 
-			populateData("dannytab2", data);
+			// int id = 1000;
+			// while (data.size() < 1000)
+			// {
+			// String[] clonee = data.get(0);
+			// String[] clone = new String[clonee.length];
+			// clone[0] = (id++) + ICommonConstants.NONE;
+			// for (int i = 1; i < clonee.length; i++)
+			// clone[i] = clonee[i];
+			// data.add(clone);
+			// }
+			populateData("dannytab4", data);
 
-			populateData("dannytab", data);
+			// populateData("dannytab", data);
 
 			// populateData("gt", data);
 			// populateData("gt", "2");
@@ -80,17 +87,17 @@ public class HelloWorldChangeCtrl extends FrameworkCtrl
 	public void getUsers() throws Exception
 	{
 		// NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
-		ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
+		ArrayList<String[]> data = DatabaseMethods.getData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
 
 		// data.add(0, new String[] { "UserId", "UserName", "FirstName", "LastName", "EmailAddress", "UserPassword" });
 
 		try
 		{
-			Thread.sleep(5000);
+			Thread.sleep(1500);
 		}
 		catch (Exception e)
 		{
 		}
-		marshallGridJson(data, false);
+		marshallGridJson(data, true);
 	}
 }
