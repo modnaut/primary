@@ -10,13 +10,23 @@
 						<item xsi:type="TextField" id="userName" value="dcohn">
 							<fieldLabel stringCD="User Name"/>
 						</item>
+						<item xsi:type="ComboBox" id="combo" multiSelect="true">
+							<data>
+								<record selected="true">
+									<field name="text" value="1"/>
+								</record>
+								<record selected="true">
+									<field name="text" value="ben"/>
+								</record>
+							</data>
+						</item>
 					</items>
 					<title stringCD="tab1"/>
 				</item>
 
 				<item xsi:type="GridPanel" id="dannytab4">
 					<title stringCD="tab 4"/>
-					<column dataIndex="UserId" type="int">
+					<column type="int" dataIndex="UserId">
 						<text stringCD="User ID"/>
 					</column>
 					<column dataIndex="UserName">
@@ -46,18 +56,8 @@
 						</editor>
 						<text stringCD="Hire Date"/>
 					</column>
-					
-					
 					<store xsi:type="Store">
-						<model idProperty="userId">
-							<field name="UserId" type="int"/>
-							<field name="UserName" type="string"/>
-							<field name="FirstName" type="string"/>
-							<field name="LastName" type="string"/>
-							<field name="EmailAddress" type="string"/>
-							<field name="UserPassword" type="string"/>
-							<field name="HireDate" type="date"/>
-						</model>
+						
 						<data>
 							<record>
 								<field name="UserId"/>
@@ -69,15 +69,11 @@
 								<field name="HireDate"/>
 							</record>
 						</data>
-						<!--
-						<proxy xsi:type="AjaxProxy" class="com.modnaut.apps.helloworld.HelloWorldChangeCtrl" method="getUsers">
-							<extraParam name="testParam" value="5"/>
-						</proxy>
-						-->
-					</store>
-					<!--
 					
--->
+					</store>
+					
+					
+
 					<plugin xsi:type="RowEditing" clicksToEdit="1"></plugin>
 				</item>
 			</items>

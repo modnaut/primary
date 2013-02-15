@@ -56,9 +56,9 @@ public class HelloWorldChangeCtrl extends FrameworkCtrl
 			// }
 			// logger.info(userList);
 			// }
-
+			//
 			// int id = 1000;
-			// while (data.size() < 1000)
+			// while (data.size() < 200)
 			// {
 			// String[] clonee = data.get(0);
 			// String[] clone = new String[clonee.length];
@@ -87,7 +87,7 @@ public class HelloWorldChangeCtrl extends FrameworkCtrl
 	public void getUsers() throws Exception
 	{
 		// NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
-		ArrayList<String[]> data = DatabaseMethods.getData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
+		ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
 
 		// data.add(0, new String[] { "UserId", "UserName", "FirstName", "LastName", "EmailAddress", "UserPassword" });
 
@@ -98,6 +98,6 @@ public class HelloWorldChangeCtrl extends FrameworkCtrl
 		catch (Exception e)
 		{
 		}
-		marshallGridJson(data, true);
+		marshallGridJson(data, false);
 	}
 }

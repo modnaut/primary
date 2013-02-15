@@ -149,8 +149,28 @@
 	
 	<xsl:template match="item[@xsi:type='ComboBox']">
 		<xsl:call-template name="PickerField"/>
+		<xsl:variable name="displayField">
+			<xsl:choose>
+				<xsl:when test="@displayField != ''">
+					<xsl:value-of select="@displayField"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="'text'"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="valueField">
+			<xsl:choose>
+				<xsl:when test="@valueField != ''">
+					<xsl:value-of select="@valueField"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$displayField"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 		<xsl:value-of select="mn:attribute(., 'autoSelect', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'displayField', ',')"/>
+		displayField: <xsl:value-of select="mn:wrap-string($displayField)"/>,
 		<xsl:choose>
 			<xsl:when test="@forceSelection = '' ">
 				forceSelection: true,
@@ -171,21 +191,11 @@
 		<xsl:value-of select="mn:attribute(., 'triggerAction', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'typeAhead', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'typeAheadDelay', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'valueField', ',')"/>
-		<xsl:variable name="valueField">
-			<xsl:choose>
-				<xsl:when test="@valueField != ''">
-					<xsl:value-of select="@valueField"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="'text'"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
+		valueField: <xsl:value-of select="mn:wrap-string($valueField)"/>,
 		<xsl:choose>
-			<xsl:when test="records/record[@selected='true']">
+			<xsl:when test="data/record[@selected='true']">
 				value: [
-					<xsl:for-each select="records/record[@selected='true']">
+					<xsl:for-each select="data/record[@selected='true']">
 						<xsl:value-of select="mn:wrap-string(field[@name=$valueField]/@value)"/>
 						<xsl:call-template name="comma-delimit"/>
 					</xsl:for-each>
@@ -205,54 +215,20 @@
 		</xsl:choose>
 		<xsl:value-of select="mn:childString(., 'valueNotFoundText', ',')"/>
 		<xsl:choose>
-			<xsl:when test="records">
-				store: {
-					autoDestroy: true,
-					fields: [
-						<xsl:choose>
-							<xsl:when test="@displayField">
-								"<xsl:value-of select="@displayField"/>"
-							</xsl:when>
-							<xsl:otherwise>
-								"text"
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:text>,</xsl:text>
-						<xsl:choose>
-							<xsl:when test="@valueField">
-								"<xsl:value-of select="@valueField"/>"
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:choose>
-									<xsl:when test="@displayField">
-										"<xsl:value-of select="@displayField"/>"
-									</xsl:when>
-									<xsl:otherwise>
-										"text"
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:otherwise>
-						</xsl:choose>
-					],
-					data: [
-						<xsl:for-each select="records/record">
-							{
-								<xsl:for-each select="field">
-									"<xsl:value-of select="@name"/>": <xsl:value-of select="mn:wrap-string(@value)"/>
-									<xsl:call-template name="comma-delimit"/>
-								</xsl:for-each>
-							}<xsl:call-template name="comma-delimit"/>
-						</xsl:for-each>
-					]
-				},
-			</xsl:when>
-			<xsl:when test="store">
+			<xsl:when test="store"><!--If we have a store use the normal store template-->
 				<xsl:for-each select="store">
 					<xsl:apply-templates select="."/>,
 				</xsl:for-each>
 			</xsl:when>
+			<xsl:when test="data"><!--if we're just defining inline data, use the inline data template-->
+				<xsl:for-each select="data">
+					<xsl:apply-templates select="." mode="inlineCombo">
+						<xsl:with-param name="valueField" select="$valueField"/>
+						<xsl:with-param name="displayField" select="$displayField"/>
+					</xsl:apply-templates>,
+				</xsl:for-each>
+			</xsl:when>
 		</xsl:choose>
-
 		xtype: "combobox"
 	</xsl:template>
 	

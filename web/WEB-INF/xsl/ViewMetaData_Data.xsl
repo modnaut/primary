@@ -34,7 +34,7 @@
 			<xsl:for-each select="data">
 				autoDestroy: true,
 				buffered: true,
-				pageSize: 100,
+				pageSize: 1000000,
 				proxy: {
 					type: "memory"
 				},
@@ -69,6 +69,25 @@
 			</xsl:when>
 			<xsl:when test="@modelName != '' ">
 				model: <xsl:value-of select="mn:wrap-string(@modelName)"/>,
+			</xsl:when>
+			<xsl:when test="../@xsi:type = 'GridPanel' ">
+				fields: [
+					<xsl:for-each select="../column">
+						{
+							<xsl:choose>
+								<xsl:when test="@dataIndex != ''">
+									name: <xsl:value-of select="mn:wrap-string(@dataIndex)"/>
+								</xsl:when>
+								<xsl:otherwise>
+									name: "column<xsl:value-of select="position() - 1"/>"
+								</xsl:otherwise>
+							</xsl:choose>
+							<xsl:if test="@type != ''">
+								,<xsl:value-of select="mn:attribute(., 'type', '')"/>
+							</xsl:if>
+						}<xsl:call-template name="comma-delimit"/>
+					</xsl:for-each>
+				],
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
@@ -142,7 +161,7 @@
 	<xsl:template match="data" mode="inlineGrid">
 		store: {
 			autoDestroy: true,
-			pageSize: 100,
+			pageSize: 1000000,
 			fields: [
 				<xsl:for-each select="../column">
 					{
@@ -167,12 +186,30 @@
 		}
 	</xsl:template>
 	
+	<xsl:template match="data" mode="inlineCombo">
+		<xsl:param name="valueField" as="xs:string"/>
+		<xsl:param name="displayField" as="xs:string"/>
+		store: {
+			autoDestroy: true,
+			<xsl:call-template name="RecordSet"/>
+			fields: [<xsl:value-of select="mn:wrap-string($valueField)"/>, <xsl:value-of select="mn:wrap-string($displayField)"/>],
+		}
+	</xsl:template>
+	
 	<xsl:template name="RecordSet">
 		data: [
 				<xsl:for-each select="record">
 					{
 						<xsl:for-each select="field">
-							<xsl:value-of select="mn:wrap-string(@name)"/>: <xsl:value-of select="mn:wrap-string(@value)"/><xsl:call-template name="comma-delimit"/>
+							<xsl:choose>
+								<xsl:when test="@name != '' ">
+									<xsl:value-of select="mn:wrap-string(@name)"/>
+								</xsl:when>
+								<xsl:otherwise>
+									"column<xsl:value-of select="position() - 1"/>"
+								</xsl:otherwise>
+							</xsl:choose>
+							: <xsl:value-of select="mn:wrap-string(@value)"/><xsl:call-template name="comma-delimit"/>
 						</xsl:for-each>
 					}<xsl:call-template name="comma-delimit"/>
 				</xsl:for-each>
