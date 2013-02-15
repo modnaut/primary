@@ -2,6 +2,9 @@ package com.modnaut.common.interfaces;
 
 public interface ICommonConstants
 {
+	public static final String CLASS = "Class";
+	public static final String METHOD = "Method";
+
 	public static final String LETTER_A = "A";
 	public static final String LETTER_B = "B";
 	public static final String LETTER_C = "C";

@@ -8,8 +8,8 @@ window.app = window.app = Ext.create('Ext.app.Application', {
 			items: [{
 				xtype: 'vmdContainer',
 				layout: 'fit',
-				class: 'com.modnaut.apps.helloworld.HelloWorldChangeCtrl',
-				method: 'defaultAction'
+				Class: 'com.modnaut.apps.helloworld.HelloWorldChangeCtrl',
+				Method: 'defaultAction'
 			}]
 		});
 	}

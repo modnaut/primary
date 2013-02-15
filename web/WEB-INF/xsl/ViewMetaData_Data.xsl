@@ -116,8 +116,8 @@
 		</xsl:choose>
 		extraParams: {
 			<xsl:if test="@xsi:type = 'AjaxProxy' ">
-				<xsl:value-of select="mn:attribute(., 'class', ',')"/>
-				<xsl:value-of select="mn:attribute(., 'method', ',')"/>
+				<xsl:value-of select="mn:attribute(., 'Class', ',')"/>
+				<xsl:value-of select="mn:attribute(., 'Method', ',')"/>
 				<xsl:for-each select="extraParam">
 					<xsl:value-of select="@name"/>: <xsl:value-of select="mn:wrap-string(@value)"/>,
 				</xsl:for-each>

@@ -899,8 +899,8 @@
 	<xs:complexType name="AjaxProxy">
 		<xs:complexContent>
 			<xs:extension base="ServerProxy">
-				<xs:attribute name="class" type="xs:string" use="required"/>
-				<xs:attribute name="method" type="xs:string" use="required"/>
+				<xs:attribute name="Class" type="xs:string" use="required"/>
+				<xs:attribute name="Method" type="xs:string" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

@@ -21,8 +21,7 @@ import com.modnaut.common.interfaces.ICommonConstants;
  * @author Jamie LaMarche
  * @date 1/9/2013
  * 
- *       Servlet class used by all applications. Will be called every time there is a request from the browser.
- *       Uses java annotation, removes need to specify directly within web.xml (ie WebServlet("/"))
+ *       Servlet class used by all applications. Will be called every time there is a request from the browser. Uses java annotation, removes need to specify directly within web.xml (ie WebServlet("/"))
  * 
  */
 
@@ -30,9 +29,6 @@ import com.modnaut.common.interfaces.ICommonConstants;
 public class ApplicationServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	private static final String CLASS = "class";
-	private static final String METHOD = "method";
-
 	private static String realPath = ICommonConstants.NONE;
 
 	/**
@@ -44,8 +40,7 @@ public class ApplicationServlet extends HttpServlet
 	}
 
 	/**
-	 * Called to obtain path of all source code, including views and view related code. Sets realPath static
-	 * variable to be available for retrieving from all methods within this class.
+	 * Called to obtain path of all source code, including views and view related code. Sets realPath static variable to be available for retrieving from all methods within this class.
 	 */
 	public void init(ServletConfig config) throws ServletException
 	{
@@ -54,8 +49,7 @@ public class ApplicationServlet extends HttpServlet
 	}
 
 	/**
-	 * Called by outside classes and methods to get the actual path of all source code,
-	 * including views and view related code. Makes finding necessary files within the code file system quick and easy.
+	 * Called by outside classes and methods to get the actual path of all source code, including views and view related code. Makes finding necessary files within the code file system quick and easy.
 	 * 
 	 * @return String
 	 */
@@ -65,10 +59,7 @@ public class ApplicationServlet extends HttpServlet
 	}
 
 	/**
-	 * Method used every time this class is called from the browser.
-	 * Retrieves the class name, method and parameters contained within the servlet request.
-	 * Uses reflection to create the java class instance based on class name, which then invokes the method
-	 * for that class instance with the parameters (if any).
+	 * Method used every time this class is called from the browser. Retrieves the class name, method and parameters contained within the servlet request. Uses reflection to create the java class instance based on class name, which then invokes the method for that class instance with the parameters (if any).
 	 * 
 	 * @return void
 	 * 
@@ -88,8 +79,8 @@ public class ApplicationServlet extends HttpServlet
 
 		try
 		{
-			String className = StringUtils.trimToEmpty(request.getParameter(CLASS));
-			String methodName = StringUtils.trimToEmpty(request.getParameter(METHOD));
+			String className = StringUtils.trimToEmpty(request.getParameter(ICommonConstants.CLASS));
+			String methodName = StringUtils.trimToEmpty(request.getParameter(ICommonConstants.METHOD));
 
 			if (!className.equals(ICommonConstants.NONE) && !methodName.equals(ICommonConstants.NONE))
 			{

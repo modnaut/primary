@@ -10,11 +10,11 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 						return;
 					
 					var parameters = Ext.clone(container.parameters || {});
-					if(!(container.class && container.method))
+					if(!(container.Class && container.Method))
 						return;
 					
-					parameters.class = container.class;
-					parameters.method = container.method;
+					parameters.Class = container.Class;
+					parameters.Method = container.Method;
 					
 					controller.getContainerContent({
 						component: container,
@@ -152,6 +152,5 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				}
 			});
 		}
-	},
-	
+	}
 });
