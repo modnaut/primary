@@ -654,7 +654,7 @@
 					</xs:choice>
 				</xs:sequence>
 				<xs:attribute name="autoSelect" type="xs:boolean" default="true"/>
-				<xs:attribute name="displayField" type="xs:string" default="text"/>
+				<xs:attribute name="displayField" type="xs:string" default="display"/>
 				<xs:attribute name="forceSelection" type="xs:boolean" default="true"/>
 				<xs:attribute name="growToLongestValue" type="xs:boolean" default="true"/>
 				<xs:attribute name="minChars" type="xs:int"/>
@@ -668,7 +668,7 @@
 				<xs:attribute name="triggerAction" type="TriggerAction" default="all"/>
 				<xs:attribute name="typeAhead" type="xs:boolean" default="false"/>
 				<xs:attribute name="typeAheadDelay" type="xs:int" default="250"/>
-				<xs:attribute name="valueField" type="xs:string"/>
+				<xs:attribute name="valueField" type="xs:string" default="value"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

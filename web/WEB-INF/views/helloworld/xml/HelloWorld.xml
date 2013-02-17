@@ -10,15 +10,19 @@
 						<item xsi:type="TextField" id="userName" value="dcohn">
 							<fieldLabel stringCD="User Name"/>
 						</item>
-						<item xsi:type="ComboBox" id="combo" multiSelect="true">
-							<data>
-								<record selected="true">
-									<field name="text" value="1"/>
-								</record>
-								<record selected="true">
-									<field name="text" value="ben"/>
-								</record>
-							</data>
+						<item xsi:type="ComboBox" id="combo" multiSelect="true" displayField="name" valueField="id" value="5">
+							<store xsi:type="Store">
+								<model>
+									<field name="id" type="int"/>
+									<field name="name" type="string"/>
+								</model>
+								<data>
+									<record>
+										<field name="id" value="5"/>
+										<field name="name" value="dannyc"/>
+									</record>
+								</data>
+							</store>
 						</item>
 					</items>
 					<title stringCD="tab1"/>
@@ -45,9 +49,6 @@
 						<text stringCD="email"/>
 					</column>
 					<column type="string" dataIndex="UserPassword">
-						<editor>
-							<item xsi:type="ComboBox"></item>
-						</editor>
 						<text stringCD="Password"/>
 					</column>
 					<column xsi:type="DateColumn" type="date" dataIndex="HireDate">

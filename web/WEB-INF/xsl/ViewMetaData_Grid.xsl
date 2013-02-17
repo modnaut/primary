@@ -33,13 +33,13 @@
 	
 	<xsl:template name="Columns">
 		<xsl:if test="column">
-			columns: [
+			"columns": [
 				<xsl:for-each select="column">
 				{
 					<xsl:apply-templates select="." mode="columnType"/>
 					<xsl:value-of select="mn:attribute(., 'align', ',')"/>
 					<xsl:call-template name="Columns"/>
-					dataIndex:	<xsl:choose>
+					"dataIndex":	<xsl:choose>
 										<xsl:when test="@dataIndex != '' ">
 											<xsl:value-of select="mn:wrap-string(@dataIndex)"/>
 										</xsl:when>
@@ -49,7 +49,7 @@
 									</xsl:choose>,
 					<xsl:value-of select="mn:attribute(., 'draggable', ',')"/>
 					<xsl:if test="editor">
-						editor: {
+						"editor": {
 						
 							<xsl:for-each select="editor/item">
 								<xsl:call-template name="Item"/>
@@ -73,7 +73,7 @@
 					<xsl:value-of select="mn:childString(., 'text', ',')"/>
 					<xsl:value-of select="mn:childString(., 'tooltip', ',')"/>
 					<xsl:value-of select="mn:attribute(., 'width', ',')"/>
-					_d: 0
+					"_d": 0
 				}<xsl:call-template name="comma-delimit"/>
 				</xsl:for-each>
 			],
@@ -81,35 +81,35 @@
 	</xsl:template>
 	
 	<xsl:template match="column[@xsi:type='ActionColumn']" mode="columnType">
-		xtype: "actioncolumn",
+		"xtype": "actioncolumn",
 	</xsl:template>
 	
 	<xsl:template match="column[@xsi:type='BooleanColumn']" mode="columnType">
 		<xsl:value-of select="mn:childString(., 'falseText', ',')"/>
 		<xsl:value-of select="mn:childString(., 'trueText', ',')"/>
 		<xsl:value-of select="mn:childString(., 'undefinedText', ',')"/>
-		xtype: "booleancolumn",
+		"xtype": "booleancolumn",
 	</xsl:template>
 	
 	<xsl:template match="column[@xsi:type='DateColumn']" mode="columnType">
 		<xsl:value-of select="mn:attribute(., 'format', ',')"/>
-		xtype: "datecolumn",
+		"xtype": "datecolumn",
 	</xsl:template>
 
 	<xsl:template match="column[@xsi:type='NumberColumn']" mode="columnType">
 		<xsl:value-of select="mn:attribute(., 'format', ',')"/>
-		xtype: "numbercolumn",
+		"xtype": "numbercolumn",
 	</xsl:template>
 
 	<xsl:template match="item[@xsi:type='GridPanel']">
 		<xsl:call-template name="TablePanel"/>
 		<xsl:call-template name="GridPlugins"/>
-		xtype: "grid"
+		"xtype": "grid"
 	</xsl:template>
 	
 	<xsl:template name="GridPlugins">
 		<xsl:if test="plugin">
-			plugins: [
+			"plugins": [
 				<xsl:for-each select="plugin">
 					<xsl:apply-templates select="."/>
 				</xsl:for-each>
@@ -127,7 +127,7 @@
 	<xsl:template match="plugin[@xsi:type='CellEditing']">
 		Ext.create('Ext.grid.plugin.CellEditing', {
 				<xsl:call-template name="GridEditingPlugin"/>
-				_d: 0
+				"_d": 0
 		})
 	</xsl:template>
 	
@@ -137,7 +137,7 @@
 				<xsl:value-of select="mn:attribute(., 'autoCancel', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'clicksToMoveEditor', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'errorSummary', ',')"/>
-				_d: 0
+				"_d": 0
 		})
 	</xsl:template>
 

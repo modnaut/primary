@@ -4,7 +4,7 @@
 
 	<xsl:template match="item[@xsi:type='Container']">
 		<xsl:call-template name="Container"/>
-		xtype: "container"
+		"xtype": "container"
 	</xsl:template>
 
 	<xsl:template name="Container">
@@ -47,7 +47,7 @@
 	
 	<xsl:template match="item[@xsi:type='Panel']">
 		<xsl:call-template name="Panel"/>
-		xtype: "panel"
+		"xtype": "panel"
 	</xsl:template>
 	
 	
@@ -60,7 +60,7 @@
 		<xsl:value-of select="mn:attribute(., 'plain', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'removePanelHeader', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'tabPosition', ',')"/>
-		xtype: "tabpanel"
+		"xtype": "tabpanel"
 	</xsl:template>
 	
 	
@@ -73,7 +73,7 @@
 		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'submitValue', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'validateOnChange', ',')"/>
-		xtype: "checkboxgroup"
+		"xtype": "checkboxgroup"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='RadioGroup']">
@@ -85,6 +85,6 @@
 		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'submitValue', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'validateOnChange', ',')"/>
-		xtype: "radiogroup"
+		"xtype": "radiogroup"
 	</xsl:template>
 </xsl:stylesheet>

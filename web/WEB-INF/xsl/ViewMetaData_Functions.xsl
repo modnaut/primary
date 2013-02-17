@@ -29,7 +29,7 @@
 				<xsl:choose>
 					<xsl:when test="$attributeValue != '' ">
 						<xsl:variable name="colon" select="':'"/>
-						<xsl:sequence select="concat($attributeName,$colon,mn:wrap-string($attributeValue), $extraString)"/>
+						<xsl:sequence select="concat('&quot;',$attributeName,'&quot;',$colon,mn:wrap-string($attributeValue), $extraString)"/>
 					</xsl:when>
 				</xsl:choose>
 			</xsl:when>
@@ -49,7 +49,7 @@
 				<xsl:choose>
 					<xsl:when test="$attributeValue != '' ">
 						<xsl:variable name="colon" select="':'"/>
-						<xsl:sequence select="concat($attributeName,$colon,$attributeValue,$extraString)"/>
+						<xsl:sequence select="concat('&quot;',$attributeName,'&quot;',$colon,$attributeValue,$extraString)"/>
 					</xsl:when>
 				</xsl:choose>
 			</xsl:when>
@@ -69,7 +69,7 @@
 				<xsl:choose>
 					<xsl:when test="$stringValue != '' ">
 						<xsl:variable name="colon" select="':'"/>
-						<xsl:sequence select="concat($elementName,$colon,mn:wrap-string($stringValue), $extraString)"/>
+						<xsl:sequence select="concat('&quot;',$elementName,'&quot;',$colon,mn:wrap-string($stringValue), $extraString)"/>
 					</xsl:when>
 				</xsl:choose>
 			</xsl:when>
@@ -86,10 +86,10 @@
 		<xsl:if test="$iconNode">
 			<xsl:choose>
 				<xsl:when test="not($iconNode/@external = 'true')">
-					<xsl:sequence select="concat($attributeName, ':&quot;', $imagePath, $iconNode/@path, '&quot;', $extraString)"/>
+					<xsl:sequence select="concat('&quot;',$attributeName,'&quot;', ':&quot;', $imagePath, $iconNode/@path, '&quot;', $extraString)"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:sequence select="concat($attributeName, ':&quot;', $iconNode/@path, '&quot;', $extraString)"/>
+					<xsl:sequence select="concat('&quot;',$attributeName,'&quot;', ':&quot;', $iconNode/@path, '&quot;', $extraString)"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:if>

@@ -69,6 +69,16 @@ public class HelloWorldChangeCtrl extends FrameworkCtrl
 			// }
 			populateData("dannytab4", data);
 
+			ArrayList<String[]> data2 = new ArrayList<String[]>()
+			{
+				{
+					add(new String[] { "577", "danny" });
+					add(new String[] { "677", "ben" });
+				}
+			};
+
+			populateData("combo", data2);
+
 			// populateData("dannytab", data);
 
 			// populateData("gt", data);
@@ -98,6 +108,21 @@ public class HelloWorldChangeCtrl extends FrameworkCtrl
 		catch (Exception e)
 		{
 		}
-		marshallGridJson(data, false);
+		marshallStoreJson(data, false);
+	}
+
+	public void getUserCombo() throws Exception
+	{
+		logger.info("userType: " + getParameter("userType"));
+		ArrayList<String[]> data = new ArrayList<String[]>()
+		{
+			{
+				add(new String[] { "id", "name" });
+				add(new String[] { "5", "danny" });
+				add(new String[] { "6", "ben" });
+			}
+		};
+
+		marshallStoreJson(data, true);
 	}
 }

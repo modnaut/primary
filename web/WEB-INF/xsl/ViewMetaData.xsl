@@ -14,13 +14,13 @@
 		<xsl:if test="items">
 			{
 				<xsl:apply-templates select="items"/>
-				success: true
+				"success": true
 			}
 		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="items">
-		items: [
+		"items": [
 			<xsl:for-each select="item">
 				{
 					<xsl:call-template name="Item"/>
@@ -33,7 +33,7 @@
 
 	<xsl:template name="Item">
 		<xsl:if test="@id != '' ">
-			itemId: <xsl:value-of select="mn:wrap-string(@id)"/>,
+			"itemId": <xsl:value-of select="mn:wrap-string(@id)"/>,
 		</xsl:if>
 		<xsl:value-of select="mn:attribute(., 'flex', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hidden', ',')"/>

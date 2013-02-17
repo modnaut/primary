@@ -4,7 +4,7 @@
 	
 	<xsl:template name="Layout">
 			<xsl:if test="Layout">
-				layout: {
+				"layout": {
 					<xsl:apply-templates select="Layout"/>
 				},
 			</xsl:if>
@@ -16,7 +16,7 @@
 	</xsl:template>
 	
 	<xsl:template match="Layout[@xsi:type='AutoLayout']">
-		type: "auto"
+		"type": "auto"
 	</xsl:template>
 	
 	<xsl:template name="AnchorLayout">
@@ -26,13 +26,13 @@
 	
 	<xsl:template match="Layout[@xsi:type='AnchorLayout']">
 		<xsl:call-template name="AnchorLayout"/>
-		type: "anchor"
+		"type": "anchor"
 	</xsl:template>
 	
 	<xsl:template match="Layout[@xsi:type='AbsoluteLayout']">
 		<xsl:call-template name="AnchorLayout"/>
 		<xsl:value-of select="mn:attribute(., 'ignoreOnContentChange', ',')"/>
-		type: "absolute"
+		"type": "absolute"
 	</xsl:template>
 	
 	<xsl:template name="BoxLayout">
@@ -44,12 +44,12 @@
 	
 	<xsl:template match="Layout[@xsi:type='HBoxLayout']">
 		<xsl:call-template name="BoxLayout"/>
-		type: "hbox"
+		"type": "hbox"
 	</xsl:template>
 	
 	<xsl:template match="Layout[@xsi:type='VBoxLayout']">
 		<xsl:call-template name="BoxLayout"/>
-		type: "vbox"
+		"type": "vbox"
 	</xsl:template>
 	
 	<xsl:template match="Layout[@xsi:type='AccordionLayout']">
@@ -61,19 +61,19 @@
 		<xsl:value-of select="mn:attribute(., 'hideCollapseTool', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'multi', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'titleCollapse', ',')"/>
-		type: "accordion"
+		"type": "accordion"
 	</xsl:template>
 	
 	<xsl:template match="Layout[@xsi:type='ColumnLayout']">
-		type: "column"
+		"type": "column"
 	</xsl:template>
 	
 	<xsl:template match="Layout[@xsi:type='FitLayout']">
-		type: "fit"
+		"type": "fit"
 	</xsl:template>
 	
 	<xsl:template match="Layout[@xsi:type='CenterLayout']">
-		type: "ux.center"
+		"type": "ux.center"
 	</xsl:template>
 	
 </xsl:stylesheet>

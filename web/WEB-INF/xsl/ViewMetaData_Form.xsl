@@ -22,7 +22,7 @@
 		<xsl:value-of select="mn:attribute(., 'textAlign', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'toggleGroup', ',')"/>
 		<xsl:value-of select="mn:childString(., 'tooltip', ',')"/>
-		xtype: "button"
+		"xtype": "button"
 	</xsl:template>
 	
 	<xsl:template name="Labelable">
@@ -42,7 +42,7 @@
 	<xsl:template name="Field">
 		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
 				<xsl:if test="@id != '' and @radioGroupName = ''">
-			name: <xsl:value-of select="mn:wrap-string(@id)"/>,
+			"name": <xsl:value-of select="mn:wrap-string(@id)"/>,
 		</xsl:if>
 		<xsl:value-of select="mn:attribute(., 'submitValue', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'validateOnChange', ',')"/>
@@ -70,25 +70,25 @@
 	
 	<xsl:template match="item[@xsi:type='Checkbox']">
 		<xsl:call-template name="Checkbox"/>
-		xtype: "checkbox"
+		"xtype": "checkbox"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='Radio']">
 		<xsl:call-template name="Checkbox"/>
 		<xsl:if test="@radioGroupName != ''">
-			name: <xsl:value-of select="mn:wrap-string(@radioGroupName)"/>,
+			"name": <xsl:value-of select="mn:wrap-string(@radioGroupName)"/>,
 		</xsl:if>
-		xtype: "radio"
+		"xtype": "radio"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='DisplayField']">
 		<xsl:call-template name="AbstractField"/>
-		xtype: "displayfield"
+		"xtype": "displayfield"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='HiddenField']">
 		<xsl:call-template name="AbstractField"/>
-		xtype: "hidden"
+		"xtype": "hidden"
 	</xsl:template>
 	
 	<xsl:template name="TextField">
@@ -114,7 +114,7 @@
 	
 	<xsl:template match="item[@xsi:type='TextField']">
 		<xsl:call-template name="TextField"/>
-		xtype: "textfield"
+		"xtype": "textfield"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='TextArea']">
@@ -123,7 +123,7 @@
 		<xsl:value-of select="mn:attribute(., 'enterIsSpecial', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'preventScrollbars', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'rows', ',')"/>
-		xtype: "textarea"
+		"xtype": "textarea"
 	</xsl:template>
 	
 	<xsl:template name="TriggerField">
@@ -138,7 +138,7 @@
 		<xsl:value-of select="mn:attribute(., 'buttonMargin', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'buttonOnly', ',')"/>
 		<xsl:value-of select="mn:childString(., 'buttonText', ',')"/>		
-		xtype: "filefield"
+		"xtype": "filefield"
 	</xsl:template>
 	
 	<xsl:template name="PickerField">
@@ -155,7 +155,7 @@
 					<xsl:value-of select="@displayField"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="'text'"/>
+					<xsl:value-of select="'display'"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
@@ -165,18 +165,18 @@
 					<xsl:value-of select="@valueField"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="$displayField"/>
+					<xsl:value-of select="'value'"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:value-of select="mn:attribute(., 'autoSelect', ',')"/>
-		displayField: <xsl:value-of select="mn:wrap-string($displayField)"/>,
+		"displayField": <xsl:value-of select="mn:wrap-string($displayField)"/>,
 		<xsl:choose>
-			<xsl:when test="@forceSelection = '' ">
-				forceSelection: true,
+			<xsl:when test="@forceSelection != '' ">
+				<xsl:value-of select="mn:attribute(., 'forceSelection', ',')"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="mn:attribute(., 'forceSelection', ',')"/>
+				"forceSelection": true,
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:value-of select="mn:attribute(., 'growToLongestValue', ',')"/>
@@ -185,26 +185,47 @@
 		<xsl:value-of select="mn:attribute(., 'pageSize', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'queryCaching', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'queryDelay', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'queryMode', ',')"/>
+		<xsl:choose>
+			<xsl:when test="data or store/data">
+				"queryMode": "local",
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="mn:attribute(., 'queryMode', ',')"/>
+			</xsl:otherwise>
+		</xsl:choose>
 		<xsl:value-of select="mn:attribute(., 'queryParam', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'selectOnTab', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'triggerAction', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'typeAhead', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'typeAheadDelay', ',')"/>
-		valueField: <xsl:value-of select="mn:wrap-string($valueField)"/>,
+		"valueField": <xsl:value-of select="mn:wrap-string($valueField)"/>,
 		<xsl:choose>
 			<xsl:when test="data/record[@selected='true']">
-				value: [
+				"value": [
 					<xsl:for-each select="data/record[@selected='true']">
-						<xsl:value-of select="mn:wrap-string(field[@name=$valueField]/@value)"/>
+						<xsl:choose>
+							<xsl:when test="field[@name=$valueField]">
+								<xsl:value-of select="mn:wrap-string(field[@name=$valueField]/@value)"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="mn:wrap-string(field[position() = 1]/@value)"/>
+							</xsl:otherwise>
+						</xsl:choose>
 						<xsl:call-template name="comma-delimit"/>
 					</xsl:for-each>
 				],
 			</xsl:when>
 			<xsl:when test="store/data/record[@selected='true']">
-				value: [
+				"value": [
 					<xsl:for-each select="store/data/record[@selected='true']">
-						<xsl:value-of select="mn:wrap-string(field[@name=$valueField]/@value)"/>
+						<xsl:choose>
+							<xsl:when test="field[@name=$valueField]">
+								<xsl:value-of select="mn:wrap-string(field[@name=$valueField]/@value)"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="mn:wrap-string(field[position() = 1]/@value)"/>
+							</xsl:otherwise>
+						</xsl:choose>
 						<xsl:call-template name="comma-delimit"/>
 					</xsl:for-each>
 				],
@@ -217,7 +238,10 @@
 		<xsl:choose>
 			<xsl:when test="store"><!--If we have a store use the normal store template-->
 				<xsl:for-each select="store">
-					<xsl:apply-templates select="."/>,
+					<xsl:apply-templates select=".">
+						<xsl:with-param name="valueField" select="$valueField"/>
+						<xsl:with-param name="displayField" select="$displayField"/>
+					</xsl:apply-templates>,
 				</xsl:for-each>
 			</xsl:when>
 			<xsl:when test="data"><!--if we're just defining inline data, use the inline data template-->
@@ -229,7 +253,7 @@
 				</xsl:for-each>
 			</xsl:when>
 		</xsl:choose>
-		xtype: "combobox"
+		"xtype": "combobox"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='TimeField']">
@@ -244,7 +268,7 @@
 		<xsl:value-of select="mn:attribute(., 'selectOnTab', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'snapToIncrement', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'submitFormat', ',')"/>
-		xtype: "timefield"
+		"xtype": "timefield"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='DateField']">
@@ -262,7 +286,7 @@
 		<xsl:value-of select="mn:attribute(., 'startDay', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'submitFormat', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'useStrict', ',')"/>
-		xtype: "datefield"
+		"xtype": "datefield"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='NumberField']">
@@ -279,7 +303,7 @@
 		<xsl:value-of select="mn:childString(., 'negativeText', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'step', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'submitLocaleSeparator', ',')"/>
-		xtype: "numberfield"
+		"xtype": "numberfield"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='Slider']">
@@ -296,7 +320,7 @@
 		<xsl:value-of select="mn:attribute(., 'useTips', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'vertical', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'zeroBasedSnapping', ',')"/>
-		xtype: "slider"
+		"xtype": "slider"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='HTMLEditor']">
@@ -310,7 +334,7 @@
 		<xsl:value-of select="mn:attribute(., 'enableLinks', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'enableLists', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'enableSourceEdit', ',')"/>
-		xtype: "htmleditor"
+		"xtype": "htmleditor"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='Image']">

@@ -100,12 +100,12 @@ public class FrameworkCtrl
 		XslPool.marshalAndTransform(viewMetaData, response.getOutputStream(), VIEW_META_DATA_FILE, null);
 	}
 
-	public void marshallGridJson(ArrayList<String[]> data) throws IOException
+	public void marshallStoreJson(ArrayList<String[]> data) throws IOException
 	{
-		marshallGridJson(data, true);
+		marshallStoreJson(data, true);
 	}
 
-	public void marshallGridJson(ArrayList<String[]> data, boolean useSqlColumnNames) throws IOException
+	public void marshallStoreJson(ArrayList<String[]> data, boolean useSqlColumnNames) throws IOException
 	{
 		String[] columnNames = null;
 		if (useSqlColumnNames)
@@ -117,10 +117,10 @@ public class FrameworkCtrl
 				columnNames[i] = "column" + i;
 		}
 
-		marshallGridJson(data, columnNames);
+		marshallStoreJson(data, columnNames);
 	}
 
-	public void marshallGridJson(ArrayList<String[]> data, String[] columnNames) throws IOException
+	public void marshallStoreJson(ArrayList<String[]> data, String[] columnNames) throws IOException
 	{
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		JsonObject responseObject = new JsonObject();
