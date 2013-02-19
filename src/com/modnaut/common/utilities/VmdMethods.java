@@ -8,11 +8,13 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.properties.viewmetadata.AbstractStore;
 import com.modnaut.common.properties.viewmetadata.ComboBox;
+import com.modnaut.common.properties.viewmetadata.DisplayField;
 import com.modnaut.common.properties.viewmetadata.GridPanel;
 import com.modnaut.common.properties.viewmetadata.Record;
 import com.modnaut.common.properties.viewmetadata.RecordField;
 import com.modnaut.common.properties.viewmetadata.RecordSet;
 import com.modnaut.common.properties.viewmetadata.Store;
+import com.modnaut.common.properties.viewmetadata.TextArea;
 import com.modnaut.common.properties.viewmetadata.TextField;
 import com.modnaut.common.properties.viewmetadata.ViewMetaData;
 
@@ -165,6 +167,10 @@ public class VmdMethods
 			populateComboBox((ComboBox) element, data);
 		if (element instanceof TextField)
 			populateTextField((TextField) element, data);
+		if (element instanceof TextArea)
+			populateTextArea((TextArea) element, data);
+		if (element instanceof DisplayField)
+			populateDisplayField((DisplayField) element, data);
 	}
 
 	/**
@@ -265,7 +271,26 @@ public class VmdMethods
 	 */
 	public static void populateTextField(TextField element, String data)
 	{
-		// do something here
+		element.setMaxLength(2);
+		element.setValue(data);
+	}
+
+	/**
+	 * @param element
+	 * @param data
+	 */
+	public static void populateTextArea(TextArea element, String data)
+	{
+		element.setValue(data);
+	}
+
+	/**
+	 * @param element
+	 * @param data
+	 */
+	public static void populateDisplayField(DisplayField element, String data)
+	{
+		element.setValue(data);
 	}
 
 	/**
@@ -281,5 +306,92 @@ public class VmdMethods
 
 		long end = System.currentTimeMillis();
 		LOGGER.info("deleteElement deleted " + id + " from page took " + (end - start));
+	}
+
+	/**
+	 * @param viewMetaData
+	 * @param context
+	 * @param id
+	 * @param data
+	 * @param minTextLength
+	 * @param maxTextLength
+	 * @param set_disabled
+	 * @return
+	 */
+	public static boolean populateTextFieldElement(ViewMetaData viewMetaData, JXPathContext context, String id, String data, int label_width, int label_height, int min_text_length, int max_text_length, boolean set_disabled)
+	{
+		boolean found = false;
+
+		List elements = getMultipleById(viewMetaData, context, id);
+		if (elements.size() > 0)
+		{
+			found = true;
+			for (Object element : elements)
+			{
+				LOGGER.info("populating data on " + element.getClass().getCanonicalName());
+				populateTextFieldElement((TextField) element, data, label_width, label_height, min_text_length, max_text_length, set_disabled);
+			}
+		}
+		return found;
+	}
+
+	/**
+	 * @param element
+	 * @param data
+	 * @param minTextLength
+	 * @param maxTextLength
+	 * @param set_disabled
+	 */
+	public static void populateTextFieldElement(TextField element, String data, int label_width, int label_height, int min_text_length, int max_text_length, boolean set_disabled)
+	{
+		element.setValue(data);
+
+		if (label_height > 0)
+			element.setHeight(label_height);
+
+		if (label_width > 0)
+			element.setLabelWidth(label_width);
+
+		if (min_text_length > 0)
+			element.setMinLength(min_text_length);
+
+		if (max_text_length > 0)
+			element.setMaxLength(max_text_length);
+
+		element.setDisabled(set_disabled);
+	}
+
+	/**
+	 * @param id
+	 * @param data
+	 * @param label_width
+	 * @param label_height
+	 * @param min_text_length
+	 * @param max_text_length
+	 * @param set_disabled
+	 * @return
+	 */
+	public static TextField getTextFieldElement(String id, String data, int label_width, int label_height, int min_text_length, int max_text_length, boolean set_disabled)
+	{
+		TextField element = new TextField();
+
+		element.setId(id);
+		element.setValue(data);
+
+		if (label_height > 0)
+			element.setHeight(label_height);
+
+		if (label_width > 0)
+			element.setLabelWidth(label_width);
+
+		if (min_text_length > 0)
+			element.setMinLength(min_text_length);
+
+		if (max_text_length > 0)
+			element.setMaxLength(max_text_length);
+
+		element.setDisabled(set_disabled);
+
+		return element;
 	}
 }
