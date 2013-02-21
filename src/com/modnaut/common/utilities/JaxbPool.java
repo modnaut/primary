@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.HashMap;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
@@ -144,12 +145,22 @@ public class JaxbPool
 		 * @param key
 		 */
 		@Override
-		public Marshaller makeObject(JaxbPoolKey key) throws Exception
+		public Marshaller makeObject(JaxbPoolKey key)
 		{
-			JAXBContext jaxbContext = JAXB_CONTEXT_POOL.borrowObject(key.getClazz());
-			Marshaller marshaller = jaxbContext.createMarshaller();
-			JAXB_CONTEXT_POOL.returnObject(key.getClazz(), jaxbContext);
-			return marshaller;
+			try
+			{
+				JAXBContext jaxbContext = JAXB_CONTEXT_POOL.borrowObject(key.getClazz());
+				Marshaller marshaller = jaxbContext.createMarshaller();
+				JAXB_CONTEXT_POOL.returnObject(key.getClazz(), jaxbContext);
+				return marshaller;
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				// throw new EnrichableException("", "", "", e);
+			}
+
+			return null;
 		}
 	}
 
@@ -164,12 +175,22 @@ public class JaxbPool
 		 * @param key
 		 */
 		@Override
-		public Unmarshaller makeObject(JaxbPoolKey key) throws Exception
+		public Unmarshaller makeObject(JaxbPoolKey key)
 		{
-			JAXBContext jaxbContext = JAXB_CONTEXT_POOL.borrowObject(key.getClazz());
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			JAXB_CONTEXT_POOL.returnObject(key.getClazz(), jaxbContext);
-			return unmarshaller;
+			try
+			{
+				JAXBContext jaxbContext = JAXB_CONTEXT_POOL.borrowObject(key.getClazz());
+				Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+				JAXB_CONTEXT_POOL.returnObject(key.getClazz(), jaxbContext);
+				return unmarshaller;
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				// throw new EnrichableException("", "", "", e);
+			}
+
+			return null;
 		}
 	}
 
@@ -184,9 +205,19 @@ public class JaxbPool
 		 * @param clazz
 		 */
 		@Override
-		public JAXBContext makeObject(Class clazz) throws Exception
+		public JAXBContext makeObject(Class clazz)
 		{
-			return JAXBContext.newInstance(clazz);
+			try
+			{
+				return JAXBContext.newInstance(clazz);
+			}
+			catch (JAXBException e)
+			{
+				e.printStackTrace();
+				// throw new EnrichableException("", "", "", e);
+			}
+
+			return null;
 		}
 	}
 
@@ -233,11 +264,20 @@ public class JaxbPool
 	 * 
 	 * @param clazz
 	 * @return
-	 * @throws Exception
 	 */
-	public static Unmarshaller getUnmarshaller(Class clazz) throws Exception
+	public static Unmarshaller getUnmarshaller(Class clazz)
 	{
-		return UNMARSHALLER_POOL.borrowObject(getPoolKey(clazz));
+		try
+		{
+			return UNMARSHALLER_POOL.borrowObject(getPoolKey(clazz));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			// throw new EnrichableException("", "", "", e);
+		}
+
+		return null;
 	}
 
 	/**
@@ -245,11 +285,18 @@ public class JaxbPool
 	 * 
 	 * @param unmarshaller
 	 * @param clazz
-	 * @throws Exception
 	 */
-	public static void returnUnmarshaller(Unmarshaller unmarshaller, Class clazz) throws Exception
+	public static void returnUnmarshaller(Unmarshaller unmarshaller, Class clazz)
 	{
-		UNMARSHALLER_POOL.returnObject(getPoolKey(clazz), unmarshaller);
+		try
+		{
+			UNMARSHALLER_POOL.returnObject(getPoolKey(clazz), unmarshaller);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			// throw new EnrichableException("", "", "", e);
+		}
 	}
 
 	/**
@@ -257,11 +304,20 @@ public class JaxbPool
 	 * 
 	 * @param clazz
 	 * @return
-	 * @throws Exception
 	 */
-	public static Marshaller getMarshaller(Class clazz) throws Exception
+	public static Marshaller getMarshaller(Class clazz)
 	{
-		return MARSHALLER_POOL.borrowObject(getPoolKey(clazz));
+		try
+		{
+			return MARSHALLER_POOL.borrowObject(getPoolKey(clazz));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			// throw new EnrichableException("", "", "", e);
+		}
+
+		return null;
 	}
 
 	/**
@@ -269,11 +325,18 @@ public class JaxbPool
 	 * 
 	 * @param marshaller
 	 * @param clazz
-	 * @throws Exception
 	 */
-	public static void returnMarshaller(Marshaller marshaller, Class clazz) throws Exception
+	public static void returnMarshaller(Marshaller marshaller, Class clazz)
 	{
-		MARSHALLER_POOL.returnObject(getPoolKey(clazz), marshaller);
+		try
+		{
+			MARSHALLER_POOL.returnObject(getPoolKey(clazz), marshaller);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			// throw new EnrichableException("", "", "", e);
+		}
 	}
 
 	/**
@@ -281,26 +344,38 @@ public class JaxbPool
 	 * @param clazz
 	 * @param file
 	 * @return
-	 * @throws Exception
 	 */
-	public static <T> T unmarshal(Class<T> clazz, File file) throws Exception
+	public static <T> T unmarshal(Class<T> clazz, File file)
 	{
 		T result;
 
 		JaxbPoolKey poolKey = getPoolKey(clazz);
-		Unmarshaller unmarshaller = UNMARSHALLER_POOL.borrowObject(poolKey);
+		Unmarshaller unmarshaller = null;
 
 		try
 		{
+			unmarshaller = UNMARSHALLER_POOL.borrowObject(poolKey);
 			result = (T) unmarshaller.unmarshal(file);
 			UNMARSHALLER_POOL.returnObject(poolKey, unmarshaller);
 			return result;
 		}
 		catch (Exception e)
 		{
-			UNMARSHALLER_POOL.invalidateObject(poolKey, unmarshaller);
-			throw new RuntimeException(e);
+			try
+			{
+				UNMARSHALLER_POOL.invalidateObject(poolKey, unmarshaller);
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+				// throw new EnrichableException("", "", "", ex);
+			}
+
+			e.printStackTrace();
+			// throw new EnrichableException("", "", "", e);
 		}
+
+		return null;
 	}
 
 	/**
@@ -308,26 +383,38 @@ public class JaxbPool
 	 * @param url
 	 * @param clazz
 	 * @return
-	 * @throws Exception
 	 */
-	public static <T> T unmarshal(URL url, Class<T> clazz) throws Exception
+	public static <T> T unmarshal(URL url, Class<T> clazz)
 	{
 		T result;
 
 		JaxbPoolKey poolKey = getPoolKey(clazz);
-		Unmarshaller unmarshaller = UNMARSHALLER_POOL.borrowObject(poolKey);
+		Unmarshaller unmarshaller = null;
 
 		try
 		{
+			unmarshaller = UNMARSHALLER_POOL.borrowObject(poolKey);
 			result = (T) unmarshaller.unmarshal(url);
 			UNMARSHALLER_POOL.returnObject(poolKey, unmarshaller);
 			return result;
 		}
 		catch (Exception e)
 		{
-			UNMARSHALLER_POOL.invalidateObject(poolKey, unmarshaller);
-			throw new RuntimeException(e);
+			try
+			{
+				UNMARSHALLER_POOL.invalidateObject(poolKey, unmarshaller);
+			}
+			catch (Exception ex)
+			{
+				ex.printStackTrace();
+				// throw new EnrichableException("", "", "", ex);
+			}
+
+			e.printStackTrace();
+			// throw new EnrichableException("", "", "", e);
 		}
+
+		return null;
 	}
 
 	/**
@@ -352,12 +439,14 @@ public class JaxbPool
 			{
 				MARSHALLER_POOL.invalidateObject(poolKey, marshaller);
 			}
-			catch (Exception i)
+			catch (Exception ex)
 			{
-				throw new RuntimeException(i);
+				ex.printStackTrace();
+				// throw new EnrichableException("", "", "", ex);
 			}
 
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			// throw new EnrichableException("", "", "", e);
 		}
 	}
 }

@@ -45,9 +45,8 @@ public class DatabaseMethods
 	 * @param queryName
 	 * @param queryFile
 	 * @return
-	 * @throws Exception
 	 */
-	public static ArrayList<String[]> getData(String queryName, String queryFile) throws Exception
+	public static ArrayList<String[]> getData(String queryName, String queryFile)
 	{
 		return_column_names = true;
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, null, null, GET_DATA);
@@ -60,9 +59,8 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @param parms
 	 * @return
-	 * @throws Exception
 	 */
-	public static ArrayList<String[]> getData(String queryName, String queryFile, HashMap<String, String> parms) throws Exception
+	public static ArrayList<String[]> getData(String queryName, String queryFile, HashMap<String, String> parms)
 	{
 		return_column_names = true;
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, parms, null, GET_DATA);
@@ -75,9 +73,8 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @param con
 	 * @return
-	 * @throws Exception
 	 */
-	public static ArrayList<String[]> getData(String queryName, String queryFile, HashMap<String, String> parms, Connection connection) throws Exception
+	public static ArrayList<String[]> getData(String queryName, String queryFile, HashMap<String, String> parms, Connection connection)
 	{
 		return_column_names = true;
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, parms, connection, GET_DATA);
@@ -89,9 +86,8 @@ public class DatabaseMethods
 	 * @param queryName
 	 * @param queryFile
 	 * @return
-	 * @throws Exception
 	 */
-	public static ArrayList<String[]> getJustData(String queryName, String queryFile) throws Exception
+	public static ArrayList<String[]> getJustData(String queryName, String queryFile)
 	{
 		return_column_names = false;
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, null, null, GET_DATA);
@@ -104,9 +100,8 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @param parms
 	 * @return
-	 * @throws Exception
 	 */
-	public static ArrayList<String[]> getJustData(String queryName, String queryFile, HashMap<String, String> parms) throws Exception
+	public static ArrayList<String[]> getJustData(String queryName, String queryFile, HashMap<String, String> parms)
 	{
 		return_column_names = false;
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, parms, null, GET_DATA);
@@ -119,9 +114,8 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @param con
 	 * @return
-	 * @throws Exception
 	 */
-	public static ArrayList<String[]> getJustData(String queryName, String queryFile, HashMap<String, String> parms, Connection connection) throws Exception
+	public static ArrayList<String[]> getJustData(String queryName, String queryFile, HashMap<String, String> parms, Connection connection)
 	{
 		return_column_names = false;
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, parms, connection, GET_DATA);
@@ -256,9 +250,8 @@ public class DatabaseMethods
 	 * @param queryName
 	 * @param queryFile
 	 * @return
-	 * @throws Exception
 	 */
-	public static ArrayList<ArrayList<String[]>> getMultipleResults(String queryName, String queryFile) throws Exception
+	public static ArrayList<ArrayList<String[]>> getMultipleResults(String queryName, String queryFile)
 	{
 		return (ArrayList<ArrayList<String[]>>) executeQuery(queryName, queryFile, null, null, GET_MULTIPLE);
 	}
@@ -270,9 +263,8 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @param parms
 	 * @return
-	 * @throws Exception
 	 */
-	public static ArrayList<ArrayList<String[]>> getMulitpleResults(String queryName, String queryFile, HashMap<String, String> parms) throws Exception
+	public static ArrayList<ArrayList<String[]>> getMulitpleResults(String queryName, String queryFile, HashMap<String, String> parms)
 	{
 		return (ArrayList<ArrayList<String[]>>) executeQuery(queryName, queryFile, parms, null, GET_MULTIPLE);
 	}
@@ -284,9 +276,8 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @param con
 	 * @return
-	 * @throws Exception
 	 */
-	public static ArrayList<ArrayList<String[]>> getMultipleResults(String queryName, String queryFile, HashMap<String, String> parms, Connection connection) throws Exception
+	public static ArrayList<ArrayList<String[]>> getMultipleResults(String queryName, String queryFile, HashMap<String, String> parms, Connection connection)
 	{
 		return (ArrayList<ArrayList<String[]>>) executeQuery(queryName, queryFile, parms, connection, GET_MULTIPLE);
 	}
@@ -789,7 +780,7 @@ public class DatabaseMethods
 			}
 			else
 			{
-				// add execption enrichment
+				// add exception enrichment
 				System.out.println("Insert failed, no generated key obtained.");
 			}
 		}

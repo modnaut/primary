@@ -131,12 +131,22 @@ public class XslPool
 		 * @param key
 		 */
 		@Override
-		public Transformer makeObject(XslPoolKey key) throws TransformerConfigurationException
+		public Transformer makeObject(XslPoolKey key)
 		{
-			javax.xml.transform.TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
-			Source xsltSource = new StreamSource(ApplicationServlet.getRealPath() + WEB_DIRECTORY + key.xslFileName);
-			Transformer transformer = factory.newTransformer(xsltSource);
-			return transformer;
+			try
+			{
+				javax.xml.transform.TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
+				Source xsltSource = new StreamSource(ApplicationServlet.getRealPath() + WEB_DIRECTORY + key.xslFileName);
+				Transformer transformer = factory.newTransformer(xsltSource);
+				return transformer;
+			}
+			catch (TransformerConfigurationException e)
+			{
+				e.printStackTrace();
+				// throw new EnrichableException("", "", "", e);
+			}
+
+			return null;
 		}
 	}
 
@@ -188,23 +198,24 @@ public class XslPool
 	 * @param outputStream
 	 * @param xslFileName
 	 * @param parameters
-	 * @throws Exception
 	 */
-	public static void transform(Source input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters) throws Exception
+	public static void transform(Source input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters)
 	{
-		TRANSFORMER_POOL.clear();
 		XslPoolKey key = getPoolKey(xslFileName);
-		Transformer transformer = TRANSFORMER_POOL.borrowObject(key);
-		if (parameters != null)
-		{
-			for (String parameter : parameters.keySet())
-			{
-				transformer.setParameter(parameter, parameters.get(parameter));
-			}
-		}
+		Transformer transformer = null;
 
 		try
 		{
+			TRANSFORMER_POOL.clear();
+			transformer = TRANSFORMER_POOL.borrowObject(key);
+			if (parameters != null)
+			{
+				for (String parameter : parameters.keySet())
+				{
+					transformer.setParameter(parameter, parameters.get(parameter));
+				}
+			}
+
 			// perform xslt transformation
 			transformer.transform(input, new StreamResult(outputStream));
 			transformer.reset();// reset to be sure parameters aren't retained
@@ -218,11 +229,14 @@ public class XslPool
 				// the transformer in case it's the cause of the problem
 				TRANSFORMER_POOL.invalidateObject(key, transformer);
 			}
-			catch (RuntimeException i)
+			catch (Exception ex)
 			{
-				throw new RuntimeException(i);
+				ex.printStackTrace();
+				// throw new EnrichableException("", "", "", e);
 			}
-			throw new RuntimeException(e);
+
+			e.printStackTrace();
+			// throw new EnrichableException("", "", "", e);
 		}
 	}
 
@@ -234,16 +248,23 @@ public class XslPool
 	 * @param xslFileName
 	 * @param parameters
 	 * @param prettyPrintJson
-	 * @throws Exception
 	 */
-	public static void marshalAndTransform(Object input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters) throws Exception
+	public static void marshalAndTransform(Object input, OutputStream outputStream, String xslFileName, HashMap<String, Object> parameters)
 	{
-		// create jaxb context and instantiate the marshaller - will be borrowed from existing jaxbPool
-		Marshaller marshaller = JaxbPool.getMarshaller(input.getClass());
-		JAXBSource source = new JAXBSource(marshaller, input);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		transform(source, baos, xslFileName, parameters);
-		JaxbPool.returnMarshaller(marshaller, input.getClass());
-		outputStream.write(baos.toByteArray());
+		try
+		{
+			// create jaxb context and instantiate the marshaller - will be borrowed from existing jaxbPool
+			Marshaller marshaller = JaxbPool.getMarshaller(input.getClass());
+			JAXBSource source = new JAXBSource(marshaller, input);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			transform(source, baos, xslFileName, parameters);
+			JaxbPool.returnMarshaller(marshaller, input.getClass());
+			outputStream.write(baos.toByteArray());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			// throw new EnrichableException("", "", "", e);
+		}
 	}
 }

@@ -20,11 +20,17 @@ import javax.sql.DataSource;
  */
 public class JdbcConnection
 {
+	private static final String CLASS_NAME_PATH = "com.modnaut.common.database.JdbcConnection";
+	private static final String CONNECTION_METHOD = "getConnection()";
+	private static final String CONFIGURATION_ERROR_MESSAGE = "Error with database configuration file settings.";
+	private static final String CONNECTION_ERROR_MESSAGE = "Error accessing connection with database.";
+
 	/**
 	 * Uses datasource to get and return a pooled connection.
 	 * 
 	 * @return
 	 */
+
 	public static Connection getConnection()
 	{
 		Connection con = null;
@@ -34,23 +40,20 @@ public class JdbcConnection
 			Context initCtx = new InitialContext();
 			Context envCtx = (Context) initCtx.lookup("java:comp/env");
 
-			// grabs database settings (username, password, etc) from the context.xml file
-			// based on the res-ref-name in web.xml (ie: 'jdbc/modnaut')
+			// grabs database settings (username, password, etc) from the context.xml file based on the res-ref-name in web.xml (ie: 'jdbc/modnaut')
 			DataSource ds = (DataSource) envCtx.lookup("jdbc/modnaut");
 
-			try
-			{
-				con = ds.getConnection();
-			}
-			catch (SQLException s)
-			{
-				s.printStackTrace();
-			}
-
+			con = ds.getConnection();
 		}
-		catch (NamingException n)
+		catch (NamingException e)
 		{
-			n.printStackTrace();
+			e.printStackTrace();
+			// throw new EnrichableException(CLASS_NAME_PATH, CONNECTION_METHOD, CONFIGURATION_ERROR_MESSAGE, e);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			// throw new EnrichableException(CLASS_NAME_PATH, CONNECTION_METHOD, CONNECTION_ERROR_MESSAGE, e);
 		}
 
 		return con;
