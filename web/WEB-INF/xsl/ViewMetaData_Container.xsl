@@ -20,7 +20,6 @@
 		<xsl:value-of select="mn:attribute(., 'minWidth', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'maxWidth', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'padding', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'region', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'resizable', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'shrinkWrap', ',')"/>
 		<xsl:apply-templates select="items"/>

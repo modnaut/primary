@@ -14,6 +14,7 @@
 		<xsl:value-of select="mn:attribute(., 'enableColumnResize', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'enableLocking', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hideHeaders', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'linkedFormId', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'rowLines', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'scroll', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'sortableColumns', ',')"/>

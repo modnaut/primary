@@ -36,10 +36,13 @@
 			"itemId": <xsl:value-of select="mn:wrap-string(@id)"/>,
 		</xsl:if>
 		<xsl:value-of select="mn:attribute(., 'flex', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'height', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hidden', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hideMode', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'region', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'split', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'width', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'height', ',')"/>
+		
 		<xsl:call-template name="Listeners"/>
 	</xsl:template>
 	
@@ -56,7 +59,7 @@
 	
 	<xsl:template name="Listener">
 		<xsl:value-of select="@event"/>: function() {
-			console.log(<xsl:value-of select="mn:wrap-string(@action)"/>, <xsl:value-of select="mn:wrap-string(@itemsToUpdate)"/>);
+			return Globals.eventListener(arguments, this, <xsl:value-of select="mn:wrap-string(@event)"/>, <xsl:value-of select="mn:wrap-string(@action)"/>);
 		}
 	</xsl:template>
 

@@ -35,6 +35,10 @@
 		"type": "absolute"
 	</xsl:template>
 	
+	<xsl:template match="Layout[@xsi:type='BorderLayout']">
+		"type": "border"
+	</xsl:template>
+	
 	<xsl:template name="BoxLayout">
 		<xsl:value-of select="mn:attribute(., 'align', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'constrainAlign', ',')"/>

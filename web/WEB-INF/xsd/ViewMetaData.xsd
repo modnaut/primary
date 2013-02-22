@@ -31,12 +31,14 @@
 		<xs:sequence>
 			<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="id" type="xs:string"/>
 		<xs:attribute name="flex" type="xs:int"/>
+		<xs:attribute name="height" type="xs:int"/>
 		<xs:attribute name="hidden" type="xs:boolean"/>
 		<xs:attribute name="hideMode" type="HideMode"/>
+		<xs:attribute name="id" type="xs:string"/>
+		<xs:attribute name="region" type="Region"/>
+		<xs:attribute name="split" type="xs:boolean"/>
 		<xs:attribute name="width" type="xs:int"/>
-		<xs:attribute name="height" type="xs:int"/>
 	</xs:complexType>
 	<xs:complexType name="AbstractLayout" abstract="true">
 		<xs:attribute name="itemCls" type="xs:string"/>
@@ -123,6 +125,20 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:simpleType name="Region">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="north"/>
+			<xs:enumeration value="south"/>
+			<xs:enumeration value="east"/>
+			<xs:enumeration value="west"/>
+			<xs:enumeration value="center"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="BorderLayout">
+		<xs:complexContent>
+			<xs:extension base="AbstractLayout"/>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="ColumnLayout">
 		<xs:complexContent>
 			<xs:extension base="AbstractLayout"/>
@@ -159,18 +175,13 @@
 		<xs:attribute name="path" type="xs:string" use="required"/>
 		<xs:attribute name="external" type="xs:boolean" default="false"/>
 	</xs:complexType>
-	<xs:simpleType name="Region">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="north"/>
-			<xs:enumeration value="south"/>
-			<xs:enumeration value="east"/>
-			<xs:enumeration value="west"/>
-			<xs:enumeration value="center"/>
-		</xs:restriction>
-	</xs:simpleType>
 	<xs:complexType name="Container">
 		<xs:complexContent>
 			<xs:extension base="Item">
+				<xs:sequence>
+					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="layout" type="AbstractLayout" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
 				<xs:attribute name="autoScroll" type="xs:boolean" default="false"/>
 				<xs:attribute name="border" type="xs:string"/>
 				<xs:attribute name="cls" type="xs:string"/>
@@ -182,7 +193,6 @@
 				<xs:attribute name="minWidth" type="xs:int"/>
 				<xs:attribute name="maxWidth" type="xs:int"/>
 				<xs:attribute name="padding" type="xs:string"/>
-				<xs:attribute name="region" type="Region"/>
 				<xs:attribute name="resizable" type="xs:boolean">
 					<xs:annotation>
 						<xs:documentation>
@@ -229,8 +239,6 @@
 			<xs:extension base="Container">
 				<xs:sequence>
 					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="layout" type="AbstractLayout" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
 				<xs:attribute name="animCollapse" type="xs:boolean" default="true"/>
@@ -344,8 +352,8 @@
 				<xs:attribute name="enableColumnMove" type="xs:boolean" default="true"/>
 				<xs:attribute name="enableColumnResize" type="xs:boolean" default="true"/>
 				<xs:attribute name="enableLocking" type="xs:boolean" default="false"/>
-				<xs:attribute name="formId" type="xs:string" use="optional"/>
 				<xs:attribute name="hideHeaders" type="xs:boolean" default="false"/>
+				<xs:attribute name="linkedFormId" type="xs:string" use="optional"/>
 				<xs:attribute name="rowLines" type="xs:boolean" default="true"/>
 				<xs:attribute name="scroll" type="Scroll" default="both"/>
 				<xs:attribute name="sortableColumns" type="xs:boolean" default="true"/>
@@ -436,8 +444,6 @@
 					<xs:element name="activeError" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="blankText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="fieldLabel" type="str:String" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="layout" type="AbstractLayout" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
 				<xs:attributeGroup ref="Field"/>

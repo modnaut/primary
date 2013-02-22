@@ -27,3 +27,21 @@ Ext.require(['Ext.ux.layout.Center', 'Ext.ux.data.PagingMemoryProxy']);
 		}
 	}
 }());
+
+
+Ext.define('Globals', {
+    singleton: true,
+    eventListener: function(listenerArgs, element, eventType, actionType, params) {
+    	switch(eventType) {
+    		case 'selectionchange':
+    			if(element.linkedFormId) {
+    				var container = element.up('vmdContainer');
+    				var form = container.down('form#' + element.linkedFormId);
+    				if(form) {
+    					form.loadRecord(listenerArgs[1][0]);
+    				}
+    			}
+    			break;
+    	}
+    }
+});
