@@ -469,21 +469,20 @@ public class DatabaseMethods
 			if (queryMethod.equals(GET_DATA))
 				data = executeGetData(preparedStatement);
 
-			if (queryMethod.equals(GET_OBJECTS))
-				data = executeGetDataObjects(preparedStatement);
-
-			if (queryMethod.equals(GET_MULTIPLE))
-				data = executeGetDataMultiple(preparedStatement);
-
-			if (queryMethod.equals(GET_FIRST_ROW))
+			else if (queryMethod.equals(GET_FIRST_ROW))
 				data = executeGetDataFirstRow(preparedStatement);
 
-			if (queryMethod.equals(UPDATE))
+			else if (queryMethod.equals(UPDATE))
 				data = executeUpdateData(preparedStatement);
 
-			if (queryMethod.equals(INSERT))
+			else if (queryMethod.equals(INSERT))
 				data = executeInsertReturnId(preparedStatement);
 
+			else if (queryMethod.equals(GET_OBJECTS))
+				data = executeGetDataObjects(preparedStatement);
+
+			else if (queryMethod.equals(GET_MULTIPLE))
+				data = executeGetDataMultiple(preparedStatement);
 		}
 		catch (SQLException e)
 		{
