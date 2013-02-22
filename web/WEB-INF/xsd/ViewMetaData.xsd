@@ -28,6 +28,9 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="Item" abstract="true">
+		<xs:sequence>
+			<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
 		<xs:attribute name="id" type="xs:string"/>
 		<xs:attribute name="flex" type="xs:int"/>
 		<xs:attribute name="hidden" type="xs:boolean"/>
@@ -135,7 +138,22 @@
 			<xs:extension base="FitLayout"/>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="Listener"/>
+	<xs:simpleType name="EventType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="click"/>
+			<xs:enumeration value="selectionchange"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ActionType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="submit"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Listener">
+		<xs:attribute name="event" type="EventType" use="required"/>
+		<xs:attribute name="action" type="ActionType" use="required"/>
+		<xs:attribute name="itemsToUpdate" type="xs:string"/>
+	</xs:complexType>
 	<xs:complexType name="Menu"/>
 	<xs:complexType name="ImageSpec">
 		<xs:attribute name="path" type="xs:string" use="required"/>
@@ -213,7 +231,6 @@
 					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="layout" type="AbstractLayout" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
 				<xs:attribute name="animCollapse" type="xs:boolean" default="true"/>
@@ -327,6 +344,7 @@
 				<xs:attribute name="enableColumnMove" type="xs:boolean" default="true"/>
 				<xs:attribute name="enableColumnResize" type="xs:boolean" default="true"/>
 				<xs:attribute name="enableLocking" type="xs:boolean" default="false"/>
+				<xs:attribute name="formId" type="xs:string" use="optional"/>
 				<xs:attribute name="hideHeaders" type="xs:boolean" default="false"/>
 				<xs:attribute name="rowLines" type="xs:boolean" default="true"/>
 				<xs:attribute name="scroll" type="Scroll" default="both"/>
@@ -420,7 +438,6 @@
 					<xs:element name="fieldLabel" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="layout" type="AbstractLayout" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
 				<xs:attributeGroup ref="Field"/>
@@ -463,7 +480,6 @@
 			<xs:extension base="Item">
 				<xs:sequence>
 					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="menu" type="Menu" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="text" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="tooltip" type="str:String" minOccurs="0" maxOccurs="1"/>

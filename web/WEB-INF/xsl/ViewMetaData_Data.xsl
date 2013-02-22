@@ -42,8 +42,7 @@
 				<xsl:with-param name="displayField" select="$displayField"/>
 			</xsl:call-template>
 			<xsl:for-each select="data">
-				"buffered": true,
-				"pageSize": 1000000,
+				"pageSize": <xsl:value-of select="count(record)"/>,
 				"proxy": {
 					"type": "memory"
 				},
@@ -182,6 +181,16 @@
 		"proxy": {
 			<xsl:call-template name="ServerProxy"/>
 			"type": "ajax"
+		}
+	</xsl:template>
+	
+	<xsl:template name="ClientProxy">
+	</xsl:template>
+	
+	<xsl:template match="proxy[@xsi:type='MemoryProxy']">
+		"proxy": {
+			<xsl:call-template name="ClientProxy"/>
+			"type": "memory"
 		}
 	</xsl:template>
 	

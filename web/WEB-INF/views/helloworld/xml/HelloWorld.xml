@@ -4,31 +4,8 @@
 		<item xsi:type="TabPanel" width="100" height="50" id="top" titleAlign="center" tabPosition="bottom" plain="true" activeTab="0">
 			<icon path="silk/wrench.png"/>
 			<items>
-				
-				<item xsi:type="Panel">
-					<items>
-						<item xsi:type="TextField" id="userName" value="dcohn">
-							<fieldLabel stringCD="User Name"/>
-						</item>
-						<item xsi:type="ComboBox" id="combo" multiSelect="true" displayField="name" valueField="id" value="5">
-							<store xsi:type="Store">
-								<model>
-									<field name="id" type="int"/>
-									<field name="name" type="string"/>
-								</model>
-								<data>
-									<record>
-										<field name="id" value="5"/>
-										<field name="name" value="dannyc"/>
-									</record>
-								</data>
-							</store>
-						</item>
-					</items>
-					<title stringCD="tab1"/>
-				</item>
-
-				<item xsi:type="GridPanel" id="dannytab4">
+				<item xsi:type="GridPanel" id="users">
+					<listener event="selectionchange" action="submit" itemsToUpdate="item2,item3"/>
 					<title stringCD="tab 4"/>
 					<column type="int" dataIndex="UserId">
 						<text stringCD="User ID"/>
@@ -57,8 +34,8 @@
 						</editor>
 						<text stringCD="Hire Date"/>
 					</column>
-					<store xsi:type="Store">
-						
+					<store xsi:type="Store" buffered="true">
+					
 						<data>
 							<record>
 								<field name="UserId"/>
@@ -70,11 +47,7 @@
 								<field name="HireDate"/>
 							</record>
 						</data>
-					
 					</store>
-					
-					
-
 					<plugin xsi:type="RowEditing" clicksToEdit="1"></plugin>
 				</item>
 			</items>
