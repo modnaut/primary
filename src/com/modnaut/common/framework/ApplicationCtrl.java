@@ -1,7 +1,6 @@
 package com.modnaut.common.framework;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,14 +39,21 @@ public class ApplicationCtrl
 
 	/**
 	 * 
-	 * @throws IOException
-	 * @throws Exception
+	
 	 */
-	public void defaultAction() throws IOException, Exception
+	public void defaultAction()
 	{
-		Applications apps = JaxbPool.unmarshal(Applications.class, new File(ApplicationServlet.getRealPath() + APPLICATION_XML));
-		HashMap<String, Object> parms = new HashMap<String, Object>();
-		parms.put(APPLICATION_ID, 1);
-		XslPool.marshalAndTransform(apps, response.getOutputStream(), APPLICATION_XSL, parms);
+		try
+		{
+			Applications apps = JaxbPool.unmarshal(Applications.class, new File(ApplicationServlet.getRealPath() + APPLICATION_XML));
+			HashMap<String, Object> parms = new HashMap<String, Object>();
+			parms.put(APPLICATION_ID, 1);
+			XslPool.marshalAndTransform(apps, response.getOutputStream(), APPLICATION_XSL, parms);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			// throw new EnrichableException("", "", "", e);
+		}
 	}
 }

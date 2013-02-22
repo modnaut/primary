@@ -288,25 +288,11 @@
 	  <target name="build" depends="" description="Compile Java sources">
 
 	  	<!-- make web-inf directory -->
-	    <mkdir dir="${build.home}/WEB-INF/classes"/>
-	  	
-	    <!-- Copy web.xml, servlet-context.xml -->
-	    <copy file="${basedir}/web.xml" todir="${build.home}/WEB-INF/"/>
-	  	
-	  	<!--<copy file="${basedir}/src/root-context.xml" todir="${build.home}/WEB-INF/"/>
-	  	<copy file="${basedir}/servlet-context.xml" todir="${build.home}/WEB-INF/"/>-->
-	  	
-	  	<!-- make lib directory and copy additional jar files needed for project -->
-	  	<mkdir  dir="${build.home}/WEB-INF/lib"/>
-	  	<copy todir="${build.home}/WEB-INF/lib">
-	      <fileset dir="${basedir}/lib">
-  	   	    <exclude name="servlet-api.jar"/>
-		  </fileset>	
-	    </copy>
+	    <mkdir dir="${dist.home}/WEB-INF/classes"/>
 	  	
 	    <!-- Compile Java classes as necessary -->
 	    <javac srcdir="${src.home}"
-	          destdir="${build.home}/WEB-INF/classes"
+	          destdir="${dist.home}/WEB-INF/classes"
 	            debug="${compile.debug}"
 	      deprecation="${compile.deprecation}"
 	         optimize="${compile.optimize}"
@@ -314,36 +300,43 @@
 	        <classpath refid="compile.classpath"/>
 	    </javac>
 
-	  	<!--<copy file="${basedir}/WebServlet.java" todir="${build.home}/WEB-INF/classes/"/>-->
+	  	<!-- Copy web.xml, servlet-context.xml -->
+	  	<copy file="${web.home}/WEB-INF/web.xml" todir="${dist.home}/WEB-INF/"/>
 	  	
-	  	<mkdir  dir="${build.home}/WEB-INF/web"/>
-	  	<copy todir="${build.home}/WEB-INF/web">
-	      <fileset dir="${web.home}"/>
-	    </copy>
+	  	<copy todir="${dist.home}/WEB-INF/lib">
+	      <fileset dir="${web.home}/WEB-INF/lib"/>
+	    </copy>	
+	  	
+	  	<copy todir="${dist.home}/WEB-INF/views">
+	      <fileset dir="${web.home}/WEB-INF/views"/>
+	    </copy>	
 
-	  	<mkdir  dir="${build.home}/WEB-INF/xsd"/>
-	  	<copy todir="${build.home}/WEB-INF/xsd">
-	      <fileset dir="${basedir}/xsd"/>
-	    </copy>
-	      	
-	  	<mkdir  dir="${build.home}/WEB-INF/xml"/>
-	  	<copy todir="${build.home}/WEB-INF/xml">
-	      <fileset dir="${basedir}/xml"/>
-	    </copy>
-	  	
-	  	<mkdir  dir="${build.home}/WEB-INF/xsl"/>
-	  	<copy todir="${build.home}/WEB-INF/xsl">
-	      <fileset dir="${basedir}/xsl"/>
-	    </copy>
-	  	
-	  	
-	  	<!-- make meta-inf directory -->
-	    <mkdir dir="${build.home}/META-INF"/>
-	  	
+	  	<copy todir="${dist.home}/WEB-INF/xml">
+	      <fileset dir="${web.home}/WEB-INF/xml"/>
+	    </copy>	
+
+	  	<copy todir="${dist.home}/WEB-INF/xsd">
+	      <fileset dir="${web.home}/WEB-INF/xsd"/>
+	    </copy>	
+
+	  	<copy todir="${dist.home}/WEB-INF/xsl">
+	      <fileset dir="${web.home}/WEB-INF/xsl"/>
+	    </copy>	
+	
 	    <!-- Copy context.xml -->
-	    <copy file="${basedir}/context.xml" todir="${build.home}/META-INF/"/>
+	    <copy todir="${dist.home}/META-INF">
+	    	<fileset dir="${web.home}/META-INF"/>
+	  	</copy>
+
+	    <!-- Copy java script files -->
+	    <copy todir="${dist.home}/static">
+	    	<fileset dir="${web.home}/static"/>
+	  	</copy>
 	  	
-	  	
+	    <!-- Copy login pages -->
+	  	<copy file="${web.home}/invalid_login.html" todir="${dist.home}/"/>
+	  	<copy file="${web.home}/login.html" todir="${dist.home}/"/>
+		
 	  </target>
 
 <!-- ==================== Deploy Target ===================================== -->
@@ -386,7 +379,7 @@
          basedir="${build.home}"/> -->
   	
   	<jar jarfile="${dist.home}/${app.name}.war"
-  	         basedir="${build.home}"/>
+  	         basedir="${dist.home}"/>
   	
 
     <!-- Copy additional files to ${dist.home} as necessary -->

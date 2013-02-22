@@ -95,48 +95,76 @@ public class FrameworkCtrl
 	 * @throws IOException
 	 * @throws Exception
 	 */
-	public void marshall(ViewMetaData viewMetaData) throws IOException, Exception
+	public void marshall(ViewMetaData viewMetaData)
 	{
-		XslPool.marshalAndTransform(viewMetaData, response.getOutputStream(), VIEW_META_DATA_FILE, null);
-	}
-
-	public void marshallStoreJson(ArrayList<String[]> data) throws IOException
-	{
-		marshallStoreJson(data, true);
-	}
-
-	public void marshallStoreJson(ArrayList<String[]> data, boolean useSqlColumnNames) throws IOException
-	{
-		String[] columnNames = null;
-		if (useSqlColumnNames)
-			columnNames = data.remove(0);
-		else
+		try
 		{
-			columnNames = new String[data.get(0).length];
-			for (int i = 0; i < columnNames.length; i++)
-				columnNames[i] = "column" + i;
+			XslPool.marshalAndTransform(viewMetaData, response.getOutputStream(), VIEW_META_DATA_FILE, null);
 		}
-
-		marshallStoreJson(data, columnNames);
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
-	public void marshallStoreJson(ArrayList<String[]> data, String[] columnNames) throws IOException
+	public void marshallStoreJson(ArrayList<String[]> data)
 	{
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		JsonObject responseObject = new JsonObject();
-		JsonArray responseArray = new JsonArray();
-		responseObject.add("data", responseArray);
-
-		for (String[] rowData : data)
+		try
 		{
-			JsonObject row = new JsonObject();
-			responseArray.add(row);
-			for (int i = 0; i < rowData.length; i++)
-				row.addProperty(columnNames[i], rowData[i]);
+			marshallStoreJson(data, true);
 		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 
-		String prettyJsonString = gson.toJson(responseObject);
-		response.getOutputStream().write(prettyJsonString.getBytes());
+	public void marshallStoreJson(ArrayList<String[]> data, boolean useSqlColumnNames)
+	{
+		try
+		{
+			String[] columnNames = null;
+			if (useSqlColumnNames)
+				columnNames = data.remove(0);
+			else
+			{
+				columnNames = new String[data.get(0).length];
+				for (int i = 0; i < columnNames.length; i++)
+					columnNames[i] = "column" + i;
+			}
+
+			marshallStoreJson(data, columnNames);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void marshallStoreJson(ArrayList<String[]> data, String[] columnNames)
+	{
+		try
+		{
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			JsonObject responseObject = new JsonObject();
+			JsonArray responseArray = new JsonArray();
+			responseObject.add("data", responseArray);
+
+			for (String[] rowData : data)
+			{
+				JsonObject row = new JsonObject();
+				responseArray.add(row);
+				for (int i = 0; i < rowData.length; i++)
+					row.addProperty(columnNames[i], rowData[i]);
+			}
+
+			String prettyJsonString = gson.toJson(responseObject);
+			response.getOutputStream().write(prettyJsonString.getBytes());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/**
