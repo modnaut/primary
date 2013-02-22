@@ -40,6 +40,24 @@
 		<xsl:value-of select="mn:attribute(., 'hideMode', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'width', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'height', ',')"/>
+		<xsl:call-template name="Listeners"/>
+	</xsl:template>
+	
+	<xsl:template name="Listeners">
+		<xsl:if test="listener">
+			listeners: {
+				<xsl:for-each select="listener">
+					<xsl:call-template name="Listener"/>
+					<xsl:call-template name="comma-delimit"/>
+				</xsl:for-each>
+			},
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="Listener">
+		<xsl:value-of select="@event"/>: function() {
+			console.log(<xsl:value-of select="mn:wrap-string(@action)"/>, <xsl:value-of select="mn:wrap-string(@itemsToUpdate)"/>);
+		}
 	</xsl:template>
 
 </xsl:stylesheet>
