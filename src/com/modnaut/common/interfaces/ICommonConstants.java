@@ -2,6 +2,7 @@ package com.modnaut.common.interfaces;
 
 public interface ICommonConstants
 {
+
 	public static final String CLASS = "Class";
 	public static final String METHOD = "Method";
 
@@ -75,8 +76,29 @@ public interface ICommonConstants
 	public static final String PLUS = "+";
 	public static final String COMMA = ",";
 
+	// sql meta data files
 	public static final String COMMON = "CommonSqlMetaData";
 
 	public static final String SHA_1 = "SHA-1";
 	public static final String UTF_8 = "UTF-8";
+
+	// exceptions
+	public static final String WARNING = "1";
+	public static final String ERROR = "2";
+	public static final String FATAL = "3";
+
+	public static final String DEFAULT_ERROR_MESSAGE = "An error has occured while processing this request. Please try again.";
+	public static final String DEFAULT_FATAL_MESSAGE = "An error has occurred while processing this request.  Please contact customer support. Error Id: ";
+	public static final String UKNOWN_ERROR_MESSAGE = "Unchecked exception occurred :";
+
+	// database column types
+	public static final String CHAR = "CHAR";
+	public static final String DATE = "DATE";
+	public static final String DECIMAL = "DECIMAL";
+	public static final String DOUBLE = "DOUBLE";
+	public static final String FLOAT = "FLOAT";
+	public static final String INT = "INT";
+	public static final String VARCHAR = "VARCHAR";
+	public static final String TIMESTAMP = "TIMESTAMP";
+	public static final String TIME = "TIME";
 }
