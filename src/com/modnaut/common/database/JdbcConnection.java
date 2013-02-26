@@ -8,6 +8,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.modnaut.common.exceptions.EnrichableException;
+import com.modnaut.common.interfaces.ICommonConstants;
+
 /**
  * 
  * @author Jamie Lynn
@@ -22,8 +25,8 @@ public class JdbcConnection
 {
 	private static final String CLASS_NAME_PATH = "com.modnaut.common.database.JdbcConnection";
 	private static final String CONNECTION_METHOD = "getConnection()";
-	private static final String CONFIGURATION_ERROR_MESSAGE = "Error with database configuration file settings.";
-	private static final String CONNECTION_ERROR_MESSAGE = "Error accessing connection with database.";
+	private static final String CONFIGURATION_ERROR_MESSAGE = "Error with database configuration file settings. Check configuration settings and files (JdbcConnection.java, context.xml, web.xml).";
+	private static final String CONNECTION_ERROR_MESSAGE = "Error accessing connection with database. Make sure database server is running. Check configuration settings and files (JdbcConnection.java, context.xml, web.xml).";
 
 	/**
 	 * Uses datasource to get and return a pooled connection.
@@ -47,13 +50,13 @@ public class JdbcConnection
 		}
 		catch (NamingException e)
 		{
-			e.printStackTrace();
-			// throw new EnrichableException(CLASS_NAME_PATH, CONNECTION_METHOD, CONFIGURATION_ERROR_MESSAGE, e);
+			// e.printStackTrace();
+			throw new EnrichableException(CLASS_NAME_PATH, CONNECTION_METHOD, ICommonConstants.DB_LOG, ICommonConstants.FATAL, CONFIGURATION_ERROR_MESSAGE, e);
 		}
 		catch (SQLException e)
 		{
-			e.printStackTrace();
-			// throw new EnrichableException(CLASS_NAME_PATH, CONNECTION_METHOD, CONNECTION_ERROR_MESSAGE, e);
+			// e.printStackTrace();
+			throw new EnrichableException(CLASS_NAME_PATH, CONNECTION_METHOD, ICommonConstants.DB_LOG, ICommonConstants.FATAL, CONNECTION_ERROR_MESSAGE, e);
 		}
 
 		return con;

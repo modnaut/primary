@@ -8,9 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.modnaut.common.database.JdbcConnection;
 import com.modnaut.common.database.SqlQueries;
+import com.modnaut.common.exceptions.EnrichableException;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.sqlmetadata.Parameter;
 import com.modnaut.common.properties.sqlmetadata.ParameterType;
@@ -27,10 +29,11 @@ import com.modnaut.common.properties.sqlmetadata.StatementType;
  */
 public class DatabaseMethods
 {
+	private static final String CLASS_NAME_PATH = "com.modnaut.common.utilities.DatabaseMethods";
+	private static final String EXECUTE_QUERY_METHOD = "executeQuery";
+
 	private static final String SP = "SP";
 	private static final String CALL = "CALL ";
-
-	private static boolean return_column_names = false;
 
 	private static final String GET_DATA = "GET_DATA";
 	private static final String GET_OBJECTS = "GET_OBJECTS";
@@ -38,6 +41,8 @@ public class DatabaseMethods
 	private static final String GET_FIRST_ROW = "GET_FIRST_ROW";
 	private static final String UPDATE = "UPDATE";
 	private static final String INSERT = "INSERT";
+
+	private static boolean return_column_names = false;
 
 	/**
 	 * Overload method for getData
@@ -413,6 +418,7 @@ public class DatabaseMethods
 	{
 		// use a prepared statement for sql queries and sps that have input and output parameters.
 		PreparedStatement preparedStatement = null;
+		String statementString = ICommonConstants.NONE;
 
 		Object data = new Object();
 		boolean was_connection_passed = true;
@@ -428,7 +434,7 @@ public class DatabaseMethods
 
 			Query query = SqlQueries.getQuery(queryName, queryFile);
 			StatementType statement = query.getStatement();
-			String statementString = statement.getValue();
+			statementString = statement.getValue();
 
 			if (query.getType().value().equals(SP))
 				statementString = CALL + statementString;
@@ -486,8 +492,9 @@ public class DatabaseMethods
 		}
 		catch (SQLException e)
 		{
-			e.printStackTrace();
-			// throw new EnrichableException("executeQuery", ICommonConstants.ERROR, "Error running getData method ", e);
+			// e.printStackTrace();
+			String fullStatement = buildStatementString(statementString, parms);
+			throw new EnrichableException(CLASS_NAME_PATH, EXECUTE_QUERY_METHOD + ICommonConstants.COLON + queryMethod, ICommonConstants.DB_LOG, ICommonConstants.ERROR, "Check sql statement and parameters. \n" + fullStatement, e);
 		}
 		finally
 		{
@@ -501,8 +508,8 @@ public class DatabaseMethods
 			}
 			catch (SQLException e)
 			{
-				e.printStackTrace();
-				// throw new EnrichableException("executeQuery", ICommonConstants.ERROR, "Error closing database connection and or prepared statement", e);
+				// e.printStackTrace();
+				throw new EnrichableException(CLASS_NAME_PATH, EXECUTE_QUERY_METHOD, ICommonConstants.DB_LOG, ICommonConstants.WARNING, "Error closing database connection and or prepared statement", e);
 			}
 		}
 
@@ -544,15 +551,90 @@ public class DatabaseMethods
 		return 0;
 	}
 
-	public static ArrayList<String[]> executeGetData(PreparedStatement preparedStatement)
+	public static ArrayList<String[]> executeGetData(PreparedStatement preparedStatement) throws SQLException
 	{
 		ArrayList<String[]> data = new ArrayList<String[]>();
 		ResultSet resultSet = null;
 
-		try
+		resultSet = preparedStatement.executeQuery();
+		while (resultSet.next())
 		{
+			// ResultSetMetaData, allows for retrieving information about the statement dynamically without having to know exactly what the statement is.
+			// Puts results into a string array and then a final array to be returned.
 
-			resultSet = preparedStatement.executeQuery();
+			ResultSetMetaData rsmd = resultSet.getMetaData();
+			String[] dataRow = new String[rsmd.getColumnCount()];
+
+			if (return_column_names == true)
+			{
+				String[] columnRow = new String[rsmd.getColumnCount()];
+				for (int i = 0; columnRow.length > i; i++)
+				{
+					columnRow[i] = rsmd.getColumnLabel(i + 1);
+				}
+				data.add(columnRow);
+
+				return_column_names = false;
+			}
+
+			for (int i = 0; dataRow.length > i; i++)
+			{
+				dataRow[i] = resultSet.getString(i + 1);
+			}
+			data.add(dataRow);
+		}
+
+		return data;
+	}
+
+	public static ArrayList<Object[]> executeGetDataObjects(PreparedStatement preparedStatement) throws SQLException
+	{
+		ArrayList<Object[]> data = new ArrayList<Object[]>();
+		ResultSet resultSet = null;
+
+		resultSet = preparedStatement.executeQuery();
+		while (resultSet.next())
+		{
+			// metadata output of ResultSetObject, allows for retrieving information about the statement dynamically
+			// without having to know exactly what the statement is. Puts results into a string array and then a final array to be returned.
+			ResultSetMetaData rsmd = resultSet.getMetaData();
+			Object[] dataRow = new Object[rsmd.getColumnCount()];
+
+			if (return_column_names == true)
+			{
+				String[] columnRow = new String[rsmd.getColumnCount()];
+				for (int i = 0; columnRow.length > i; i++)
+				{
+					columnRow[i] = rsmd.getColumnLabel(i + 1);
+				}
+				data.add(columnRow);
+
+				return_column_names = false;
+			}
+
+			for (int i = 0; dataRow.length > i; i++)
+			{
+				dataRow[i] = resultSet.getObject(i + 1);
+			}
+
+			data.add(dataRow);
+		}
+
+		return data;
+	}
+
+	private static ArrayList<ArrayList<String[]>> executeGetDataMultiple(PreparedStatement preparedStatement) throws SQLException
+	{
+		ArrayList<ArrayList<String[]>> data = new ArrayList<ArrayList<String[]>>();
+
+		boolean has_results = preparedStatement.execute();
+		while (has_results)
+		{
+			ArrayList<String[]> resultSetData = new ArrayList<String[]>();
+			return_column_names = true;
+
+			ResultSet resultSet = preparedStatement.getResultSet();
+
 			while (resultSet.next())
 			{
 				// ResultSetMetaData, allows for retrieving information about the statement dynamically without having to know exactly what the statement is.
@@ -568,7 +650,7 @@ public class DatabaseMethods
 					{
 						columnRow[i] = rsmd.getColumnLabel(i + 1);
 					}
-					data.add(columnRow);
+					resultSetData.add(columnRow);
 
 					return_column_names = false;
 				}
@@ -577,162 +659,54 @@ public class DatabaseMethods
 				{
 					dataRow[i] = resultSet.getString(i + 1);
 				}
-				data.add(dataRow);
+				resultSetData.add(dataRow);
 			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			// add exception enrichment
+
+			data.add(resultSetData);
+
+			has_results = preparedStatement.getMoreResults();
 		}
 
 		return data;
 	}
 
-	public static ArrayList<Object[]> executeGetDataObjects(PreparedStatement preparedStatement)
-	{
-		ArrayList<Object[]> data = new ArrayList<Object[]>();
-		ResultSet resultSet = null;
-
-		try
-		{
-			resultSet = preparedStatement.executeQuery();
-			while (resultSet.next())
-			{
-				// metadata output of ResultSetObject, allows for retrieving information about the statement dynamically
-				// without having to know exactly what the statement is. Puts results into a string array and then a final array to be returned.
-				ResultSetMetaData rsmd = resultSet.getMetaData();
-				Object[] dataRow = new Object[rsmd.getColumnCount()];
-
-				if (return_column_names == true)
-				{
-					String[] columnRow = new String[rsmd.getColumnCount()];
-					for (int i = 0; columnRow.length > i; i++)
-					{
-						columnRow[i] = rsmd.getColumnLabel(i + 1);
-					}
-					data.add(columnRow);
-
-					return_column_names = false;
-				}
-
-				for (int i = 0; dataRow.length > i; i++)
-				{
-					dataRow[i] = resultSet.getObject(i + 1);
-				}
-
-				data.add(dataRow);
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			// add exception enrichment
-		}
-
-		return data;
-	}
-
-	private static ArrayList<ArrayList<String[]>> executeGetDataMultiple(PreparedStatement preparedStatement)
-	{
-		ArrayList<ArrayList<String[]>> data = new ArrayList<ArrayList<String[]>>();
-
-		try
-		{
-			boolean has_results = preparedStatement.execute();
-			while (has_results)
-			{
-				ArrayList<String[]> resultSetData = new ArrayList<String[]>();
-				return_column_names = true;
-
-				ResultSet resultSet = preparedStatement.getResultSet();
-
-				while (resultSet.next())
-				{
-					// ResultSetMetaData, allows for retrieving information about the statement dynamically without having to know exactly what the statement is.
-					// Puts results into a string array and then a final array to be returned.
-
-					ResultSetMetaData rsmd = resultSet.getMetaData();
-					String[] dataRow = new String[rsmd.getColumnCount()];
-
-					if (return_column_names == true)
-					{
-						String[] columnRow = new String[rsmd.getColumnCount()];
-						for (int i = 0; columnRow.length > i; i++)
-						{
-							columnRow[i] = rsmd.getColumnLabel(i + 1);
-						}
-						resultSetData.add(columnRow);
-
-						return_column_names = false;
-					}
-
-					for (int i = 0; dataRow.length > i; i++)
-					{
-						dataRow[i] = resultSet.getString(i + 1);
-					}
-					resultSetData.add(dataRow);
-				}
-
-				data.add(resultSetData);
-
-				has_results = preparedStatement.getMoreResults();
-			}
-		}
-		catch (Exception e)
-		{
-			// add exception enrichment
-			e.printStackTrace();
-		}
-
-		return data;
-	}
-
-	private static String[] executeGetDataFirstRow(PreparedStatement preparedStatement)
+	private static String[] executeGetDataFirstRow(PreparedStatement preparedStatement) throws SQLException
 	{
 		ResultSet resultSet = null;
 		String[] data = null;
 
-		try
+		resultSet = preparedStatement.executeQuery();
+
+		if (return_column_names == true)
 		{
-			resultSet = preparedStatement.executeQuery();
-
-			if (return_column_names == true)
+			// We will only return the first row
+			if (resultSet.next())
 			{
-				// We will only return the first row
-				if (resultSet.next())
-				{
-					// metadata output of ResultSetObject, allows for retrieving information about the statement dynamically
-					// without having to know exactly what the statement is. Puts results into a string array and then a final array to be returned.
-					ResultSetMetaData rsmd = resultSet.getMetaData();
-					data = new String[rsmd.getColumnCount()];
+				// metadata output of ResultSetObject, allows for retrieving information about the statement dynamically
+				// without having to know exactly what the statement is. Puts results into a string array and then a final array to be returned.
+				ResultSetMetaData rsmd = resultSet.getMetaData();
+				data = new String[rsmd.getColumnCount()];
 
-					for (int i = 0; data.length > i; i++)
-					{
-						data[i] = rsmd.getColumnName(i + 1);
-					}
-				}
-			}
-			else
-			{
-				// We will only return the first row
-				if (resultSet.next())
+				for (int i = 0; data.length > i; i++)
 				{
-					// metadata output of ResultSetObject, allows for retrieving information about the statement dynamically
-					// without having to know exactly what the statement is. Puts results into a string array and then a final array to be returned.
-					ResultSetMetaData rsmd = resultSet.getMetaData();
-					data = new String[rsmd.getColumnCount()];
-					for (int i = 0; data.length > i; i++)
-					{
-						data[i] = resultSet.getString(i + 1);
-					}
+					data[i] = rsmd.getColumnName(i + 1);
 				}
 			}
 		}
-		catch (Exception e)
+		else
 		{
-			e.printStackTrace();
-			// add exception enrichment
+			// We will only return the first row
+			if (resultSet.next())
+			{
+				// metadata output of ResultSetObject, allows for retrieving information about the statement dynamically
+				// without having to know exactly what the statement is. Puts results into a string array and then a final array to be returned.
+				ResultSetMetaData rsmd = resultSet.getMetaData();
+				data = new String[rsmd.getColumnCount()];
+				for (int i = 0; data.length > i; i++)
+				{
+					data[i] = resultSet.getString(i + 1);
+				}
+			}
 		}
 
 		return data;
@@ -756,39 +730,40 @@ public class DatabaseMethods
 		return row_count;
 	}
 
-	private static int executeInsertReturnId(PreparedStatement preparedStatement)
+	private static int executeInsertReturnId(PreparedStatement preparedStatement) throws SQLException
 	{
 		ResultSet resultSet = null;
 		int row_id = 0;
 
-		try
-		{
-			// first execute the statement
-			int affectedRows = preparedStatement.executeUpdate();
-			if (affectedRows == 0)
-			{
-				// add execption enrichment
-				System.out.println("Creating user failed, no rows affected.");
-			}
+		// first execute the statement
+		preparedStatement.executeUpdate();
 
-			// second grab the generatedkeys (ie: row id )
-			resultSet = preparedStatement.getGeneratedKeys();
-			if (resultSet.next())
-			{
-				row_id = resultSet.getInt(1);
-			}
-			else
-			{
-				// add exception enrichment
-				System.out.println("Insert failed, no generated key obtained.");
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			// add exception enrichment
-		}
+		// second grab the generatedkeys (ie: row id )
+		resultSet = preparedStatement.getGeneratedKeys();
+		row_id = resultSet.getInt(1);
 
 		return row_id;
+	}
+
+	private static String buildStatementString(String statement, HashMap<String, String> parms)
+	{
+		String fullStatement = ICommonConstants.NONE;
+
+		fullStatement += "SQL Statement: " + statement;
+		if (parms != null)
+		{
+			fullStatement += "\nParms:\n";
+			for (Entry<String, String> entry : parms.entrySet())
+			{
+				String keyvalue = ICommonConstants.NONE;
+				String key = entry.getKey();
+				String value = entry.getValue();
+
+				keyvalue += key + ":" + value;
+				fullStatement += keyvalue + "\n";
+			}
+		}
+
+		return fullStatement;
 	}
 }

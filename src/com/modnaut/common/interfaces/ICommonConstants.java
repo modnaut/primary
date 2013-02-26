@@ -75,6 +75,8 @@ public interface ICommonConstants
 	public static final String MINUS = "-";
 	public static final String PLUS = "+";
 	public static final String COMMA = ",";
+	public static final String COLON = ":";
+	public static final String SEMI_COLON = ";";
 
 	// sql meta data files
 	public static final String COMMON = "CommonSqlMetaData";
@@ -83,9 +85,13 @@ public interface ICommonConstants
 	public static final String UTF_8 = "UTF-8";
 
 	// exceptions
-	public static final String WARNING = "1";
-	public static final String ERROR = "2";
-	public static final String FATAL = "3";
+	public static final String WARNING = "WARNING";
+	public static final String ERROR = "ERROR";
+	public static final String FATAL = "FATAL";
+
+	// error codes
+	public static final String DB_LOG = "DB_LOG";
+	public static final String SESSION_LOG = "SESSION_LOG";
 
 	public static final String DEFAULT_ERROR_MESSAGE = "An error has occured while processing this request. Please try again.";
 	public static final String DEFAULT_FATAL_MESSAGE = "An error has occurred while processing this request.  Please contact customer support. Error Id: ";
