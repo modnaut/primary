@@ -2,17 +2,32 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<script src="static/login.js"></script>
 		<title>Insert title here</title>
 	</head>
 	<body>
 		<h1>Welcome!</h1>
-		<form name="login" action="http://localhost:8080/primary/ApplicationServlet?Class=com.modnaut.apps.login.LoginCtrl&Method=defaultAction" method="post">
-			Email&nbsp;<input type="text" id="email" name="Email"/>
-			<br/>
-			Password&nbsp;<input type="text" id="password" name="Password"/>
-			<br/>
+		<form name="loginForm" action="http://localhost:8080/primary/ApplicationServlet?Class=com.modnaut.common.framework.ApplicationCtrl&Method=defaultAction" method="post" onsubmit="return(validateForm())">
+			<table>
+				<tr>
+					<td>
+						Email:
+					</td>
+					<td>
+						<input type="text" id="email" name="Email" size="35"/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Password:
+					</td>
+					<td>
+						<input type="password" id="password" name="Password" size="35"/>
+					</td>
+				</tr>
+			</table>
 			<input type="submit" value="Submit"/>
-			<input type="hidden" id="class" name="Class" value="LoginCtrl"/>
+			<input type="hidden" id="class" name="Class" value="ApplicationCtrl"/>
 			<input type="hidden" id="method" name="Method" value="defaultAction"/>
 		</form>
 	</body>

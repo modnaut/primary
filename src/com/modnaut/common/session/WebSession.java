@@ -1,5 +1,7 @@
 package com.modnaut.common.session;
 
+import java.util.HashMap;
+
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.SessionMethods;
 
@@ -7,7 +9,7 @@ import com.modnaut.common.utilities.SessionMethods;
  * @author Ben
  * 
  */
-public class Session implements java.io.Serializable
+public class WebSession implements java.io.Serializable
 {
 	/**
 	 * generated serialVersionUID
@@ -17,11 +19,12 @@ public class Session implements java.io.Serializable
 	private long session_id = 0;
 	private int user_id = 0;
 	private String email = ICommonConstants.NONE;
+	private HashMap<String, Object> map = new HashMap<String, Object>();
 
 	/**
 	 * 
 	 */
-	public Session()
+	public WebSession()
 	{
 		this.session_id = SessionMethods.generateSessionId();
 	}
@@ -29,7 +32,7 @@ public class Session implements java.io.Serializable
 	/**
 	 * @param session_id
 	 */
-	public Session(long session_id)
+	public WebSession(long session_id)
 	{
 		// TODO
 		this.session_id = session_id;
@@ -76,11 +79,35 @@ public class Session implements java.io.Serializable
 	}
 
 	/**
-	 * @return
+	 * @return email
 	 */
 	public String getEmail()
 	{
 		return this.email;
 	}
 
+	/**
+	 * This is a method that allows objects to be stored in the session object using a HashMap. WARNING: Don't make a mess of this as it will increase the size of the session and decrease database speed. You have been warned!!!
+	 * 
+	 * @param key
+	 *            - key to access object by
+	 * @param value
+	 *            - value of the object
+	 * 
+	 */
+	public void addValue(String key, Object value)
+	{
+		map.put(key, value);
+	}
+
+	/**
+	 * This is the method used to retrieve objects being stored in session.
+	 * 
+	 * @param key
+	 * @return Object stored in HashMap.
+	 */
+	public Object getValue(String key)
+	{
+		return map.get(key);
+	}
 }

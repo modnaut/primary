@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.session.WebSession;
+import com.modnaut.common.session.WebSessionController;
 
 /**
  * 
@@ -30,6 +32,10 @@ public class ApplicationServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	private static String realPath = ICommonConstants.NONE;
+
+	// SQL Parms
+	private static final String EMAIL = "Email";
+	private static final String PASSWORD = "Password";
 
 	/**
 	 * Constructor method
@@ -74,6 +80,15 @@ public class ApplicationServlet extends HttpServlet
 	{
 		// sets output response shown in browser to html
 		response.setContentType("text/html");
+
+		// This is where we will intercept every request and check for a valid, unexpired session.
+		WebSessionController wsController = new WebSessionController(request, response);
+		WebSession webSession = wsController.authenticate();
+
+		if (webSession == null)
+			response.sendRedirect(ICommonConstants.INVALID_LOGIN_PAGE);
+
+		// TODO - we are not doing anything with the WebSession object yet. We will want to pass this to the Class that extends FrameworkCtrl.
 
 		Class<?> params[] = { HttpServletRequest.class, HttpServletResponse.class };
 

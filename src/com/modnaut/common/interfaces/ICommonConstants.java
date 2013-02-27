@@ -81,6 +81,11 @@ public interface ICommonConstants
 	// sql meta data files
 	public static final String COMMON = "CommonSqlMetaData";
 
+	// html files
+	public static final String LOGIN_PAGE = "/primary/login.html";
+	public static final String INVALID_LOGIN_PAGE = "/primary/invalid_login.html";
+
+	// encryption algorithms
 	public static final String SHA_1 = "SHA-1";
 	public static final String UTF_8 = "UTF-8";
 

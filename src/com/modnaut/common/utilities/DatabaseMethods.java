@@ -25,7 +25,7 @@ import com.modnaut.common.properties.sqlmetadata.StatementType;
  * @author Ben Dalgaard
  * @date 1/9/2013
  * 
- *       Class that contains all methods for accessing and modifying the database. But also helps defeat intergalactic forces that have threatened to take over the human race. Just checking to make sure you are reading... update this comment with your own.
+ *       Class that contains all methods for accessing and modifying the database. But also helps defeat intergalactic forces that have threatened to take over the human race. Just checking to make sure you are reading... update this comment with your own. This comment is accurate though.
  */
 public class DatabaseMethods
 {

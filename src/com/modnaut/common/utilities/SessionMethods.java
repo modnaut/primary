@@ -1,5 +1,6 @@
 package com.modnaut.common.utilities;
 
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +14,7 @@ import com.modnaut.common.database.SqlQueries;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.sqlmetadata.Query;
 import com.modnaut.common.properties.sqlmetadata.StatementType;
-import com.modnaut.common.session.Session;
+import com.modnaut.common.session.WebSession;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLDataException;
 
 /**
@@ -24,12 +25,23 @@ public class SessionMethods
 {
 	private static final Logger logger = LoggerFactory.getLogger("com.modnaut.common.utilities.SessionMethods");
 
+	// CONSTANTS
+	private static MessageDigest MESSAGE_DIGEST = null;
+	private static final int ITERATION_NUMBER = 1000;
+	private static final String PASSWORD_SALT = "MoDnaUt_SalT";
+
+	// SQL QUERIES
 	private static final String GET_SESSION = "GET_SESSION";
 	private static final String INSERT_SESSION = "INSERT_SESSION";
+	private static final String GET_USER = "GET_USER";
+
+	// SQL Parms
+	private static final String EMAIL = "Email";
+	private static final String PASSWORD = "Password";
 
 	public static void main(String[] args)
 	{
-		Session session = new Session();
+		WebSession session = new WebSession();
 		session.setSessionId(1234);
 	}
 
@@ -46,7 +58,7 @@ public class SessionMethods
 	 * @param sessionId
 	 * @return
 	 */
-	public static Session getSession(long session_id)
+	public static WebSession getSession(long session_id)
 	{
 		// use a prepared statement for sql queries and sps that have input and output parameters.
 		PreparedStatement st = null;
@@ -105,7 +117,7 @@ public class SessionMethods
 			}
 		}
 
-		return new Session();
+		return new WebSession();
 	}
 
 	/**
@@ -113,7 +125,7 @@ public class SessionMethods
 	 * @param session
 	 * @return
 	 */
-	public static long saveSession(Session session)
+	public static long saveSession(WebSession session)
 	{
 		PreparedStatement st = null;
 		Connection con = null;
@@ -166,4 +178,5 @@ public class SessionMethods
 
 		return row_count;
 	}
+
 }
