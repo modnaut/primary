@@ -27,28 +27,80 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				}
 			}
 		});
+		
+		Globals.on({
+			SubmitForm: function(options) {
+				controller.getContainerContent(options);
+			}
+		});
+	},
+	safeSetLoading: function(component, value) {
+		if(component.isVisible(true))
+			component.setLoading(value);
+	},
+	findNewComponentConfig: function(items, itemId) {
+		var controller = this;
+		for(var i = 0, len = items.length; i < len; i++) {
+			if(items[i].itemId == itemId) {
+				return items[i];
+			} else if(items[i].items) {
+				return controller.findNewComponentConfig(items[i].items, itemId);
+			}
+		}
+	},
+	replaceComponent: function(oldComponent, newConfig) {
+		var ownerCt = oldComponent.ownerCt;
+		if(ownerCt) {
+			var form = ownerCt.form;
+			var componentIndex = ownerCt.items.indexOf(oldComponent)
+			var resetActiveTab = false;
+			if(ownerCt.is('tabpanel') && ownerCt.getActiveTab() == oldComponent)
+				resetActiveTab = true;
+			ownerCt.remove(oldComponent, true);
+			var addedComponent = ownerCt.insert(componentIndex, newConfig);
+			if(resetActiveTab) {
+				ownerCt.setActiveTab(addedComponent);
+			}
+			if(form) {
+				form.remove(oldComponent);
+				form.add(addedComponent);
+			}
+		}
 	},
 	getContainerContent: function(options) {
+		var controller = this;
+		
 		options = Ext.clone(options);
 		
 		var parameters = options.parameters;
 		
 		var component = options.component;
-		if(!component.is('vmdContainer')) {
-			component = component.up('vmdContainer');
+		var container = component;
+		if(!container.is('vmdContainer')) {
+			container = component.up('vmdContainer');
 		}
-		var form = component.down('form');
-		var basicForm = null;
-		if(form)
-			basicForm = form.getForm();
 		
-		if(component.branchSession === true) {
+		if(container.branchSession === true) {
 			parameters.branchSession = true;
-			delete component.branchSession;//only want to branch the session the first time it's rendered
+			delete container.branchSession;//only want to branch the session the first time it's rendered
 		}
 		
-		if(component.sessionId)
-			parameters.sessionId = component.sessionId;
+		if(container.sessionId)
+			parameters.sessionId = container.sessionId;
+		
+		var componentsToUpdate = {};
+		if(options.itemsToUpdate) {
+			var itemsToUpdate = options.itemsToUpdate.split(',');
+			for(var i = 0, len = itemsToUpdate.length; i < len; i++) {
+				var itemId = Ext.String.trim(itemsToUpdate[i]);
+				itemsToUpdate[i] = itemId;//set trimmed form back into array;
+				var componentToUpdate = container.query('#' + itemId)[0];
+				if(componentToUpdate) {
+					componentsToUpdate[itemId] = componentToUpdate;
+				}
+			}
+			parameters.itemsToUpdate = itemsToUpdate.join(',');
+		}
 		
 		var success =  function(response) {
 			console.log('success', arguments);
@@ -57,15 +109,31 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			var sessionId = response.sessionId;
 			
 			if(sessionId) {
-				component.sessionId = sessionId;
+				container.sessionId = sessionId;
 			}
 			
 			Ext.suspendLayouts();
-			if(items) {
-				component.removeAll();
-				component.add(items);
+			if(options.itemsToUpdate) {
+				for(itemId in componentsToUpdate) {
+					var oldComponent = componentsToUpdate[itemId];
+					controller.safeSetLoading(oldComponent, false);
+					if(items) {
+						var newConfig = controller.findNewComponentConfig(items, itemId);
+						if(newConfig) {
+							controller.replaceComponent(oldComponent, newConfig);
+						}
+					} else {
+						oldComponent.update(html);
+					}
+				}
 			} else {
-				component.update(html);
+				controller.safeSetLoading(container, false);
+				if(items) {
+					container.removeAll();
+					container.add(items);
+				} else {
+					container.update(html);
+				}
 			}
 			Ext.resumeLayouts(true);
 			
@@ -73,22 +141,42 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		};
 		
 		var failure = function(text) {
-			component.setLoading(false);
-			component.removeAll();
-			component.update(text);
+			if(options.itemsToUpdate) {
+				for(itemId in componentsToUpdate) {
+					var oldComponent = componentsToUpdate[itemId];
+					controller.safeSetLoading(oldComponent, false);
+					oldComponent.update(text);
+				}
+			} else {
+				controller.safeSetLoading(container, false);
+				container.removeAll();
+				container.update(text);
+			}
 		};
+		
+		
+		if(options.loadMask !== false) {
+			if(options.itemsToUpdate) {
+				for(itemId in componentsToUpdate) {
+					var component = componentsToUpdate[itemId];
+					controller.safeSetLoading(component, true);
+				}
+			} else {
+				controller.safeSetLoading(container, true);
+			}
+		}
 		
 		if(options.download === true) {
 			
-		} else if (basicForm) {
-			if(basicForm.hasUpload() && options.upload !== true) {
-				basicForm.getFields().each(function(field) {
+		} else if (container.getForm()) {
+			if(container.getForm().hasUpload() && options.upload !== true) {
+				container.getForm().getFields().each(function(field) {
 		            if(field.isFileUpload())
 		            	field.ownerCt.remove(field);
 		        });
 			}
 			
-			basicForm.submit({
+			container.getForm().submit({
 				clientValidation: false,
 				url: 'ApplicationServlet',
 				params: parameters,
@@ -137,7 +225,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				url: 'ApplicationServlet',
 				params: parameters,
 				success: function(response, options){
-					component.setLoading(false);
+					container.setLoading(false);
 					var decoded = Ext.decode(response.responseText, true);
 					if(Ext.isObject(decoded)) {
 						success(decoded);

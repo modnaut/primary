@@ -156,19 +156,27 @@
 	</xs:complexType>
 	<xs:simpleType name="EventType">
 		<xs:restriction base="xs:string">
+			<xs:enumeration value="change"/>
 			<xs:enumeration value="click"/>
+			<xs:enumeration value="select"/>
 			<xs:enumeration value="selectionchange"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="ActionType">
 		<xs:restriction base="xs:string">
+			<xs:enumeration value="loadRecord"/>
 			<xs:enumeration value="submit"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="Listener">
-		<xs:attribute name="event" type="EventType" use="required"/>
+		<xs:sequence>
+			<xs:element name="parameter" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
 		<xs:attribute name="action" type="ActionType" use="required"/>
+		<xs:attribute name="class" type="xs:string" use="optional"/>
+		<xs:attribute name="event" type="EventType" use="required"/>
 		<xs:attribute name="itemsToUpdate" type="xs:string"/>
+		<xs:attribute name="method" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="Menu"/>
 	<xs:complexType name="ImageSpec">
@@ -353,7 +361,6 @@
 				<xs:attribute name="enableColumnResize" type="xs:boolean" default="true"/>
 				<xs:attribute name="enableLocking" type="xs:boolean" default="false"/>
 				<xs:attribute name="hideHeaders" type="xs:boolean" default="false"/>
-				<xs:attribute name="linkedFormId" type="xs:string" use="optional"/>
 				<xs:attribute name="rowLines" type="xs:boolean" default="true"/>
 				<xs:attribute name="scroll" type="Scroll" default="both"/>
 				<xs:attribute name="sortableColumns" type="xs:boolean" default="true"/>

@@ -1,5 +1,7 @@
 Ext.define('Modnaut.view.ViewMetaDataContainer', {
-	extend: 'Ext.container.Container',
+	extend: 'Ext.form.Panel',
 	alias: 'widget.vmdContainer',
-	layout: 'fit'
+	layout: 'fit',
+	frame: false,
+	border: false
 });

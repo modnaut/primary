@@ -164,7 +164,9 @@
 				<xsl:value-of select="mn:attribute(., 'Class', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'Method', ',')"/>
 				<xsl:for-each select="extraParam">
-					<xsl:value-of select="mn:wrap-string(@name)"/>: <xsl:value-of select="mn:wrap-string(@value)"/>,
+					<xsl:call-template name="Parameter"/>,
+					<xsl:call-template name="comma-delimit"/>
+					}
 				</xsl:for-each>
 			</xsl:if>
 		},

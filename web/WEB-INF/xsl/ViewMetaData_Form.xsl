@@ -41,7 +41,7 @@
 	
 	<xsl:template name="Field">
 		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
-				<xsl:if test="@id != '' and @radioGroupName = ''">
+		<xsl:if test="@id != '' and string(@radioGroupName) = ''">
 			"name": <xsl:value-of select="mn:wrap-string(@id)"/>,
 		</xsl:if>
 		<xsl:value-of select="mn:attribute(., 'submitValue', ',')"/>

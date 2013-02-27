@@ -46,6 +46,10 @@
 		<xsl:call-template name="Listeners"/>
 	</xsl:template>
 	
+	<xsl:template name="Parameter">
+		<xsl:value-of select="mn:wrap-string(@name)"/>: <xsl:value-of select="mn:wrap-string(@value)"/>
+	</xsl:template>
+	
 	<xsl:template name="Listeners">
 		<xsl:if test="listener">
 			listeners: {
@@ -59,7 +63,27 @@
 	
 	<xsl:template name="Listener">
 		<xsl:value-of select="@event"/>: function() {
-			return Globals.eventListener(arguments, this, <xsl:value-of select="mn:wrap-string(@event)"/>, <xsl:value-of select="mn:wrap-string(@action)"/>);
+			return Globals.eventListener({
+				arguments: arguments,
+				component: this, 
+				eventType: <xsl:value-of select="mn:wrap-string(@event)"/>,
+				actionType: <xsl:value-of select="mn:wrap-string(@action)"/>,
+				itemsToUpdate: <xsl:value-of select="mn:wrap-string(@itemsToUpdate)"/>,
+				parameters: {
+					<xsl:if test="@class != ''">
+						"Class": <xsl:value-of select="mn:wrap-string(@class)"/>
+						<xsl:if test="@method != '' or parameter">,</xsl:if>
+					</xsl:if>
+					<xsl:if test="@method != ''">
+						"Method": <xsl:value-of select="mn:wrap-string(@method)"/>
+						<xsl:if test="parameter">,</xsl:if>
+					</xsl:if>
+					<xsl:for-each select="parameter">
+						<xsl:call-template name="Parameter"/>
+						<xsl:call-template name="comma-delimit"/>
+					</xsl:for-each>
+					}
+			});
 		}
 	</xsl:template>
 

@@ -6,15 +6,14 @@ import org.apache.commons.jxpath.JXPathContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.modnaut.common.properties.viewmetadata.AbstractField;
 import com.modnaut.common.properties.viewmetadata.AbstractStore;
 import com.modnaut.common.properties.viewmetadata.ComboBox;
-import com.modnaut.common.properties.viewmetadata.DisplayField;
 import com.modnaut.common.properties.viewmetadata.GridPanel;
 import com.modnaut.common.properties.viewmetadata.Record;
 import com.modnaut.common.properties.viewmetadata.RecordField;
 import com.modnaut.common.properties.viewmetadata.RecordSet;
 import com.modnaut.common.properties.viewmetadata.Store;
-import com.modnaut.common.properties.viewmetadata.TextArea;
 import com.modnaut.common.properties.viewmetadata.TextField;
 import com.modnaut.common.properties.viewmetadata.ViewMetaData;
 
@@ -165,12 +164,8 @@ public class VmdMethods
 	{
 		if (element instanceof ComboBox)
 			populateComboBox((ComboBox) element, data);
-		if (element instanceof TextField)
-			populateTextField((TextField) element, data);
-		if (element instanceof TextArea)
-			populateTextArea((TextArea) element, data);
-		if (element instanceof DisplayField)
-			populateDisplayField((DisplayField) element, data);
+		if (element instanceof AbstractField)
+			populateAbstractField((AbstractField) element, data);
 	}
 
 	/**
@@ -269,26 +264,7 @@ public class VmdMethods
 	 * @param element
 	 * @param data
 	 */
-	public static void populateTextField(TextField element, String data)
-	{
-		element.setMaxLength(2);
-		element.setValue(data);
-	}
-
-	/**
-	 * @param element
-	 * @param data
-	 */
-	public static void populateTextArea(TextArea element, String data)
-	{
-		element.setValue(data);
-	}
-
-	/**
-	 * @param element
-	 * @param data
-	 */
-	public static void populateDisplayField(DisplayField element, String data)
+	public static void populateAbstractField(AbstractField element, String data)
 	{
 		element.setValue(data);
 	}

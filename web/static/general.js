@@ -31,17 +31,43 @@ Ext.require(['Ext.ux.layout.Center', 'Ext.ux.data.PagingMemoryProxy']);
 
 Ext.define('Globals', {
     singleton: true,
-    eventListener: function(listenerArgs, element, eventType, actionType, params) {
-    	switch(eventType) {
-    		case 'selectionchange':
-    			if(element.linkedFormId) {
-    				var container = element.up('vmdContainer');
-    				var form = container.down('form#' + element.linkedFormId);
+    mixins: {
+		observable: 'Ext.util.Observable'
+	},
+	constructor: function(config){
+		this.callParent(arguments);
+    	this.mixins.observable.constructor.call(this, config);
+	},
+	events: ['SubmitForm'],
+    eventListener: function(options) {
+    	console.log('eventListener', options);
+    	var component = options.component;
+    	switch(options.actionType) {
+    		case 'submit':
+				Globals.submitForm({
+					component: component,
+					parameters: options.parameters,
+					itemsToUpdate: options.itemsToUpdate
+				});
+				break;
+    		case 'loadRecord':
+    			if(options.eventType == 'selectionchange') {
+    				var form = component.up('form');
     				if(form) {
-    					form.loadRecord(listenerArgs[1][0]);
+    					var fields = form.query('[isFormField=true]');
+    					Ext.each(fields, function(field){
+    						field.suspendEvents(false);
+    					});
+    					form.loadRecord(options.arguments[1][0]);
+    					Ext.each(fields, function(field){
+    						field.resumeEvents();
+    					});
     				}
     			}
     			break;
     	}
+    },
+    submitForm: function(options) {
+    	Globals.fireEvent('SubmitForm', options);
     }
 });

@@ -1,65 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
 	<items>
-		<item xsi:type="TabPanel" id="top" titleAlign="center" tabPosition="bottom" plain="true" activeTab="0">
+		<item xsi:type="Panel">
 			<items>
-				<item xsi:type="Panel">
+				<item xsi:type="GridPanel" region="center" id="users" height="200">
+					<listener event="selectionchange" action="loadRecord"/>
+					<column type="int" dataIndex="UserId">
+						<text stringCD="User ID"/>
+					</column>
+					<column dataIndex="UserName">
+						<editor>
+							<item xsi:type="TextField" allowBlank="false"></item>
+						</editor>
+						<text stringCD="Username"/>
+					</column>
+					<column type="string" dataIndex="FirstName">
+						<text stringCD="First Name"/>
+					</column>
+					<column type="string" dataIndex="LastName">
+						<text stringCD="Last Name"/>
+					</column>
+					<column type="string" dataIndex="EmailAddress">
+						<text stringCD="email"/>
+					</column>
+					<column type="string" dataIndex="UserPassword">
+						<text stringCD="Password"/>
+					</column>
+					<column xsi:type="DateColumn" type="date" dataIndex="HireDate">
+						<editor>
+							<item xsi:type="DateField"></item>
+						</editor>
+						<text stringCD="Hire Date"/>
+					</column>
+					<store xsi:type="Store" buffered="true">
+						<data>
+							<record>
+								<field name="UserId"/>
+								<field name="UserName"/>
+								<field name="FirstName"/>
+								<field name="LastName"/>
+								<field name="EmailAddress"/>
+								<field name="UserPassword"/>
+								<field name="HireDate"/>
+							</record>
+						</data>
+					</store>
+				</item>
+				<item xsi:type="Panel" id="targetPanel">
 					<items>
-						<item xsi:type="GridPanel" region="center" id="users" linkedFormId="userForm" height="200">
-							<listener event="selectionchange" action="submit" itemsToUpdate="item2,item3"/>
-
-							<column type="int" dataIndex="UserId">
-								<text stringCD="User ID"/>
-							</column>
-							<column dataIndex="UserName">
-								<editor>
-									<item xsi:type="TextField" allowBlank="false"></item>
-								</editor>
-								<text stringCD="Username"/>
-							</column>
-							<column type="string" dataIndex="FirstName">
-								<text stringCD="First Name"/>
-							</column>
-							<column type="string" dataIndex="LastName">
-								<text stringCD="Last Name"/>
-							</column>
-							<column type="string" dataIndex="EmailAddress">
-								<text stringCD="email"/>
-							</column>
-							<column type="string" dataIndex="UserPassword">
-								<text stringCD="Password"/>
-							</column>
-							<column xsi:type="DateColumn" type="date" dataIndex="HireDate">
-								<editor>
-									<item xsi:type="DateField"></item>
-								</editor>
-								<text stringCD="Hire Date"/>
-							</column>
-							<store xsi:type="Store" buffered="true">
-								<data>
-									<record>
-										<field name="UserId"/>
-										<field name="UserName"/>
-										<field name="FirstName"/>
-										<field name="LastName"/>
-										<field name="EmailAddress"/>
-										<field name="UserPassword"/>
-										<field name="HireDate"/>
-									</record>
-								</data>
-							</store>
-							<plugin xsi:type="RowEditing" clicksToEdit="1"></plugin>
+						<item xsi:type="DisplayField" id="UserId">
+							<fieldLabel stringCD="User ID"/>
 						</item>
-						<item xsi:type="Container" region="east" flex="1" id="userForm">
-							<items></items>
+						<item xsi:type="TextField" id="UserName" maxLength="2">
+							<listener action="submit" event="change" class="com.modnaut.apps.helloworld.HelloWorldChangeCtrl" method="defaultAction"/>
+							<fieldLabel stringCD="Username"/>
+						</item>
+						<item xsi:type="TextField" id="FirstName">
+							<fieldLabel stringCD="First Name"/>
 						</item>
 					</items>
-					<layout xsi:type="BorderLayout"/>
-					<title stringCD="tab 4"/>
+					<title stringCD="target panel"/>
+				</item>
+				<item xsi:type="Container" region="south" flex="1" id="userForm">
+					<items>
+						<item xsi:type="Button" id="dannyButton">
+							<listener event="click" action="submit" class="com.modnaut.apps.helloworld.HelloWorldChangeCtrl" method="defaultAction" itemsToUpdate="targetPanel,userForm">
+								<parameter name="testParam" value="5"/>
+							</listener>
+							<text stringCD="Submit"/>
+						</item>
+						<item xsi:type="ComboBox" id="userType">
+							<listener action="submit" event="change" class="com.modnaut.apps.helloworld.HelloWorldChangeCtrl" method="userTypeChange" itemsToUpdate="targetPanel"/>
+							<data>
+								<record>
+									<field name="value" value="1"/>
+									<field name="display" value="Admin"/>
+								</record>
+								<record>
+									<field name="value" value="2"/>
+									<field name="display" value="SuperAdmin"/>
+								</record>
+							</data>
+						</item>
+					</items>
 				</item>
 			</items>
-			<icon path="silk/wrench.png"/>
-			<title stringCD="danny"/>
+			<layout xsi:type="BorderLayout"/>
+			<title stringCD="tab 4"/>
 		</item>
 	</items>
 </viewMetaData>
