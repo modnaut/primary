@@ -3,7 +3,7 @@
 -- Server version:               5.5.28 - MySQL Community Server (GPL)
 -- Server OS:                    Win64
 -- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-02-06 00:28:59
+-- Date/time:                    2013-02-27 07:49:48
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -16,17 +16,35 @@ CREATE DATABASE IF NOT EXISTS `common` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `common`;
 
 
+-- Dumping structure for table common.action
+DROP TABLE IF EXISTS `action`;
+CREATE TABLE IF NOT EXISTS `action` (
+  `ActionId` int(11) NOT NULL AUTO_INCREMENT,
+  `ActionDescription` varchar(100) NOT NULL,
+  `ActionStatusCd` char(1) NOT NULL DEFAULT 'A',
+  PRIMARY KEY (`ActionId`),
+  UNIQUE KEY `ActionId_UNIQUE` (`ActionId`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.action: ~2 rows (approximately)
+/*!40000 ALTER TABLE `action` DISABLE KEYS */;
+INSERT INTO `action` (`ActionId`, `ActionDescription`, `ActionStatusCd`) VALUES
+	(1, 'Application Access', 'A'),
+	(2, 'Admin Access', 'A');
+/*!40000 ALTER TABLE `action` ENABLE KEYS */;
+
+
 -- Dumping structure for table common.application
 DROP TABLE IF EXISTS `application`;
 CREATE TABLE IF NOT EXISTS `application` (
-  `ApplicationID` int(10) NOT NULL AUTO_INCREMENT,
+  `ApplicationId` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) NOT NULL,
   PRIMARY KEY (`ApplicationID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.application: ~1 rows (approximately)
 /*!40000 ALTER TABLE `application` DISABLE KEYS */;
-INSERT INTO `application` (`ApplicationID`, `Name`) VALUES
+INSERT INTO `application` (`ApplicationId`, `Name`) VALUES
 	(1, 'Modnaut Demo');
 /*!40000 ALTER TABLE `application` ENABLE KEYS */;
 
@@ -34,17 +52,17 @@ INSERT INTO `application` (`ApplicationID`, `Name`) VALUES
 -- Dumping structure for table common.language
 DROP TABLE IF EXISTS `language`;
 CREATE TABLE IF NOT EXISTS `language` (
-  `LanguageID` smallint(3) NOT NULL AUTO_INCREMENT,
+  `LanguageId` smallint(3) NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) NOT NULL,
   `LocalName` varchar(100) DEFAULT NULL,
   `FlagFileName` varchar(100) DEFAULT NULL,
-  `IsoLanguageCD` varchar(2) NOT NULL,
+  `IsoLanguageCd` varchar(2) NOT NULL,
   PRIMARY KEY (`LanguageID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.language: ~2 rows (approximately)
 /*!40000 ALTER TABLE `language` DISABLE KEYS */;
-INSERT INTO `language` (`LanguageID`, `Name`, `LocalName`, `FlagFileName`, `IsoLanguageCD`) VALUES
+INSERT INTO `language` (`LanguageId`, `Name`, `LocalName`, `FlagFileName`, `IsoLanguageCd`) VALUES
 	(1, 'English', 'English', NULL, 'en'),
 	(2, 'Spanish', 'Español', NULL, 'es');
 /*!40000 ALTER TABLE `language` ENABLE KEYS */;
@@ -65,18 +83,32 @@ CREATE TABLE IF NOT EXISTS `session` (
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 
 
+-- Dumping structure for table common.status
+DROP TABLE IF EXISTS `status`;
+CREATE TABLE IF NOT EXISTS `status` (
+  `StatusCd` char(1) NOT NULL,
+  `StatusDescription` varchar(50) NOT NULL,
+  PRIMARY KEY (`StatusCd`),
+  UNIQUE KEY `StatusCd_UNIQUE` (`StatusCd`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.status: ~0 rows (approximately)
+/*!40000 ALTER TABLE `status` DISABLE KEYS */;
+/*!40000 ALTER TABLE `status` ENABLE KEYS */;
+
+
 -- Dumping structure for table common.string
 DROP TABLE IF EXISTS `string`;
 CREATE TABLE IF NOT EXISTS `string` (
-  `StringID` int(10) NOT NULL,
-  `StringCD` varchar(500) NOT NULL,
-  PRIMARY KEY (`StringID`),
-  UNIQUE KEY `Index 2` (`StringCD`(255))
+  `StringId` int(10) NOT NULL,
+  `StringCd` varchar(500) NOT NULL,
+  PRIMARY KEY (`StringId`),
+  UNIQUE KEY `Index 2` (`StringCd`(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.string: ~2 rows (approximately)
 /*!40000 ALTER TABLE `string` DISABLE KEYS */;
-INSERT INTO `string` (`StringID`, `StringCD`) VALUES
+INSERT INTO `string` (`StringId`, `StringCd`) VALUES
 	(1, 'Hello World'),
 	(2, 'Danny was here');
 /*!40000 ALTER TABLE `string` ENABLE KEYS */;
@@ -85,20 +117,43 @@ INSERT INTO `string` (`StringID`, `StringCD`) VALUES
 -- Dumping structure for table common.stringvalue
 DROP TABLE IF EXISTS `stringvalue`;
 CREATE TABLE IF NOT EXISTS `stringvalue` (
-  `StringID` int(10) NOT NULL,
-  `LanguageID` smallint(3) NOT NULL,
+  `StringId` int(10) NOT NULL,
+  `LanguageId` smallint(3) NOT NULL,
   `Value` varchar(5000) NOT NULL,
-  KEY `FK__string` (`StringID`),
-  KEY `FK__language` (`LanguageID`),
-  CONSTRAINT `FK__language` FOREIGN KEY (`LanguageID`) REFERENCES `language` (`LanguageID`),
-  CONSTRAINT `FK__string` FOREIGN KEY (`StringID`) REFERENCES `string` (`StringID`)
+  KEY `FK__string` (`StringId`),
+  KEY `FK__language` (`LanguageId`),
+  CONSTRAINT `FK__language` FOREIGN KEY (`LanguageId`) REFERENCES `language` (`LanguageId`),
+  CONSTRAINT `FK__string` FOREIGN KEY (`StringId`) REFERENCES `string` (`StringId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.stringvalue: ~1 rows (approximately)
 /*!40000 ALTER TABLE `stringvalue` DISABLE KEYS */;
-INSERT INTO `stringvalue` (`StringID`, `LanguageID`, `Value`) VALUES
+INSERT INTO `stringvalue` (`StringId`, `LanguageId`, `Value`) VALUES
 	(1, 1, 'Hello World');
 /*!40000 ALTER TABLE `stringvalue` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.useraction
+DROP TABLE IF EXISTS `useraction`;
+CREATE TABLE IF NOT EXISTS `useraction` (
+  `UserId` int(11) NOT NULL,
+  `ActionId` int(11) NOT NULL,
+  `CreatedByUserId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`UserId`,`ActionId`),
+  KEY `FK_useraction_action` (`ActionId`),
+  KEY `FK_useraction_users_2` (`CreatedByUserId`),
+  CONSTRAINT `FK_useraction_action` FOREIGN KEY (`ActionId`) REFERENCES `action` (`ActionId`) ON DELETE NO ACTION,
+  CONSTRAINT `FK_useraction_users` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`) ON DELETE NO ACTION,
+  CONSTRAINT `FK_useraction_users_2` FOREIGN KEY (`CreatedByUserId`) REFERENCES `users` (`UserId`) ON DELETE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.useraction: ~2 rows (approximately)
+/*!40000 ALTER TABLE `useraction` DISABLE KEYS */;
+INSERT INTO `useraction` (`UserId`, `ActionId`, `CreatedByUserId`, `CreatedDate`) VALUES
+	(1, 1, 1, '2013-02-26 11:12:16'),
+	(1, 2, 1, '2013-02-26 11:12:59');
+/*!40000 ALTER TABLE `useraction` ENABLE KEYS */;
 
 
 -- Dumping structure for table common.users
@@ -111,6 +166,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `EmailAddress` varchar(100) NOT NULL,
   `UserPassword` varchar(100) NOT NULL,
   `HireDate` datetime DEFAULT NULL,
+  `UserTypeCd` char(1) NOT NULL DEFAULT 'C',
+  `UserStatusCd` char(1) NOT NULL DEFAULT 'A',
   PRIMARY KEY (`UserId`),
   UNIQUE KEY `EmailAddress` (`EmailAddress`),
   UNIQUE KEY `UserName` (`UserName`)
@@ -118,10 +175,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Dumping data for table common.users: ~3 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`, `HireDate`) VALUES
-	(1, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51'),
-	(2, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51'),
-	(3, 'bdalgaard22', 'Ben', 'Dalgaard', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51');
+INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`, `HireDate`, `UserTypeCd`, `UserStatusCd`) VALUES
+	(1, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A'),
+	(2, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A'),
+	(3, 'bdalgaard22', 'Ben', 'Dalgaard', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 
@@ -132,8 +189,8 @@ CREATE TABLE IF NOT EXISTS `usersession` (
   `SessionId` bigint(19) NOT NULL,
   KEY `FK__user` (`UserId`),
   KEY `FK__session` (`SessionId`),
-  CONSTRAINT `FK__user` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`),
-  CONSTRAINT `FK__session` FOREIGN KEY (`SessionId`) REFERENCES `session` (`SessionId`)
+  CONSTRAINT `FK__session` FOREIGN KEY (`SessionId`) REFERENCES `session` (`SessionId`),
+  CONSTRAINT `FK__user` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.usersession: ~0 rows (approximately)
