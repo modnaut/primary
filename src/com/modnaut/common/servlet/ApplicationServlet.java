@@ -79,7 +79,7 @@ public class ApplicationServlet extends HttpServlet
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		// sets output response shown in browser to html
-		response.setContentType("text/html");
+		response.setContentType("text/html");// TODO:This isn't always the case, in fact, in most cases the response will be JSON
 
 		// This is where we will intercept every request and check for a valid, unexpired session.
 		WebSessionController wsController = new WebSessionController(request, response);
@@ -111,16 +111,11 @@ public class ApplicationServlet extends HttpServlet
 				Method method = clazz.getDeclaredMethod(methodName);
 				method.invoke(instance);
 			}
-			else
-			{
-				// this is temporary for development purposes only. Will be removed from production environment.
-				// is only called in the event the url does not contain the class and method parameters.
-				Class<?> clazz = Class.forName("com.modnaut.apps.helloworld.HelloWorldChangeCtrl");
-				Object instance = clazz.getConstructor(params).newInstance(request, response);
-
-				Method method = clazz.getDeclaredMethod("defaultAction");
-				method.invoke(instance);
-			}
+			/*
+			 * else { // this is temporary for development purposes only. Will be removed from production environment. // is only called in the event the url does not contain the class and method parameters. Class<?> clazz = Class.forName("com.modnaut.apps.helloworld.HelloWorldChangeCtrl"); Object instance = clazz.getConstructor(params).newInstance(request, response);
+			 * 
+			 * Method method = clazz.getDeclaredMethod("defaultAction"); method.invoke(instance); }
+			 */
 
 		}
 		catch (Exception e)
