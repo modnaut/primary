@@ -3,19 +3,19 @@
 	<xsl:output indent="no" omit-xml-declaration="yes" method="text" encoding="utf-8"/>
 	
 	<xsl:template name="Layout">
-			<xsl:if test="Layout">
+			<xsl:if test="layout">
 				"layout": {
-					<xsl:apply-templates select="Layout"/>
+					<xsl:apply-templates select="layout"/>
 				},
 			</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="Layout">
+	<xsl:template match="layout">
 		<xsl:value-of select="mn:attribute(., 'itemCls', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'reserveScrollbar', ',')"/>
 	</xsl:template>
 	
-	<xsl:template match="Layout[@xsi:type='AutoLayout']">
+	<xsl:template match="layout[@xsi:type='AutoLayout']">
 		"type": "auto"
 	</xsl:template>
 	
@@ -24,18 +24,18 @@
 		<xsl:value-of select="mn:attribute(., 'manageOverflow', ',')"/>
 	</xsl:template>
 	
-	<xsl:template match="Layout[@xsi:type='AnchorLayout']">
+	<xsl:template match="layout[@xsi:type='AnchorLayout']">
 		<xsl:call-template name="AnchorLayout"/>
 		"type": "anchor"
 	</xsl:template>
 	
-	<xsl:template match="Layout[@xsi:type='AbsoluteLayout']">
+	<xsl:template match="layout[@xsi:type='AbsoluteLayout']">
 		<xsl:call-template name="AnchorLayout"/>
 		<xsl:value-of select="mn:attribute(., 'ignoreOnContentChange', ',')"/>
 		"type": "absolute"
 	</xsl:template>
 	
-	<xsl:template match="Layout[@xsi:type='BorderLayout']">
+	<xsl:template match="layout[@xsi:type='BorderLayout']">
 		"type": "border"
 	</xsl:template>
 	
@@ -46,17 +46,17 @@
 		<xsl:value-of select="mn:attribute(., 'pack', ',')"/>
 	</xsl:template>
 	
-	<xsl:template match="Layout[@xsi:type='HBoxLayout']">
+	<xsl:template match="layout[@xsi:type='HBoxLayout']">
 		<xsl:call-template name="BoxLayout"/>
 		"type": "hbox"
 	</xsl:template>
 	
-	<xsl:template match="Layout[@xsi:type='VBoxLayout']">
+	<xsl:template match="layout[@xsi:type='VBoxLayout']">
 		<xsl:call-template name="BoxLayout"/>
 		"type": "vbox"
 	</xsl:template>
 	
-	<xsl:template match="Layout[@xsi:type='AccordionLayout']">
+	<xsl:template match="layout[@xsi:type='AccordionLayout']">
 		<xsl:call-template name="BoxLayout"/>
 		<xsl:value-of select="mn:attribute(., 'activeOnTop', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'animate', ',')"/>
@@ -68,15 +68,15 @@
 		"type": "accordion"
 	</xsl:template>
 	
-	<xsl:template match="Layout[@xsi:type='ColumnLayout']">
+	<xsl:template match="layout[@xsi:type='ColumnLayout']">
 		"type": "column"
 	</xsl:template>
 	
-	<xsl:template match="Layout[@xsi:type='FitLayout']">
+	<xsl:template match="layout[@xsi:type='FitLayout']">
 		"type": "fit"
 	</xsl:template>
 	
-	<xsl:template match="Layout[@xsi:type='CenterLayout']">
+	<xsl:template match="layout[@xsi:type='CenterLayout']">
 		"type": "ux.center"
 	</xsl:template>
 	

@@ -26,6 +26,13 @@ public class VmdMethods
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(VmdMethods.class);
 
+	public static com.modnaut.common.properties.string.String getStringObject(String value)
+	{
+		com.modnaut.common.properties.string.String string = new com.modnaut.common.properties.string.String();
+		string.setStringCD(value);
+		return string;
+	}
+
 	/**
 	 * @param viewMetaData
 	 * @param id

@@ -3,9 +3,20 @@ USE common
 DROP PROCEDURE IF EXISTS `GetUser`
 ;
 CREATE PROCEDURE GetUser(
-	IN EmailParm VARCHAR(255),
-	IN UserPasswordParm VARCHAR(255)) 
+	IN PUserId INT)
 BEGIN 
-SELECT UserId, FirstName, LastName, EmailAddress, UserPassword FROM Common.users WHERE IFNULL(EmailParm, EmailAddress) = EmailAddress AND IFNULL(UserPasswordParm, UserPassword) = UserPassword ORDER BY LastName; 
+
+		SELECT
+			UserId
+			,Username
+			,FirstName
+			,LastName
+			,EmailAddress
+			,CAST(HireDate as DATE)
+			,UserTypeCd
+		FROM
+			Common.users
+		WHERE
+			UserId = PUserId; 
 END 
 ; 

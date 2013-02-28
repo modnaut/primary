@@ -44,9 +44,21 @@ Ext.define('Globals', {
     	var component = options.component;
     	switch(options.actionType) {
     		case 'submit':
+    			var parameters = options.parameters || {};
+    			if(options.eventType == 'selectionchange') {
+    				var selection = options.arguments[1];
+    				for(var r = 0, len = selection.length; r < len; r++) {
+    					var record = selection[r];
+    					var fields = record.fields.getRange();
+    					for(var f = 0, flen = fields.length; f < flen; f++) {
+    						parameters[fields[f].name + '-' + r ] = record.get(fields[f].name);
+    					}
+    				}
+    			}
+    			
 				Globals.submitForm({
 					component: component,
-					parameters: options.parameters,
+					parameters: parameters,
 					itemsToUpdate: options.itemsToUpdate
 				});
 				break;

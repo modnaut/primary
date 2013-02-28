@@ -67,7 +67,14 @@
 			<xsl:value-of select="mn:attribute(., 'groupDir', ',')"/>
 			<xsl:value-of select="mn:attribute(., 'groupField', ',')"/>
 			<xsl:value-of select="mn:attribute(., 'leadingBufferZone', ',')"/>
-			<xsl:value-of select="mn:attribute(., 'pageSize', ',')"/>
+			<xsl:choose>
+				<xsl:when test="string(@pageSize) = ''">
+					"pageSize": 1000000,
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="mn:attribute(., 'pageSize', ',')"/>
+				</xsl:otherwise>
+			</xsl:choose>
 			<xsl:value-of select="mn:attribute(., 'purgePageCount', ',')"/>
 			<xsl:value-of select="mn:attribute(., 'remoteGroup', ',')"/>
 			<xsl:value-of select="mn:attribute(., 'sortOnFilter', ',')"/>

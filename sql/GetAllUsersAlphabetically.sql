@@ -4,6 +4,6 @@ DROP PROCEDURE IF EXISTS `GetAllUsersAlphabetically`
 ;
 CREATE PROCEDURE GetAllUsersAlphabetically() 
 BEGIN
-SELECT `UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`, `HireDate` FROM Common.users ORDER BY LastName; 
+SELECT `UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`, `HireDate`, `UserTypeCd` FROM Common.users ORDER BY LastName; 
 END 
 ; 

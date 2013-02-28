@@ -40,8 +40,7 @@ public class SqlQueries
 	};
 
 	/**
-	 * Loops through every file that exists in the sqlFiles arraylist and builds a central repository hashmap
-	 * that contains of sql queries within those sqlmetadata.xml files.
+	 * Loops through every file that exists in the sqlFiles arraylist and builds a central repository hashmap that contains of sql queries within those sqlmetadata.xml files.
 	 */
 	private static void unmarshalSqlMetaData()
 	{
@@ -52,10 +51,7 @@ public class SqlQueries
 	}
 
 	/**
-	 * For each sqlmetadata file passed in, the file is unmarshalled into a sqlmetadata object. From here this object
-	 * can then be broken down further to get to each individual query and parameters contained within the file. The
-	 * query / parameters are stored as a hashmap. Once all queries and parameters have been added to this hashmap the
-	 * entire set is then stored in a hashmap with the key of the 'sqlmetadata.xml' file name.
+	 * For each sqlmetadata file passed in, the file is unmarshalled into a sqlmetadata object. From here this object can then be broken down further to get to each individual query and parameters contained within the file. The query / parameters are stored as a hashmap. Once all queries and parameters have been added to this hashmap the entire set is then stored in a hashmap with the key of the 'sqlmetadata.xml' file name.
 	 * 
 	 * 
 	 * @param fileName
@@ -98,9 +94,7 @@ public class SqlQueries
 	}
 
 	/**
-	 * Checks to see if the queries have been loaded into the allQueries hashmap object. If not, it creates the hashmap and loads
-	 * the existing queries. Returns query object that contains query string and parameters from specified
-	 * applicationId (name of sqlmetadatafile) and the varcode (name of the query to be retrieved)
+	 * Checks to see if the queries have been loaded into the allQueries hashmap object. If not, it creates the hashmap and loads the existing queries. Returns query object that contains query string and parameters from specified applicationId (name of sqlmetadatafile) and the varcode (name of the query to be retrieved)
 	 * 
 	 * @param varCode
 	 * @param applicationId
@@ -108,6 +102,8 @@ public class SqlQueries
 	 */
 	public static Query getQuery(String varCode, String applicationId)
 	{
+		allQueries = null;// TODO: This is for development so we dont have to restart server. Make this config-based
+
 		if (allQueries == null)
 			unmarshalSqlMetaData();
 

@@ -12,12 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.jxpath.JXPathContext;
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.properties.viewmetadata.AbstractField;
 import com.modnaut.common.properties.viewmetadata.ViewMetaData;
 import com.modnaut.common.servlet.ApplicationServlet;
 import com.modnaut.common.utilities.JaxbPool;
@@ -201,5 +203,25 @@ public class FrameworkCtrl
 	protected void deleteElement(String id)
 	{
 		VmdMethods.deleteElement(viewMetaData, jxPathContext, id);
+	}
+
+	protected boolean validateFieldIsNotEmpty(String fieldId)
+	{
+		return StringUtils.isNotEmpty(getParameter(fieldId));
+	}
+
+	protected boolean validateFieldIsNotEmpty(String fieldId, String error)
+	{
+		boolean isNotEmpty = validateFieldIsNotEmpty(fieldId);
+		if (error == null)
+			error = "This field is required";
+		if (!isNotEmpty)
+		{
+			AbstractField field = (AbstractField) findById(fieldId);
+			if (field != null)
+				field.setActiveError(VmdMethods.getStringObject(error));
+		}
+
+		return isNotEmpty;
 	}
 }

@@ -19,8 +19,8 @@
 			<parameter id="4" name="EmailAddress" type="VARCHAR"/>
 		</parameters>
 	</query>
-	<query id="4" name="GET_USER" action="SELECT" type="SP">
-		<statement value="Common.GetUser(?, ?)"/>
+	<query id="4" name="AUTHENTICATE_USER" action="SELECT" type="SP">
+		<statement value="Common.AuthenticateUser(?, ?)"/>
 		<parameters>
 			<parameter id="1" name="Email" type="VARCHAR"/>
 			<parameter id="2" name="Password" type="VARCHAR"/>
@@ -43,6 +43,28 @@
 		<statement value="Common.GetUserSession(?)"/>
 		<parameters>
 			<parameter id="1" name="UserId" type="INT"/>
+		</parameters>
+	</query>
+	<query id="8" name="GET_USER" action="SELECT" type="SP">
+		<statement value="Common.GetUser(?)"/>
+		<parameters>
+			<parameter id="1" name="UserId" type="INT"/>
+		</parameters>
+	</query>
+	<query id="9" name="GET_USER_TYPES" action="SELECT" type="QUERY">
+		<statement value="Select UserTypeCd, Description From Common.UserType Order By Description ASC"/>
+	</query>
+	<query id="10" name="UPDATE_USER" action="ACTION" type="SP">
+		<statement value="Common.UpdateUser(?, ?, ?, ?, ?, ?, ?, ?)"/>
+		<parameters>
+			<parameter id="1" name="UserId" type="INT"/>
+			<parameter id="2" name="UserName" type="VARCHAR"/>
+			<parameter id="3" name="FirstName" type="VARCHAR"/>
+			<parameter id="4" name="LastName" type="VARCHAR"/>
+			<parameter id="5" name="EmailAddress" type="VARCHAR"/>
+			<parameter id="6" name="HireDateDisabled" type="VARCHAR"/>
+			<parameter id="7" name="UserTypeCd" type="VARCHAR"/>
+			<parameter id="8" name="UserPassword" type="VARCHAR"/>
 		</parameters>
 	</query>
 </sqlMetaData>
