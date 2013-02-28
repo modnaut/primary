@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sqlMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/SqlMetaData.xsd">
-	<query id="1" name="GET_USER_LIST" action="SELECT" type="QUERY">
+	<query name="GET_USER_LIST" action="SELECT" type="QUERY">
 		<statement value="Select UserName, FirstName, LastName, EmailAddress From Users Where UserId = ?"/>
 		<parameters>
 			<parameter id="1" name="UserId" type="INT"/>
 		</parameters>
 	</query>
-	<query id="2" name="GET_ALL_USERS_ALPHABETICALLY" action="SELECT" type="SP">
+	<query name="GET_ALL_USERS_ALPHABETICALLY" action="SELECT" type="SP">
 		<statement value="Common.GetAllUsersAlphabetically()"/>
 	</query>
-	<query id="3" name="INSERT_USER" action="ACTION" type="QUERY">
+	<query name="INSERT_USER" action="ACTION" type="QUERY">
 		<statement value="INSERT INTO users (UserName, FirstName, LastName, EmailAddress) 
 						  VALUES (?, ?, ?, ?)"/>
 		<parameters>
@@ -19,42 +19,42 @@
 			<parameter id="4" name="EmailAddress" type="VARCHAR"/>
 		</parameters>
 	</query>
-	<query id="4" name="AUTHENTICATE_USER" action="SELECT" type="SP">
+	<query name="AUTHENTICATE_USER" action="SELECT" type="SP">
 		<statement value="Common.AuthenticateUser(?, ?)"/>
 		<parameters>
 			<parameter id="1" name="Email" type="VARCHAR"/>
 			<parameter id="2" name="Password" type="VARCHAR"/>
 		</parameters>
 	</query>
-	<query id="5" name="INSERT_SESSION" action="ACTION" type="QUERY">
+	<query name="INSERT_SESSION" action="ACTION" type="QUERY">
 		<statement value="INSERT INTO Common.Session(SessionId, SessionObject, CreatedDate) VALUES (?, ?, CURRENT_TIMESTAMP())"/>
 		<parameters>
 			<parameter id="1" name="SessionId" type="INT"/>
 			<parameter id="2" name="SessionObject" type="OBJECT"/>
 		</parameters>
 	</query>
-	<query id="6" name="GET_SESSION" action="SELECT" type="QUERY">
+	<query name="GET_SESSION" action="SELECT" type="QUERY">
 		<statement value="SELECT SessionObject, LastModifiedDate FROM Common.Session WHERE SessionId = ?"/>
 		<parameters>
 			<parameter id="1" name="SessionId" type="INT"/>
 		</parameters>
 	</query>
-	<query id="7" name="GET_USER_SESSION" action="SELECT" type="QUERY">
+	<query name="GET_USER_SESSION" action="SELECT" type="QUERY">
 		<statement value="Common.GetUserSession(?)"/>
 		<parameters>
 			<parameter id="1" name="UserId" type="INT"/>
 		</parameters>
 	</query>
-	<query id="8" name="GET_USER" action="SELECT" type="SP">
+	<query name="GET_USER" action="SELECT" type="SP">
 		<statement value="Common.GetUser(?)"/>
 		<parameters>
 			<parameter id="1" name="UserId" type="INT"/>
 		</parameters>
 	</query>
-	<query id="9" name="GET_USER_TYPES" action="SELECT" type="QUERY">
+	<query name="GET_USER_TYPES" action="SELECT" type="QUERY">
 		<statement value="Select UserTypeCd, Description From Common.UserType Order By Description ASC"/>
 	</query>
-	<query id="10" name="UPDATE_USER" action="ACTION" type="SP">
+	<query name="UPDATE_USER" action="ACTION" type="SP">
 		<statement value="Common.UpdateUser(?, ?, ?, ?, ?, ?, ?, ?)"/>
 		<parameters>
 			<parameter id="1" name="UserId" type="INT"/>
