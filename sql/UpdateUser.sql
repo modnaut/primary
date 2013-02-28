@@ -21,7 +21,7 @@ BEGIN
 			,LastName = PLastName
 			,EmailAddress = PEmailAddress
 			,UserPassword = IFNULL(PUserPassword, UserPassword)
-			--,HireDate = PHireDate
+			/*,HireDate = PHireDate*/
 			,UserTypeCd = PUserTypeCd
 		WHERE
 			UserId = PUserId;
