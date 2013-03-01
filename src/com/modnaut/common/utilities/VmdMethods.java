@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import com.modnaut.common.properties.viewmetadata.AbstractField;
 import com.modnaut.common.properties.viewmetadata.AbstractStore;
 import com.modnaut.common.properties.viewmetadata.ComboBox;
+import com.modnaut.common.properties.viewmetadata.DateField;
+import com.modnaut.common.properties.viewmetadata.DisplayField;
 import com.modnaut.common.properties.viewmetadata.GridPanel;
 import com.modnaut.common.properties.viewmetadata.Record;
 import com.modnaut.common.properties.viewmetadata.RecordField;
@@ -25,6 +27,7 @@ import com.modnaut.common.properties.viewmetadata.ViewMetaData;
 public class VmdMethods
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(VmdMethods.class);
+	private static String formatter = "//*[@id='%s']";
 
 	public static com.modnaut.common.properties.string.String getStringObject(String value)
 	{
@@ -56,7 +59,7 @@ public class VmdMethods
 	public static List getMultipleById(ViewMetaData viewMetaData, JXPathContext context, String id)
 	{
 		long start = System.currentTimeMillis();
-		List list = context.selectNodes("//*[@id='" + id + "']");
+		List list = context.selectNodes(String.format(formatter, id));
 		long end = System.currentTimeMillis();
 		LOGGER.info("getMultipleById(" + id + ") took " + (end - start));
 		return list;
@@ -85,7 +88,7 @@ public class VmdMethods
 	public static Object getSingleById(ViewMetaData viewMetaData, JXPathContext context, String id)
 	{
 		long start = System.currentTimeMillis();
-		Object object = context.selectSingleNode("//*[@id='" + id + "']");
+		Object object = context.selectSingleNode(String.format(formatter, id));
 		long end = System.currentTimeMillis();
 		LOGGER.info("getSingleById(" + id + ") took " + (end - start));
 		return object;
@@ -169,8 +172,6 @@ public class VmdMethods
 	 */
 	public static void populateData(Object element, String data)
 	{
-		if (element instanceof ComboBox)
-			populateComboBox((ComboBox) element, data);
 		if (element instanceof AbstractField)
 			populateAbstractField((AbstractField) element, data);
 	}
@@ -262,15 +263,6 @@ public class VmdMethods
 	 * @param element
 	 * @param data
 	 */
-	public static void populateComboBox(ComboBox element, String data)
-	{
-		element.setValue(data);
-	}
-
-	/**
-	 * @param element
-	 * @param data
-	 */
 	public static void populateAbstractField(AbstractField element, String data)
 	{
 		element.setValue(data);
@@ -285,96 +277,87 @@ public class VmdMethods
 	{
 		long start = System.currentTimeMillis();
 
-		context.removeAll("//*[@id='" + id + "']");
+		context.removeAll(String.format(formatter, id));
 
 		long end = System.currentTimeMillis();
 		LOGGER.info("deleteElement deleted " + id + " from page took " + (end - start));
 	}
 
 	/**
-	 * @param viewMetaData
-	 * @param context
 	 * @param id
 	 * @param data
-	 * @param minTextLength
-	 * @param maxTextLength
-	 * @param set_disabled
 	 * @return
 	 */
-	public static boolean populateTextFieldElement(ViewMetaData viewMetaData, JXPathContext context, String id, String data, int label_width, int label_height, int min_text_length, int max_text_length, boolean set_disabled)
-	{
-		boolean found = false;
-
-		List elements = getMultipleById(viewMetaData, context, id);
-		if (elements.size() > 0)
-		{
-			found = true;
-			for (Object element : elements)
-			{
-				LOGGER.info("populating data on " + element.getClass().getCanonicalName());
-				populateTextFieldElement((TextField) element, data, label_width, label_height, min_text_length, max_text_length, set_disabled);
-			}
-		}
-		return found;
-	}
-
-	/**
-	 * @param element
-	 * @param data
-	 * @param minTextLength
-	 * @param maxTextLength
-	 * @param set_disabled
-	 */
-	public static void populateTextFieldElement(TextField element, String data, int label_width, int label_height, int min_text_length, int max_text_length, boolean set_disabled)
-	{
-		element.setValue(data);
-
-		if (label_height > 0)
-			element.setHeight(label_height);
-
-		if (label_width > 0)
-			element.setLabelWidth(label_width);
-
-		if (min_text_length > 0)
-			element.setMinLength(min_text_length);
-
-		if (max_text_length > 0)
-			element.setMaxLength(max_text_length);
-
-		element.setDisabled(set_disabled);
-	}
-
-	/**
-	 * @param id
-	 * @param data
-	 * @param label_width
-	 * @param label_height
-	 * @param min_text_length
-	 * @param max_text_length
-	 * @param set_disabled
-	 * @return
-	 */
-	public static TextField getTextFieldElement(String id, String data, int label_width, int label_height, int min_text_length, int max_text_length, boolean set_disabled)
+	public static TextField createTextFieldElement(String id, String data)
 	{
 		TextField element = new TextField();
 
 		element.setId(id);
 		element.setValue(data);
 
-		if (label_height > 0)
-			element.setHeight(label_height);
+		return element;
+	}
 
-		if (label_width > 0)
-			element.setLabelWidth(label_width);
+	public static ComboBox createComboBoxElement(String id, List data, String selectedField)
+	{
+		ComboBox element = new ComboBox();
 
-		if (min_text_length > 0)
-			element.setMinLength(min_text_length);
-
-		if (max_text_length > 0)
-			element.setMaxLength(max_text_length);
-
-		element.setDisabled(set_disabled);
+		element.setId(id);
 
 		return element;
+	}
+
+	public static GridPanel createGridElement(String id, List data)
+	{
+		GridPanel element = new GridPanel();
+
+		element.setId(id);
+
+		return element;
+	}
+
+	public static DisplayField createDisplayFieldElement(String id, String data)
+	{
+		DisplayField element = new DisplayField();
+
+		element.setId(id);
+		element.setValue(data);
+
+		return element;
+	}
+
+	public static DateField createDateFieldElement(String id, String data)
+	{
+		DateField element = new DateField();
+
+		element.setId(id);
+		element.setValue(data);
+
+		return element;
+	}
+
+	public static TextField getTextFieldElement(ViewMetaData viewMetaData, JXPathContext context, String id)
+	{
+		return (TextField) getSingleById(viewMetaData, context, id);
+	}
+
+	public static ComboBox getComboBoxElement(ViewMetaData viewMetaData, JXPathContext context, String id)
+	{
+		return (ComboBox) getSingleById(viewMetaData, context, id);
+	}
+
+	public static GridPanel getGridPanelElement(ViewMetaData viewMetaData, JXPathContext context, String id)
+	{
+		return (GridPanel) getSingleById(viewMetaData, context, id);
+	}
+
+	public static DisplayField getDisplayFieldElement(ViewMetaData viewMetaData, JXPathContext context, String id)
+	{
+		return (DisplayField) getSingleById(viewMetaData, context, id);
+	}
+
+	public static DateField getDateFieldElement(ViewMetaData viewMetaData, JXPathContext context, String id)
+	{
+		return (DateField) getSingleById(viewMetaData, context, id);
 	}
 }
