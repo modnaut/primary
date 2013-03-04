@@ -1,4 +1,4 @@
-package com.modnaut.common.database;
+package com.modnaut.framework.database;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.List;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.sqlmetadata.Query;
 import com.modnaut.common.properties.sqlmetadata.SqlMetaData;
-import com.modnaut.common.utilities.JaxbPool;
+import com.modnaut.framework.pools.JaxbPool;
 
 /**
  * 

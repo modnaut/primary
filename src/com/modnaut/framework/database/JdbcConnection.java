@@ -1,4 +1,4 @@
-package com.modnaut.common.database;
+package com.modnaut.framework.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,8 +8,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import com.modnaut.common.exceptions.EnrichableException;
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.EnrichableException;
 
 /**
  * 

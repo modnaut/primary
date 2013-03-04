@@ -1,4 +1,4 @@
-package com.modnaut.common.exceptions;
+package com.modnaut.common.utilities;
 
 import java.util.ArrayList;
 import java.util.List;

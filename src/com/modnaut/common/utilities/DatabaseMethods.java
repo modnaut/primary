@@ -10,15 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.modnaut.common.database.JdbcConnection;
-import com.modnaut.common.database.SqlQueries;
-import com.modnaut.common.exceptions.EnrichableException;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.sqlmetadata.Parameter;
 import com.modnaut.common.properties.sqlmetadata.ParameterType;
 import com.modnaut.common.properties.sqlmetadata.Parameters;
 import com.modnaut.common.properties.sqlmetadata.Query;
 import com.modnaut.common.properties.sqlmetadata.StatementType;
+import com.modnaut.framework.database.JdbcConnection;
+import com.modnaut.framework.database.SqlQueries;
 
 /**
  * 
@@ -745,7 +744,7 @@ public class DatabaseMethods
 		return row_id;
 	}
 
-	private static String buildStatementString(String statement, HashMap<String, String> parms)
+	public static String buildStatementString(String statement, HashMap<String, String> parms)
 	{
 		String fullStatement = ICommonConstants.NONE;
 

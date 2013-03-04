@@ -21,10 +21,10 @@ import com.google.gson.JsonObject;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.viewmetadata.AbstractField;
 import com.modnaut.common.properties.viewmetadata.ViewMetaData;
-import com.modnaut.common.servlet.ApplicationServlet;
-import com.modnaut.common.utilities.JaxbPool;
 import com.modnaut.common.utilities.VmdMethods;
-import com.modnaut.common.utilities.XslPool;
+import com.modnaut.framework.pools.JaxbPool;
+import com.modnaut.framework.pools.XslPool;
+import com.modnaut.framework.servlet.ApplicationServlet;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package com.modnaut.common.session;
+package com.modnaut.framework.session;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;

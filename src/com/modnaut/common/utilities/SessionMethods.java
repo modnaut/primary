@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-import com.modnaut.common.database.JdbcConnection;
-import com.modnaut.common.database.SqlQueries;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.sqlmetadata.Query;
 import com.modnaut.common.properties.sqlmetadata.StatementType;
-import com.modnaut.common.session.WebSession;
+import com.modnaut.framework.database.JdbcConnection;
+import com.modnaut.framework.database.SqlQueries;
+import com.modnaut.framework.session.WebSession;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLDataException;
 
 /**

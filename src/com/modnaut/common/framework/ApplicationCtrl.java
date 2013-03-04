@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.modnaut.common.properties.application.Applications;
-import com.modnaut.common.servlet.ApplicationServlet;
-import com.modnaut.common.utilities.JaxbPool;
-import com.modnaut.common.utilities.XslPool;
+import com.modnaut.framework.pools.JaxbPool;
+import com.modnaut.framework.pools.XslPool;
+import com.modnaut.framework.servlet.ApplicationServlet;
 
 /**
  * 

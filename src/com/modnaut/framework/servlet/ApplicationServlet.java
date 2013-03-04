@@ -1,4 +1,4 @@
-package com.modnaut.common.servlet;
+package com.modnaut.framework.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import com.modnaut.common.interfaces.ICommonConstants;
-import com.modnaut.common.session.WebSession;
-import com.modnaut.common.session.WebSessionController;
+import com.modnaut.framework.session.WebSession;
+import com.modnaut.framework.session.WebSessionController;
 
 /**
  * 
