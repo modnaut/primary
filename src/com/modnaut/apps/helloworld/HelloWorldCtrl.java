@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.modnaut.common.control.ScreenCtrl;
+import com.modnaut.common.controllers.ScreenCtrl;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.common.utilities.SessionMethods;

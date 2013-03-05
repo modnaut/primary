@@ -1,4 +1,4 @@
-package com.modnaut.common.control;
+package com.modnaut.common.controllers;
 
 import java.io.File;
 import java.util.HashMap;

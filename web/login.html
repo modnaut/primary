@@ -3,32 +3,68 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<script src="static/login.js"></script>
-		<title>Insert title here</title>
+		<title>Login | Modnaut</title>
+		
+		<style type="text/css">
+			body {
+				 background-color:#FAFAFA;
+				 font-family:Verdana, Arial;
+				 font-size: 13px;
+			 }
+			 
+			 #login {
+			 	margin-left: 30%;
+			 	margin-top:5%;
+				background-color:#FFFFFF;
+				width: 375px;
+				height:275px;
+				border: 1px solid #E6E6E6;				
+			 }
+			 
+			 #header {
+			 	background-color: #0489B1;
+			 	color: white;
+			 
+			 }
+			 
+			 #username {
+			 	margin-left:10px;
+			 	padding-top: 20px;
+			 	padding-bottom: 10px;
+			 }
+			 
+			 #password {
+			 	margin-left:10px;
+			 	
+			 }
+			 
+			 #loginButton {
+			 	padding-top:25px;
+			 	margin-left:10px;
+			 	margin-top:20px;
+			 }	
+	
+		</style>
 	</head>
 	<body>
-		<h1>Welcome!</h1>
-		<form name="loginForm" action="http://localhost:8080/primary/ApplicationServlet?Class=com.modnaut.common.framework.ApplicationCtrl&Method=defaultAction" method="post" onsubmit="return(validateForm())">
-			<table>
-				<tr>
-					<td>
-						Email:
-					</td>
-					<td>
-						<input type="text" id="email" name="Email" size="35"/>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						Password:
-					</td>
-					<td>
-						<input type="password" id="password" name="Password" size="35"/>
-					</td>
-				</tr>
-			</table>
-			<input type="submit" value="Submit"/>
+		<div id="login">
+		<div id="header"><h1>LOGIN</h1></div>
+		<form name="loginForm" action="http://localhost:8080/primary/ApplicationServlet?Class=com.modnaut.common.controllers.ApplicationCtrl&Method=defaultAction" method="post" onsubmit="return(validateForm())">
+			<div id="username"> 
+				<label for="ID">Email Address</label> <br>
+				<input id="ID" name="ID" type="text" maxlength="50" size="50" value=""/> 
+			</div> 
+			<div id="password"> 
+				<label for="PASSWORD" id="">Password</label> <br>
+				<input id="PASSWORD" name="PASSWORD" type="password" id="password" size="50" value=""/><br>
+				<a id="forgot_password" href="javascript:;">Forgot Your Username or Password?</a> 
+			</div> 
+			<div id="loginButton">
+				<input type="submit" value="Login"/>
+			</div> 
 			<input type="hidden" id="class" name="Class" value="ApplicationCtrl"/>
 			<input type="hidden" id="method" name="Method" value="defaultAction"/>
 		</form>
+		</div>
 	</body>
 </html>
