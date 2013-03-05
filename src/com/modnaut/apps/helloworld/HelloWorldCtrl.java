@@ -10,14 +10,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.modnaut.common.framework.FrameworkCtrl;
+import com.modnaut.common.framework.ScreenCtrl;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.properties.viewmetadata.TextField;
 import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.common.utilities.SessionMethods;
 import com.modnaut.common.utilities.VmdMethods;
 
-public class HelloWorldCtrl extends FrameworkCtrl
+public class HelloWorldCtrl extends ScreenCtrl
 {
 	private static final String XML_FILE = "HelloWorld.xml";
 	private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldCtrl.class);
