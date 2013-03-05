@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.modnaut.common.interfaces.ICommonConstants;
-import com.modnaut.common.properties.sqlmetadata.Query;
-import com.modnaut.common.properties.sqlmetadata.SqlMetaData;
 import com.modnaut.framework.pools.JaxbPool;
+import com.modnaut.framework.properties.sqlmetadata.Query;
+import com.modnaut.framework.properties.sqlmetadata.SqlMetaData;
 
 /**
  * 

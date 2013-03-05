@@ -15,9 +15,9 @@ import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.modnaut.common.properties.application.Applications;
-import com.modnaut.common.properties.sqlmetadata.SqlMetaData;
-import com.modnaut.common.properties.viewmetadata.ViewMetaData;
+import com.modnaut.framework.properties.application.Applications;
+import com.modnaut.framework.properties.sqlmetadata.SqlMetaData;
+import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
 
 /**
  * 

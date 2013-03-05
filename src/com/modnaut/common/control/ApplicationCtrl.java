@@ -1,4 +1,4 @@
-package com.modnaut.common.framework;
+package com.modnaut.common.control;
 
 import java.io.File;
 import java.util.HashMap;
@@ -6,9 +6,9 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.modnaut.common.properties.application.Applications;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
+import com.modnaut.framework.properties.application.Applications;
 import com.modnaut.framework.servlet.ApplicationServlet;
 
 /**

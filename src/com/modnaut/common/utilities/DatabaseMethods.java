@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.modnaut.common.interfaces.ICommonConstants;
-import com.modnaut.common.properties.sqlmetadata.Parameter;
-import com.modnaut.common.properties.sqlmetadata.ParameterType;
-import com.modnaut.common.properties.sqlmetadata.Parameters;
-import com.modnaut.common.properties.sqlmetadata.Query;
-import com.modnaut.common.properties.sqlmetadata.StatementType;
 import com.modnaut.framework.database.JdbcConnection;
 import com.modnaut.framework.database.SqlQueries;
+import com.modnaut.framework.properties.sqlmetadata.Parameter;
+import com.modnaut.framework.properties.sqlmetadata.ParameterType;
+import com.modnaut.framework.properties.sqlmetadata.Parameters;
+import com.modnaut.framework.properties.sqlmetadata.Query;
+import com.modnaut.framework.properties.sqlmetadata.StatementType;
 
 /**
  * 

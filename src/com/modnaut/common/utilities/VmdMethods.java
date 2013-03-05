@@ -6,18 +6,18 @@ import org.apache.commons.jxpath.JXPathContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.modnaut.common.properties.viewmetadata.AbstractField;
-import com.modnaut.common.properties.viewmetadata.AbstractStore;
-import com.modnaut.common.properties.viewmetadata.ComboBox;
-import com.modnaut.common.properties.viewmetadata.DateField;
-import com.modnaut.common.properties.viewmetadata.DisplayField;
-import com.modnaut.common.properties.viewmetadata.GridPanel;
-import com.modnaut.common.properties.viewmetadata.Record;
-import com.modnaut.common.properties.viewmetadata.RecordField;
-import com.modnaut.common.properties.viewmetadata.RecordSet;
-import com.modnaut.common.properties.viewmetadata.Store;
-import com.modnaut.common.properties.viewmetadata.TextField;
-import com.modnaut.common.properties.viewmetadata.ViewMetaData;
+import com.modnaut.framework.properties.viewmetadata.AbstractField;
+import com.modnaut.framework.properties.viewmetadata.AbstractStore;
+import com.modnaut.framework.properties.viewmetadata.ComboBox;
+import com.modnaut.framework.properties.viewmetadata.DateField;
+import com.modnaut.framework.properties.viewmetadata.DisplayField;
+import com.modnaut.framework.properties.viewmetadata.GridPanel;
+import com.modnaut.framework.properties.viewmetadata.Record;
+import com.modnaut.framework.properties.viewmetadata.RecordField;
+import com.modnaut.framework.properties.viewmetadata.RecordSet;
+import com.modnaut.framework.properties.viewmetadata.Store;
+import com.modnaut.framework.properties.viewmetadata.TextField;
+import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
 
 /**
  * @author Danny Cohn
@@ -29,9 +29,9 @@ public class VmdMethods
 	private static Logger LOGGER = LoggerFactory.getLogger(VmdMethods.class);
 	private static String formatter = "//*[@id='%s']";
 
-	public static com.modnaut.common.properties.string.String getStringObject(String value)
+	public static com.modnaut.framework.properties.string.String getStringObject(String value)
 	{
-		com.modnaut.common.properties.string.String string = new com.modnaut.common.properties.string.String();
+		com.modnaut.framework.properties.string.String string = new com.modnaut.framework.properties.string.String();
 		string.setStringCD(value);
 		return string;
 	}

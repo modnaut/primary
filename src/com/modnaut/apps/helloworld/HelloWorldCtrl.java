@@ -10,12 +10,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.modnaut.common.framework.ScreenCtrl;
+import com.modnaut.common.control.ScreenCtrl;
 import com.modnaut.common.interfaces.ICommonConstants;
-import com.modnaut.common.properties.viewmetadata.TextField;
 import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.common.utilities.SessionMethods;
 import com.modnaut.common.utilities.VmdMethods;
+import com.modnaut.framework.properties.viewmetadata.TextField;
 
 public class HelloWorldCtrl extends ScreenCtrl
 {
@@ -84,7 +84,7 @@ public class HelloWorldCtrl extends ScreenCtrl
 
 		marshall(viewMetaData);
 	}
-	
+
 	public void userTypeChanged()
 	{
 		LOGGER.info("User type changed: " + getParameter(USER_TYPE_CD));
