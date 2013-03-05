@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.CommonMethods;
 import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.common.utilities.SessionMethods;
 
@@ -21,6 +22,10 @@ import com.modnaut.common.utilities.SessionMethods;
  */
 public class WebSessionController
 {
+	// CONSTANTS
+	private static final int ITERATION_NUMBER = 1000;
+	private static final String PASSWORD_SALT = "MoDnaUt_SalT";
+
 	// SQL
 	private static final String AUTHENTICATE_USER = "AUTHENTICATE_USER";
 
@@ -93,7 +98,7 @@ public class WebSessionController
 				if (email != null && password != null)
 				{
 					// The word 'password' will equal 'kLxNpX+0w9lWcamR3wSZ8O/828A=' after it has been salted and hashed
-					String saltedPassword = SessionMethods.encryptPassword(password);
+					String saltedPassword = CommonMethods.encryptString(password, ITERATION_NUMBER, PASSWORD_SALT);
 
 					HashMap<String, String> parms = new HashMap<String, String>();
 					parms.put(EMAIL, email);

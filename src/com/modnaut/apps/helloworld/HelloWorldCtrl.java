@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.controllers.ScreenCtrl;
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.CommonMethods;
 import com.modnaut.common.utilities.DatabaseMethods;
-import com.modnaut.common.utilities.SessionMethods;
 import com.modnaut.common.utilities.VmdMethods;
 import com.modnaut.framework.properties.viewmetadata.TextField;
 
@@ -30,6 +30,10 @@ public class HelloWorldCtrl extends ScreenCtrl
 	private static final String HIRE_DATE = "HireDate";
 	private static final String USER_TYPE_CD = "UserTypeCd";
 	private static final String USER_PASSWORD = "UserPassword";
+
+	// CONSTANTS
+	private static final int ITERATION_NUMBER = 1000;
+	private static final String PASSWORD_SALT = "MoDnaUt_SalT";
 
 	private static final String GET_ALL_USERS_ALPHABETICALLY = "GET_ALL_USERS_ALPHABETICALLY";
 
@@ -115,7 +119,7 @@ public class HelloWorldCtrl extends ScreenCtrl
 		{
 			try
 			{
-				encryptedPassword = SessionMethods.encryptPassword(userPassword);
+				encryptedPassword = CommonMethods.encryptString(userPassword, ITERATION_NUMBER, PASSWORD_SALT);
 			}
 			catch (Exception e)
 			{
