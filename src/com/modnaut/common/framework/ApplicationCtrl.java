@@ -17,14 +17,11 @@ import com.modnaut.framework.servlet.ApplicationServlet;
  * @date 1/9/2013
  * 
  */
-public class ApplicationCtrl
+public class ApplicationCtrl extends FrameworkCtrl
 {
 	private static final String APPLICATION_ID = "applicationId";
 	private static final String APPLICATION_XSL = "Application.xsl";
 	private static final String APPLICATION_XML = "WEB-INF/xml/Application.xml";
-
-	private HttpServletRequest request;
-	private HttpServletResponse response;
 
 	/**
 	 * 
@@ -33,8 +30,7 @@ public class ApplicationCtrl
 	 */
 	public ApplicationCtrl(HttpServletRequest request, HttpServletResponse response)
 	{
-		this.request = request;
-		this.response = response;
+		super(request, response);
 	}
 
 	/**

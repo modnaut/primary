@@ -67,7 +67,7 @@ public class HelloWorldCtrl extends ScreenCtrl
 		marshallStoreJson(data, true);
 	}
 
-	public void userSelected() throws Exception
+	public void userSelected()
 	{
 		HashMap<String, String> parms = new HashMap<String, String>();
 		parms.put(USER_ID, getParameter("UserId-0"));
@@ -83,6 +83,12 @@ public class HelloWorldCtrl extends ScreenCtrl
 		populateUserTypesCombo();
 
 		marshall(viewMetaData);
+	}
+	
+	public void userTypeChanged()
+	{
+		LOGGER.info("User type changed: " + getParameter(USER_TYPE_CD));
+		userSelected();
 	}
 
 	public void saveUser()

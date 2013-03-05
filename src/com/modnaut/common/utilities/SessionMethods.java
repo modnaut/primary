@@ -29,7 +29,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLDataException;
  */
 public class SessionMethods
 {
-	private static final Logger logger = LoggerFactory.getLogger("com.modnaut.common.utilities.SessionMethods");
+	private static final Logger logger = LoggerFactory.getLogger(SessionMethods.class);
 
 	// CONSTANTS
 	private static MessageDigest MESSAGE_DIGEST = null;

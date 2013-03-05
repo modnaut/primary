@@ -178,7 +178,6 @@
 		<xs:attribute name="itemsToUpdate" type="xs:string"/>
 		<xs:attribute name="method" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="Menu"/>
 	<xs:complexType name="ImageSpec">
 		<xs:attribute name="path" type="xs:string" use="required"/>
 		<xs:attribute name="external" type="xs:boolean" default="false"/>
@@ -248,6 +247,7 @@
 				<xs:sequence>
 					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="toolbar" type="Toolbar" minOccurs="0" maxOccurs="2"/>
 				</xs:sequence>
 				<xs:attribute name="animCollapse" type="xs:boolean" default="true"/>
 				<xs:attribute name="bodyPadding" type="xs:string"/>
@@ -262,6 +262,58 @@
 				<xs:attribute name="iconCls" type="xs:string"/>
 				<xs:attribute name="titleAlign" type="TitleAlign" default="left"/>
 				<xs:attribute name="titleCollapse" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Menu">
+		<xs:complexContent>
+			<xs:extension base="Panel">
+				<xs:attribute name="allowOtherMenus" type="xs:boolean" default="false"/>
+				<xs:attribute name="enableKeyNav" type="xs:boolean" default="true"/>
+				<xs:attribute name="ignoreParentClicks" type="xs:boolean" default="false"/>
+				<xs:attribute name="plain" type="xs:boolean" default="false"/>
+				<xs:attribute name="showSeparator" type="xs:boolean" default="true"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="ToolbarPosition">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="bottom"/>
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="right"/>
+			<xs:enumeration value="top"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Toolbar">
+		<xs:complexContent>
+			<xs:extension base="Container">
+				<xs:attribute name="enableOverflow" type="xs:boolean" default="false"/>
+				<xs:attribute name="position" type="ToolbarPosition" use="required"/>
+				<xs:attribute name="vertical" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ToolbarFill">
+		<xs:complexContent>
+			<xs:extension base="Item"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ToolbarSeparator">
+		<xs:complexContent>
+			<xs:extension base="Item"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ToolbarSpacer">
+		<xs:complexContent>
+			<xs:extension base="Item"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ToolbarText">
+		<xs:complexContent>
+			<xs:extension base="Item">
+				<xs:sequence>
+					<xs:element name="text" type="str:String" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

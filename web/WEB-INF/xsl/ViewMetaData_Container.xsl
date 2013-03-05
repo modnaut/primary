@@ -25,6 +25,29 @@
 		<xsl:apply-templates select="items"/>
 	</xsl:template>
 	
+	<xsl:template name="Toolbar">
+		<xsl:for-each select="toolbar">
+			<xsl:choose>
+				<xsl:when test="@position = 'bottom' ">	
+					<xsl:text>bbar</xsl:text>
+				</xsl:when>
+				<xsl:when test="@position = 'left' ">	
+					<xsl:text>lbar</xsl:text>
+				</xsl:when>
+				<xsl:when test="@position = 'right' ">	
+					<xsl:text>rbar</xsl:text>
+				</xsl:when>
+				<xsl:when test="@position = 'top' ">	
+					<xsl:text>tbar</xsl:text>
+				</xsl:when>
+			</xsl:choose>
+			: {
+				<xsl:value-of select="mn:attribute(., 'vertical', ',')"/>
+				<xsl:call-template name="Container"/>
+			},
+		</xsl:for-each>
+	</xsl:template>
+	
 	<xsl:template name="Panel">
 		<xsl:call-template name="Container"/>
 		<xsl:value-of select="mn:attribute(., 'animCollapse', ',')"/>
@@ -42,6 +65,7 @@
 		<xsl:value-of select="mn:childString(., 'title', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'titleAlign', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'titleCollapse', ',')"/>
+		<xsl:call-template name="Toolbar"/>
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='Panel']">
@@ -85,5 +109,32 @@
 		<xsl:value-of select="mn:attribute(., 'submitValue', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'validateOnChange', ',')"/>
 		"xtype": "radiogroup"
+	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type='ToolbarFill']">
+		"xtype": "tbfill"
+	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type='ToolbarSeparator']">
+		"xtype": "tbseparator"
+	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type='ToolbarSpacer']">
+		"xtype": "tbspacer"
+	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type='ToolbarText']">
+		<xsl:value-of select="mn:childString(., 'text', ',')"/>
+		"xtype": "tbtext"
+	</xsl:template>
+	
+	<xsl:template name="Menu">
+		<xsl:for-each select="menu">
+			menu: {
+				<xsl:call-template name="Item"/>
+				<xsl:call-template name="Panel"/>
+				<xsl:value-of select="mn:attribute(., 'allowOtherMenus', '')"/>
+			},
+		</xsl:for-each>
 	</xsl:template>
 </xsl:stylesheet>

@@ -11,6 +11,9 @@
 				<link rel="stylesheet" type="text/css">
 					<xsl:attribute name="href"><xsl:value-of select="$staticPath"/>extjs/resources/css/ext-all.css</xsl:attribute>
 				</link>
+				<link rel="stylesheet" type="text/css">
+					<xsl:attribute name="href"><xsl:value-of select="$staticPath"/>css/icon_silk.css</xsl:attribute>
+				</link>
 				<script type="text/javascript">
 					<xsl:attribute name="src"><xsl:value-of select="$staticPath"/>extjs/bootstrap.js</xsl:attribute>
 				</script>

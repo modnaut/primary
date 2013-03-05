@@ -61,6 +61,7 @@
 							<fieldLabel stringCD="Hire Date"/>
 						</item>
 						<item xsi:type="ComboBox" id="UserTypeCd" valueField="userTypeCd" displayField="description">
+							<listener action="submit" event="change" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userTypeChanged" itemsToUpdate="editUserPanel"/>
 							<fieldLabel stringCD="User Type"/>
 							<data>
 								<record>
@@ -72,16 +73,36 @@
 						<item xsi:type="TextField" id="UserPassword">
 							<fieldLabel stringCD="New Password"/>
 						</item>
-						<item xsi:type="Button" id="saveUser">
-							<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="saveUser"/>
-							<text stringCD="Save"/>
-						</item>
-						<item xsi:type="Button" id="newUser">
-							<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="newUser"/>
-							<text stringCD="New User"/>
-						</item>
+						
 					</items>
 					<title stringCD="Create/Edit User"/>
+					<toolbar position="top">
+						<items>
+							<item xsi:type="Button">
+								<menu>
+									<items>
+										<item xsi:type="Button">
+											<text stringCD="menu item 1"/>
+										</item>
+									</items>
+								</menu>
+								<text stringCD="Menu Button"/>
+							</item>
+						</items>
+					</toolbar>
+					<toolbar position="bottom">
+						<items>
+							<item xsi:type="ToolbarFill"/>
+							<item xsi:type="Button" id="saveUser" iconCls="icon-database_save">
+								<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="saveUser"/>
+								<text stringCD="Save"/>
+							</item>
+							<item xsi:type="Button" id="newUser" iconCls="icon-user_add">
+								<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="newUser"/>
+								<text stringCD="New User"/>
+							</item>
+						</items>
+					</toolbar>
 				</item>
 			</items>
 			<layout xsi:type="BorderLayout"/>

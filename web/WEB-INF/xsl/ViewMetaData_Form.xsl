@@ -22,6 +22,7 @@
 		<xsl:value-of select="mn:attribute(., 'textAlign', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'toggleGroup', ',')"/>
 		<xsl:value-of select="mn:childString(., 'tooltip', ',')"/>
+		<xsl:call-template name="Menu"/>
 		"xtype": "button"
 	</xsl:template>
 	
