@@ -2,7 +2,6 @@ package com.modnaut.common.interfaces;
 
 public interface ICommonConstants
 {
-
 	public static final String CLASS = "Class";
 	public static final String METHOD = "Method";
 
@@ -97,6 +96,7 @@ public interface ICommonConstants
 	// error codes
 	public static final String DB_LOG = "DB_LOG";
 	public static final String SESSION_LOG = "SESSION_LOG";
+	public static final String SERVLET_LOG = "SERVLET_LOG";
 
 	public static final String DEFAULT_ERROR_MESSAGE = "An error has occured while processing this request. Please try again.";
 	public static final String DEFAULT_FATAL_MESSAGE = "An error has occurred while processing this request.  Please contact customer support. Error Id: ";

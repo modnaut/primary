@@ -109,6 +109,5 @@ public class EnrichableException extends RuntimeException
 			return;
 		appendException(builder, throwable.getCause());
 		builder.append(throwable.toString());
-		builder.append('\n');
 	}
 }

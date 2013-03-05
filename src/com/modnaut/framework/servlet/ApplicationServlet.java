@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.EnrichableException;
 import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.session.WebSessionController;
 
@@ -30,12 +31,11 @@ import com.modnaut.framework.session.WebSessionController;
 @WebServlet("/")
 public class ApplicationServlet extends HttpServlet
 {
+	private static final String CLASS_NAME_PATH = "com.modnaut.framework.servlet.ApplicationServlet";
+	private static final String METHOD_NAME = "doGet";
+
 	private static final long serialVersionUID = 1L;
 	private static String realPath = ICommonConstants.NONE;
-
-	// SQL Parms
-	private static final String EMAIL = "Email";
-	private static final String PASSWORD = "Password";
 
 	/**
 	 * Constructor method
@@ -111,12 +111,10 @@ public class ApplicationServlet extends HttpServlet
 				Method method = clazz.getDeclaredMethod(methodName);
 				method.invoke(instance);
 			}
-			/*
-			 * else { // this is temporary for development purposes only. Will be removed from production environment. // is only called in the event the url does not contain the class and method parameters. Class<?> clazz = Class.forName("com.modnaut.apps.helloworld.HelloWorldChangeCtrl"); Object instance = clazz.getConstructor(params).newInstance(request, response);
-			 * 
-			 * Method method = clazz.getDeclaredMethod("defaultAction"); method.invoke(instance); }
-			 */
-
+			else
+			{
+				throw new EnrichableException(CLASS_NAME_PATH, METHOD_NAME, ICommonConstants.SERVLET_LOG, ICommonConstants.ERROR, "Invalid or missing required parameters: className: " + className + " methodName: " + methodName);
+			}
 		}
 		catch (Exception e)
 		{
@@ -132,6 +130,7 @@ public class ApplicationServlet extends HttpServlet
 			pw.println("<p> An error occurred while trying to load this page. Please try again.</p>");
 			pw.println("</body>");
 			pw.println("</html>");
+
 		}
 	}
 

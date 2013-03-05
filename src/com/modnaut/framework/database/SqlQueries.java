@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.EnrichableException;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.properties.sqlmetadata.Query;
 import com.modnaut.framework.properties.sqlmetadata.SqlMetaData;
@@ -20,9 +21,14 @@ import com.modnaut.framework.properties.sqlmetadata.SqlMetaData;
  */
 public class SqlQueries
 {
+	// exception handling
+	private static final String CLASS_NAME_PATH = "com.modnaut.framework.database.SqlQueries";
+	private static final String METHOD_NAME = "getQuery";
+	private static final String QUERY_ERROR_MESSAGE = "Invalid query name. Please check spelling and sql meta data file being used.";
+	private static final String FILE_ERROR_MESSAGE = "Invalid sql metadata file. Please check spelling or make sure file exists.";
+
 	// constants
 	private static final String XML_EXTENSION = ".xml";
-	private static final String FILE_NOT_FOUND = "Could not find SqlMetaData file: ";
 	private static final String XML_PATH = "../xml";
 
 	// private variables
@@ -61,36 +67,23 @@ public class SqlQueries
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		String filePath = classLoader.getResource(XML_PATH).getPath();
 
-		try
+		allQueries = new HashMap<String, HashMap<String, Query>>();
+		HashMap<String, Query> hashMap = new HashMap<String, Query>();
+
+		File file = new File(filePath + fileName + XML_EXTENSION);
+		SqlMetaData sqlmetadata = JaxbPool.unmarshal(SqlMetaData.class, file);
+
+		List<Query> queryList = sqlmetadata.getQuery();
+		if (queryList != null)
 		{
-
-			allQueries = new HashMap<String, HashMap<String, Query>>();
-			HashMap<String, Query> hashMap = new HashMap<String, Query>();
-
-			File file = new File(filePath + fileName + XML_EXTENSION);
-			SqlMetaData sqlmetadata = JaxbPool.unmarshal(SqlMetaData.class, file);
-
-			List<Query> queryList = sqlmetadata.getQuery();
-			if (queryList != null)
+			for (int i = 0; queryList.size() > i; i++)
 			{
-				for (int i = 0; queryList.size() > i; i++)
-				{
-					Query q = queryList.get(i);
-					hashMap.put(q.getName(), q);
-				}
+				Query q = queryList.get(i);
+				hashMap.put(q.getName(), q);
 			}
+		}
 
-			allQueries.put(fileName, hashMap);
-
-		}
-		catch (NullPointerException npe)
-		{
-			System.out.println(FILE_NOT_FOUND + filePath + fileName + XML_EXTENSION);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		allQueries.put(fileName, hashMap);
 	}
 
 	/**
@@ -100,13 +93,25 @@ public class SqlQueries
 	 * @param applicationId
 	 * @return
 	 */
-	public static Query getQuery(String varCode, String applicationId)
+	public static Query getQuery(String queryName, String queryFile)
 	{
 		allQueries = null;// TODO: This is for development so we dont have to restart server. Make this config-based
 
 		if (allQueries == null)
 			unmarshalSqlMetaData();
 
-		return allQueries.get(applicationId).get(varCode);
+		Query query = null;
+		try
+		{
+			query = allQueries.get(queryFile).get(queryName);
+			if (query == null)
+				throw new EnrichableException(CLASS_NAME_PATH, METHOD_NAME, ICommonConstants.DB_LOG, ICommonConstants.WARNING, QUERY_ERROR_MESSAGE);
+		}
+		catch (Exception e)
+		{
+			throw new EnrichableException(CLASS_NAME_PATH, METHOD_NAME, ICommonConstants.DB_LOG, ICommonConstants.WARNING, FILE_ERROR_MESSAGE, e);
+		}
+
+		return query;
 	}
 }
