@@ -133,8 +133,48 @@
 			menu: {
 				<xsl:call-template name="Item"/>
 				<xsl:call-template name="Panel"/>
-				<xsl:value-of select="mn:attribute(., 'allowOtherMenus', '')"/>
+				<xsl:value-of select="mn:attribute(., 'allowOtherMenus', ',')"/>
+				<xsl:value-of select="mn:attribute(., 'enableKeyNav', ',')"/>
+				<xsl:value-of select="mn:attribute(., 'ignoreParentClicks', ',')"/>
+				<xsl:value-of select="mn:attribute(., 'plain', ',')"/>
+				<xsl:value-of select="mn:attribute(., 'showSeparator', '')"/>
 			},
 		</xsl:for-each>
+	</xsl:template>
+	
+	<xsl:template name="MenuItem">
+		<xsl:value-of select="mn:attribute(., 'canActivate', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'clickHideDelay', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'destroyMenu', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'hideOnClick', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'href', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'hrefTarget', ',')"/>
+		<xsl:value-of select="mn:imageSpec(icon, 'icon', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'iconCls', ',')"/>
+		<xsl:call-template name="Menu"/>
+		<xsl:value-of select="mn:attribute(., 'menuAlign', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'menuExpandDelay', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'menuHideDelay', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'plain', ',')"/>
+		<xsl:value-of select="mn:childString(., 'text', ',')"/>
+		<xsl:value-of select="mn:childString(., 'tooltip', ',')"/>
+	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type='MenuItem']">
+		<xsl:call-template name="MenuItem"/>
+		xtype: "menuitem"
+	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type='MenuCheckItem']">
+		<xsl:call-template name="MenuItem"/>
+		<xsl:value-of select="mn:attribute(., 'checkChangeDisabled', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'checked', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'group', ',')"/>
+		xtype: "menucheckitem"
+	</xsl:template>
+	
+		<xsl:template match="item[@xsi:type='MenuSeparatorItem']">
+		<xsl:call-template name="MenuItem"/>
+		xtype: "menuseparator"
 	</xsl:template>
 </xsl:stylesheet>

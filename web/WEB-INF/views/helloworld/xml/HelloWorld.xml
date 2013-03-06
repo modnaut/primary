@@ -81,7 +81,8 @@
 							<item xsi:type="Button">
 								<menu>
 									<items>
-										<item xsi:type="Button">
+										<item xsi:type="MenuItem">
+											<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userTypeChanged" itemsToUpdate="editUserPanel"/>
 											<text stringCD="menu item 1"/>
 										</item>
 									</items>

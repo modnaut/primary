@@ -276,6 +276,43 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="MenuItem">
+		<xs:complexContent>
+			<xs:extension base="Item">
+				<xs:sequence>
+					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="menu" type="Menu" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="text" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="tooltip" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="canActivate" type="xs:boolean" default="true"/>
+				<xs:attribute name="clickHideDelay" type="xs:int" default="1"/>
+				<xs:attribute name="destroyMenu" type="xs:boolean" default="true"/>
+				<xs:attribute name="hideOnClick" type="xs:boolean"/>
+				<xs:attribute name="href" type="xs:string" default="#"/>
+				<xs:attribute name="hrefTarget" type="xs:string"/>
+				<xs:attribute name="iconCls" type="xs:string"/>
+				<xs:attribute name="menuAlign" type="xs:string" default="tl-tr?"/>
+				<xs:attribute name="menuExpandDelay" type="xs:int" default="200"/>
+				<xs:attribute name="menuHideDelay" type="xs:int" default="200"/>
+				<xs:attribute name="plain" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="MenuCheckItem">
+		<xs:complexContent>
+			<xs:extension base="MenuItem">
+				<xs:attribute name="checkChangeDisabled" type="xs:boolean" default="false"/>
+				<xs:attribute name="checked" type="xs:boolean" default="false"/>
+				<xs:attribute name="group" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="MenuSeparatorItem">
+		<xs:complexContent>
+			<xs:extension base="MenuItem"/>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:simpleType name="ToolbarPosition">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="bottom"/>
