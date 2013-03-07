@@ -45,16 +45,16 @@
 						<item xsi:type="DisplayField" id="UserId" submitValue="true">
 							<fieldLabel stringCD="User ID"/>
 						</item>
-						<item xsi:type="TextField" id="UserName" allowBlank="false" maxLength="50">
+						<item xsi:type="TextField" id="UserName" allowBlank="false" maxLength="50" msgTarget="under">
 							<fieldLabel stringCD="Username"/>
 						</item>
 						<item xsi:type="TextField" id="FirstName" allowBlank="false" maxLength="50">
 							<fieldLabel stringCD="First Name"/>
 						</item>
-						<item xsi:type="TextField" id="LastName" allowBlank="false" maxLength="50">
+						<item xsi:type="TextField" id="LastName" allowBlank="false" maxLength="50" msgTarget="side">
 							<fieldLabel stringCD="Last Name"/>
 						</item>
-						<item xsi:type="TextField" id="EmailAddress" allowBlank="false" maxLength="100">
+						<item xsi:type="TextField" id="EmailAddress" allowBlank="false" maxLength="100" msgTarget="title">
 							<fieldLabel stringCD="Email Address"/>
 						</item>
 						<item xsi:type="DateField" id="HireDate">
