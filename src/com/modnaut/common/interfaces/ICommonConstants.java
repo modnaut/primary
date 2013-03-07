@@ -97,6 +97,7 @@ public interface ICommonConstants
 	public static final String DB_LOG = "DB_LOG";
 	public static final String SESSION_LOG = "SESSION_LOG";
 	public static final String SERVLET_LOG = "SERVLET_LOG";
+	public static final String POOL_LOG = "POOL_LOG";
 
 	public static final String DEFAULT_ERROR_MESSAGE = "An error has occured while processing this request. Please try again.";
 	public static final String DEFAULT_FATAL_MESSAGE = "An error has occurred while processing this request.  Please contact customer support. Error Id: ";
@@ -112,4 +113,23 @@ public interface ICommonConstants
 	public static final String VARCHAR = "VARCHAR";
 	public static final String TIMESTAMP = "TIMESTAMP";
 	public static final String TIME = "TIME";
+	public static final String BLOB = "BLOB";
+	public static final String TINYINT = "TINYINT";
+	public static final String SMALLINT = "SMALLINT";
+	public static final String MEDIUMINT = "MEDIUMINT";
+	public static final String BIGINT = "BIGINT";
+	public static final String BIT = "BIT";
+	public static final String TINYTEXT = "TINYTEXT";
+	public static final String TEXT = "TEXT";
+	public static final String MEDIUMTEXT = "MEDIUMTEXT";
+	public static final String LONGTEXT = "LONGTEXT";
+	public static final String BINARY = "BINARY";
+	public static final String VARBINARY = "VARBINARY";
+	public static final String TINYBLOB = "TINYBLOB";
+	public static final String MEDIUMBLOB = "MEDIUMBLOB";
+	public static final String LONGBLOB = "LONGBLOB";
+	public static final String YEAR = "YEAR";
+	public static final String DATETIME = "DATETIME";
+	public static final String OBJECT = "OBJECT";
+
 }

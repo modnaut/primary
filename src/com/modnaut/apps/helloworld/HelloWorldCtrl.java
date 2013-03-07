@@ -73,7 +73,7 @@ public class HelloWorldCtrl extends ScreenCtrl
 
 	public void userSelected()
 	{
-		HashMap<String, String> parms = new HashMap<String, String>();
+		HashMap<String, Object> parms = new HashMap<String, Object>();
 		parms.put(USER_ID, getParameter("UserId-0"));
 		String[] userData = DatabaseMethods.getJustDataFirstRow("GET_USER", ICommonConstants.COMMON, parms);
 		populateData(USER_ID, userData[0]);
@@ -140,7 +140,7 @@ public class HelloWorldCtrl extends ScreenCtrl
 
 		if (valid)
 		{
-			HashMap<String, String> parms = new HashMap<String, String>();
+			HashMap<String, Object> parms = new HashMap<String, Object>();
 			parms.put(USER_ID, userId);
 			parms.put(USER_NAME, userName);
 			parms.put(FIRST_NAME, firstName);
