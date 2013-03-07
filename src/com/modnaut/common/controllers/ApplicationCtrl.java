@@ -6,6 +6,8 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.EnrichableException;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.application.Applications;
@@ -19,6 +21,10 @@ import com.modnaut.framework.servlet.ApplicationServlet;
  */
 public class ApplicationCtrl extends FrameworkCtrl
 {
+	// exception handling
+	private static final String CLASS_NAME_PATH = "com.modnaut.common.controllers";
+	private static final String METHOD_NAME = "defaultAction";
+
 	private static final String APPLICATION_ID = "applicationId";
 	private static final String APPLICATION_XSL = "Application.xsl";
 	private static final String APPLICATION_XML = "WEB-INF/xml/Application.xml";
@@ -35,7 +41,6 @@ public class ApplicationCtrl extends FrameworkCtrl
 
 	/**
 	 * 
-	
 	 */
 	public void defaultAction()
 	{
@@ -48,8 +53,7 @@ public class ApplicationCtrl extends FrameworkCtrl
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-			// throw new EnrichableException("", "", "", e);
+			throw new EnrichableException(CLASS_NAME_PATH, METHOD_NAME, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "", e);
 		}
 	}
 }
