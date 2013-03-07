@@ -45,7 +45,7 @@
 						<item xsi:type="DisplayField" id="UserId" submitValue="true">
 							<fieldLabel stringCD="User ID"/>
 						</item>
-						<item xsi:type="TextField" id="UserName" allowBlank="false" maxLength="50">
+						<item xsi:type="TextField" id="UserName" allowBlank="false" maxLength="50" msgTarget="under">
 							<fieldLabel stringCD="Username"/>
 						</item>
 						<item xsi:type="TextField" id="FirstName" allowBlank="false" maxLength="50">
