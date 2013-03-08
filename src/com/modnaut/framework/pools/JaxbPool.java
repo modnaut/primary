@@ -15,6 +15,8 @@ import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.EnrichableException;
 import com.modnaut.framework.properties.application.Applications;
 import com.modnaut.framework.properties.sqlmetadata.SqlMetaData;
 import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
@@ -29,6 +31,9 @@ import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
 public class JaxbPool
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(JaxbPool.class);
+	private static final String CLASS_NAME_PATH = "com.modnaut.framework.pools.JaxbPool";
+	private static final String UNMARSHAL_METHOD = "unmarshal";
+	private static final String MARSHAL_METHOD = "marshal";
 
 	/**
 	 * When coupled with the appropriate KeyedPoolableObjectFactory, GenericKeyedObjectPool provides pooling functionality for keyed objects. A GenericKeyedObjectPool can be viewed as a map of pools, keyed on the (unique) key values provided to the preparePool, addObject or borrowObject methods. Each time a new key value is provided to one of these methods, a new pool is created under the given key to be managed by the containing GenericKeyedObjectPool.
@@ -273,11 +278,8 @@ public class JaxbPool
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-			// throw new EnrichableException("", "", "", e);
+			throw new EnrichableException(CLASS_NAME_PATH, UNMARSHAL_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "" + clazz.getSimpleName(), e);
 		}
-
-		return null;
 	}
 
 	/**
@@ -294,8 +296,8 @@ public class JaxbPool
 		}
 		catch (Exception e)
 		{
+			EnrichableException ex = new EnrichableException(CLASS_NAME_PATH, UNMARSHAL_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.WARNING, "Throwing out marshaller, failed to return back to pool" + clazz.getSimpleName(), e);
 			e.printStackTrace();
-			// throw new EnrichableException("", "", "", e);
 		}
 	}
 
@@ -313,11 +315,8 @@ public class JaxbPool
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-			// throw new EnrichableException("", "", "", e);
+			throw new EnrichableException(CLASS_NAME_PATH, MARSHAL_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "" + clazz.getSimpleName(), e);
 		}
-
-		return null;
 	}
 
 	/**
@@ -334,8 +333,8 @@ public class JaxbPool
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-			// throw new EnrichableException("", "", "", e);
+			EnrichableException ex = new EnrichableException(CLASS_NAME_PATH, MARSHAL_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.WARNING, "Throwing out marshaller, failed to return back to pool" + clazz.getSimpleName(), e);
+			ex.printStackTrace();
 		}
 	}
 
@@ -367,15 +366,12 @@ public class JaxbPool
 			}
 			catch (Exception ex)
 			{
-				ex.printStackTrace();
-				// throw new EnrichableException("", "", "", ex);
+				EnrichableException ee = new EnrichableException(CLASS_NAME_PATH, UNMARSHAL_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "" + "Class: " + clazz.getSimpleName() + " File: " + file.getName(), ex);
+				ee.printStackTrace();
 			}
 
-			e.printStackTrace();
-			// throw new EnrichableException("", "", "", e);
+			throw new EnrichableException(CLASS_NAME_PATH, UNMARSHAL_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "" + clazz.getSimpleName() + " File: " + file.getName(), e);
 		}
-
-		return null;
 	}
 
 	/**
@@ -406,15 +402,12 @@ public class JaxbPool
 			}
 			catch (Exception ex)
 			{
-				ex.printStackTrace();
-				// throw new EnrichableException("", "", "", ex);
+				EnrichableException ee = new EnrichableException(CLASS_NAME_PATH, UNMARSHAL_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "" + clazz.getSimpleName() + " URL: " + url.getPath(), ex);
+				ee.printStackTrace();
 			}
 
-			e.printStackTrace();
-			// throw new EnrichableException("", "", "", e);
+			throw new EnrichableException(CLASS_NAME_PATH, UNMARSHAL_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "" + clazz.getSimpleName() + " URL: " + url.getPath(), e);
 		}
-
-		return null;
 	}
 
 	/**
@@ -441,12 +434,11 @@ public class JaxbPool
 			}
 			catch (Exception ex)
 			{
-				ex.printStackTrace();
-				// throw new EnrichableException("", "", "", ex);
+				EnrichableException ee = new EnrichableException(CLASS_NAME_PATH, MARSHAL_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "", ex);
+				ee.printStackTrace();
 			}
 
-			e.printStackTrace();
-			// throw new EnrichableException("", "", "", e);
+			throw new EnrichableException(CLASS_NAME_PATH, MARSHAL_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "", e);
 		}
 	}
 }

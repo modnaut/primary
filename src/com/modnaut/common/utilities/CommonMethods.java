@@ -34,10 +34,17 @@ public class CommonMethods
 		System.out.println(valueList);
 	}
 
-	public static String encryptString(String password, int interation_number, String passwordSalt) throws NoSuchAlgorithmException, UnsupportedEncodingException, IOException
+	public static String encryptString(String password, int interation_number, String passwordSalt)
 	{
-		// The word 'password' will equal 'kLxNpX+0w9lWcamR3wSZ8O/828A=' after it has been salted and hashed
-		return byteToBase64(getHash(interation_number, password, base64ToByte(passwordSalt)));
+		try
+		{
+			// The word 'password' will equal 'kLxNpX+0w9lWcamR3wSZ8O/828A=' after it has been salted and hashed
+			return byteToBase64(getHash(interation_number, password, base64ToByte(passwordSalt)));
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
 	}
 
 	/**

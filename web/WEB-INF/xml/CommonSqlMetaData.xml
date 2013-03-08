@@ -30,7 +30,7 @@
 		<statement value="INSERT INTO Common.Session(SessionId, SessionObject, CreatedDate) VALUES (?, ?, CURRENT_TIMESTAMP())"/>
 		<parameters>
 			<parameter id="1" name="SessionId" type="INT"/>
-			<parameter id="2" name="SessionObject" type="OBJECT"/>
+			<parameter id="2" name="SessionObject" type="BLOB"/>
 		</parameters>
 	</query>
 	<query name="GET_SESSION" action="SELECT" type="QUERY">

@@ -17,6 +17,8 @@ import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.EnrichableException;
 import com.modnaut.framework.servlet.ApplicationServlet;
 
 /**
@@ -29,8 +31,14 @@ import com.modnaut.framework.servlet.ApplicationServlet;
 
 public class XslPool
 {
+	private static final String CLASS_NAME_PATH = "com.modnaut.framework.pools.XslPool";
+	private static final String MARSHAL_TRANSFORM_METHOD = "marshalAndTransform";
+	private static final String TRANSFORM_METHOD = "marshal";
+
 	private static Logger LOGGER = LoggerFactory.getLogger(XslPool.class);
 	private static final String WEB_DIRECTORY = "WEB-INF/xsl/";
+	private static final String VIEWMETADATA_XSL = "ViewMetaData.xsl";
+	private static final String APPLICATION_XSL = "Application.xsl";
 
 	/**
 	 * When coupled with the appropriate KeyedPoolableObjectFactory, GenericKeyedObjectPool provides pooling functionality for keyed objects. A GenericKeyedObjectPool can be viewed as a map of pools, keyed on the (unique) key values provided to the preparePool, addObject or borrowObject methods. Each time a new key value is provided to one of these methods, a new pool is created under the given key to be managed by the containing GenericKeyedObjectPool.
@@ -46,18 +54,20 @@ public class XslPool
 		{
 			try
 			{
-				put("ViewMetaData.xsl", new XslPoolKey("ViewMetaData.xsl"));
+				put(VIEWMETADATA_XSL, new XslPoolKey(VIEWMETADATA_XSL));
 			}
 			catch (Exception e)
 			{
+				e.printStackTrace();
 			}
 
 			try
 			{
-				put("Application.xsl", new XslPoolKey("Application.xsl"));
+				put(APPLICATION_XSL, new XslPoolKey(APPLICATION_XSL));
 			}
 			catch (Exception e)
 			{
+				e.printStackTrace();
 			}
 		}
 	};
@@ -231,12 +241,10 @@ public class XslPool
 			}
 			catch (Exception ex)
 			{
-				ex.printStackTrace();
-				// throw new EnrichableException("", "", "", e);
+				throw new EnrichableException(CLASS_NAME_PATH, TRANSFORM_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "", ex);
 			}
 
-			e.printStackTrace();
-			// throw new EnrichableException("", "", "", e);
+			throw new EnrichableException(CLASS_NAME_PATH, TRANSFORM_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "", e);
 		}
 	}
 
@@ -263,8 +271,7 @@ public class XslPool
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-			// throw new EnrichableException("", "", "", e);
+			throw new EnrichableException(CLASS_NAME_PATH, MARSHAL_TRANSFORM_METHOD, ICommonConstants.POOL_LOG, ICommonConstants.FATAL, "", e);
 		}
 	}
 }
