@@ -13,10 +13,29 @@
 	<xsl:template match="viewMetaData">
 		<xsl:if test="items">
 			{
+				<xsl:call-template name="RootNotifications"/>
 				<xsl:apply-templates select="items"/>
 				"success": true
 			}
 		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="RootNotifications">
+		"notifications": [
+			<xsl:for-each select="notification">
+				<xsl:apply-templates select="."/>
+				<xsl:call-template name="comma-delimit"/>
+			</xsl:for-each>
+		],
+	</xsl:template>
+	
+	<xsl:template match="notification">
+		{
+			<xsl:value-of select="mn:attribute(., 'hideAfterMs', ',')"/>
+			<xsl:value-of select="mn:childString(., 'text', ',')"/>
+			<xsl:value-of select="mn:attribute(., 'type', ',')"/>
+			"xtype": "notificationBar"
+		}
 	</xsl:template>
 	
 	<xsl:template match="items">

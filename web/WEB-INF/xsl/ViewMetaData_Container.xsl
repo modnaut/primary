@@ -48,6 +48,17 @@
 		</xsl:for-each>
 	</xsl:template>
 	
+	<xsl:template name="PanelNotifications">
+		<xsl:if test="notification">
+			"dockedItems": [
+				<xsl:for-each select="notification">
+					<xsl:apply-templates select="."/>
+					<xsl:call-template name="comma-delimit"/>
+				</xsl:for-each>
+			],
+		</xsl:if>
+	</xsl:template>
+	
 	<xsl:template name="Panel">
 		<xsl:call-template name="Container"/>
 		<xsl:value-of select="mn:attribute(., 'animCollapse', ',')"/>
@@ -65,6 +76,7 @@
 		<xsl:value-of select="mn:childString(., 'title', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'titleAlign', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'titleCollapse', ',')"/>
+		<xsl:call-template name="PanelNotifications"/>
 		<xsl:call-template name="Toolbar"/>
 	</xsl:template>
 	

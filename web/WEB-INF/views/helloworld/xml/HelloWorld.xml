@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
+	<notification type="success">
+		<text stringCD="Danny says hi"/>
+	</notification>
 	<items>
 		<item xsi:type="Panel">
 			<items>
 				<item xsi:type="GridPanel" region="center" id="users" flex="1">
 					<listener event="selectionchange" action="submit" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userSelected" itemsToUpdate="editUserPanel"/>
+					<notification type="error">
+						<text stringCD="error message"/>
+					</notification>
+					<notification type="warning">
+						<text stringCD="warning message"/>
+					</notification>
 					<title stringCD="Users"/>
 					<column dataIndex="UserId" flex="1">
 						<text stringCD="User ID"/>

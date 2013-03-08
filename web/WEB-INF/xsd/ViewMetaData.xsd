@@ -4,10 +4,13 @@
 	<xs:import namespace="String" schemaLocation="String.xsd"/>
 	<xs:element name="viewMetaData">
 		<xs:complexType>
-			<xs:choice>
-				<xs:element name="viewport" type="Viewport"/>
-				<xs:element name="items" type="ItemSet"/>
-			</xs:choice>
+			<xs:sequence>
+				<xs:element name="notification" type="Notification" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:choice>
+					<xs:element name="viewport" type="Viewport"/>
+					<xs:element name="items" type="ItemSet"/>
+				</xs:choice>
+			</xs:sequence>		
 		</xs:complexType>
 	</xs:element>
 	<xs:complexType name="Viewport">
@@ -19,6 +22,20 @@
 		<xs:sequence>
 			<xs:element name="item" type="Item" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="NotificationType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="error"/>
+			<xs:enumeration value="success"/>
+			<xs:enumeration value="warning"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Notification">
+		<xs:sequence>
+			<xs:element name="text" type="str:String" minOccurs="1" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="hideAfterMs" type="xs:int" use="optional"/>
+		<xs:attribute name="type" type="NotificationType" use="required"/>
 	</xs:complexType>
 	<xs:simpleType name="HideMode">
 		<xs:restriction base="xs:string">
@@ -246,6 +263,7 @@
 			<xs:extension base="Container">
 				<xs:sequence>
 					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="notification" type="Notification" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="toolbar" type="Toolbar" minOccurs="0" maxOccurs="2"/>
 				</xs:sequence>

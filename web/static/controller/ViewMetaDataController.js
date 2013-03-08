@@ -106,6 +106,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			console.log('success', arguments);
 			var items = response.items;
 			var html = response.html;
+			var notifications = response.notifications;
 			var sessionId = response.sessionId;
 			
 			if(sessionId) {
@@ -134,6 +135,9 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				} else {
 					container.update(html);
 				}
+			}
+			if(notifications && notifications.length) {
+				container.addDocked(notifications);
 			}
 			Ext.resumeLayouts(true);
 			

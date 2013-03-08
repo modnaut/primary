@@ -3,7 +3,7 @@ Ext.Loader.setPath({
 	'Ext.ux': 'static/extjs/ux'
 });
 
-Ext.require(['Ext.ux.layout.Center', 'Ext.ux.data.PagingMemoryProxy']);
+Ext.require(['Ext.ux.layout.Center', 'Ext.ux.data.PagingMemoryProxy', 'Modnaut.view.NotificationBar']);
 
 
 //Avoid 'console' errors in browsers that lack a console.
