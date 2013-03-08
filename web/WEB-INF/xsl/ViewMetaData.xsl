@@ -71,7 +71,7 @@
 	
 	<xsl:template name="Listeners">
 		<xsl:if test="listener">
-			listeners: {
+			"listeners": {
 				<xsl:for-each select="listener">
 					<xsl:call-template name="Listener"/>
 					<xsl:call-template name="comma-delimit"/>

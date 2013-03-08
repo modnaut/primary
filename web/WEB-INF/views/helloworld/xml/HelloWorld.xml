@@ -9,9 +9,9 @@
 				<item xsi:type="GridPanel" region="center" id="users" flex="1">
 					<listener event="selectionchange" action="submit" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userSelected" itemsToUpdate="editUserPanel"/>
 					<notification type="error">
-						<text stringCD="error message"/>
+						<text stringCD="this is a very long error message that should wrap to the second line of the toolbar if it gets long enough which shold be after another sentence or two. I hope it gets long enough to see if it wraps"/>
 					</notification>
-					<notification type="warning">
+					<notification type="warning" hideAfterMs="1500">
 						<text stringCD="warning message"/>
 					</notification>
 					<title stringCD="Users"/>

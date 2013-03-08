@@ -13,7 +13,7 @@ Ext.define('Modnaut.view.NotificationBar', {
 		}, {
 			text: 'X',
 			scope: this,
-			handler: this.hideBar
+			handler: this.destroyMe
 		}];
 		
 		switch(this.type) {
@@ -29,29 +29,42 @@ Ext.define('Modnaut.view.NotificationBar', {
 		}
 		
 		this.callParent(arguments);
-		this.messageItem = this.child('#message');
 	},
-	showBar: function(message) {
-		this.messageItem.setText(message);
-		this.show();
-		this.getEl().setOpacity(1, {
-			duration: 1000
+	afterRender: function() {
+		var bar = this;
+		bar.getEl().animate({
+			duration: 500,
+			keyframes: {
+				0: {
+					opacity: 0.1
+				},
+				100: {
+					opacity: 1
+				}
+			},
+			listeners: {
+				afteranimate: function() {
+					if(bar.hideAfterMs) {
+						Ext.Function.defer(function() {
+							bar.destroyMe();
+						}, bar.hideAfterMs);
+					}
+				}
+			}
 		});
-	},
-	hideBar: function() {
-		if(this.rendered && !this.isHidden()) {
-			Ext.suspendLayouts();
-			this.hide();
-			this.getEl().setOpacity(0.25, false);
-			this.removeCls('notificationBar-error notificationBar-success notificationBar-warning');
-			this.messageItem.update('');
-			Ext.resumeLayouts(true);
-		}
-	},
-	beforeRender: function() {
 		this.callParent(arguments);
-		if(!this.text) {
-			this.hide();
+	},
+	destroyMe: function() {
+		var bar = this;
+		if(bar.rendered && !bar.isHidden()) {
+			bar.getEl().fadeOut({
+				duration: 500,
+				listeners: {
+					afteranimate: function() {
+						bar.ownerCt.removeDocked(bar, true);
+					}
+				}
+			});
 		}
 	},
 	onDestroy: function() {

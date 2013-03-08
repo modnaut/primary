@@ -29,21 +29,22 @@
 		<xsl:for-each select="toolbar">
 			<xsl:choose>
 				<xsl:when test="@position = 'bottom' ">	
-					<xsl:text>bbar</xsl:text>
+					<xsl:text>"bbar"</xsl:text>
 				</xsl:when>
 				<xsl:when test="@position = 'left' ">	
-					<xsl:text>lbar</xsl:text>
+					<xsl:text>"lbar"</xsl:text>
 				</xsl:when>
 				<xsl:when test="@position = 'right' ">	
-					<xsl:text>rbar</xsl:text>
+					<xsl:text>"rbar"</xsl:text>
 				</xsl:when>
 				<xsl:when test="@position = 'top' ">	
-					<xsl:text>tbar</xsl:text>
+					<xsl:text>"tbar"</xsl:text>
 				</xsl:when>
 			</xsl:choose>
 			: {
 				<xsl:value-of select="mn:attribute(., 'vertical', ',')"/>
 				<xsl:call-template name="Container"/>
+				"_d": 0
 			},
 		</xsl:for-each>
 	</xsl:template>
@@ -142,14 +143,15 @@
 	
 	<xsl:template name="Menu">
 		<xsl:for-each select="menu">
-			menu: {
+			"menu": {
 				<xsl:call-template name="Item"/>
 				<xsl:call-template name="Panel"/>
 				<xsl:value-of select="mn:attribute(., 'allowOtherMenus', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'enableKeyNav', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'ignoreParentClicks', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'plain', ',')"/>
-				<xsl:value-of select="mn:attribute(., 'showSeparator', '')"/>
+				<xsl:value-of select="mn:attribute(., 'showSeparator', ',')"/>
+				"_d": 0
 			},
 		</xsl:for-each>
 	</xsl:template>
@@ -174,7 +176,7 @@
 	
 	<xsl:template match="item[@xsi:type='MenuItem']">
 		<xsl:call-template name="MenuItem"/>
-		xtype: "menuitem"
+		"xtype": "menuitem"
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='MenuCheckItem']">
@@ -182,11 +184,11 @@
 		<xsl:value-of select="mn:attribute(., 'checkChangeDisabled', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'checked', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'group', ',')"/>
-		xtype: "menucheckitem"
+		"xtype": "menucheckitem"
 	</xsl:template>
 	
 		<xsl:template match="item[@xsi:type='MenuSeparatorItem']">
 		<xsl:call-template name="MenuItem"/>
-		xtype: "menuseparator"
+		"xtype": "menuseparator"
 	</xsl:template>
 </xsl:stylesheet>
