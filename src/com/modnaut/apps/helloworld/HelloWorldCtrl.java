@@ -10,14 +10,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.modnaut.common.controllers.ScreenCtrl;
+import com.modnaut.common.controllers.ExtJsScreenCtrl;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.CommonMethods;
 import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.common.utilities.VmdMethods;
+import com.modnaut.framework.properties.viewmetadata.NotificationType;
 import com.modnaut.framework.properties.viewmetadata.TextField;
 
-public class HelloWorldCtrl extends ScreenCtrl
+public class HelloWorldCtrl extends ExtJsScreenCtrl
 {
 	private static final String XML_FILE = "HelloWorld.xml";
 	private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldCtrl.class);
@@ -45,23 +46,20 @@ public class HelloWorldCtrl extends ScreenCtrl
 
 	public void defaultAction()
 	{
-		try
-		{
-			// In order to utilize a different configuration than the default you must place the web/WEB-INF/lib/resource file in the build/classes folder (which is not versioned)
-			// This is not very elegant, but it works for now.
-			// LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-			// StatusPrinter.print(lc);
+		// In order to utilize a different configuration than the default you must place the web/WEB-INF/lib/resource file in the build/classes folder (which is not versioned)
+		// This is not very elegant, but it works for now.
+		// LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+		// StatusPrinter.print(lc);
 
-			// NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
-			// ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
-			// populateData("users", data);
-			populateUserTypesCombo();
-			marshall(viewMetaData);
-		}
-		catch (Exception e)
-		{
-			LOGGER.error("This a Logback ERROR meesage.  There was an error in default action of this class.", e);
-		}
+		// NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
+		// ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
+		// populateData("users", data);
+		populateUserTypesCombo();
+
+		addNotification("danny was here", NotificationType.SUCCESS);
+		addNotification("Danny was here too", NotificationType.ERROR, "users");
+		addNotification("added to wrong panelid", NotificationType.ERROR, "userasgsagass");
+		marshall(viewMetaData);
 	}
 
 	public void getUsers() throws Exception

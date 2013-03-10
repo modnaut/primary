@@ -7,8 +7,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.VmdMethods;
 import com.modnaut.framework.properties.viewmetadata.AbstractField;
+import com.modnaut.framework.properties.viewmetadata.NotificationType;
 
 /**
  * 
@@ -18,16 +20,17 @@ import com.modnaut.framework.properties.viewmetadata.AbstractField;
  *       Used by all java classes that produce ExtJS-based screens. Takes request sent in from servlet, performs unmarshalling which allows the injection of data, searching on sub objects, etc and then marshalling which puts all the pieces together and sets the response to the final output result.
  * 
  */
-public class ScreenCtrl extends FrameworkCtrl
+public class ExtJsScreenCtrl extends FrameworkCtrl
 {
 	/**
 	 * 
 	 * @param request
 	 * @param response
 	 */
-	public ScreenCtrl(HttpServletRequest request, HttpServletResponse response)
+	public ExtJsScreenCtrl(HttpServletRequest request, HttpServletResponse response)
 	{
 		super(request, response);
+		response.setContentType(ICommonConstants.CONTENT_TYPE_JSON);
 	}
 
 	/**
@@ -64,6 +67,16 @@ public class ScreenCtrl extends FrameworkCtrl
 	protected void deleteElement(String id)
 	{
 		VmdMethods.deleteElement(viewMetaData, jxPathContext, id);
+	}
+
+	protected void addNotification(String notificationStringCd, NotificationType type, String panelId)
+	{
+		VmdMethods.addNotification(viewMetaData, jxPathContext, notificationStringCd, type, panelId);
+	}
+
+	protected void addNotification(String notificationStringCd, NotificationType type)
+	{
+		VmdMethods.addNotification(viewMetaData, jxPathContext, notificationStringCd, type);
 	}
 
 	protected boolean validateFieldIsNotEmpty(String fieldId)

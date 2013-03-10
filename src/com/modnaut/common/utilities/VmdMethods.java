@@ -3,6 +3,7 @@ package com.modnaut.common.utilities;
 import java.util.List;
 
 import org.apache.commons.jxpath.JXPathContext;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,9 @@ import com.modnaut.framework.properties.viewmetadata.ComboBox;
 import com.modnaut.framework.properties.viewmetadata.DateField;
 import com.modnaut.framework.properties.viewmetadata.DisplayField;
 import com.modnaut.framework.properties.viewmetadata.GridPanel;
+import com.modnaut.framework.properties.viewmetadata.Notification;
+import com.modnaut.framework.properties.viewmetadata.NotificationType;
+import com.modnaut.framework.properties.viewmetadata.Panel;
 import com.modnaut.framework.properties.viewmetadata.Record;
 import com.modnaut.framework.properties.viewmetadata.RecordField;
 import com.modnaut.framework.properties.viewmetadata.RecordSet;
@@ -26,6 +30,7 @@ import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
 
 public class VmdMethods
 {
+	private static final String CLASS_NAME = VmdMethods.class.getCanonicalName();
 	private static Logger LOGGER = LoggerFactory.getLogger(VmdMethods.class);
 	private static String formatter = "//*[@id='%s']";
 
@@ -268,6 +273,38 @@ public class VmdMethods
 		element.setValue(data);
 	}
 
+	public static void addNotification(ViewMetaData viewMetaData, JXPathContext context, String notificationStringCd, NotificationType type)
+	{
+		addNotification(viewMetaData, context, notificationStringCd, type, null);
+	}
+
+	public static void addNotification(ViewMetaData viewMetaData, JXPathContext context, String notificationStringCd, NotificationType type, String panelId)
+	{
+		Notification notifcation = new Notification();
+		notifcation.setType(type);
+		notifcation.setText(getStringObject(notificationStringCd));
+
+		if (!StringUtils.isEmpty(panelId))
+		{
+			Panel panel = getPanelElement(viewMetaData, context, panelId);
+			if (panel == null)
+			{
+				viewMetaData.getNotification().add(notifcation);
+				LOGGER.warn("Attempted to add notification to panel that doesn't exist");
+				// TOOD: Throw exception or just log it? We handle internally by adding to root of page, so is it an exception?
+				// throw new EnrichableException(CLASS_NAME, "addNotification", ICommonConstants.POOL_LOG, ICommonConstants.WARNING, "Attempted to add notification to panel that doesn't exist");
+			}
+			else
+			{
+				panel.getNotification().add(notifcation);
+			}
+		}
+		else
+		{
+			viewMetaData.getNotification().add(notifcation);
+		}
+	}
+
 	/**
 	 * @param viewMetaData
 	 * @param context
@@ -344,6 +381,11 @@ public class VmdMethods
 	public static ComboBox getComboBoxElement(ViewMetaData viewMetaData, JXPathContext context, String id)
 	{
 		return (ComboBox) getSingleById(viewMetaData, context, id);
+	}
+
+	public static Panel getPanelElement(ViewMetaData viewMetaData, JXPathContext context, String id)
+	{
+		return (Panel) getSingleById(viewMetaData, context, id);
 	}
 
 	public static GridPanel getGridPanelElement(ViewMetaData viewMetaData, JXPathContext context, String id)

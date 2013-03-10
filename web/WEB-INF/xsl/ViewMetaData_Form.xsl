@@ -36,7 +36,14 @@
 		<xsl:value-of select="mn:attribute(., 'labelPad', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'labelSeparator', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'labelWidth', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'msgTarget', ',')"/>
+		<xsl:choose>
+			<xsl:when test="string(@msgTarget) = '' ">
+				"msgTarget": "under",
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="mn:attribute(., 'msgTarget', ',')"/>
+			</xsl:otherwise>
+		</xsl:choose>
 		<xsl:value-of select="mn:attribute(., 'preventMark', ',')"/>
 	</xsl:template>
 	

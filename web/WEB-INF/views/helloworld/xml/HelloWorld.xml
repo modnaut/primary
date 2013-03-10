@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
-	<notification type="success">
-		<text stringCD="Danny says hi"/>
-	</notification>
 	<items>
 		<item xsi:type="Panel">
 			<items>
 				<item xsi:type="GridPanel" region="center" id="users" flex="1">
 					<listener event="selectionchange" action="submit" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userSelected" itemsToUpdate="editUserPanel"/>
-					<notification type="error">
-						<text stringCD="this is a very long error message that should wrap to the second line of the toolbar if it gets long enough which shold be after another sentence or two. I hope it gets long enough to see if it wraps"/>
-					</notification>
-					<notification type="warning" hideAfterMs="1500">
-						<text stringCD="warning message"/>
-					</notification>
 					<title stringCD="Users"/>
 					<column dataIndex="UserId" flex="1">
 						<text stringCD="User ID"/>
@@ -54,7 +45,7 @@
 						<item xsi:type="DisplayField" id="UserId" submitValue="true">
 							<fieldLabel stringCD="User ID"/>
 						</item>
-						<item xsi:type="TextField" id="UserName" allowBlank="false" maxLength="50" msgTarget="under">
+						<item xsi:type="TextField" id="UserName" allowBlank="false" maxLength="50">
 							<fieldLabel stringCD="Username"/>
 						</item>
 						<item xsi:type="TextField" id="FirstName" allowBlank="false" maxLength="50">

@@ -102,7 +102,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			parameters.itemsToUpdate = itemsToUpdate.join(',');
 		}
 		
-		var success =  function(response) {
+		var success =  function(response, action) {
 			console.log('success', arguments);
 			var items = response.items;
 			var html = response.html;
@@ -144,7 +144,8 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			eval(response.script);
 		};
 		
-		var failure = function(text) {
+		var failure = function(text, action) {
+			console.log('failure', arguments)
 			if(options.itemsToUpdate) {
 				for(itemId in componentsToUpdate) {
 					var oldComponent = componentsToUpdate[itemId];
@@ -218,10 +219,10 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			        }
 				},
 				success: function(form, action) {
-					success(action.result);
+					success(action.result, action);
 				},
 				failure: function(form, action) {
-					failure(action.result);
+					failure(action.result, action);
 				}
 			});
 		} else {

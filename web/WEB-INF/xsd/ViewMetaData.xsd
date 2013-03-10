@@ -10,7 +10,7 @@
 					<xs:element name="viewport" type="Viewport"/>
 					<xs:element name="items" type="ItemSet"/>
 				</xs:choice>
-			</xs:sequence>		
+			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 	<xs:complexType name="Viewport">
@@ -542,7 +542,7 @@
 		<xs:attribute name="labelPad" type="xs:int" default="5"/>
 		<xs:attribute name="labelSeparator" type="xs:string" default=":"/>
 		<xs:attribute name="labelWidth" type="xs:int" default="100"/>
-		<xs:attribute name="msgTarget" type="MsgTarget" default="qtip"/>
+		<xs:attribute name="msgTarget" type="MsgTarget" default="under"/>
 		<xs:attribute name="preventMark" type="xs:boolean" default="false"/>
 	</xs:attributeGroup>
 	<xs:attributeGroup name="Field">
