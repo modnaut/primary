@@ -26,11 +26,12 @@
 			<parameter id="2" name="Password" type="VARCHAR"/>
 		</parameters>
 	</query>
-	<query name="INSERT_SESSION" action="ACTION" type="QUERY">
-		<statement value="INSERT INTO Common.Session(SessionId, SessionObject, CreatedDate) VALUES (?, ?, CURRENT_TIMESTAMP())"/>
+	<query name="INSERT_UPDATE_SESSION" action="ACTION" type="SP">
+		<statement value="Common.up_InsertUpdateSession(?, ?, ?)"/>
 		<parameters>
-			<parameter id="1" name="SessionId" type="INT"/>
-			<parameter id="2" name="SessionObject" type="BLOB"/>
+			<parameter id="1" name="UserId" type="INT"/>
+			<parameter id="2" name="SessionId" type="INT"/>
+			<parameter id="3" name="SessionObject" type="BLOB"/>
 		</parameters>
 	</query>
 	<query name="GET_SESSION" action="SELECT" type="QUERY">

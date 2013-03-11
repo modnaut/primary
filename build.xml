@@ -82,6 +82,7 @@
 				<transaction src="sql/GetUser.sql"/>
 				<transaction src="sql/GetUserSession.sql"/>
 				<transaction src="sql/UpdateUser.sql"/>
+				<transaction src="sql/up_InsertUpdateSession.sql"/>
 			</sql>
 	</target>
 		

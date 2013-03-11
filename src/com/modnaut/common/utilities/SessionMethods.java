@@ -18,12 +18,13 @@ public class SessionMethods
 	private static final Logger logger = LoggerFactory.getLogger(SessionMethods.class);
 
 	// parms
+	private static final String USER_ID = "UserId";
 	private static final String SESSION_ID = "SessionId";
 	private static final String SESSION_OBJECT = "SessionObject";
 
 	// SQL QUERIES
 	private static final String GET_SESSION = "GET_SESSION";
-	private static final String INSERT_SESSION = "INSERT_SESSION";
+	private static final String INSERT_UPDATE_SESSION = "INSERT_UPDATE_SESSION";
 
 	public static void main(String[] args)
 	{
@@ -66,10 +67,11 @@ public class SessionMethods
 	public static long saveSession(WebSession session)
 	{
 		HashMap<String, Object> parms = new HashMap<String, Object>();
+		parms.put(USER_ID, session.getUserId());
 		parms.put(SESSION_ID, session.getSessionId());
 		parms.put(SESSION_OBJECT, session);
 
-		long row_count = DatabaseMethods.updateData(INSERT_SESSION, ICommonConstants.COMMON, parms);
+		long row_count = DatabaseMethods.updateData(INSERT_UPDATE_SESSION, ICommonConstants.COMMON, parms);
 
 		return row_count;
 	}
