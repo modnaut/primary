@@ -82,7 +82,7 @@
 								<menu>
 									<items>
 										<item xsi:type="MenuItem">
-											<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userTypeChanged" itemsToUpdate="editUserPanel"/>
+											<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="defaultAction" itemsToUpdate="editUserPanel"/>
 											<text stringCD="menu item 1"/>
 										</item>
 									</items>

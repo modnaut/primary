@@ -13,7 +13,7 @@ Ext.define('Modnaut.view.NotificationBar', {
 		}, {
 			text: 'X',
 			scope: this,
-			handler: this.destroyMe
+			handler: this.destroyBar
 		}];
 		
 		switch(this.type) {
@@ -46,7 +46,7 @@ Ext.define('Modnaut.view.NotificationBar', {
 				afteranimate: function() {
 					if(bar.hideAfterMs) {
 						Ext.Function.defer(function() {
-							bar.destroyMe();
+							bar.destroyBar();
 						}, bar.hideAfterMs);
 					}
 				}
@@ -54,17 +54,22 @@ Ext.define('Modnaut.view.NotificationBar', {
 		});
 		this.callParent(arguments);
 	},
-	destroyMe: function() {
+	destroyBar: function(immediate) {
 		var bar = this;
-		if(bar.rendered && !bar.isHidden()) {
+		
+		var removeBar = function() {
+			bar.ownerCt.removeDocked(bar, true);
+		};
+		
+		if(immediate !== true && bar.rendered && !bar.isHidden()) {
 			bar.getEl().fadeOut({
 				duration: 500,
 				listeners: {
-					afteranimate: function() {
-						bar.ownerCt.removeDocked(bar, true);
-					}
+					afteranimate: removeBar
 				}
 			});
+		} else {
+			removeBar();
 		}
 	},
 	onDestroy: function() {

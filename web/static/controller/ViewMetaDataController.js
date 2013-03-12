@@ -52,7 +52,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		var ownerCt = oldComponent.ownerCt;
 		if(ownerCt) {
 			var form = ownerCt.form;
-			var componentIndex = ownerCt.items.indexOf(oldComponent)
+			var componentIndex = ownerCt.items.indexOf(oldComponent);
 			var resetActiveTab = false;
 			if(ownerCt.is('tabpanel') && ownerCt.getActiveTab() == oldComponent)
 				resetActiveTab = true;
@@ -113,9 +113,14 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				container.sessionId = sessionId;
 			}
 			
+			//remove old notifications from root
+			Ext.each(container.query('>notificationBar'), function(notificationBar) {
+				notificationBar.destroyBar(true);
+			});
+			
 			Ext.suspendLayouts();
 			if(options.itemsToUpdate) {
-				for(itemId in componentsToUpdate) {
+				for(var itemId in componentsToUpdate) {
 					var oldComponent = componentsToUpdate[itemId];
 					controller.safeSetLoading(oldComponent, false);
 					if(items) {
@@ -136,6 +141,8 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 					container.update(html);
 				}
 			}
+			
+			//add new notifications to root
 			if(notifications && notifications.length) {
 				container.addDocked(notifications);
 			}
@@ -145,9 +152,9 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		};
 		
 		var failure = function(text, action) {
-			console.log('failure', arguments)
+			console.log('failure', arguments);
 			if(options.itemsToUpdate) {
-				for(itemId in componentsToUpdate) {
+				for(var itemId in componentsToUpdate) {
 					var oldComponent = componentsToUpdate[itemId];
 					controller.safeSetLoading(oldComponent, false);
 					oldComponent.update(text);
@@ -162,7 +169,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		
 		if(options.loadMask !== false) {
 			if(options.itemsToUpdate) {
-				for(itemId in componentsToUpdate) {
+				for(var itemId in componentsToUpdate) {
 					var component = componentsToUpdate[itemId];
 					controller.safeSetLoading(component, true);
 				}
