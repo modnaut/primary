@@ -46,11 +46,6 @@ public class HelloWorldCtrl extends ExtJsScreenCtrl
 
 	public void defaultAction()
 	{
-		// In order to utilize a different configuration than the default you must place the web/WEB-INF/lib/resource file in the build/classes folder (which is not versioned)
-		// This is not very elegant, but it works for now.
-		// LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
-		// StatusPrinter.print(lc);
-
 		// NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
 		// ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
 		// populateData("users", data);
