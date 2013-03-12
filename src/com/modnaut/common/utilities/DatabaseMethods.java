@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.framework.database.JdbcConnection;
 import com.modnaut.framework.database.SqlQueries;
@@ -28,7 +31,8 @@ import com.modnaut.framework.properties.sqlmetadata.StatementType;
  */
 public class DatabaseMethods
 {
-	private static final String CLASS_NAME_PATH = "com.modnaut.common.utilities.DatabaseMethods";
+	private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseMethods.class);
+	private static final String CLASS_NAME_PATH = DatabaseMethods.class.getCanonicalName();
 	private static final String EXECUTE_QUERY_METHOD = "executeQuery";
 
 	private static final String SP = "SP";

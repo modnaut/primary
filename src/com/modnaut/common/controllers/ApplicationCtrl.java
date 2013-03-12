@@ -22,7 +22,7 @@ import com.modnaut.framework.servlet.ApplicationServlet;
 public class ApplicationCtrl extends FrameworkCtrl
 {
 	// exception handling
-	private static final String CLASS_NAME_PATH = "com.modnaut.common.controllers";
+	private static final String CLASS_NAME_PATH = FrameworkCtrl.class.getCanonicalName();
 	private static final String METHOD_NAME = "defaultAction";
 
 	private static final String APPLICATION_ID = "applicationId";

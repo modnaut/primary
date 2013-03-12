@@ -31,7 +31,7 @@ import com.modnaut.framework.servlet.ApplicationServlet;
 
 public class XslPool
 {
-	private static final String CLASS_NAME_PATH = "com.modnaut.framework.pools.XslPool";
+	private static final String CLASS_NAME_PATH = XslPool.class.getCanonicalName();
 	private static final String MARSHAL_TRANSFORM_METHOD = "marshalAndTransform";
 	private static final String TRANSFORM_METHOD = "marshal";
 
@@ -77,7 +77,7 @@ public class XslPool
 	 */
 	private static class XslPoolKey
 	{
-		private String xslFileName;
+		private final String xslFileName;
 
 		/**
 		 * Takes in a xslFileName parameter and assigns it to the variable xslFileName contained within this static class.

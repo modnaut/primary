@@ -22,7 +22,7 @@ import com.modnaut.framework.properties.sqlmetadata.SqlMetaData;
 public class SqlQueries
 {
 	// exception handling
-	private static final String CLASS_NAME_PATH = "com.modnaut.framework.database.SqlQueries";
+	private static final String CLASS_NAME_PATH = SqlQueries.class.getCanonicalName();
 	private static final String METHOD_NAME = "getQuery";
 	private static final String QUERY_ERROR_MESSAGE = "Invalid query name. Please check spelling and sql meta data file being used.";
 	private static final String FILE_ERROR_MESSAGE = "Invalid sql metadata file. Please check spelling or make sure file exists.";

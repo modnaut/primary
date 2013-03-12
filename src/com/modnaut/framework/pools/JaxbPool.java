@@ -31,7 +31,7 @@ import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
 public class JaxbPool
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(JaxbPool.class);
-	private static final String CLASS_NAME_PATH = "com.modnaut.framework.pools.JaxbPool";
+	private static final String CLASS_NAME_PATH = JaxbPool.class.getCanonicalName();
 	private static final String UNMARSHAL_METHOD = "unmarshal";
 	private static final String MARSHAL_METHOD = "marshal";
 
@@ -81,7 +81,7 @@ public class JaxbPool
 	private static class JaxbPoolKey
 	{
 
-		private Class clazz;
+		private final Class clazz;
 
 		/**
 		 * Takes in a clazz parameter and assigns it to the variable clazz contained within this static class.
