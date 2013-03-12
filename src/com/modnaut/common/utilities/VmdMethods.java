@@ -43,20 +43,6 @@ public class VmdMethods
 
 	/**
 	 * @param viewMetaData
-	 * @param id
-	 * @return
-	 */
-	public static List getMultipleById(ViewMetaData viewMetaData, String id)
-	{
-		long start = System.currentTimeMillis();
-		JXPathContext context = JXPathContext.newContext(viewMetaData);
-		long end = System.currentTimeMillis();
-		LOGGER.info("context creation took " + (end - start));
-		return getMultipleById(viewMetaData, context, id);
-	}
-
-	/**
-	 * @param viewMetaData
 	 * @param context
 	 * @param id
 	 * @return
@@ -72,20 +58,6 @@ public class VmdMethods
 
 	/**
 	 * @param viewMetaData
-	 * @param id
-	 * @return
-	 */
-	public static Object getSingleById(ViewMetaData viewMetaData, String id)
-	{
-		long start = System.currentTimeMillis();
-		JXPathContext context = JXPathContext.newContext(viewMetaData);
-		long end = System.currentTimeMillis();
-		LOGGER.info("context creation took " + (end - start));
-		return getSingleById(viewMetaData, context, id);
-	}
-
-	/**
-	 * @param viewMetaData
 	 * @param context
 	 * @param id
 	 * @return
@@ -97,18 +69,6 @@ public class VmdMethods
 		long end = System.currentTimeMillis();
 		LOGGER.info("getSingleById(" + id + ") took " + (end - start));
 		return object;
-	}
-
-	/**
-	 * @param viewMetaData
-	 * @param id
-	 * @param data
-	 * @return
-	 */
-	public static boolean populateData(ViewMetaData viewMetaData, String id, List data)
-	{
-		JXPathContext context = JXPathContext.newContext(viewMetaData);
-		return populateData(viewMetaData, context, id, data);
 	}
 
 	/**
