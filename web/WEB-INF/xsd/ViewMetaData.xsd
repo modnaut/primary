@@ -1055,4 +1055,194 @@
 			<xs:extension base="MemoryProxy"/>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="Chart">
+		<xs:complexContent>
+			<xs:extension base="Item">
+				<xs:sequence>
+					<xs:element name="axis" type="AbstractAxis" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="background" type="ChartBackground" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="legend" type="ChartLegend" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="series" type="AbstractSeries" minOccurs="1" maxOccurs="unbounded"/>
+					<xs:choice>
+						<xs:element name="store" type="AbstractStore" minOccurs="1" maxOccurs="1"/>
+						<xs:element name="data" type="RecordSet" minOccurs="1" maxOccurs="1"/>
+					</xs:choice>
+				</xs:sequence>
+				<xs:attribute name="animate" type="xs:boolean" default="false"/>
+				<xs:attribute name="insetPadding" type="xs:int" default="10"/>
+				<xs:attribute name="theme" type="xs:string" default="Base"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="AxisPosition">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="bottom"/>
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="right"/>
+			<xs:enumeration value="top"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="AbstractAxis" abstract="true">
+		<xs:sequence>
+			<xs:element name="field" type="Field" minOccurs="0" maxOccurs="unbounded"/>
+			<!--<xs:element name="label" type="Label" minOccurs="0" maxOccurs="1"/>-->
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Axis" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="AbstractAxis">
+				<xs:sequence>
+					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="adjustEnd" type="xs:boolean" default="true"/>
+				<xs:attribute name="dashSize" type="xs:int" default="3"/>
+				<xs:attribute name="grid" type="xs:boolean" default="false"/>
+				<xs:attribute name="length" type="xs:int" default="0"/>
+				<xs:attribute name="majorTickSteps" type="xs:int"/>
+				<xs:attribute name="minorTickSteps" type="xs:int" default="0"/>
+				<xs:attribute name="position" type="AxisPosition"/>
+				<xs:attribute name="width" type="xs:int" default="0"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CategoryAxis">
+		<xs:complexContent>
+			<xs:extension base="Axis"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NumericAxis">
+		<xs:complexContent>
+			<xs:extension base="Axis"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TimeAxis">
+		<xs:complexContent>
+			<xs:extension base="NumericAxis">
+				<xs:attribute name="constrain" type="xs:boolean" default="false"/>
+				<xs:attribute name="dateFormat" type="xs:string"/>
+				<xs:attribute name="fromDate" type="xs:string"/>
+				<xs:attribute name="step" type="xs:string"/><!--Set string value to javascript value, will be output exactly. i.e. "[Ex.Date.Day, 1]"-->
+				<xs:attribute name="toDate" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GaugeAxis">
+		<xs:complexContent>
+			<xs:extension base="AbstractAxis">
+				<xs:sequence>
+					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="maximum" type="xs:float" use="required"/>
+				<xs:attribute name="minimum" type="xs:float" use="required"/>
+				<xs:attribute name="steps" type="xs:int" use="required"/>
+				<xs:attribute name="margin" type="xs:int" default="10"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ChartBackground">
+		<xs:sequence>
+			<xs:element name="image" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="gradient" type="Gradient" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="fill" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="GradientStop">
+		<xs:attribute name="key" type="xs:int" use="required"/>
+		<xs:attribute name="color" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Gradient">
+		<xs:sequence>
+			<xs:element name="stop" type="GradientStop" minOccurs="2" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required"/>
+		<xs:attribute name="angle" type="xs:int"/>
+	</xs:complexType>
+	<xs:simpleType name="ChartLegendPosition">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="bottom"/>
+			<xs:enumeration value="float"/>
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="right"/>
+			<xs:enumeration value="top"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ChartLegend">
+		<xs:attribute name="boxFill" type="xs:string" default="#FFF"/>
+		<xs:attribute name="boxStroke" type="xs:string" default="#000"/>
+		<xs:attribute name="boxStrokeWidth" type="xs:int" default="1"/>
+		<xs:attribute name="boxZIndex" type="xs:int" default="100"/>
+		<xs:attribute name="itemSpacing" type="xs:int" default="10"/>
+		<xs:attribute name="labelColor" type="xs:string" default="#000"/>
+		<xs:attribute name="labelFont" type="xs:string" default="12px Helvetica, sans-serif"/>
+		<xs:attribute name="padding" type="xs:int" default="5"/>
+		<xs:attribute name="position" type="ChartLegendPosition" default="bottom"/>
+		<xs:attribute name="update" type="xs:boolean" default="true"/>
+		<xs:attribute name="visible" type="xs:boolean" default="true"/>
+		<xs:attribute name="x" type="xs:int" default="0"/>
+		<xs:attribute name="y" type="xs:int" default="0"/>
+	</xs:complexType>
+	<xs:simpleType name="SeriesLabelDisplay">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="insideEnd"/>
+			<xs:enumeration value="insideStart"/>
+			<xs:enumeration value="middle"/>
+			<xs:enumeration value="none"/>
+			<xs:enumeration value="outside"/>
+			<xs:enumeration value="over"/>
+			<xs:enumeration value="rotate"/>
+			<xs:enumeration value="under"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SeriesLabelOrientation">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="horizontal"/>
+			<xs:enumeration value="vertical"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="SeriesLabel">
+		<xs:attribute name="display" type="SeriesLabelDisplay" default="none"/>
+		<xs:attribute name="color" type="xs:string" default="#000"/>
+		<xs:attribute name="contrast" type="xs:boolean" default="false"/>
+		<xs:attribute name="field" type="xs:string" default="name"/>
+		<xs:attribute name="minMargin" type="xs:int" default="50"/>
+		<xs:attribute name="font" type="xs:string" default="11px Helvetica, sans-serif"/>
+		<xs:attribute name="orientation" type="SeriesLabelOrientation" default="horizontal"/>
+	</xs:complexType>
+	<xs:complexType name="AbstractSeries" abstract="true">
+		<xs:sequence>
+			<xs:element name="label" type="SeriesLabel" minOccurs="0" maxOccurs="1"/>
+			<!--<xs:element name="tips" type="ToolTip" minOccurs="0" maxOccurs="1"/>-->
+			<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="highlight" type="xs:boolean" default="false"/>
+		<xs:attribute name="showInLegend" type="xs:boolean" default="true"/>
+	</xs:complexType>
+	<xs:complexType name="CartesianSeries" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="AbstractSeries">
+				<xs:sequence>
+					<xs:element name="xField" type="Field" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="yField" type="Field" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="axis" type="AxisPosition" default="left"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AreaSeries">
+		<xs:complexContent>
+			<xs:extension base="CartesianSeries"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BarSeries">
+		<xs:complexContent>
+			<xs:extension base="CartesianSeries">
+				<xs:attribute name="column" type="xs:boolean" default="false"/>
+				<xs:attribute name="groupGutter" type="xs:float" default="38.2"/>
+				<xs:attribute name="gutter" type="xs:float" default="38.2"/>
+				<xs:attribute name="stacked" type="xs:boolean" default="false"/>
+				<xs:attribute name="xPadding" type="xs:int"/>
+				<xs:attribute name="yPadding" type="xs:int"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 </xs:schema>
