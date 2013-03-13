@@ -49,10 +49,7 @@ public class VmdMethods
 	 */
 	public static List getMultipleById(ViewMetaData viewMetaData, JXPathContext context, String id)
 	{
-		long start = System.currentTimeMillis();
 		List list = context.selectNodes(String.format(formatter, id));
-		long end = System.currentTimeMillis();
-		LOGGER.info("getMultipleById(" + id + ") took " + (end - start));
 		return list;
 	}
 
@@ -64,10 +61,7 @@ public class VmdMethods
 	 */
 	public static Object getSingleById(ViewMetaData viewMetaData, JXPathContext context, String id)
 	{
-		long start = System.currentTimeMillis();
 		Object object = context.selectSingleNode(String.format(formatter, id));
-		long end = System.currentTimeMillis();
-		LOGGER.info("getSingleById(" + id + ") took " + (end - start));
 		return object;
 	}
 
@@ -88,7 +82,6 @@ public class VmdMethods
 			found = true;
 			for (Object element : elements)
 			{
-				LOGGER.info("populating data on " + element.getClass().getCanonicalName());
 				populateData(element, data);
 			}
 		}
@@ -112,7 +105,6 @@ public class VmdMethods
 			found = true;
 			for (Object element : elements)
 			{
-				LOGGER.info("populating data on " + element.getClass().getCanonicalName());
 				populateData(element, data);
 			}
 		}
@@ -272,12 +264,7 @@ public class VmdMethods
 	 */
 	public static void deleteElement(ViewMetaData viewMetaData, JXPathContext context, String id)
 	{
-		long start = System.currentTimeMillis();
-
 		context.removeAll(String.format(formatter, id));
-
-		long end = System.currentTimeMillis();
-		LOGGER.info("deleteElement deleted " + id + " from page took " + (end - start));
 	}
 
 	/**
