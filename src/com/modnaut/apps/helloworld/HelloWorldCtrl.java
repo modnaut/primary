@@ -134,7 +134,7 @@ public class HelloWorldCtrl extends ExtJsScreenCtrl
 		if (valid)
 		{
 			HashMap<String, Object> parms = new HashMap<String, Object>();
-			parms.put(USER_ID, userId);
+			parms.put(USER_ID, Integer.parseInt(userId));
 			parms.put(USER_NAME, userName);
 			parms.put(FIRST_NAME, firstName);
 			parms.put(LAST_NAME, lastName);

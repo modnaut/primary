@@ -45,6 +45,9 @@ public class DatabaseMethods
 	private static final String UPDATE = "UPDATE";
 	private static final String INSERT = "INSERT";
 
+	private static final String REGEX_QUESTION_MARK = "\\?";
+	private static final String STRING_FORMAT_PLACEHOLDER = "%s";
+
 	private static boolean return_column_names = false;
 
 	/**
@@ -426,6 +429,8 @@ public class DatabaseMethods
 		Object data = new Object();
 		boolean was_connection_passed = true;
 
+		String fullStatement = null;
+
 		try
 		{
 			if (connection == null)
@@ -445,11 +450,13 @@ public class DatabaseMethods
 			preparedStatement = connection.prepareStatement(statementString);
 
 			Parameters parameters = query.getParameters();
+			Object[] parametersForStatementString = null;
 			if (parameters != null)
 			{
 				List<Parameter> parameterList = parameters.getParameter();
 				if (parameterList != null)
 				{
+					parametersForStatementString = new Object[parameters.getParameter().size()];
 					for (int i = 0; parameterList.size() > i; i++)
 					{
 						Parameter parameter = parameterList.get(i);
@@ -460,20 +467,33 @@ public class DatabaseMethods
 						{
 							if (parms.containsKey(parameter.getName()))
 							{
-								preparedStatement.setObject(parameter.getId().intValue(), parms.get(parameter.getName()), parameter_type_value);
+								Object parameterValue = parms.get(parameter.getName());
+								preparedStatement.setObject(parameter.getId(), parameterValue, parameter_type_value);
+								parametersForStatementString[i] = parameterValue;
 							}
 							else
 							{
-								preparedStatement.setObject(parameter.getId().intValue(), parameter.getValue(), parameter_type_value);
+								preparedStatement.setObject(parameter.getId(), parameter.getValue(), parameter_type_value);
+								parametersForStatementString[i] = parameter.getValue();
 							}
 						}
 						else
 						{
-							preparedStatement.setObject(parameter.getId().intValue(), parameter.getValue(), parameter_type_value);
+							preparedStatement.setObject(parameter.getId(), parameter.getValue(), parameter_type_value);
+							parametersForStatementString[i] = parameter.getValue();
 						}
+					}
+
+					for (int i = 0; i < parametersForStatementString.length; i++)
+					{
+						if (parametersForStatementString[i] instanceof String)
+							parametersForStatementString[i] = ICommonConstants.SINGLE_QUOTE + parametersForStatementString[i] + ICommonConstants.SINGLE_QUOTE;
 					}
 				}
 			}
+
+			fullStatement = String.format(statementString.replaceAll(REGEX_QUESTION_MARK, STRING_FORMAT_PLACEHOLDER), parametersForStatementString);
+			LOGGER.debug(fullStatement);
 
 			if (queryMethod.equals(GET_DATA))
 				data = executeGetData(preparedStatement);
@@ -496,7 +516,8 @@ public class DatabaseMethods
 		catch (SQLException e)
 		{
 			// e.printStackTrace();
-			String fullStatement = buildStatementString(statementString, parms);
+			if (fullStatement == null)
+				fullStatement = buildStatementString(statementString, parms);
 			throw new EnrichableException(CLASS_NAME_PATH, EXECUTE_QUERY_METHOD + ICommonConstants.COLON + queryMethod, ICommonConstants.DB_LOG, ICommonConstants.ERROR, "Check sql statement and parameters. \n" + fullStatement, e);
 		}
 		finally
