@@ -65,13 +65,13 @@ public class WebSessionController
 			{
 				long session_id = (long) httpSession.getAttribute(SESSION_ID);
 
-				// TODO - remove printlines.
-				System.out.println("##########     checkForValidSession     ##########");
-				System.out.println("session.isNew(): " + httpSession.isNew());
-				System.out.println("session.getLastAccessedTime(): " + httpSession.getLastAccessedTime());
-				System.out.println("session.getCreationTime(): " + httpSession.getCreationTime());
-				System.out.println("session.getMaxInactiveInterval(): " + httpSession.getMaxInactiveInterval());
-				System.out.println("session has been set already: " + session_id);
+				// TODO - remove printlines. These should be logger messages anyway.
+				// System.out.println("##########     checkForValidSession     ##########");
+				// System.out.println("session.isNew(): " + httpSession.isNew());
+				// System.out.println("session.getLastAccessedTime(): " + httpSession.getLastAccessedTime());
+				// System.out.println("session.getCreationTime(): " + httpSession.getCreationTime());
+				// System.out.println("session.getMaxInactiveInterval(): " + httpSession.getMaxInactiveInterval());
+				// System.out.println("session has been set already: " + session_id);
 
 				// TODO - check session age
 
