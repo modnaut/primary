@@ -76,6 +76,8 @@ public interface ICommonConstants
 	public static final String COMMA = ",";
 	public static final String COLON = ":";
 	public static final String SEMI_COLON = ";";
+	public static final String SLASH = "/";
+	public static final String BACK_SLASH = "\\";
 
 	// MIME types
 	public static final String CONTENT_TYPE_HTML = "text/html";

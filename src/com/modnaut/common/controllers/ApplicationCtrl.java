@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
+import com.modnaut.common.utilities.ServerMethods;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.application.Applications;
-import com.modnaut.framework.servlet.ApplicationServlet;
 
 /**
  * 
@@ -46,7 +46,7 @@ public class ApplicationCtrl extends FrameworkCtrl
 	{
 		try
 		{
-			Applications apps = JaxbPool.unmarshal(Applications.class, new File(ApplicationServlet.getRealPath() + APPLICATION_XML));
+			Applications apps = JaxbPool.unmarshal(Applications.class, new File(ServerMethods.getRealPath() + APPLICATION_XML));
 			HashMap<String, Object> parms = new HashMap<String, Object>();
 			parms.put(APPLICATION_ID, 1);
 			XslPool.marshalAndTransform(apps, response.getOutputStream(), APPLICATION_XSL, parms);

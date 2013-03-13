@@ -17,10 +17,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.ServerMethods;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
-import com.modnaut.framework.servlet.ApplicationServlet;
 
 /**
  * 
@@ -62,19 +62,19 @@ public class FrameworkCtrl
 	{
 		try
 		{
-			Collection<File> files = FileUtils.listFiles(new File(ApplicationServlet.getRealPath() + VIEW_PATH), null, true);
+			Collection<File> files = FileUtils.listFiles(new File(ServerMethods.getRealPath() + VIEW_PATH), null, true);
 			String absoluteFilePath = ICommonConstants.NONE;
 			Iterator<File> iterator = files.iterator();
 			while (iterator.hasNext())
 			{
-				File file = (File) iterator.next();
+				File file = iterator.next();
 				if (file.getName().equals(xmlFileName))
 					absoluteFilePath = file.getAbsolutePath();
 			}
 			if (!absoluteFilePath.isEmpty())
 			{
 				File file = new File(absoluteFilePath);
-				viewMetaData = (ViewMetaData) JaxbPool.unmarshal(ViewMetaData.class, file);
+				viewMetaData = JaxbPool.unmarshal(ViewMetaData.class, file);
 				if (viewMetaData != null)
 					jxPathContext = JXPathContext.newContext(viewMetaData);
 			}

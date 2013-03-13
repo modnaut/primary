@@ -43,7 +43,7 @@
               maxActive="15" 
               maxIdle="3"/>
               
-              
+     <Parameter name="serverName" value="DemoAppServer"/>
 
 
    <!--  <Manager className='org.apache.catalina.session.PersistentManager'

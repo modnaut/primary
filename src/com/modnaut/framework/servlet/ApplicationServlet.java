@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
+import com.modnaut.common.utilities.ServerMethods;
 import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.session.WebSessionController;
 
@@ -39,7 +40,6 @@ public class ApplicationServlet extends HttpServlet
 	private static final String METHOD_NAME = "doGet";
 
 	private static final long serialVersionUID = 1L;
-	private static String realPath = ICommonConstants.NONE;
 
 	/**
 	 * Constructor method
@@ -55,18 +55,8 @@ public class ApplicationServlet extends HttpServlet
 	@Override
 	public void init(ServletConfig config) throws ServletException
 	{
-		realPath = config.getServletContext().getRealPath("/");
+		ServerMethods.initializeServer(config.getServletContext());
 		super.init(config);
-	}
-
-	/**
-	 * Called by outside classes and methods to get the actual path of all source code, including views and view related code. Makes finding necessary files within the code file system quick and easy.
-	 * 
-	 * @return String
-	 */
-	public static String getRealPath()
-	{
-		return realPath;
 	}
 
 	/**

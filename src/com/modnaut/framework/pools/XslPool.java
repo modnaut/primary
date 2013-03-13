@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
-import com.modnaut.framework.servlet.ApplicationServlet;
+import com.modnaut.common.utilities.ServerMethods;
 
 /**
  * 
@@ -146,7 +146,7 @@ public class XslPool
 			try
 			{
 				javax.xml.transform.TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
-				Source xsltSource = new StreamSource(ApplicationServlet.getRealPath() + WEB_DIRECTORY + key.xslFileName);
+				Source xsltSource = new StreamSource(ServerMethods.getRealPath() + WEB_DIRECTORY + key.xslFileName);
 				Transformer transformer = factory.newTransformer(xsltSource);
 				return transformer;
 			}
