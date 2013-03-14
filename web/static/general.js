@@ -4,7 +4,6 @@ Ext.Loader.setPath({
 });
 
 Ext.require(['Ext.ux.layout.Center', 'Ext.ux.data.PagingMemoryProxy', 'Modnaut.view.NotificationBar']);
-//Ext.require(['Modnaut.view.NotificationBar']);
 
 
 //Avoid 'console' errors in browsers that lack a console.
