@@ -1,4 +1,4 @@
-window.app = window.app = Ext.create('Ext.app.Application', {
+Ext.application({
 	name: 'DemoApp',
 	appFolder: 'static/demoApp',
 	controllers: ['Modnaut.controller.ViewMetaDataController'],

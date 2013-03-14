@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
+*/
 /**
  * @class Ext.data.JsonP
  * @singleton
@@ -81,7 +98,7 @@ Ext.define('Ext.data.JsonP', {
      * </ul>
      * @return {Object} request An object containing the request details.
      */
-    request: function(options){
+    request: function(options) {
         options = Ext.apply({}, options);
 
         //<debug>
@@ -97,17 +114,21 @@ Ext.define('Ext.data.JsonP', {
             callbackName = options.callbackName || 'callback' + id,
             callbackKey = options.callbackKey || me.callbackKey,
             timeout = Ext.isDefined(options.timeout) ? options.timeout : me.timeout,
-            params = Ext.apply({}, options.params),
+            params = options.params || {},
             url = options.url,
             name = Ext.name,
             request,
             script;
 
-        params[callbackKey] = name + '.data.JsonP.' + callbackName;
-        if (disableCaching) {
+
+        // Add cachebuster param unless it has already been done
+        if (disableCaching && !params[cacheParam]) {
             params[cacheParam] = new Date().getTime();
+        } else {
+            params = options.params;
         }
 
+        params[callbackKey] = name + '.data.JsonP.' + callbackName;
         script = me.createScript(url, params, options);
 
         me.requests[id] = request = {
@@ -230,6 +251,7 @@ Ext.define('Ext.data.JsonP', {
             Ext.callback(request.success, request.scope, [result]);
         }
         Ext.callback(request.callback, request.scope, [success, result, request.errorType]);
+        Ext.EventManager.idleEvent.fire();
     },
 
     /**

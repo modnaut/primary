@@ -48,6 +48,7 @@
 		<xs:sequence>
 			<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="anchor" type="xs:string"/>
 		<xs:attribute name="flex" type="xs:int"/>
 		<xs:attribute name="height" type="xs:int"/>
 		<xs:attribute name="hidden" type="xs:boolean"/>
@@ -55,10 +56,12 @@
 		<xs:attribute name="id" type="xs:string"/>
 		<xs:attribute name="region" type="Region"/>
 		<xs:attribute name="split" type="xs:boolean"/>
+		<xs:attribute name="splitterResize" type="xs:boolean" default="true"/>
 		<xs:attribute name="width" type="xs:int"/>
 	</xs:complexType>
 	<xs:complexType name="AbstractLayout" abstract="true">
 		<xs:attribute name="itemCls" type="xs:string"/>
+		<xs:attribute name="padding" type="xs:string"/>
 		<xs:attribute name="reserveScrollbar" type="xs:boolean" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="AutoLayout">
@@ -111,7 +114,6 @@
 			<xs:extension base="AbstractLayout">
 				<xs:attribute name="constrainAlign" type="xs:boolean" default="false"/>
 				<xs:attribute name="pack" type="LayoutPack" default="start"/>
-				<xs:attribute name="padding" type="xs:string" default="0"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -125,7 +127,7 @@
 	<xs:complexType name="VBoxLayout">
 		<xs:complexContent>
 			<xs:extension base="BoxLayout">
-				<xs:attribute name="align" type="VBoxLayoutAlign" default="left"/>
+				<xs:attribute name="align" type="VBoxLayoutAlign"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -134,7 +136,7 @@
 			<xs:extension base="VBoxLayout">
 				<xs:attribute name="activeOnTop" type="xs:boolean" default="false"/>
 				<xs:attribute name="animate" type="xs:boolean" default="true"/>
-				<xs:attribute name="collapseFirst" type="xs:boolean" default="true"/>
+				<xs:attribute name="collapseFirst" type="xs:boolean"/>
 				<xs:attribute name="fill" type="xs:boolean" default="true"/>
 				<xs:attribute name="hideCollapseTool" type="xs:boolean" default="false"/>
 				<xs:attribute name="multi" type="xs:boolean" default="false"/>
@@ -169,6 +171,16 @@
 	<xs:complexType name="CenterLayout">
 		<xs:complexContent>
 			<xs:extension base="FitLayout"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="TableLayout">
+		<xs:complexContent>
+			<xs:extension base="AbstractLayout">
+				<xs:attribute name="columns" type="xs:int"/>
+				<xs:attribute name="tableAttrs" type="xs:string"/>
+				<xs:attribute name="tdAttrs" type="xs:string"/>
+				<xs:attribute name="trAttrs" type="xs:string"/>
+			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:simpleType name="EventType">
@@ -622,6 +634,7 @@
 				<xs:attribute name="overflowText" type="xs:string"/>
 				<xs:attribute name="pressed" type="xs:boolean" default="false"/>
 				<xs:attribute name="scale" type="ButtonScale" default="small"/>
+				<xs:attribute name="showEmptyMenu" type="xs:boolean" default="false"/>
 				<xs:attribute name="shrinkWrap" type="xs:int" default="3"/>
 				<xs:attribute name="tabIndex" type="xs:int"/>
 				<xs:attribute name="textAlign" type="TextAlign" default="center"/>
@@ -791,6 +804,7 @@
 				</xs:sequence>
 				<xs:attribute name="autoSelect" type="xs:boolean" default="true"/>
 				<xs:attribute name="displayField" type="xs:string" default="display"/>
+				<xs:attribute name="enableRegEx" type="xs:boolean"/>
 				<xs:attribute name="forceSelection" type="xs:boolean" default="true"/>
 				<xs:attribute name="growToLongestValue" type="xs:boolean" default="true"/>
 				<xs:attribute name="minChars" type="xs:int"/>
@@ -1107,12 +1121,21 @@
 	</xs:complexType>
 	<xs:complexType name="CategoryAxis">
 		<xs:complexContent>
-			<xs:extension base="Axis"/>
+			<xs:extension base="Axis">
+				<xs:attribute name="calculateCategoryAxis" type="xs:boolean" default="false"/>
+				<xs:attribute name="categoryNames" type="xs:string"/>
+			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="NumericAxis">
 		<xs:complexContent>
-			<xs:extension base="Axis"/>
+			<xs:extension base="Axis">
+				<xs:attribute name="adjustMaximumByMajorUnit" type="xs:boolean" default="false"/>
+				<xs:attribute name="adjustMinimumByMajorUnit" type="xs:boolean" default="false"/>
+				<xs:attribute name="decimals" type="xs:int" default="2"/>
+				<xs:attribute name="maximum" type="xs:float"/>
+				<xs:attribute name="minimum" type="xs:float"/>
+			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="TimeAxis">
@@ -1121,9 +1144,10 @@
 				<xs:attribute name="constrain" type="xs:boolean" default="false"/>
 				<xs:attribute name="dateFormat" type="xs:string"/>
 				<xs:attribute name="fromDate" type="xs:string"/>
-				<xs:attribute name="step" type="xs:string"/><!--Set string value to javascript value, will be output exactly. i.e. "[Ex.Date.Day, 1]"-->
+				<xs:attribute name="step" type="xs:string"/>
 				<xs:attribute name="toDate" type="xs:string"/>
 			</xs:extension>
+			<!--Set string value to javascript value, will be output exactly. i.e. "[Ex.Date.Day, 1]"-->
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="GaugeAxis">

@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
+*/
 /**
  * A simple class that provides the basic implementation needed to make any element draggable.
  */
@@ -72,7 +89,7 @@ Ext.define('Ext.dd.DragSource', {
         return this.dragData;
     },
 
-    // private
+    // @private
     onDragEnter : function(e, id){
         var target = Ext.dd.DragDropManager.getDDById(id),
             status;
@@ -112,7 +129,7 @@ Ext.define('Ext.dd.DragSource', {
         return true;
     },
 
-    // private
+    // @private
     onDragOver: function(e, id) {
         var target = this.cachedTarget || Ext.dd.DragDropManager.getDDById(id),
             status;
@@ -149,7 +166,7 @@ Ext.define('Ext.dd.DragSource', {
         return true;
     },
 
-    // private
+    // @private
     onDragOut: function(e, id) {
         var target = this.cachedTarget || Ext.dd.DragDropManager.getDDById(id);
         if (this.beforeDragOut(target, e, id) !== false) {
@@ -185,7 +202,7 @@ Ext.define('Ext.dd.DragSource', {
         return true;
     },
 
-    // private
+    // @private
     onDragDrop: function(e, id){
         var target = this.cachedTarget || Ext.dd.DragDropManager.getDDById(id);
         if (this.beforeDragDrop(target, e, id) !== false) {
@@ -227,7 +244,7 @@ Ext.define('Ext.dd.DragSource', {
         return true;
     },
 
-    // private
+    // @private
     onValidDrop: function(target, e, id){
         this.hideProxy();
         if(this.afterValidDrop){
@@ -243,12 +260,12 @@ Ext.define('Ext.dd.DragSource', {
         }
     },
 
-    // private
+    // @private
     getRepairXY: function(e, data){
         return this.el.getXY();
     },
 
-    // private
+    // @private
     onInvalidDrop: function(target, e, id) {
         // This method may be called by the DragDropManager.
         // To preserve backwards compat, it only passes the event object
@@ -279,7 +296,7 @@ Ext.define('Ext.dd.DragSource', {
         }
     },
 
-    // private
+    // @private
     afterRepair: function() {
         var me = this;
         if (Ext.enableFx) {
@@ -301,7 +318,7 @@ Ext.define('Ext.dd.DragSource', {
         return true;
     },
 
-    // private
+    // @private
     handleMouseDown: function(e) {
         if (this.dragging) {
             return;
@@ -341,7 +358,7 @@ Ext.define('Ext.dd.DragSource', {
         return this.callParent(arguments);
     },
 
-    // private override
+    // @private
     startDrag: function(x, y) {
         this.proxy.reset();
         this.proxy.hidden = false;
@@ -351,7 +368,7 @@ Ext.define('Ext.dd.DragSource', {
         this.proxy.show();
     },
 
-    // private
+    // @private
     onInitDrag: function(x, y) {
         var clone = this.el.dom.cloneNode(true);
         clone.id = Ext.id(); // prevent duplicate ids
@@ -377,25 +394,25 @@ Ext.define('Ext.dd.DragSource', {
         this.dragging = false;
     },
 
-    // private
+    // @private
     triggerCacheRefresh: function() {
         Ext.dd.DDM.refreshCache(this.groups);
     },
 
-    // private - override to prevent hiding
+    // @private
     b4EndDrag: function(e) {
     },
 
-    // private - override to prevent moving
+    // @private
     endDrag : function(e){
         this.onEndDrag(this.dragData, e);
     },
 
-    // private
+    // @private
     onEndDrag : function(data, e){
     },
 
-    // private - pin to cursor
+    // @private
     autoOffset : function(x, y) {
         this.setDelta(-12, -20);
     },

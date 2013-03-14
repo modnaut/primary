@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
+*/
 /**
  * @class Ext.chart.series.Scatter
  * @extends Ext.chart.series.Cartesian
@@ -64,8 +81,6 @@
  * `data1`, `data2` and `data3` respectively. All x-fields for the series must be the same field, in this case `name`.
  * Each scatter series has a different styling configuration for markers, specified by the `markerConfig` object. Finally we set the left axis as
  * axis to show the current values of the elements.
- *
- * @xtype scatter
  */
 Ext.define('Ext.chart.series.Scatter', {
 
@@ -88,13 +103,6 @@ Ext.define('Ext.chart.series.Scatter', {
     /**
      * @cfg {Object} style
      * Append styling properties to this object for it to override theme properties.
-     */
-    
-    /**
-     * @cfg {String/Array} axis
-     * The position of the axis to bind the values to. Possible values are 'left', 'bottom', 'top' and 'right'.
-     * You must explicitly set this value to bind the values of the line series to the ones in the axis, otherwise a
-     * relative scale will be used. If multiple axes are being used, they should both be specified in in the configuration.
      */
 
     constructor: function(config) {
@@ -465,7 +473,7 @@ Ext.define('Ext.chart.series.Scatter', {
     },
 
     // @private callback for when placing a label sprite.
-    onPlaceLabel: function(label, storeItem, item, i, display, animate) {
+    onPlaceLabel: function(label, storeItem, item, i, display, animate, index) {
         var me = this,
             chart = me.chart,
             resizing = chart.resizing,
@@ -479,7 +487,7 @@ Ext.define('Ext.chart.series.Scatter', {
             bb, width, height, anim;
 
         label.setAttributes({
-            text: format(storeItem.get(field)),
+            text: format(storeItem.get(field), label, storeItem, item, i, display, animate, index),
             hidden: true
         }, true);
 

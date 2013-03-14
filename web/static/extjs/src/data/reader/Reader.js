@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
+*/
 /**
  * @author Ed Spencer
  *
@@ -168,7 +185,7 @@ Ext.define('Ext.data.reader.Reader', {
     /**
      * @cfg {String} idProperty
      * Name of the property within a row object that contains a record identifier value. Defaults to the id of the
-     * model. If an idProperty is explicitly specified it will override the idProperty defined on the model.
+     * model. If an idProperty is explicitly specified it will take precedence over idProperty defined on the model.
      */
 
     /**
@@ -293,7 +310,9 @@ Ext.define('Ext.data.reader.Reader', {
         var me = this;
         
         me.model = Ext.ModelManager.getModel(model);
-        me.buildExtractors(true);
+        if (model) {
+            me.buildExtractors(true);
+        }
         
         if (setOnProxy && me.proxy) {
             me.proxy.setModel(me.model, true);
@@ -408,11 +427,11 @@ Ext.define('Ext.data.reader.Reader', {
      */
     extractData : function(root) {
         var me = this,
-            records = [],
             Model   = me.model,
             length  = root.length,
+            records = new Array(length),
             convertedValues, node, record, i;
-            
+
         if (!root.length && Ext.isObject(root)) {
             root = [root];
             length = 1;
@@ -420,10 +439,15 @@ Ext.define('Ext.data.reader.Reader', {
 
         for (i = 0; i < length; i++) {
             node = root[i];
-            if (!node.isModel) { 
+            if (node.isModel) {
+                // If we're given a model instance in the data, just push it on
+                // without doing any conversion
+                records[i] = node;
+            } else {
                 // Create a record with an empty data object.
-                // Populate that data object by extracting and converting field values from raw data
-                record = new Model(undefined, me.getId(node), node, convertedValues = {});
+                // Populate that data object by extracting and converting field values from raw data.
+                // Must pass the ID to use because we pass no data for the constructor to pluck an ID from
+                records[i] = record = new Model(undefined, me.getId(node), node, convertedValues = {});
 
                 // If the server did not include an id in the response data, the Model constructor will mark the record as phantom.
                 // We  need to set phantom to false here because records created from a server response using a reader by definition are not phantom records.
@@ -432,21 +456,15 @@ Ext.define('Ext.data.reader.Reader', {
                 // Use generated function to extract all fields at once
                 me.convertRecordData(convertedValues, node, record);
 
-                records.push(record);
-                
-                if (me.implicitIncludes) {
+                if (me.implicitIncludes && record.associations.length) {
                     me.readAssociated(record, node);
                 }
-            } else {
-                // If we're given a model instance in the data, just push it on
-                // without doing any conversion
-                records.push(node);
             }
         }
 
         return records;
     },
-    
+
     /**
      * @private
      * Loads a record's associations from the data object. This prepopulates hasMany and belongsTo associations
@@ -463,12 +481,12 @@ Ext.define('Ext.data.reader.Reader', {
         
         for (; i < length; i++) {
             association     = associations[i];
-            associationData = this.getAssociatedDataRoot(data, association.associationKey || association.name);
+            associationData = this.getAssociatedDataRoot(data, association.associationKeyFunction || association.associationKey || association.name);
             
             if (associationData) {
                 reader = association.getReader();
                 if (!reader) {
-                    proxy = association.associatedModel.proxy;
+                    proxy = association.associatedModel.getProxy();
                     // if the associated model has a Reader already, use that, otherwise attempt to create a sensible one
                     if (proxy) {
                         reader = proxy.getReader();
@@ -486,13 +504,17 @@ Ext.define('Ext.data.reader.Reader', {
     /**
      * @private
      * Used internally by {@link #readAssociated}. Given a data object (which could be json, xml etc) for a specific
-     * record, this should return the relevant part of that data for the given association name. This is only really
-     * needed to support the XML Reader, which has to do a query to get the associated data object
+     * record, this should return the relevant part of that data for the given association name. If a complex
+     * mapping, this will traverse arrays and objects to resolve the data.
      * @param {Object} data The raw data object
      * @param {String} associationName The name of the association to get data for (uses associationKey if present)
      * @return {Object} The root
      */
     getAssociatedDataRoot: function(data, associationName) {
+        if (Ext.isFunction(associationName)) {
+            return associationName(data);
+        }
+
         return data[associationName];
     },
     
@@ -507,9 +529,7 @@ Ext.define('Ext.data.reader.Reader', {
      * @param {Object} data The data object
      * @return {Object} The normalized data object
      */
-    getData: function(data) {
-        return data;
-    },
+    getData: Ext.identityFn,
 
     /**
      * @private
@@ -519,9 +539,7 @@ Ext.define('Ext.data.reader.Reader', {
      * @param {Object} data The data object
      * @return {Object} The same data object
      */
-    getRoot: function(data) {
-        return data;
-    },
+    getRoot: Ext.identityFn,
 
     /**
      * Takes a raw response object (as passed to the {@link #read} method) and returns the useful data
@@ -580,10 +598,16 @@ Ext.define('Ext.data.reader.Reader', {
     /**
      * Get the idProperty to use for extracting data
      * @private
-     * @return {String} The id property
+     * @return {String} The id property **if any**
      */
-    getIdProperty: function(){
-        return this.idProperty || this.model.prototype.idProperty;
+    getIdProperty: function() {
+        var idField = this.model.prototype.idField,
+            idProperty = this.idProperty;
+
+        if (!idProperty && idField  && (idProperty = idField.mapping) == null) {
+            idProperty = idField.name;
+        }
+        return idProperty;
     },
 
     /**
@@ -598,9 +622,7 @@ Ext.define('Ext.data.reader.Reader', {
             totalProp   = me.totalProperty,
             successProp = me.successProperty,
             messageProp = me.messageProperty,
-            accessor,
-            idField,
-            map;
+            accessor;
             
         if (force === true) {
             delete me.convertRecordData;
@@ -623,14 +645,9 @@ Ext.define('Ext.data.reader.Reader', {
             me.getMessage = me.createAccessor(messageProp);
         }
 
+        // Generate a getter for the raw identifying property if any
         if (idProp) {
-            idField = me.model.prototype.fields.get(idProp);
-            if (idField) {
-                map = idField.mapping;
-                idProp = (map !== undefined && map !== null) ? map : idProp;
-            }
             accessor = me.createAccessor(idProp);
-
             me.getId = function(record) {
                 var id = accessor.call(me, record);
                 return (id === undefined || id === '') ? null : id;
@@ -650,11 +667,13 @@ Ext.define('Ext.data.reader.Reader', {
         '    ,value\n',
         '    ,internalId\n',
         '<tpl for="fields">',
-        '    ,__field{#} = fields.get("{name}")\n',
+        '    ,__field{#} = fields.map["{name}"]\n',
         '</tpl>', ';\n',
 
         'return function(dest, source, record) {\n',
         '<tpl for="fields">',
+        '{% var fieldAccessExpression =  this.createFieldAccessExpression(values, "__field" + xindex, "source");',
+        '   if (fieldAccessExpression) { %}',
         // createFieldAccessExpression must be implemented in subclasses to extract data from the source object in the correct way
         '    value = {[ this.createFieldAccessExpression(values, "__field" + xindex, "source") ]};\n',
 
@@ -678,7 +697,7 @@ Ext.define('Ext.data.reader.Reader', {
                 '<tpl else>',
         '        dest["{name}"] = value;\n',
                 '</tpl>',
-        '    };',
+        '    };\n',
 
         // Code for processing a source property value when there is no default value
             '<tpl else>',
@@ -690,7 +709,19 @@ Ext.define('Ext.data.reader.Reader', {
                 '</tpl>',
         '    }\n',
             '</tpl>',
-
+            
+        // For when createFieldExpression yielded nothing.
+        // There's no mapping - the field is not intended to be read from server data.
+        // This is the case with NodeInterface fields.
+        '{% } else { %}',
+            '<tpl if="defaultValue !== undefined">',
+                '<tpl if="convert">',
+        '    dest["{name}"] = __field{#}.convert(__field{#}.defaultValue, record);\n',
+                '<tpl else>',
+        '    dest["{name}"] = __field{#}.defaultValue\n',
+                '</tpl>',
+            '</tpl>',
+        '{% } %}',
         '</tpl>',
 
         // set the client id as the internalId of the record.
@@ -751,7 +782,8 @@ Ext.define('Ext.data.reader.Reader', {
             total  : 0,
             count  : 0,
             records: [],
-            success: true
+            success: true,
+            message: ''
         }),
         recordDataExtractorTemplate: new Ext.XTemplate(proto.recordDataExtractorTemplate)
     });

@@ -60,6 +60,7 @@
 		<xsl:value-of select="mn:attribute(., 'hideMode', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'region', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'split', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'splitterResize', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'width', ',')"/>
 		
 		<xsl:call-template name="Listeners"/>

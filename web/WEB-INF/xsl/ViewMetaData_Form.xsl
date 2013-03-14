@@ -16,6 +16,7 @@
 		<xsl:value-of select="mn:attribute(., 'overflowText', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'pressed', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'scale', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'showEmptyMenu', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'shrinkWrap', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'tabIndex', ',')"/>
 		<xsl:value-of select="mn:childString(., 'text', ',')"/>
@@ -179,6 +180,7 @@
 		</xsl:variable>
 		<xsl:value-of select="mn:attribute(., 'autoSelect', ',')"/>
 		"displayField": <xsl:value-of select="mn:wrap-string($displayField)"/>,
+		<xsl:value-of select="mn:attribute(., 'enableRegEx', ',')"/>
 		<xsl:choose>
 			<xsl:when test="@forceSelection != '' ">
 				<xsl:value-of select="mn:attribute(., 'forceSelection', ',')"/>

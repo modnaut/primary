@@ -10,16 +10,19 @@
 			</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="layout">
+	<xsl:template name="AbstractLayout">
 		<xsl:value-of select="mn:attribute(., 'itemCls', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'padding', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'reserveScrollbar', ',')"/>
 	</xsl:template>
 	
 	<xsl:template match="layout[@xsi:type='AutoLayout']">
+		<xsl:call-template name="AbstractLayout"/>
 		"type": "auto"
 	</xsl:template>
 	
 	<xsl:template name="AnchorLayout">
+		<xsl:call-template name="AbstractLayout"/>
 		<xsl:value-of select="mn:attribute(., 'defaultAnchor', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'manageOverflow', ',')"/>
 	</xsl:template>
@@ -36,13 +39,14 @@
 	</xsl:template>
 	
 	<xsl:template match="layout[@xsi:type='BorderLayout']">
+		<xsl:call-template name="AbstractLayout"/>
 		"type": "border"
 	</xsl:template>
 	
 	<xsl:template name="BoxLayout">
+		<xsl:call-template name="AbstractLayout"/>
 		<xsl:value-of select="mn:attribute(., 'align', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'constrainAlign', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'padding', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'pack', ',')"/>
 	</xsl:template>
 	
@@ -69,15 +73,27 @@
 	</xsl:template>
 	
 	<xsl:template match="layout[@xsi:type='ColumnLayout']">
+		<xsl:call-template name="AbstractLayout"/>
 		"type": "column"
 	</xsl:template>
 	
 	<xsl:template match="layout[@xsi:type='FitLayout']">
+		<xsl:call-template name="AbstractLayout"/>
 		"type": "fit"
 	</xsl:template>
 	
 	<xsl:template match="layout[@xsi:type='CenterLayout']">
+		<xsl:call-template name="AbstractLayout"/>
 		"type": "ux.center"
+	</xsl:template>
+	
+	<xsl:template match="layout[@xsi:type='TableLayout']">
+		<xsl:call-template name="AbstractLayout"/>
+		<xsl:value-of select="mn:attribute(., 'column', ',')"/>
+		<xsl:value-of select="mn:eval-attribute(., 'tableAttrs', ',')"/>
+		<xsl:value-of select="mn:eval-attribute(., 'tdAttrs', ',')"/>
+		<xsl:value-of select="mn:eval-attribute(., 'trAttrs', ',')"/>
+		"type": "table"
 	</xsl:template>
 	
 </xsl:stylesheet>

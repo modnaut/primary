@@ -73,7 +73,6 @@
 						<item xsi:type="TextField" id="UserPassword">
 							<fieldLabel stringCD="New Password"/>
 						</item>
-						
 					</items>
 					<title stringCD="Create/Edit User"/>
 					<toolbar position="top">

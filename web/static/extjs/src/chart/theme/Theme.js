@@ -1,3 +1,20 @@
+/*
+This file is part of Ext JS 4.2
+
+Copyright (c) 2011-2013 Sencha Inc
+
+Contact:  http://www.sencha.com/contact
+
+Commercial Usage
+Licensees holding valid commercial licenses may use this file in accordance with the Commercial
+Software License Agreement provided with the Software or, alternatively, in accordance with the
+terms contained in a written agreement between you and Sencha.
+
+If you are unsure which license is appropriate for your use, please contact the sales department
+at http://www.sencha.com/contact.
+
+Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
+*/
 /**
  * @class Ext.chart.theme.Theme
  * 
@@ -5,44 +22,10 @@
  * 
  * Used as mixins by Ext.chart.Chart.
  */
-Ext.define('Ext.chart.theme.Theme', {
+Ext.chart = Ext.chart || {};
 
-    /* Begin Definitions */
+Ext.define('Ext.chart.theme.Theme', (
 
-    requires: ['Ext.draw.Color'],
-
-    /* End Definitions */
-
-    theme: 'Base',
-    themeAttrs: false,
-    
-    initTheme: function(theme) {
-        var me = this,
-            themes = Ext.chart.theme,
-            key, gradients;
-        if (theme) {
-            theme = theme.split(':');
-            for (key in themes) {
-                if (key == theme[0]) {
-                    gradients = theme[1] == 'gradients';
-                    me.themeAttrs = new themes[key]({
-                        useGradients: gradients
-                    });
-                    if (gradients) {
-                        me.gradients = me.themeAttrs.gradients;
-                    }
-                    if (me.themeAttrs.background) {
-                        me.background = me.themeAttrs.background;
-                    }
-                    return;
-                }
-            }
-            //<debug>
-            Ext.Error.raise('No theme found named "' + theme + '"');
-            //</debug>
-        }
-    }
-}, 
 // This callback is executed right after when the class is created. This scope refers to the newly created class itself
 function() {
    /* Theme constructor: takes either a complex object with styles like:
@@ -250,4 +233,44 @@ function() {
         Ext.apply(this, base);
     };
 }());
-});
+
+return {
+
+    /* Begin Definitions */
+
+    requires: ['Ext.draw.Color'],
+
+    /* End Definitions */
+
+    theme: 'Base',
+    themeAttrs: false,
+
+    initTheme: function(theme) {
+        var me = this,
+            themes = Ext.chart.theme,
+            key, gradients;
+        if (theme) {
+            theme = theme.split(':');
+            for (key in themes) {
+                if (key == theme[0]) {
+                    gradients = theme[1] == 'gradients';
+                    me.themeAttrs = new themes[key]({
+                        useGradients: gradients
+                    });
+                    if (gradients) {
+                        me.gradients = me.themeAttrs.gradients;
+                    }
+                    if (me.themeAttrs.background) {
+                        me.background = me.themeAttrs.background;
+                    }
+                    return;
+                }
+            }
+            //<debug>
+            Ext.Error.raise('No theme found named "' + theme + '"');
+            //</debug>
+        }
+    }
+};
+
+})());
