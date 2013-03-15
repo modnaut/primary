@@ -51,7 +51,7 @@
 		<h1 style="color:red">Fail!</h1>
 		<p>You have entered an invalid Email or Password.  Did you try "password"?</p>
 		<div id="header"><h1>LOGIN</h1></div>
-		<form name="loginForm" action="http://localhost:8080/primary/ApplicationServlet?Class=com.modnaut.common.controllers.ApplicationCtrl&Method=defaultAction" method="post" onsubmit="return(validateForm())">
+		<form name="loginForm" action="/primary/ApplicationServlet?Class=com.modnaut.common.controllers.ApplicationCtrl&Method=defaultAction" method="post" onsubmit="return(validateForm())">
 			<div id="username"> 
 				<label for="Email">Email Address</label> <br>
 				<input id="Email" name="Email" type="text" maxlength="50" size="50" value=""/> 
