@@ -104,6 +104,30 @@
 						</items>
 					</toolbar>
 				</item>
+				<item xsi:type="Chart" region="south" flex="1">
+					<axis xsi:type="CategoryAxis" position="bottom">
+						<field name="UserName"/>
+						<title stringCD="User Name"/>
+					</axis>
+					<axis xsi:type="NumericAxis" position="left">
+						<field name="UserId"/>
+						<title stringCD="UserId"/>
+					</axis>
+					<series xsi:type="BarSeries" axis="left" column="true">
+					</series>
+					<store xsi:type="Store">
+						<model>
+							<field name="UserId" type="int"/>
+							<field name="UserName" type="string"/>
+							<field name="FirstName" type="string"/>
+							<field name="LastName" type="string"/>
+							<field name="EmailAddress" type="string"/>
+							<field name="HireDate" type="date"/>
+							<field name="UserTypeCd" type="string"/>
+						</model>
+						<proxy xsi:type="AjaxProxy" Class="com.modnaut.apps.helloworld.HelloWorldCtrl" Method="getUsers"/>
+					</store>
+				</item>
 			</items>
 			<layout xsi:type="BorderLayout"/>
 		</item>

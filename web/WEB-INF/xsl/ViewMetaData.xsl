@@ -9,6 +9,7 @@
 	<xsl:include href="ViewMetaData_Data.xsl"/>
 	<xsl:include href="ViewMetaData_Form.xsl"/>
 	<xsl:include href="ViewMetaData_Grid.xsl"/>
+	<xsl:include href="ViewMetaData_Chart.xsl"/>
 	
 	<xsl:template match="viewMetaData">
 		<xsl:if test="items">

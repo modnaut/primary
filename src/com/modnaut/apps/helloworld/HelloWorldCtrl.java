@@ -15,7 +15,6 @@ import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.CommonMethods;
 import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.common.utilities.VmdMethods;
-import com.modnaut.framework.properties.viewmetadata.NotificationType;
 import com.modnaut.framework.properties.viewmetadata.TextField;
 
 public class HelloWorldCtrl extends ExtJsScreenCtrl
@@ -50,10 +49,6 @@ public class HelloWorldCtrl extends ExtJsScreenCtrl
 		// ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
 		// populateData("users", data);
 		populateUserTypesCombo();
-
-		addNotification("danny was here", NotificationType.SUCCESS);
-		addNotification("Danny was here too", NotificationType.ERROR, "users");
-		addNotification("added to wrong panelid", NotificationType.ERROR, "userasgsagass");
 		marshall(viewMetaData);
 	}
 

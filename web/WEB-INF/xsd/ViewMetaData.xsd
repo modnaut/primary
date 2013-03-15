@@ -1096,10 +1096,37 @@
 			<xs:enumeration value="top"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="AxisLabelDisplay">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="rotate"/>
+			<xs:enumeration value="middle"/>
+			<xs:enumeration value="insideStart"/>
+			<xs:enumeration value="insideEnd"/>
+			<xs:enumeration value="outside"/>
+			<xs:enumeration value="over"/>
+			<xs:enumeration value="under"/>
+			<xs:enumeration value="none"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="AxisLabelOrientation">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="horizontal"/>
+			<xs:enumeration value="vertical"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="AxisLabel">
+		<xs:attribute name="display" type="AxisLabelDisplay" default="none"/>
+		<xs:attribute name="color" type="xs:string" default="#000"/>
+		<xs:attribute name="contrast" type="xs:boolean" default="false"/>
+		<xs:attribute name="field" type="xs:string" default="name"/>
+		<xs:attribute name="minMargin" type="xs:int" default="50"/>
+		<xs:attribute name="font" type="xs:string" default="11px Helvetica, sans-serif"/>
+		<xs:attribute name="orientation" type="AxisLabelOrientation" default="horizontal"/>
+	</xs:complexType>
 	<xs:complexType name="AbstractAxis" abstract="true">
 		<xs:sequence>
 			<xs:element name="field" type="Field" minOccurs="0" maxOccurs="unbounded"/>
-			<!--<xs:element name="label" type="Label" minOccurs="0" maxOccurs="1"/>-->
+			<xs:element name="label" type="AxisLabel" minOccurs="0" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Axis" abstract="true">
@@ -1144,10 +1171,9 @@
 				<xs:attribute name="constrain" type="xs:boolean" default="false"/>
 				<xs:attribute name="dateFormat" type="xs:string"/>
 				<xs:attribute name="fromDate" type="xs:string"/>
-				<xs:attribute name="step" type="xs:string"/>
+				<xs:attribute name="step" type="xs:string"/><!--Set string value to javascript value, will be output exactly. i.e. "[Ex.Date.Day, 1]"-->
 				<xs:attribute name="toDate" type="xs:string"/>
 			</xs:extension>
-			<!--Set string value to javascript value, will be output exactly. i.e. "[Ex.Date.Day, 1]"-->
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="GaugeAxis">
@@ -1160,6 +1186,14 @@
 				<xs:attribute name="minimum" type="xs:float" use="required"/>
 				<xs:attribute name="steps" type="xs:int" use="required"/>
 				<xs:attribute name="margin" type="xs:int" default="10"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RadialAxis">
+		<xs:complexContent>
+			<xs:extension base="AbstractAxis">
+				<xs:attribute name="maximum" type="xs:float"/>
+				<xs:attribute name="steps" type="xs:int" default="10"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1239,7 +1273,7 @@
 			<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
 		</xs:sequence>
 		<xs:attribute name="highlight" type="xs:boolean" default="false"/>
-		<xs:attribute name="showInLegend" type="xs:boolean" default="true"/>
+		<xs:attribute name="showInLegend" type="xs:boolean"/>
 	</xs:complexType>
 	<xs:complexType name="CartesianSeries" abstract="true">
 		<xs:complexContent>
@@ -1248,7 +1282,7 @@
 					<xs:element name="xField" type="Field" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="yField" type="Field" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
-				<xs:attribute name="axis" type="AxisPosition" default="left"/>
+				<xs:attribute name="axis" type="AxisPosition" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1266,6 +1300,57 @@
 				<xs:attribute name="stacked" type="xs:boolean" default="false"/>
 				<xs:attribute name="xPadding" type="xs:int"/>
 				<xs:attribute name="yPadding" type="xs:int"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="LineSeries">
+		<xs:complexContent>
+			<xs:extension base="CartesianSeries">
+				<xs:attribute name="fill" type="xs:boolean" default="false"/>
+				<xs:attribute name="selectionTolerance" type="xs:int" default="20"/>
+				<xs:attribute name="showMarkers" type="xs:boolean" default="true"/>
+				<xs:attribute name="smooth" type="xs:int" default="0"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ScatterSeries">
+		<xs:complexContent>
+			<xs:extension base="CartesianSeries"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GaugeSeries">
+		<xs:complexContent>
+			<xs:extension base="AbstractSeries">
+				<xs:sequence>
+					<xs:element name="angleField" type="Field" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="donut" type="xs:int" default="0"/>
+				<xs:attribute name="highlightDuration" type="xs:int" default="150"/>
+				<xs:attribute name="needle" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PieSeries">
+		<xs:complexContent>
+			<xs:extension base="AbstractSeries">
+				<xs:sequence>
+					<xs:element name="angleField" type="Field" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="lengthField" type="Field" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="donut" type="xs:int" default="0"/>
+				<xs:attribute name="highlightDuration" type="xs:int" default="150"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RadarSeries">
+		<xs:complexContent>
+			<xs:extension base="AbstractSeries">
+				<xs:sequence>
+					<xs:element name="xField" type="Field" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="yhField" type="Field" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="showMarkers" type="xs:boolean" default="false"/>
+				<xs:attribute name="highlightDuration" type="xs:int" default="150"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
