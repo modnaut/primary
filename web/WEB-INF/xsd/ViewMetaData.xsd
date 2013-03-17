@@ -1182,10 +1182,10 @@
 				<xs:sequence>
 					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
+				<xs:attribute name="margin" type="xs:int" default="10"/>
 				<xs:attribute name="maximum" type="xs:float" use="required"/>
 				<xs:attribute name="minimum" type="xs:float" use="required"/>
 				<xs:attribute name="steps" type="xs:int" use="required"/>
-				<xs:attribute name="margin" type="xs:int" default="10"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -1258,9 +1258,9 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="SeriesLabel">
-		<xs:attribute name="display" type="SeriesLabelDisplay" default="none"/>
 		<xs:attribute name="color" type="xs:string" default="#000"/>
 		<xs:attribute name="contrast" type="xs:boolean" default="false"/>
+		<xs:attribute name="display" type="SeriesLabelDisplay" default="none"/>
 		<xs:attribute name="field" type="xs:string" default="name"/>
 		<xs:attribute name="minMargin" type="xs:int" default="50"/>
 		<xs:attribute name="font" type="xs:string" default="11px Helvetica, sans-serif"/>
@@ -1347,10 +1347,10 @@
 			<xs:extension base="AbstractSeries">
 				<xs:sequence>
 					<xs:element name="xField" type="Field" minOccurs="1" maxOccurs="1"/>
-					<xs:element name="yhField" type="Field" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="yField" type="Field" minOccurs="1" maxOccurs="1"/>
 				</xs:sequence>
-				<xs:attribute name="showMarkers" type="xs:boolean" default="false"/>
 				<xs:attribute name="highlightDuration" type="xs:int" default="150"/>
+				<xs:attribute name="showMarkers" type="xs:boolean" default="false"/>				
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
