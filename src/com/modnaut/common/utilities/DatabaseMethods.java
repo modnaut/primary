@@ -468,18 +468,18 @@ public class DatabaseMethods
 							if (parms.containsKey(parameter.getName()))
 							{
 								Object parameterValue = parms.get(parameter.getName());
-								preparedStatement.setObject(parameter.getId(), parameterValue, parameter_type_value);
+								preparedStatement.setObject(i + 1, parameterValue, parameter_type_value);
 								parametersForStatementString[i] = parameterValue;
 							}
 							else
 							{
-								preparedStatement.setObject(parameter.getId(), parameter.getValue(), parameter_type_value);
+								preparedStatement.setObject(i + 1, parameter.getValue(), parameter_type_value);
 								parametersForStatementString[i] = parameter.getValue();
 							}
 						}
 						else
 						{
-							preparedStatement.setObject(parameter.getId(), parameter.getValue(), parameter_type_value);
+							preparedStatement.setObject(i + 1, parameter.getValue(), parameter_type_value);
 							parametersForStatementString[i] = parameter.getValue();
 						}
 					}
