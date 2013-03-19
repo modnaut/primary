@@ -83,6 +83,7 @@
 				<transaction src="sql/GetUserSession.sql"/>
 				<transaction src="sql/UpdateUser.sql"/>
 				<transaction src="sql/up_InsertUpdateSession.sql"/>
+				<transaction src="sql/up_GetAllServerAttributes.sql"/>
 			</sql>
 	</target>
 		

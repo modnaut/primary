@@ -1,9 +1,9 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               5.5.28 - MySQL Community Server (GPL)
+-- Server version:               5.6.10-log - MySQL Community Server (GPL)
 -- Server OS:                    Win64
 -- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-02-28 00:58:55
+-- Date/time:                    2013-03-17 22:36:55
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -49,6 +49,43 @@ INSERT INTO `application` (`ApplicationId`, `Name`) VALUES
 /*!40000 ALTER TABLE `application` ENABLE KEYS */;
 
 
+-- Dumping structure for table common.attribute
+DROP TABLE IF EXISTS `attribute`;
+CREATE TABLE IF NOT EXISTS `attribute` (
+  `AttributeId` int(10) NOT NULL AUTO_INCREMENT,
+  `AttributeName` varchar(255) NOT NULL,
+  `AttributeTypeId` int(11) NOT NULL,
+  PRIMARY KEY (`AttributeId`),
+  KEY `FK_attribute_attributetype` (`AttributeTypeId`),
+  CONSTRAINT `FK_attribute_attributetype` FOREIGN KEY (`AttributeTypeId`) REFERENCES `attributetype` (`AttributeTypeId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.attribute: ~1 rows (approximately)
+/*!40000 ALTER TABLE `attribute` DISABLE KEYS */;
+INSERT INTO `attribute` (`AttributeId`, `AttributeName`, `AttributeTypeId`) VALUES
+	(1, 'CacheXsl', 1);
+/*!40000 ALTER TABLE `attribute` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.attributetype
+DROP TABLE IF EXISTS `attributetype`;
+CREATE TABLE IF NOT EXISTS `attributetype` (
+  `AttributeTypeId` int(10) NOT NULL AUTO_INCREMENT,
+  `Description` varchar(50) NOT NULL,
+  PRIMARY KEY (`AttributeTypeId`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.attributetype: ~5 rows (approximately)
+/*!40000 ALTER TABLE `attributetype` DISABLE KEYS */;
+INSERT INTO `attributetype` (`AttributeTypeId`, `Description`) VALUES
+	(1, 'Text'),
+	(2, 'Integer'),
+	(3, 'Float'),
+	(4, 'List'),
+	(5, 'Date');
+/*!40000 ALTER TABLE `attributetype` ENABLE KEYS */;
+
+
 -- Dumping structure for table common.language
 DROP TABLE IF EXISTS `language`;
 CREATE TABLE IF NOT EXISTS `language` (
@@ -68,6 +105,41 @@ INSERT INTO `language` (`LanguageId`, `Name`, `LocalName`, `FlagFileName`, `IsoL
 /*!40000 ALTER TABLE `language` ENABLE KEYS */;
 
 
+-- Dumping structure for table common.server
+DROP TABLE IF EXISTS `server`;
+CREATE TABLE IF NOT EXISTS `server` (
+  `ServerId` int(10) NOT NULL AUTO_INCREMENT,
+  `ServerName` varchar(200) NOT NULL,
+  `ServerDescription` varchar(200) NOT NULL,
+  PRIMARY KEY (`ServerId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.server: ~1 rows (approximately)
+/*!40000 ALTER TABLE `server` DISABLE KEYS */;
+INSERT INTO `server` (`ServerId`, `ServerName`, `ServerDescription`) VALUES
+	(1, 'localhost', 'Local development PC');
+/*!40000 ALTER TABLE `server` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.serverattributevalue
+DROP TABLE IF EXISTS `serverattributevalue`;
+CREATE TABLE IF NOT EXISTS `serverattributevalue` (
+  `ServerId` int(10) NOT NULL,
+  `AttributeId` int(10) NOT NULL,
+  `AttributeValue` varchar(2000) NOT NULL,
+  KEY `FK_ServerAttributeValue_server` (`ServerId`),
+  KEY `FK_ServerAttributeValue_attribute` (`AttributeId`),
+  CONSTRAINT `FK_ServerAttributeValue_attribute` FOREIGN KEY (`AttributeId`) REFERENCES `attribute` (`AttributeId`),
+  CONSTRAINT `FK_ServerAttributeValue_server` FOREIGN KEY (`ServerId`) REFERENCES `server` (`ServerId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.serverattributevalue: ~1 rows (approximately)
+/*!40000 ALTER TABLE `serverattributevalue` DISABLE KEYS */;
+INSERT INTO `serverattributevalue` (`ServerId`, `AttributeId`, `AttributeValue`) VALUES
+	(1, 1, 'N');
+/*!40000 ALTER TABLE `serverattributevalue` ENABLE KEYS */;
+
+
 -- Dumping structure for table common.session
 DROP TABLE IF EXISTS `session`;
 CREATE TABLE IF NOT EXISTS `session` (
@@ -78,11 +150,8 @@ CREATE TABLE IF NOT EXISTS `session` (
   PRIMARY KEY (`SessionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.session: ~2 rows (approximately)
+-- Dumping data for table common.session: ~18 rows (approximately)
 /*!40000 ALTER TABLE `session` DISABLE KEYS */;
-INSERT INTO `session` (`SessionId`, `SessionObject`, `CreatedDate`, `LastModifiedDate`) VALUES
-	(9829863113365, _binary 0xACED000573720025636F6D2E6D6F646E6175742E636F6D6D6F6E2E73657373696F6E2E57656253657373696F6EC6D379D2ADF1911B0200044A000A73657373696F6E5F6964490007757365725F69644C0005656D61696C7400124C6A6176612F6C616E672F537472696E673B4C00036D61707400134C6A6176612F7574696C2F486173684D61703B7870000008F0B17FC29500000000740000737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000078, '2013-02-27 23:12:29', '2013-02-27 23:12:29'),
-	(13749790474425, _binary 0xACED000573720025636F6D2E6D6F646E6175742E636F6D6D6F6E2E73657373696F6E2E57656253657373696F6EC6D379D2ADF1911B0200044A000A73657373696F6E5F6964490007757365725F69644C0005656D61696C7400124C6A6176612F6C616E672F537472696E673B4C00036D61707400134C6A6176612F7574696C2F486173684D61703B787000000C815F6080B900000000740000737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000078, '2013-02-28 00:50:05', '2013-02-28 00:50:05');
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 
 
@@ -182,8 +251,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`, `HireDate`, `UserTypeCd`, `UserStatusCd`) VALUES
 	(1, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A'),
-	(2, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 't85j1nK7VVxAv3QtmvSHldXtCKE=', '2013-02-05 18:34:51', 'C', 'A'),
-	(3, 'bdalgaard22', 'Ben', 'Dalgaard', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A');
+	(2, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A'),
+	(3, 'bdalgaard22', 'Ben', 'Dalgaardfasdfsa', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 
