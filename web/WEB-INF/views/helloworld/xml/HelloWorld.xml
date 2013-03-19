@@ -6,6 +6,7 @@
 				<item xsi:type="GridPanel" region="center" id="users" flex="1">
 					<listener event="selectionchange" action="submit" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userSelected" itemsToUpdate="editUserPanel"/>
 					<title stringCD="Users"/>
+					<column xsi:type="RowNumbererColumn" width="40"/>
 					<column dataIndex="UserId" flex="1">
 						<text stringCD="User ID"/>
 					</column>

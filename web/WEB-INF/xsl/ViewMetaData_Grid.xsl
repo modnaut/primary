@@ -80,6 +80,10 @@
 		</xsl:if>
 	</xsl:template>
 	
+	<xsl:template match="column[@xsi:type='RowNumbererColumn']" mode="columnType">
+		"xtype": "rownumberer",
+	</xsl:template>
+	
 	<xsl:template match="column[@xsi:type='ActionColumn']" mode="columnType">
 		"xtype": "actioncolumn",
 	</xsl:template>

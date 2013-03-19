@@ -423,6 +423,11 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="RowNumbererColumn">
+		<xs:complexContent>
+			<xs:extension base="Column"/>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="ActionColumn">
 		<xs:complexContent>
 			<xs:extension base="Column"/>
