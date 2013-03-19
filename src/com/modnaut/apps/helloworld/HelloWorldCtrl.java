@@ -46,8 +46,11 @@ public class HelloWorldCtrl extends ExtJsScreenCtrl
 	public void defaultAction()
 	{
 		// NOTE: need to run the SP located in the new "primary/sql" folder in MySql before testing
-		// ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
-		// populateData("users", data);
+		ArrayList<String[]> data = DatabaseMethods.getJustData(GET_ALL_USERS_ALPHABETICALLY, ICommonConstants.COMMON);
+		ArrayList<String[]> multipleData = new ArrayList<String[]>();
+		for (int i = 0; i < 3000; i++)
+			multipleData.addAll(data);
+		populateData("users", multipleData);
 		populateUserTypesCombo();
 		marshall(viewMetaData);
 	}

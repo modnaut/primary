@@ -42,7 +42,6 @@
 				<xsl:with-param name="displayField" select="$displayField"/>
 			</xsl:call-template>
 			<xsl:for-each select="data">
-				"pageSize": <xsl:value-of select="count(record)"/>,
 				"proxy": {
 					"type": "memory"
 				},
@@ -59,6 +58,13 @@
 							<xsl:with-param name="displayField" select="$displayField"/>
 						</xsl:call-template>
 					</xsl:when>
+					<xsl:when test="../../@xsi:type='Chart' ">
+						<xsl:call-template name="RecordSet">
+							<xsl:with-param name="mode" select=" 'chart' "/>
+							<xsl:with-param name="valueField" select="$valueField"/>
+							<xsl:with-param name="displayField" select="$displayField"/>
+						</xsl:call-template>
+					</xsl:when>
 				</xsl:choose>
 			</xsl:for-each>
 			<xsl:value-of select="mn:attribute(., 'buffered', ',')"/>
@@ -67,14 +73,7 @@
 			<xsl:value-of select="mn:attribute(., 'groupDir', ',')"/>
 			<xsl:value-of select="mn:attribute(., 'groupField', ',')"/>
 			<xsl:value-of select="mn:attribute(., 'leadingBufferZone', ',')"/>
-			<xsl:choose>
-				<xsl:when test="string(@pageSize) = ''">
-					"pageSize": 1000000,
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="mn:attribute(., 'pageSize', ',')"/>
-				</xsl:otherwise>
-			</xsl:choose>
+			<xsl:value-of select="mn:attribute(., 'pageSize', ',')"/>
 			<xsl:value-of select="mn:attribute(., 'purgePageCount', ',')"/>
 			<xsl:value-of select="mn:attribute(., 'remoteGroup', ',')"/>
 			<xsl:value-of select="mn:attribute(., 'sortOnFilter', ',')"/>
@@ -204,7 +203,6 @@
 	<xsl:template match="data" mode="inlineGrid">
 		"store": {
 			"autoDestroy": true,
-			"pageSize": 1000000,
 			"fields": [
 				<xsl:for-each select="../column">
 					{
@@ -242,6 +240,25 @@
 				<xsl:with-param name="displayField" select="$displayField"/>
 			</xsl:call-template>
 			"fields": [<xsl:value-of select="mn:wrap-string($valueField)"/>, <xsl:value-of select="mn:wrap-string($displayField)"/>]
+		}
+	</xsl:template>
+	
+	<xsl:template match="data" mode="inlineChart">
+		"store": {
+			"autoDestroy": true,
+			"fields": [
+				<xsl:for-each select="record[0]/field">
+					{
+						"name": <xsl:value-of select="mn:wrap-string(@name)"/>
+					}<xsl:call-template name="comma-delimit"/>
+				</xsl:for-each>
+			],
+			<xsl:call-template name="RecordSet">
+				<xsl:with-param name="mode" select=" 'grid' "/>
+			</xsl:call-template>
+			"proxy": {
+				"type": "memory"
+			}
 		}
 	</xsl:template>
 	

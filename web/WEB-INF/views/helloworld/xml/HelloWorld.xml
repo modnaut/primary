@@ -27,7 +27,7 @@
 					<column dataIndex="UserTypeCd" flex="1">
 						<text stringCD="User Type"/>
 					</column>
-					<store xsi:type="Store" buffered="true" pageSize="10000">
+					<store xsi:type="Store">
 						<model>
 							<field name="UserId" type="int"/>
 							<field name="UserName" type="string"/>
@@ -37,10 +37,21 @@
 							<field name="HireDate" type="date"/>
 							<field name="UserTypeCd" type="string"/>
 						</model>
-						<proxy xsi:type="AjaxProxy" Class="com.modnaut.apps.helloworld.HelloWorldCtrl" Method="getUsers"/>
+						<data>
+							<record>
+								<field name="UserId"/>
+								<field name="UserName"/>
+								<field name="FirstName"/>
+								<field name="LastName"/>
+								<field name="EmailAddress"/>
+								<field name="HireDate"/>
+								<field name="UserTypeCd"/>
+							</record>
+						</data>
 					</store>
+					<plugin xsi:type="BufferedRendererPlugin"/>
 				</item>
-				<item xsi:type="Panel" id="editUserPanel" flex="1" region="east" bodyPadding="5">
+				<item xsi:type="Panel" id="editUserPanel" flex="1" region="east" bodyPadding="5" autoScroll="true">
 					<items>
 						<item xsi:type="DisplayField" id="UserId" submitValue="true">
 							<fieldLabel stringCD="User ID"/>
@@ -109,23 +120,41 @@
 						<field name="UserName"/>
 						<title stringCD="User Name"/>
 					</axis>
-					<axis xsi:type="NumericAxis" position="left">
-						<field name="UserId"/>
-						<title stringCD="UserId"/>
+					<axis xsi:type="NumericAxis" position="left" minimum="0">
+						<field name="LoginCount"/>
+						<field name="LoginAttempts"/>
+						<title stringCD="Login Count"/>
 					</axis>
-					<series xsi:type="BarSeries" axis="left" column="true">
+					<legend position="bottom"/>
+					<series xsi:type="BarSeries" axis="bottom" highlight="true" column="true">
+						<label display="insideEnd" field="LoginCount"/>
+						<xField name="UserName"/>
+						<yField name="LoginCount"/>
+						<yField name="LoginAttempts"/>
 					</series>
 					<store xsi:type="Store">
 						<model>
-							<field name="UserId" type="int"/>
 							<field name="UserName" type="string"/>
-							<field name="FirstName" type="string"/>
-							<field name="LastName" type="string"/>
-							<field name="EmailAddress" type="string"/>
-							<field name="HireDate" type="date"/>
-							<field name="UserTypeCd" type="string"/>
+							<field name="LoginCount" type="string"/>
+							<field name="LoginAttempts" type="int"/>
 						</model>
-						<proxy xsi:type="AjaxProxy" Class="com.modnaut.apps.helloworld.HelloWorldCtrl" Method="getUsers"/>
+						<data>
+							<record>
+								<field name="UserName" value="dcohn"/>
+								<field name="LoginCount" value="10"/>
+								<field name="LoginAttempts" value="10"/>
+							</record>
+							<record>
+								<field name="UserName" value="bdalgaard"/>
+								<field name="LoginCount" value="15"/>
+								<field name="LoginAttempts" value="15"/>
+							</record>
+							<record>
+								<field name="UserName" value="jlamarche"/>
+								<field name="LoginCount" value="20"/>
+								<field name="LoginAttempts" value="15"/>
+							</record>
+						</data>
 					</store>
 				</item>
 			</items>

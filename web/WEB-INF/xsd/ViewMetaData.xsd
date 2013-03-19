@@ -527,6 +527,19 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="BufferedRendererPlugin">
+		<xs:complexContent>
+			<xs:extension base="GridPlugin">
+				<xs:attribute name="leadingBufferZone" type="xs:int" default="20"/>
+				<xs:attribute name="numFromEdge" type="xs:int" default="8"/>
+				<xs:attribute name="pluginId" type="xs:string"/>
+				<xs:attribute name="scrollToLoadBuffer" type="xs:int" default="200"/>
+				<xs:attribute name="synchronousRender" type="xs:boolean" default="true"/>
+				<xs:attribute name="trailingBufferZone" type="xs:int" default="10"/>
+				<xs:attribute name="variableRowHeight" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:simpleType name="TabPosition">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="top"/>
@@ -1171,9 +1184,10 @@
 				<xs:attribute name="constrain" type="xs:boolean" default="false"/>
 				<xs:attribute name="dateFormat" type="xs:string"/>
 				<xs:attribute name="fromDate" type="xs:string"/>
-				<xs:attribute name="step" type="xs:string"/><!--Set string value to javascript value, will be output exactly. i.e. "[Ex.Date.Day, 1]"-->
+				<xs:attribute name="step" type="xs:string"/>
 				<xs:attribute name="toDate" type="xs:string"/>
 			</xs:extension>
+			<!--Set string value to javascript value, will be output exactly. i.e. "[Ex.Date.Day, 1]"-->
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="GaugeAxis">
@@ -1350,7 +1364,7 @@
 					<xs:element name="yField" type="Field" minOccurs="1" maxOccurs="1"/>
 				</xs:sequence>
 				<xs:attribute name="highlightDuration" type="xs:int" default="150"/>
-				<xs:attribute name="showMarkers" type="xs:boolean" default="false"/>				
+				<xs:attribute name="showMarkers" type="xs:boolean" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

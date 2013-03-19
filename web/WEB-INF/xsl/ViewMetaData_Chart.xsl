@@ -11,8 +11,6 @@
 		<xsl:value-of select="mn:attribute(., 'animate', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'insetPadding', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'theme', ',')"/>
-		
-		
 		<xsl:choose>
 			<xsl:when test="store"><!--If we have a store use the normal store template-->
 				<xsl:for-each select="store">
@@ -21,7 +19,7 @@
 			</xsl:when>
 			<xsl:when test="data"><!--if we're just defining inline data, use the inline data template-->
 				<xsl:for-each select="data">
-					<xsl:apply-templates select="." mode="inlineGrid"/>,
+					<xsl:apply-templates select="." mode="inlineChart"/>,
 				</xsl:for-each>
 			</xsl:when>
 		</xsl:choose>
@@ -122,7 +120,7 @@
 	</xsl:template>
 	
 	<xsl:template name="ChartBackground">
-		<xsl:if test="background">
+		<xsl:for-each select="background">
 			"background": {
 				<xsl:choose>
 					<xsl:when test="@fill != '' ">
@@ -147,11 +145,11 @@
 					</xsl:when>
 				</xsl:choose>
 			},
-		</xsl:if>
+		</xsl:for-each>
 	</xsl:template>
 	
 	<xsl:template name="ChartLegend">
-		<xsl:if test="legend">
+		<xsl:for-each select="legend">
 			"legend": {
 				<xsl:value-of select="mn:attribute(., 'boxFill', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'boxStroke', ',')"/>
@@ -167,7 +165,7 @@
 				<xsl:value-of select="mn:attribute(., 'x', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'y', '')"/>
 			},
-		</xsl:if>
+		</xsl:for-each>
 	</xsl:template>
 	
 	<xsl:template name="Series">
@@ -188,7 +186,7 @@
 	</xsl:template>
 	
 	<xsl:template name="SeriesLabel">
-		<xsl:if test="label">
+		<xsl:for-each select="label">
 			"label": {
 				<xsl:value-of select="mn:attribute(., 'color', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'constrast', ',')"/>
@@ -197,18 +195,29 @@
 				<xsl:value-of select="mn:attribute(., 'minMargin', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'font', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'orientation', '')"/>
+				_d: null
 			},
-		</xsl:if>
+		</xsl:for-each>
 	</xsl:template>
 	
 	<xsl:template name="CartesianSeries">
 		<xsl:call-template name="AbstractSeries"/>
 		<xsl:value-of select="mn:attribute(., 'axis', ',')"/>
 		<xsl:if test="xField">
-			"xField": <xsl:value-of select="mn:wrap-string(xField/@name)"/>,
+			"xField": [
+				<xsl:for-each select="xField">
+					<xsl:value-of select="mn:wrap-string(@name)"/>
+					<xsl:call-template name="comma-delimit"/>
+				</xsl:for-each>
+			],
 		</xsl:if>
 		<xsl:if test="yField">
-			"yField": <xsl:value-of select="mn:wrap-string(yField/@name)"/>,
+			"yField": [
+				<xsl:for-each select="yField">
+					<xsl:value-of select="mn:wrap-string(@name)"/>
+					<xsl:call-template name="comma-delimit"/>
+				</xsl:for-each>
+			],
 		</xsl:if>
 	</xsl:template>
 	

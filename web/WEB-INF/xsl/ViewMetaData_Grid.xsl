@@ -111,9 +111,10 @@
 		<xsl:if test="plugin">
 			"plugins": [
 				<xsl:for-each select="plugin">
-					<xsl:apply-templates select="."/>
+					{
+						<xsl:apply-templates select="."/>
+					}<xsl:call-template name="comma-delimit"/>
 				</xsl:for-each>
-				<xsl:call-template name="comma-delimit"/>
 			],
 		</xsl:if>
 	</xsl:template>
@@ -125,20 +126,27 @@
 	</xsl:template>
 	
 	<xsl:template match="plugin[@xsi:type='CellEditing']">
-		Ext.create('Ext.grid.plugin.CellEditing', {
-				<xsl:call-template name="GridEditingPlugin"/>
-				"_d": 0
-		})
+		<xsl:call-template name="GridEditingPlugin"/>
+		"ptype": "cellediting"
 	</xsl:template>
 	
 	<xsl:template match="plugin[@xsi:type='RowEditing']">
-		Ext.create('Ext.grid.plugin.RowEditing', {
-				<xsl:call-template name="GridEditingPlugin"/>
-				<xsl:value-of select="mn:attribute(., 'autoCancel', ',')"/>
-				<xsl:value-of select="mn:attribute(., 'clicksToMoveEditor', ',')"/>
-				<xsl:value-of select="mn:attribute(., 'errorSummary', ',')"/>
-				"_d": 0
-		})
+		<xsl:call-template name="GridEditingPlugin"/>
+		<xsl:value-of select="mn:attribute(., 'autoCancel', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'clicksToMoveEditor', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'errorSummary', ',')"/>
+		"ptype": "rowediting"
+	</xsl:template>
+	
+	<xsl:template match="plugin[@xsi:type='BufferedRendererPlugin']">
+		<xsl:value-of select="mn:attribute(., 'leadingBufferZone', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'numFromEdge', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'pluginId', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'scrollToLoadBuffer', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'synchronousRender', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'trailingBufferZone', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'variableRowHeight', ',')"/>
+		"ptype": "bufferedrenderer"
 	</xsl:template>
 
 </xsl:stylesheet>
