@@ -349,6 +349,7 @@
 	
 	<xsl:template match="item[@xsi:type='Image']">
 		<xsl:value-of select="mn:childString(., 'altText', ',')"/>
-		<xsl:value-of select="mn:imageSpec(image, 'image', ',')"/>
+		<xsl:value-of select="mn:imageSpec(image, 'src', ',')"/>
+		"xtype": "image"
 	</xsl:template>
 </xsl:stylesheet>
