@@ -25,7 +25,7 @@
 		<xsl:apply-templates select="items"/>
 	</xsl:template>
 	
-	<xsl:template name="Toolbar">
+	<xsl:template name="Toolbars">
 		<xsl:for-each select="toolbar">
 			<xsl:choose>
 				<xsl:when test="@position = 'bottom' ">	
@@ -42,11 +42,20 @@
 				</xsl:when>
 			</xsl:choose>
 			: {
-				<xsl:value-of select="mn:attribute(., 'vertical', ',')"/>
-				<xsl:call-template name="Container"/>
-				"_d": 0
+				<xsl:call-template name="Toolbar"/>
 			},
 		</xsl:for-each>
+	</xsl:template>
+	
+	<xsl:template name="Toolbar">
+		<xsl:call-template name="Container"/>
+		<xsl:value-of select="mn:attribute(., 'enableOverflow', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'vertical', ',')"/>
+		"xtype": "toolbar"
+	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type = 'Toolbar']">
+		<xsl:call-template name="Toolbar"/>
 	</xsl:template>
 	
 	<xsl:template name="Panel">
@@ -67,7 +76,7 @@
 		<xsl:value-of select="mn:attribute(., 'titleAlign', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'titleCollapse', ',')"/>
 		<xsl:call-template name="Notifications"/>
-		<xsl:call-template name="Toolbar"/>
+		<xsl:call-template name="Toolbars"/>
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='Panel']">
