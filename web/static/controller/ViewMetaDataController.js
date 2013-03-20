@@ -49,6 +49,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		}
 	},
 	replaceComponent: function(oldComponent, newConfig) {
+		var controller = this;
 		var ownerCt = oldComponent.ownerCt;
 		if(ownerCt) {
 			var form = ownerCt.form;
@@ -56,15 +57,24 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			var resetActiveTab = false;
 			if(ownerCt.is('tabpanel') && ownerCt.getActiveTab() == oldComponent)
 				resetActiveTab = true;
+			
+			controller.removeDescendantFormFields(oldComponent);
+			
 			ownerCt.remove(oldComponent, true);
 			var addedComponent = ownerCt.insert(componentIndex, newConfig);
 			if(resetActiveTab) {
 				ownerCt.setActiveTab(addedComponent);
 			}
-			if(form) {
-				form.remove(oldComponent);
-				form.add(addedComponent);
-			}
+			
+		}
+	},
+	removeDescendantFormFields: function(container) {
+		//if the component being removed might contain form fields, they need to be removed manually
+		//since the ExtJS code misses if a form field is removed indirectly by removing it's owner
+		//container
+		var containedFormFields = container.query('[isFormField]');
+		for(var i = 0, len = containedFormFields.length; i < len; i++) {
+			containedFormFields[i].ownerCt.remove(containedFormFields[i]);
 		}
 	},
 	getContainerContent: function(options) {
@@ -135,6 +145,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			} else {
 				controller.safeSetLoading(container, false);
 				if(items) {
+					controller.removeDescendantFormFields(container);
 					container.removeAll();
 					container.add(items);
 				} else {
