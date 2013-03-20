@@ -12,22 +12,24 @@
 	<xsl:include href="ViewMetaData_Chart.xsl"/>
 	
 	<xsl:template match="viewMetaData">
-		<xsl:if test="items">
-			{
-				<xsl:call-template name="RootNotifications"/>
-				<xsl:apply-templates select="items"/>
-				"success": true
-			}
-		</xsl:if>
+		{
+			<xsl:call-template name="Notifications"/>
+			"items": [
+				<xsl:call-template name="Items"/>
+			],
+			"success": true
+		}
 	</xsl:template>
 	
-	<xsl:template name="RootNotifications">
-		"notifications": [
-			<xsl:for-each select="notification">
-				<xsl:apply-templates select="."/>
-				<xsl:call-template name="comma-delimit"/>
-			</xsl:for-each>
-		],
+		<xsl:template name="Notifications">
+		<xsl:if test="notification">
+			"dockedItems": [
+				<xsl:for-each select="notification">
+					<xsl:apply-templates select="."/>
+					<xsl:call-template name="comma-delimit"/>
+				</xsl:for-each>
+			],
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="notification">
@@ -41,14 +43,18 @@
 	
 	<xsl:template match="items">
 		"items": [
-			<xsl:for-each select="item">
+			<xsl:call-template name="Items"/>
+		],
+	</xsl:template>
+	
+	<xsl:template name="Items">
+		<xsl:for-each select="item">
 				{
 					<xsl:call-template name="Item"/>
 					<xsl:apply-templates select="."/>
 				}
 				<xsl:call-template name="comma-delimit"/>
 			</xsl:for-each>
-		],
 	</xsl:template>
 
 	<xsl:template name="Item">

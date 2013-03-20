@@ -1,165 +1,163 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
-	<items>
-		<item xsi:type="Panel">
-			<items>
-				<item xsi:type="GridPanel" region="center" id="users" flex="1">
-					<listener event="selectionchange" action="submit" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userSelected" itemsToUpdate="editUserPanel"/>
-					<title stringCD="Users"/>
-					<column xsi:type="RowNumbererColumn" width="40"/>
-					<column dataIndex="UserId" flex="1">
-						<text stringCD="User ID"/>
-					</column>
-					<column dataIndex="UserName" flex="1">
-						<text stringCD="Username"/>
-					</column>
-					<column dataIndex="FirstName" flex="1">
-						<text stringCD="First Name"/>
-					</column>
-					<column  dataIndex="LastName" flex="1">
-						<text stringCD="Last Name"/>
-					</column>
-					<column dataIndex="EmailAddress" flex="1">
-						<text stringCD="email"/>
-					</column>
-					<column xsi:type="DateColumn" dataIndex="HireDate" flex="1">
-						<text stringCD="Hire Date"/>
-					</column>
-					<column dataIndex="UserTypeCd" flex="1">
-						<text stringCD="User Type"/>
-					</column>
-					<store xsi:type="Store">
-						<model>
-							<field name="UserId" type="int"/>
-							<field name="UserName" type="string"/>
-							<field name="FirstName" type="string"/>
-							<field name="LastName" type="string"/>
-							<field name="EmailAddress" type="string"/>
-							<field name="HireDate" type="date"/>
-							<field name="UserTypeCd" type="string"/>
-						</model>
+	<item xsi:type="Panel">
+		<items>
+			<item xsi:type="GridPanel" region="center" id="users" flex="1">
+				<listener event="selectionchange" action="submit" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userSelected" itemsToUpdate="editUserPanel"/>
+				<title stringCD="Users"/>
+				<column xsi:type="RowNumbererColumn" width="40"/>
+				<column dataIndex="UserId" flex="1">
+					<text stringCD="User ID"/>
+				</column>
+				<column dataIndex="UserName" flex="1">
+					<text stringCD="Username"/>
+				</column>
+				<column dataIndex="FirstName" flex="1">
+					<text stringCD="First Name"/>
+				</column>
+				<column dataIndex="LastName" flex="1">
+					<text stringCD="Last Name"/>
+				</column>
+				<column dataIndex="EmailAddress" flex="1">
+					<text stringCD="email"/>
+				</column>
+				<column xsi:type="DateColumn" dataIndex="HireDate" flex="1">
+					<text stringCD="Hire Date"/>
+				</column>
+				<column dataIndex="UserTypeCd" flex="1">
+					<text stringCD="User Type"/>
+				</column>
+				<store xsi:type="Store">
+					<model>
+						<field name="UserId" type="int"/>
+						<field name="UserName" type="string"/>
+						<field name="FirstName" type="string"/>
+						<field name="LastName" type="string"/>
+						<field name="EmailAddress" type="string"/>
+						<field name="HireDate" type="date"/>
+						<field name="UserTypeCd" type="string"/>
+					</model>
+					<data>
+						<record>
+							<field name="UserId"/>
+							<field name="UserName"/>
+							<field name="FirstName"/>
+							<field name="LastName"/>
+							<field name="EmailAddress"/>
+							<field name="HireDate"/>
+							<field name="UserTypeCd"/>
+						</record>
+					</data>
+				</store>
+				<plugin xsi:type="BufferedRendererPlugin"/>
+			</item>
+			<item xsi:type="Panel" id="editUserPanel" flex="1" region="east" bodyPadding="5" autoScroll="true">
+				<items>
+					<item xsi:type="DisplayField" id="UserId" submitValue="true">
+						<fieldLabel stringCD="User ID"/>
+					</item>
+					<item xsi:type="TextField" id="UserName" allowBlank="false" maxLength="50">
+						<fieldLabel stringCD="Username"/>
+					</item>
+					<item xsi:type="TextField" id="FirstName" allowBlank="false" maxLength="50">
+						<fieldLabel stringCD="First Name"/>
+					</item>
+					<item xsi:type="TextField" id="LastName" allowBlank="false" maxLength="50" msgTarget="side">
+						<fieldLabel stringCD="Last Name"/>
+					</item>
+					<item xsi:type="TextField" id="EmailAddress" allowBlank="false" maxLength="100" msgTarget="title">
+						<fieldLabel stringCD="Email Address"/>
+					</item>
+					<item xsi:type="DateField" id="HireDate">
+						<fieldLabel stringCD="Hire Date"/>
+					</item>
+					<item xsi:type="ComboBox" id="UserTypeCd" valueField="userTypeCd" displayField="description">
+						<listener action="submit" event="change" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userTypeChanged" itemsToUpdate="editUserPanel"/>
+						<fieldLabel stringCD="User Type"/>
 						<data>
 							<record>
-								<field name="UserId"/>
-								<field name="UserName"/>
-								<field name="FirstName"/>
-								<field name="LastName"/>
-								<field name="EmailAddress"/>
-								<field name="HireDate"/>
-								<field name="UserTypeCd"/>
+								<field name="userTypeCd"/>
+								<field name="description"/>
 							</record>
 						</data>
-					</store>
-					<plugin xsi:type="BufferedRendererPlugin"/>
-				</item>
-				<item xsi:type="Panel" id="editUserPanel" flex="1" region="east" bodyPadding="5" autoScroll="true">
+					</item>
+					<item xsi:type="TextField" id="UserPassword">
+						<fieldLabel stringCD="New Password"/>
+					</item>
+				</items>
+				<title stringCD="Create/Edit User"/>
+				<toolbar position="top">
 					<items>
-						<item xsi:type="DisplayField" id="UserId" submitValue="true">
-							<fieldLabel stringCD="User ID"/>
-						</item>
-						<item xsi:type="TextField" id="UserName" allowBlank="false" maxLength="50">
-							<fieldLabel stringCD="Username"/>
-						</item>
-						<item xsi:type="TextField" id="FirstName" allowBlank="false" maxLength="50">
-							<fieldLabel stringCD="First Name"/>
-						</item>
-						<item xsi:type="TextField" id="LastName" allowBlank="false" maxLength="50" msgTarget="side">
-							<fieldLabel stringCD="Last Name"/>
-						</item>
-						<item xsi:type="TextField" id="EmailAddress" allowBlank="false" maxLength="100" msgTarget="title">
-							<fieldLabel stringCD="Email Address"/>
-						</item>
-						<item xsi:type="DateField" id="HireDate">
-							<fieldLabel stringCD="Hire Date"/>
-						</item>
-						<item xsi:type="ComboBox" id="UserTypeCd" valueField="userTypeCd" displayField="description">
-							<listener action="submit" event="change" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userTypeChanged" itemsToUpdate="editUserPanel"/>
-							<fieldLabel stringCD="User Type"/>
-							<data>
-								<record>
-									<field name="userTypeCd"/>
-									<field name="description"/>
-								</record>
-							</data>
-						</item>
-						<item xsi:type="TextField" id="UserPassword">
-							<fieldLabel stringCD="New Password"/>
+						<item xsi:type="Button">
+							<menu>
+								<items>
+									<item xsi:type="MenuItem">
+										<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="defaultAction" itemsToUpdate="editUserPanel"/>
+										<text stringCD="menu item 1"/>
+									</item>
+								</items>
+							</menu>
+							<text stringCD="Menu Button"/>
 						</item>
 					</items>
-					<title stringCD="Create/Edit User"/>
-					<toolbar position="top">
-						<items>
-							<item xsi:type="Button">
-								<menu>
-									<items>
-										<item xsi:type="MenuItem">
-											<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="defaultAction" itemsToUpdate="editUserPanel"/>
-											<text stringCD="menu item 1"/>
-										</item>
-									</items>
-								</menu>
-								<text stringCD="Menu Button"/>
-							</item>
-						</items>
-					</toolbar>
-					<toolbar position="bottom">
-						<items>
-							<item xsi:type="ToolbarFill"/>
-							<item xsi:type="Button" id="saveUser" iconCls="icon-database_save">
-								<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="saveUser"/>
-								<text stringCD="Save"/>
-							</item>
-							<item xsi:type="Button" id="newUser" iconCls="icon-user_add">
-								<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="newUser"/>
-								<text stringCD="New User"/>
-							</item>
-						</items>
-					</toolbar>
-				</item>
-				<item xsi:type="Chart" region="south" flex="1">
-					<axis xsi:type="CategoryAxis" position="bottom">
-						<field name="UserName"/>
-						<title stringCD="User Name"/>
-					</axis>
-					<axis xsi:type="NumericAxis" position="left" minimum="0">
-						<field name="LoginCount"/>
-						<field name="LoginAttempts"/>
-						<title stringCD="Login Count"/>
-					</axis>
-					<legend position="bottom"/>
-					<series xsi:type="BarSeries" axis="bottom" highlight="true" column="true">
-						<label display="insideEnd" field="LoginCount"/>
-						<xField name="UserName"/>
-						<yField name="LoginCount"/>
-						<yField name="LoginAttempts"/>
-					</series>
-					<store xsi:type="Store">
-						<model>
-							<field name="UserName" type="string"/>
-							<field name="LoginCount" type="string"/>
-							<field name="LoginAttempts" type="int"/>
-						</model>
-						<data>
-							<record>
-								<field name="UserName" value="dcohn"/>
-								<field name="LoginCount" value="10"/>
-								<field name="LoginAttempts" value="10"/>
-							</record>
-							<record>
-								<field name="UserName" value="bdalgaard"/>
-								<field name="LoginCount" value="15"/>
-								<field name="LoginAttempts" value="15"/>
-							</record>
-							<record>
-								<field name="UserName" value="jlamarche"/>
-								<field name="LoginCount" value="20"/>
-								<field name="LoginAttempts" value="15"/>
-							</record>
-						</data>
-					</store>
-				</item>
-			</items>
-			<layout xsi:type="BorderLayout"/>
-		</item>
-	</items>
+				</toolbar>
+				<toolbar position="bottom">
+					<items>
+						<item xsi:type="ToolbarFill"/>
+						<item xsi:type="Button" id="saveUser" iconCls="icon-database_save">
+							<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="saveUser"/>
+							<text stringCD="Save"/>
+						</item>
+						<item xsi:type="Button" id="newUser" iconCls="icon-user_add">
+							<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="newUser"/>
+							<text stringCD="New User"/>
+						</item>
+					</items>
+				</toolbar>
+			</item>
+			<item xsi:type="Chart" region="south" flex="1">
+				<axis xsi:type="CategoryAxis" position="bottom">
+					<field name="UserName"/>
+					<title stringCD="User Name"/>
+				</axis>
+				<axis xsi:type="NumericAxis" position="left" minimum="0">
+					<field name="LoginCount"/>
+					<field name="LoginAttempts"/>
+					<title stringCD="Login Count"/>
+				</axis>
+				<legend position="bottom"/>
+				<series xsi:type="BarSeries" axis="bottom" highlight="true" column="true">
+					<label display="insideEnd" field="LoginCount"/>
+					<xField name="UserName"/>
+					<yField name="LoginCount"/>
+					<yField name="LoginAttempts"/>
+				</series>
+				<store xsi:type="Store">
+					<model>
+						<field name="UserName" type="string"/>
+						<field name="LoginCount" type="string"/>
+						<field name="LoginAttempts" type="int"/>
+					</model>
+					<data>
+						<record>
+							<field name="UserName" value="dcohn"/>
+							<field name="LoginCount" value="10"/>
+							<field name="LoginAttempts" value="10"/>
+						</record>
+						<record>
+							<field name="UserName" value="bdalgaard"/>
+							<field name="LoginCount" value="15"/>
+							<field name="LoginAttempts" value="15"/>
+						</record>
+						<record>
+							<field name="UserName" value="jlamarche"/>
+							<field name="LoginCount" value="20"/>
+							<field name="LoginAttempts" value="15"/>
+						</record>
+					</data>
+				</store>
+			</item>
+		</items>
+		<layout xsi:type="BorderLayout"/>
+	</item>
 </viewMetaData>

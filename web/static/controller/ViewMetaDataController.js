@@ -106,7 +106,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			console.log('success', arguments);
 			var items = response.items;
 			var html = response.html;
-			var notifications = response.notifications;
+			var dockedItems = response.dockedItems;
 			var sessionId = response.sessionId;
 			
 			if(sessionId) {
@@ -143,8 +143,8 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			}
 			
 			//add new notifications to root
-			if(notifications && notifications.length) {
-				container.addDocked(notifications);
+			if(dockedItems && dockedItems.length) {
+				container.addDocked(dockedItems);
 			}
 			Ext.resumeLayouts(true);
 			
