@@ -70,8 +70,14 @@
 		<xsl:value-of select="mn:attribute(., 'split', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'splitterResize', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'width', ',')"/>
-		
 		<xsl:call-template name="Listeners"/>
+	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type='Xtype']">
+		<xsl:for-each select="parameter">
+			<xsl:call-template name="Parameter"/>,
+		</xsl:for-each>
+		<xsl:value-of select="mn:attribute(., 'xtype', '')"/>
 	</xsl:template>
 	
 	<xsl:template name="Parameter">
