@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mn="http://www.modnaut.com" xmlns:json="http://json.org/">
 	<xsl:output indent="no" omit-xml-declaration="yes" method="text" encoding="utf-8"/>
-	
+
 	<xsl:template match="item[@xsi:type='Button']">
 		<xsl:value-of select="mn:attribute(., 'allowDepress', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'arrowAlign', ',')"/>
@@ -26,7 +26,7 @@
 		<xsl:call-template name="Menu"/>
 		"xtype": "button"
 	</xsl:template>
-	
+
 	<xsl:template name="Labelable">
 		<xsl:value-of select="mn:childString(., 'activeError', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'autoFitErrors', ',')"/>
@@ -47,7 +47,7 @@
 		</xsl:choose>
 		<xsl:value-of select="mn:attribute(., 'preventMark', ',')"/>
 	</xsl:template>
-	
+
 	<xsl:template name="Field">
 		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
 		<xsl:if test="@id != '' and string(@radioGroupName) = ''">
@@ -59,7 +59,7 @@
 			<xsl:value-of select="mn:attribute(., 'value', ',')"/>
 		</xsl:if>
 	</xsl:template>
-	
+
 	<xsl:template name="AbstractField">
 		<xsl:call-template name="Field"/>
 		<xsl:call-template name="Labelable"/>
@@ -68,7 +68,7 @@
 		<xsl:value-of select="mn:attribute(., 'tabIndex', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'validateOnBlur', ',')"/>
 	</xsl:template>
-	
+
 	<xsl:template name="Checkbox">
 		<xsl:call-template name="AbstractField"/>
 		<xsl:value-of select="mn:childString(., 'boxLabel', ',')"/>
@@ -76,12 +76,12 @@
 		<xsl:value-of select="mn:attribute(., 'checked', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'inputValue', ',')"/>
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='Checkbox']">
 		<xsl:call-template name="Checkbox"/>
 		"xtype": "checkbox"
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='Radio']">
 		<xsl:call-template name="Checkbox"/>
 		<xsl:if test="@radioGroupName != ''">
@@ -89,17 +89,17 @@
 		</xsl:if>
 		"xtype": "radio"
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='DisplayField']">
 		<xsl:call-template name="AbstractField"/>
 		"xtype": "displayfield"
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='HiddenField']">
 		<xsl:call-template name="AbstractField"/>
 		"xtype": "hidden"
 	</xsl:template>
-	
+
 	<xsl:template name="TextField">
 		<xsl:call-template name="AbstractField"/>
 		<xsl:value-of select="mn:attribute(., 'allowBlank', ',')"/>
@@ -120,12 +120,12 @@
 		<xsl:value-of select="mn:attribute(., 'selectOnFocus', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'vtype', ',')"/>
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='TextField']">
 		<xsl:call-template name="TextField"/>
 		"xtype": "textfield"
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='TextArea']">
 		<xsl:call-template name="TextField"/>
 		<xsl:value-of select="mn:attribute(., 'cols', ',')"/>
@@ -134,28 +134,28 @@
 		<xsl:value-of select="mn:attribute(., 'rows', ',')"/>
 		"xtype": "textarea"
 	</xsl:template>
-	
+
 	<xsl:template name="TriggerField">
 		<xsl:call-template name="TextField"/>
 		<xsl:value-of select="mn:attribute(., 'editable', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hideTrigger', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'selectOnFocus', ',')"/>
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='FileField']">
 		<xsl:call-template name="TriggerField"/>
 		<xsl:value-of select="mn:attribute(., 'buttonMargin', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'buttonOnly', ',')"/>
-		<xsl:value-of select="mn:childString(., 'buttonText', ',')"/>
+		<xsl:value-of select="mn:childString(., 'buttonText', ',')"/>	
 		"xtype": "filefield"
 	</xsl:template>
-	
+
 	<xsl:template name="PickerField">
 		<xsl:call-template name="TriggerField"/>
 		<xsl:value-of select="mn:attribute(., 'matchFieldWidth', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'pickerAlign', ',')"/>
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='ComboBox']">
 		<xsl:call-template name="PickerField"/>
 		<xsl:variable name="displayField">
@@ -265,7 +265,7 @@
 		</xsl:choose>
 		"xtype": "combobox"
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='TimeField']">
 		<xsl:call-template name="PickerField"/>
 		<xsl:value-of select="mn:attribute(., 'format', ',')"/>
@@ -280,7 +280,7 @@
 		<xsl:value-of select="mn:attribute(., 'submitFormat', ',')"/>
 		"xtype": "timefield"
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='DateField']">
 		<xsl:call-template name="PickerField"/>
 		<xsl:value-of select="mn:eval-attribute(., 'disabledDates', ',')"/>
@@ -298,7 +298,7 @@
 		<xsl:value-of select="mn:attribute(., 'useStrict', ',')"/>
 		"xtype": "datefield"
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='NumberField']">
 		<xsl:call-template name="TriggerField"/>
 		<xsl:value-of select="mn:attribute(., 'allowDecimals', ',')"/>
@@ -315,7 +315,7 @@
 		<xsl:value-of select="mn:attribute(., 'submitLocaleSeparator', ',')"/>
 		"xtype": "numberfield"
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='Slider']">
 		<xsl:call-template name="AbstractField"/>
 		<xsl:value-of select="mn:attribute(., 'animate', ',')"/>
@@ -332,7 +332,7 @@
 		<xsl:value-of select="mn:attribute(., 'zeroBasedSnapping', ',')"/>
 		"xtype": "slider"
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='HTMLEditor']">
 		<xsl:call-template name="Field"/>
 		<xsl:call-template name="Labelable"/>
@@ -346,7 +346,7 @@
 		<xsl:value-of select="mn:attribute(., 'enableSourceEdit', ',')"/>
 		"xtype": "htmleditor"
 	</xsl:template>
-	
+
 	<xsl:template match="item[@xsi:type='Image']">
 		<xsl:value-of select="mn:childString(., 'altText', ',')"/>
 		<xsl:value-of select="mn:imageSpec(image, 'src', ',')"/>
