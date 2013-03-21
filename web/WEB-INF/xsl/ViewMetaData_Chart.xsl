@@ -191,7 +191,14 @@
 				<xsl:value-of select="mn:attribute(., 'color', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'constrast', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'display', ',')"/>
-				<xsl:value-of select="mn:attribute(., 'field', ',')"/>
+				<xsl:if test="field">
+					field: [
+						<xsl:for-each select="field">
+							<xsl:value-of select="mn:wrap-string(@name)"/>
+							<xsl:call-template name="comma-delimit"/>
+						</xsl:for-each>
+					],
+				</xsl:if>
 				<xsl:value-of select="mn:attribute(., 'minMargin', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'font', ',')"/>
 				<xsl:value-of select="mn:attribute(., 'orientation', '')"/>

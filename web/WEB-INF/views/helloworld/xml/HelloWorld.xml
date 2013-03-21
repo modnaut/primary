@@ -127,7 +127,10 @@
 				</axis>
 				<legend position="bottom"/>
 				<series xsi:type="BarSeries" axis="bottom" highlight="true" column="true">
-					<label display="insideEnd" field="LoginCount"/>
+					<label display="insideEnd">
+						<field name="LoginCount"/>
+						<field name="LoginAttempts"/>
+					</label>
 					<xField name="UserName"/>
 					<yField name="LoginCount"/>
 					<yField name="LoginAttempts"/>
