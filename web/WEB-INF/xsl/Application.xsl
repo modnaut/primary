@@ -7,7 +7,7 @@
 		<html>
 			<head>
 				<meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>
-				<title><xsl:value-of select="pageTitle/@stringCD"/></title>
+				<title><xsl:value-of select="pageTitle/@stringCd"/></title>
 				<link rel="stylesheet" type="text/css">
 					<xsl:attribute name="href"><xsl:value-of select="$staticPath"/>extjs/resources/css/ext-all.css</xsl:attribute>
 				</link>

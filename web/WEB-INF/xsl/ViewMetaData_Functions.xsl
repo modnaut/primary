@@ -65,7 +65,7 @@
 		<xsl:param name="extraString" as="xs:string?"/>
 		<xsl:choose>
 			<xsl:when test="$node">
-				<xsl:variable name="stringValue" select="$node/*[local-name() = $elementName]/@stringCD"/>
+				<xsl:variable name="stringValue" select="$node/*[local-name() = $elementName]/@stringCd"/>
 				<xsl:choose>
 					<xsl:when test="$stringValue != '' ">
 						<xsl:variable name="colon" select="':'"/>

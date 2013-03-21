@@ -4,28 +4,28 @@
 		<items>
 			<item xsi:type="GridPanel" region="center" id="users" flex="1">
 				<listener event="selectionchange" action="submit" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userSelected" itemsToUpdate="editUserPanel"/>
-				<title stringCD="Users"/>
+				<title stringCd="Users"/>
 				<column xsi:type="RowNumbererColumn" width="40"/>
 				<column dataIndex="UserId" flex="1">
-					<text stringCD="User ID"/>
+					<text stringCd="User ID"/>
 				</column>
 				<column dataIndex="UserName" flex="1">
-					<text stringCD="Username"/>
+					<text stringCd="Username"/>
 				</column>
 				<column dataIndex="FirstName" flex="1">
-					<text stringCD="First Name"/>
+					<text stringCd="First Name"/>
 				</column>
 				<column dataIndex="LastName" flex="1">
-					<text stringCD="Last Name"/>
+					<text stringCd="Last Name"/>
 				</column>
 				<column dataIndex="EmailAddress" flex="1">
-					<text stringCD="email"/>
+					<text stringCd="email"/>
 				</column>
 				<column xsi:type="DateColumn" dataIndex="HireDate" flex="1">
-					<text stringCD="Hire Date"/>
+					<text stringCd="Hire Date"/>
 				</column>
 				<column dataIndex="UserTypeCd" flex="1">
-					<text stringCD="User Type"/>
+					<text stringCd="User Type"/>
 				</column>
 				<store xsi:type="Store">
 					<model>
@@ -54,26 +54,26 @@
 			<item xsi:type="Panel" id="editUserPanel" flex="1" region="east" bodyPadding="5" autoScroll="true">
 				<items>
 					<item xsi:type="DisplayField" id="UserId" submitValue="true">
-						<fieldLabel stringCD="User ID"/>
+						<fieldLabel stringCd="User ID"/>
 					</item>
 					<item xsi:type="TextField" id="UserName" allowBlank="false" maxLength="50">
-						<fieldLabel stringCD="Username"/>
+						<fieldLabel stringCd="Username"/>
 					</item>
 					<item xsi:type="TextField" id="FirstName" allowBlank="false" maxLength="50">
-						<fieldLabel stringCD="First Name"/>
+						<fieldLabel stringCd="First Name"/>
 					</item>
 					<item xsi:type="TextField" id="LastName" allowBlank="false" maxLength="50" msgTarget="side">
-						<fieldLabel stringCD="Last Name"/>
+						<fieldLabel stringCd="Last Name"/>
 					</item>
 					<item xsi:type="TextField" id="EmailAddress" allowBlank="false" maxLength="100" msgTarget="title">
-						<fieldLabel stringCD="Email Address"/>
+						<fieldLabel stringCd="Email Address"/>
 					</item>
 					<item xsi:type="DateField" id="HireDate">
-						<fieldLabel stringCD="Hire Date"/>
+						<fieldLabel stringCd="Hire Date"/>
 					</item>
 					<item xsi:type="ComboBox" id="UserTypeCd" valueField="userTypeCd" displayField="description">
 						<listener action="submit" event="change" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="userTypeChanged" itemsToUpdate="editUserPanel"/>
-						<fieldLabel stringCD="User Type"/>
+						<fieldLabel stringCd="User Type"/>
 						<data>
 							<record>
 								<field name="userTypeCd"/>
@@ -82,10 +82,10 @@
 						</data>
 					</item>
 					<item xsi:type="TextField" id="UserPassword">
-						<fieldLabel stringCD="New Password"/>
+						<fieldLabel stringCd="New Password"/>
 					</item>
 				</items>
-				<title stringCD="Create/Edit User"/>
+				<title stringCd="Create/Edit User"/>
 				<toolbar position="top">
 					<items>
 						<item xsi:type="Button">
@@ -93,11 +93,11 @@
 								<items>
 									<item xsi:type="MenuItem">
 										<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="defaultAction" itemsToUpdate="editUserPanel"/>
-										<text stringCD="menu item 1"/>
+										<text stringCd="menu item 1"/>
 									</item>
 								</items>
 							</menu>
-							<text stringCD="Menu Button"/>
+							<text stringCd="Menu Button"/>
 						</item>
 					</items>
 				</toolbar>
@@ -106,11 +106,11 @@
 						<item xsi:type="ToolbarFill"/>
 						<item xsi:type="Button" id="saveUser" iconCls="icon-database_save">
 							<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="saveUser"/>
-							<text stringCD="Save"/>
+							<text stringCd="Save"/>
 						</item>
 						<item xsi:type="Button" id="newUser" iconCls="icon-user_add">
 							<listener action="submit" event="click" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="newUser"/>
-							<text stringCD="New User"/>
+							<text stringCd="New User"/>
 						</item>
 					</items>
 				</toolbar>
@@ -118,12 +118,12 @@
 			<item xsi:type="Chart" region="south" flex="1">
 				<axis xsi:type="CategoryAxis" position="bottom">
 					<field name="UserName"/>
-					<title stringCD="User Name"/>
+					<title stringCd="User Name"/>
 				</axis>
 				<axis xsi:type="NumericAxis" position="left" minimum="0">
 					<field name="LoginCount"/>
 					<field name="LoginAttempts"/>
-					<title stringCD="Login Count"/>
+					<title stringCd="Login Count"/>
 				</axis>
 				<legend position="bottom"/>
 				<series xsi:type="BarSeries" axis="bottom" highlight="true" column="true">

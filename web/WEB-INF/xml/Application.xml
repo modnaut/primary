@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <applications xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/Application.xsd">
 	<application applicationId="1">
-		<pageTitle stringCD="Modnaut Application"/>
+		<pageTitle stringCd="Modnaut Application"/>
 		<applicationFolder>demoApp</applicationFolder>
 	</application>
 </applications>

@@ -37,7 +37,7 @@ public class VmdMethods
 	public static com.modnaut.framework.properties.string.String getStringObject(String value)
 	{
 		com.modnaut.framework.properties.string.String string = new com.modnaut.framework.properties.string.String();
-		string.setStringCD(value);
+		string.setStringCd(value);
 		return string;
 	}
 
