@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
-import com.modnaut.common.utilities.ServerMethods;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.application.Applications;
+import com.modnaut.framework.utilities.ServerMethods;
 
 /**
  * 

@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
-import com.modnaut.common.utilities.ServerMethods;
 import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.session.WebSessionController;
+import com.modnaut.framework.utilities.ServerMethods;
 
 /**
  * 

@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
-import com.modnaut.common.utilities.ServerMethods;
+import com.modnaut.framework.utilities.ServerMethods;
 
 /**
  * 
