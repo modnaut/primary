@@ -73,6 +73,9 @@
 					<xsl:value-of select="mn:childString(., 'text', ',')"/>
 					<xsl:value-of select="mn:childString(., 'tooltip', ',')"/>
 					<xsl:value-of select="mn:attribute(., 'width', ',')"/>
+					<xsl:if test="string(@flex) = '' and string(@width) = '' ">
+						"flex": 1,
+					</xsl:if>
 					"_d": 0
 				}<xsl:call-template name="comma-delimit"/>
 				</xsl:for-each>
