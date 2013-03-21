@@ -146,8 +146,7 @@
 		<xsl:call-template name="TriggerField"/>
 		<xsl:value-of select="mn:attribute(., 'buttonMargin', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'buttonOnly', ',')"/>
-		<xsl:value-of select="mn:childString(., 'buttonText', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'width', ',')"/>	
+		<xsl:value-of select="mn:childString(., 'buttonText', ',')"/>	
 		"xtype": "filefield"
 	</xsl:template>
 	
