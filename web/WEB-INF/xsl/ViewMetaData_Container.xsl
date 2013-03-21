@@ -9,7 +9,16 @@
 
 	<xsl:template name="Container">
 		<xsl:call-template name="Layout"/>
-		<xsl:value-of select="mn:attribute(., 'autoScroll', ',')"/>
+		<xsl:choose>
+			<xsl:when test="string(@autoScroll) = '' ">
+				<xsl:if test="not(layout[@xsi:type='BorderLayout'])">
+					"autoScroll": true,
+				</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="mn:attribute(., 'autoScroll', ',')"/>
+			</xsl:otherwise>
+		</xsl:choose>
 		<xsl:value-of select="mn:attribute(., 'border', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'cls', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'columnWidth', ',')"/>

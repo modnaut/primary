@@ -220,7 +220,7 @@
 					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="layout" type="AbstractLayout" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
-				<xs:attribute name="autoScroll" type="xs:boolean" default="false"/>
+				<xs:attribute name="autoScroll" type="xs:boolean" default="true"/>
 				<xs:attribute name="border" type="xs:string"/>
 				<xs:attribute name="cls" type="xs:string"/>
 				<xs:attribute name="columnWidth" type="xs:string"/>
