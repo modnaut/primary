@@ -50,6 +50,8 @@
 		<xs:attribute name="split" type="xs:boolean"/>
 		<xs:attribute name="splitterResize" type="xs:boolean" default="true"/>
 		<xs:attribute name="width" type="xs:int"/>
+		<xs:attribute name="x" type="xs:int"/>
+		<xs:attribute name="y" type="xs:int"/>
 	</xs:complexType>
 	<xs:complexType name="AbstractLayout" abstract="true">
 		<xs:attribute name="itemCls" type="xs:string"/>

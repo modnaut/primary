@@ -72,6 +72,8 @@
 		<xsl:value-of select="mn:attribute(., 'split', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'splitterResize', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'width', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'x', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'y', ',')"/>
 		<xsl:call-template name="Listeners"/>
 	</xsl:template>
 	
