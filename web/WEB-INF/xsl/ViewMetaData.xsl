@@ -61,7 +61,9 @@
 		<xsl:if test="@id != '' ">
 			"itemId": <xsl:value-of select="mn:wrap-string(@id)"/>,
 		</xsl:if>
-		<xsl:value-of select="mn:attribute(., 'anchor', ',')"/>
+		<xsl:if test="@anchor != '' ">
+			"anchor": "<xsl:value-of select="@anchor"/>",<!--Anchor value MUST be output as string, even if it's a valid number value-->
+		</xsl:if>
 		<xsl:value-of select="mn:attribute(., 'flex', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'height', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hidden', ',')"/>
