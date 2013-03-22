@@ -499,8 +499,49 @@
 		<xs:complexContent>
 			<xs:extension base="TablePanel">
 				<xs:sequence>
+					<xs:element name="feature" type="GridFeature" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="plugin" type="GridPlugin" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="GridFeature" abstract="true"/>
+	<xs:complexType name="FiltersFeature">
+		<xs:complexContent>
+			<xs:extension base="GridFeature">
+				<xs:sequence>
+					<xs:element name="menuFilterText" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="autoReload" type="xs:boolean" default="true"/>
+				<xs:attribute name="encode" type="xs:boolean" default="false"/>
+				<xs:attribute name="filterCls" type="xs:string" default="ux-filtered-column"/>
+				<xs:attribute name="local" type="xs:boolean" default="false"/>
+				<xs:attribute name="paramPrefix" type="xs:string" default="filter"/>
+				<xs:attribute name="showMenu" type="xs:boolean" default="true"/>
+				<xs:attribute name="updateBuffer" type="xs:int" default="500"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ColumnFilter" abstract="true">
+		<xs:attribute name="active" type="xs:boolean" default="false"/>
+		<xs:attribute name="dataIndex" type="xs:string"/>
+		<xs:attribute name="updateBuffer" type="xs:int" default="500"/>
+	</xs:complexType>
+	<xs:simpleType name="BooleanFilterDefaultValue">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="false"/>
+			<xs:enumeration value="null"/>
+			<xs:enumeration value="true"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="BooleanFilter">
+		<xs:complexContent>
+			<xs:extension base="ColumnFilter">
+				<xs:sequence>
+					<xs:element name="noText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="yesText" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="defaultValue" type="BooleanFilterDefaultValue" default="null"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
