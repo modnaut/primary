@@ -1,8 +1,8 @@
+USE common
+;
 
-USE common;
-DELIMITER $$
-
-DROP PROCEDURE IF EXISTS `up_InsertUpdateSession` $$
+DROP PROCEDURE IF EXISTS `up_InsertUpdateSession`
+;
 
 CREATE PROCEDURE up_InsertUpdateSession (
 	IN p_UserId INT
@@ -17,5 +17,5 @@ BEGIN
 	INSERT IGNORE INTO Common.UserSession(UserId, SessionId) 
 	VALUES (p_UserId, p_SessionId);
 
-END $$
-DELIMITER ;
+END
+;
