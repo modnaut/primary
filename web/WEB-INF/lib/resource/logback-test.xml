@@ -1,0 +1,39 @@
+<!-- In order to utilize a different configuration than the default provided by Logback, you must place the web/WEB-INF/lib/resource file in the build/classes folder. -->
+<!-- This is the Test file. Logback tries to load logback-test.xml 2nd and this file 3rd.  So, if logback-test.xml is not present, the production configuration file gets loaded. -->  
+<!-- Things to consider for Production file.  Turn off debug configuration.  Turn off Method %M and Line Number %L - these are slow according to documentation. -->
+<configuration debug="true">
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+		<encoder>
+			<pattern>%d{MM-dd-yyyy HH:mm:ss.SSS} %-5level %-40logger{40} [%M:%L] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<!-- The root location is normally where eclipse.exe is running. -->
+		<file>${catalina.base}\\logs\\testFile.log</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%d{MM-dd-yyyy HH:mm:ss.SSS}%-5level %logger{40} [%M:%L] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- Rollover at the top of each hour. -->
+			<fileNamePattern>${catalina.base}\\logs\\testFile_%d{yyyy-MM-dd_HH}.log</fileNamePattern>
+			<!-- Keep 48 hours worth of history. -->
+			<maxHistory>48</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{MM-dd-yyyy HH:mm:ss.SSS}%-5level %logger{40} [%M:%L] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- This is how to set a different logging level by class/package than the rest of the project.  Print trace information for SessionMethods class only. -->
+	<logger name="com.modnaut.common.utilities.SessionMethods" level="TRACE" />
+	
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="ROLLING_FILE" />
+	</root>
+</configuration>

@@ -15,7 +15,7 @@ import com.modnaut.framework.session.WebSession;
  */
 public class SessionMethods
 {
-	private static final Logger logger = LoggerFactory.getLogger(SessionMethods.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SessionMethods.class);
 
 	// parms
 	private static final String USER_ID = "UserId";
@@ -47,6 +47,8 @@ public class SessionMethods
 	 */
 	public static WebSession getSession(long session_id)
 	{
+		LOGGER.trace("Testing different logging levels on a clas-by-class basis.");
+
 		HashMap<String, Object> parms = new HashMap<String, Object>();
 		parms.put(SESSION_ID, session_id);
 
