@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -55,6 +56,39 @@ public class WebSessionController
 	public WebSession authenticate()
 	{
 		HttpSession httpSession = request.getSession(true);// create if it doesn't exist
+		Cookie cookie = null;
+		Cookie[] cookies = request.getCookies();
+		boolean new_cookie = false;
+
+		if (cookies != null)
+		{
+			for (int i = 0; i < cookies.length; i++)
+			{
+				if (cookies[i].getName().equals("modnaut"))
+				{
+					cookie = cookies[i];
+				}
+			}
+		}
+
+		if (cookie == null)
+		{
+			new_cookie = true;
+			int maxAge;
+			try
+			{
+				maxAge = new Integer(request.getServletContext().getInitParameter("cookie-age")).intValue();
+			}
+			catch (Exception e)
+			{
+				maxAge = -1;
+			}
+
+			cookie = new Cookie("modnaut", "" + getNextCookieValue());
+			cookie.setPath(request.getContextPath());
+			cookie.setMaxAge(maxAge);
+			response.addCookie(cookie);
+		}
 
 		// We will always continue session if it is not new, even if they went through the login page again.
 		// TODO - Is this smart? Should we check for login credentials first? Probably. Right now, this lets them in with a valid session and incorrect email/password.
@@ -102,10 +136,12 @@ public class WebSessionController
 				parms.put(EMAIL, email);
 				parms.put(PASSWORD, saltedPassword);
 
-				// See if this email/password combination exists in our database.
-				String[] data = DatabaseMethods.getJustDataFirstRow(AUTHENTICATE_USER, ICommonConstants.COMMON, parms);
-				if (data != null && data.length > 1)
+				// See if this email/password combination exists in our database. If not, the stored procedure will increment the invalid login attempts.
+				String[] data = DatabaseMethods.getJustDataFirstRow(AUTHENTICATE_USER, ICommonConstants.COMMON, parms); // [0]UserId, [1]FirstName, [2]LastName, [3]EmailAddress, [4]UserPassword
+				if (data != null && data.length > 0)
 				{
+					int userId = CommonMethods.StringToInt(data[0]);
+
 					// Found the user in the database. Create a new WebSession.
 					long new_id = SessionMethods.generateSessionId();
 					// Store the sessionId in the httpSession object. This way we do not have to have a parameter on the page.
@@ -115,6 +151,8 @@ public class WebSessionController
 
 					// create new Session object.
 					WebSession webSession = new WebSession(new_id);
+					webSession.setUserId(userId);
+					webSession.setEmail(email);
 					// Insert into database.
 					SessionMethods.saveSession(webSession);
 
@@ -133,6 +171,12 @@ public class WebSessionController
 		}
 
 		return null;
+	}
+
+	private long getNextCookieValue()
+	{
+		return new java.util.Date().getTime();
+
 	}
 
 }

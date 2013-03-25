@@ -240,6 +240,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `HireDate` datetime NOT NULL,
   `UserTypeCd` char(1) NOT NULL DEFAULT 'C',
   `UserStatusCd` char(1) NOT NULL DEFAULT 'A',
+  `InvalidLoginAttempts` int(2),
   PRIMARY KEY (`UserId`),
   UNIQUE KEY `EmailAddress` (`EmailAddress`),
   UNIQUE KEY `UserName` (`UserName`),
@@ -249,10 +250,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 -- Dumping data for table common.users: ~3 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`, `HireDate`, `UserTypeCd`, `UserStatusCd`) VALUES
-	(1, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A'),
-	(2, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A'),
-	(3, 'bdalgaard22', 'Ben', 'Dalgaardfasdfsa', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A');
+INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`, `HireDate`, `UserTypeCd`, `UserStatusCd`, `InvalidLoginAttempts`) VALUES
+	(1, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0),
+	(2, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0),
+	(3, 'bdalgaard22', 'Ben', 'Dalgaardfasdfsa', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 

@@ -55,8 +55,14 @@ public class SessionMethods
 		Object object = null;
 
 		ArrayList<Object[]> objects = DatabaseMethods.getJustDataObjects(GET_SESSION, ICommonConstants.COMMON, parms);
-		if (objects != null)
+		if (objects != null && objects.size() > 0)
+		{
 			object = ((Object[]) objects.get(0))[0];
+			if (object instanceof WebSession)
+			{
+				return (WebSession) object;
+			}
+		}
 
 		return new WebSession();
 	}
