@@ -3,7 +3,7 @@ package com.modnaut.framework.session;
 import java.util.HashMap;
 
 import com.modnaut.common.interfaces.ICommonConstants;
-import com.modnaut.common.utilities.SessionMethods;
+import com.modnaut.framework.utilities.SessionMethods;
 
 /**
  * @author Ben

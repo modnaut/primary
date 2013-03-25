@@ -1,4 +1,4 @@
-package com.modnaut.common.utilities;
+package com.modnaut.framework.utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.framework.session.WebSession;
 
 /**
@@ -25,12 +26,6 @@ public class SessionMethods
 	// SQL QUERIES
 	private static final String GET_SESSION = "GET_SESSION";
 	private static final String INSERT_UPDATE_SESSION = "INSERT_UPDATE_SESSION";
-
-	public static void main(String[] args)
-	{
-		WebSession session = new WebSession();
-		session.setSessionId(1234);
-	}
 
 	/**
 	 * @return generated id

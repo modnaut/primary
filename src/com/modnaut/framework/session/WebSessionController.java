@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.CommonMethods;
 import com.modnaut.common.utilities.DatabaseMethods;
-import com.modnaut.common.utilities.SessionMethods;
+import com.modnaut.framework.utilities.SessionMethods;
 
 /**
  * 
