@@ -614,6 +614,7 @@
 		<xs:attribute name="hideEmptyLabel" type="xs:boolean" default="true"/>
 		<xs:attribute name="hideLabel" type="xs:boolean" default="false"/>
 		<xs:attribute name="labelAlign" type="LabelAlign" default="left"/>
+		<xs:attribute name="labelClsExtra" type="xs:string" default=""/>
 		<xs:attribute name="labelPad" type="xs:int" default="5"/>
 		<xs:attribute name="labelSeparator" type="xs:string" default=":"/>
 		<xs:attribute name="labelWidth" type="xs:int" default="100"/>

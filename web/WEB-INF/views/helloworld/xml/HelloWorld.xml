@@ -53,7 +53,7 @@
 			</item>
 			<item xsi:type="Panel" id="editUserPanel" flex="1" region="east" bodyPadding="5" autoScroll="true">
 				<items>
-					<item xsi:type="DisplayField" id="UserId" submitValue="true">
+					<item xsi:type="DisplayField" id="UserId" submitValue="true" labelClsExtra="red">
 						<fieldLabel stringCd="User ID"/>
 					</item>
 					<item xsi:type="TextField" id="UserName" allowBlank="false" maxLength="50">

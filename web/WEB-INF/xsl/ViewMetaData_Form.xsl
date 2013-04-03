@@ -34,6 +34,14 @@
 		<xsl:value-of select="mn:attribute(., 'hideEmptyLabel', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hideLabel', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'labelAlign', ',')"/>
+		<xsl:choose>
+			<xsl:when test="string(@labelClsExtra) = '' ">
+				"labelClsExtra": "bold",
+			</xsl:when>
+			<xsl:otherwise>
+			"labelClsExtra": "bold <xsl:value-of select="mn:escape-string(@labelClsExtra)"/>",
+			</xsl:otherwise>
+		</xsl:choose>
 		<xsl:value-of select="mn:attribute(., 'labelPad', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'labelSeparator', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'labelWidth', ',')"/>
