@@ -34,6 +34,22 @@
 		<xsl:apply-templates select="items"/>
 	</xsl:template>
 	
+	<xsl:template name="Tools">
+		<xsl:if test="tool">
+			"tools": [
+				<xsl:for-each select="tool">
+					{
+						<xsl:call-template name="Item"/>
+						<xsl:value-of select="mn:attribute(., 'stopEvent', ',')"/>
+						<xsl:value-of select="mn:childString(., 'tooltip', ',')"/>
+						<xsl:value-of select="mn:attribute(., 'type', '')"/>
+					}
+					<xsl:call-template name="comma-delimit"/>
+				</xsl:for-each>
+			],
+		</xsl:if>
+	</xsl:template>
+	
 	<xsl:template name="Toolbars">
 		<xsl:for-each select="toolbar">
 			<xsl:choose>
@@ -85,6 +101,7 @@
 		<xsl:value-of select="mn:attribute(., 'titleAlign', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'titleCollapse', ',')"/>
 		<xsl:call-template name="Notifications"/>
+		<xsl:call-template name="Tools"/>
 		<xsl:call-template name="Toolbars"/>
 	</xsl:template>
 	

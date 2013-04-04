@@ -278,6 +278,44 @@
 			<xs:enumeration value="right"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="PanelToolType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="close"/>
+			<xs:enumeration value="collapse"/>
+			<xs:enumeration value="down"/>
+			<xs:enumeration value="expand"/>
+			<xs:enumeration value="gear"/>
+			<xs:enumeration value="help"/>
+			<xs:enumeration value="left"/>
+			<xs:enumeration value="maximize"/>
+			<xs:enumeration value="minimize"/>
+			<xs:enumeration value="minus"/>
+			<xs:enumeration value="next"/>
+			<xs:enumeration value="pin"/>
+			<xs:enumeration value="plus"/>
+			<xs:enumeration value="prev"/>
+			<xs:enumeration value="print"/>
+			<xs:enumeration value="refresh"/>
+			<xs:enumeration value="restore"/>
+			<xs:enumeration value="right"/>
+			<xs:enumeration value="save"/>
+			<xs:enumeration value="search"/>
+			<xs:enumeration value="toggle"/>
+			<xs:enumeration value="unpin"/>
+			<xs:enumeration value="up"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="PanelTool">
+		<xs:complexContent>
+			<xs:extension base="Item">
+				<xs:sequence>
+					<xs:element name="tooltip" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="stopEvent" type="xs:boolean" default="true"/>
+				<xs:attribute name="type" type="PanelToolType" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="Panel">
 		<xs:complexContent>
 			<xs:extension base="Container">
@@ -285,6 +323,7 @@
 					<xs:element name="icon" type="ImageSpec" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="notification" type="Notification" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="tool" type="PanelTool" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="toolbar" type="Toolbar" minOccurs="0" maxOccurs="2"/>
 				</xs:sequence>
 				<xs:attribute name="animCollapse" type="xs:boolean" default="true"/>
