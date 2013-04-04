@@ -7,7 +7,7 @@
 		</parameters>
 	</query>
 	<query name="GET_ALL_USERS_ALPHABETICALLY" action="SELECT" type="SP">
-		<statement value="Common.GetAllUsersAlphabetically()"/>
+		<statement value="Common.up_GetAllUsersAlphabetically()"/>
 	</query>
 	<query name="INSERT_USER" action="ACTION" type="QUERY">
 		<statement value="INSERT INTO users (UserName, FirstName, LastName, EmailAddress) 
@@ -20,7 +20,7 @@
 		</parameters>
 	</query>
 	<query name="AUTHENTICATE_USER" action="SELECT" type="SP">
-		<statement value="Common.AuthenticateUser(?, ?)"/>
+		<statement value="Common.up_AuthenticateUser(?, ?)"/>
 		<parameters>
 			<parameter name="Email" type="VARCHAR"/>
 			<parameter name="Password" type="VARCHAR"/>
@@ -41,13 +41,13 @@
 		</parameters>
 	</query>
 	<query name="GET_USER_SESSION" action="SELECT" type="QUERY">
-		<statement value="Common.GetUserSession(?)"/>
+		<statement value="Common.up_GetUserSession(?)"/>
 		<parameters>
 			<parameter name="UserId" type="INT"/>
 		</parameters>
 	</query>
 	<query name="GET_USER" action="SELECT" type="SP">
-		<statement value="Common.GetUser(?)"/>
+		<statement value="Common.up_GetUser(?)"/>
 		<parameters>
 			<parameter name="UserId" type="INT"/>
 		</parameters>
@@ -56,7 +56,7 @@
 		<statement value="Select UserTypeCd, Description From Common.UserType Order By Description ASC"/>
 	</query>
 	<query name="UPDATE_USER" action="ACTION" type="SP">
-		<statement value="Common.UpdateUser(?, ?, ?, ?, ?, ?, ?, ?)"/>
+		<statement value="Common.up_UpdateUser(?, ?, ?, ?, ?, ?, ?, ?)"/>
 		<parameters>
 			<parameter name="UserId" type="INT"/>
 			<parameter name="UserName" type="VARCHAR"/>

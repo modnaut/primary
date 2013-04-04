@@ -1,9 +1,9 @@
 USE common
 ;
-DROP PROCEDURE IF EXISTS `GetUser`
+DROP PROCEDURE IF EXISTS `up_GetUser`
 ;
-CREATE PROCEDURE GetUser(
-	IN PUserId INT)
+CREATE PROCEDURE up_GetUser(
+	IN p_UserId INT)
 BEGIN 
 
 		SELECT
@@ -17,6 +17,6 @@ BEGIN
 		FROM
 			Common.users
 		WHERE
-			UserId = PUserId; 
+			UserId = p_UserId; 
 END 
 ; 

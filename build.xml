@@ -77,11 +77,11 @@
 			    userid="modnaut00"
 			    password="zp4X263tTSv06On"
 				delimiterType="row">
-				<transaction src="sql/GetAllUsersAlphabetically.sql"/>
-			    <transaction src="sql/AuthenticateUser.sql"/>
-				<transaction src="sql/GetUser.sql"/>
-				<transaction src="sql/GetUserSession.sql"/>
-				<transaction src="sql/UpdateUser.sql"/>
+				<transaction src="sql/up_GetAllUsersAlphabetically.sql"/>
+			    <transaction src="sql/up_AuthenticateUser.sql"/>
+				<transaction src="sql/up_GetUser.sql"/>
+				<transaction src="sql/up_GetUserSession.sql"/>
+				<transaction src="sql/up_UpdateUser.sql"/>
 				<transaction src="sql/up_InsertUpdateSession.sql"/>
 				<transaction src="sql/up_GetAllServerAttributes.sql"/>
 			</sql>
