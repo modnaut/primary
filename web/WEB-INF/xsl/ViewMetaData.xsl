@@ -64,11 +64,15 @@
 		<xsl:if test="@anchor != '' ">
 			"anchor": "<xsl:value-of select="@anchor"/>",<!--Anchor value MUST be output as string, even if it's a valid number value-->
 		</xsl:if>
+		<xsl:value-of select="mn:attribute(., 'colspan', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'cellId', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'cellCls', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'flex', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'height', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hidden', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hideMode', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'region', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'rowspan', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'split', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'splitterResize', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'width', ',')"/>

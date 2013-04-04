@@ -41,12 +41,16 @@
 			<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="anchor" type="xs:string"/>
+		<xs:attribute name="colspan" type="xs:int"/>
+		<xs:attribute name="cellId" type="xs:string"/>
+		<xs:attribute name="cellCls" type="xs:string"/>
 		<xs:attribute name="flex" type="xs:int"/>
 		<xs:attribute name="height" type="xs:int"/>
 		<xs:attribute name="hidden" type="xs:boolean"/>
 		<xs:attribute name="hideMode" type="HideMode"/>
 		<xs:attribute name="id" type="xs:string"/>
 		<xs:attribute name="region" type="Region"/>
+		<xs:attribute name="rowspan" type="xs:int"/>
 		<xs:attribute name="split" type="xs:boolean"/>
 		<xs:attribute name="splitterResize" type="xs:boolean" default="true"/>
 		<xs:attribute name="width" type="xs:int"/>

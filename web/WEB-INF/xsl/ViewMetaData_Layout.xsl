@@ -89,7 +89,7 @@
 	
 	<xsl:template match="layout[@xsi:type='TableLayout']">
 		<xsl:call-template name="AbstractLayout"/>
-		<xsl:value-of select="mn:attribute(., 'column', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'columns', ',')"/>
 		<xsl:value-of select="mn:eval-attribute(., 'tableAttrs', ',')"/>
 		<xsl:value-of select="mn:eval-attribute(., 'tdAttrs', ',')"/>
 		<xsl:value-of select="mn:eval-attribute(., 'trAttrs', ',')"/>
