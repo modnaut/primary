@@ -39,7 +39,7 @@
 			<xsl:when test="$node">
 				<xsl:variable name="attributeValue" select="$node/@*[name() = $attributeName]"/>
 				<xsl:choose>
-					<xsl:when test="$attributeValue != '' ">
+					<xsl:when test="not(not($attributeValue))">
 						<xsl:variable name="colon" select="':'"/>
 						<xsl:sequence select="concat('&quot;',$attributeName,'&quot;',$colon,mn:wrap-string($attributeValue), $extraString)"/>
 					</xsl:when>
