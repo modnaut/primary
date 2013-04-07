@@ -1,6 +1,7 @@
 Ext.define('Modnaut.controller.ViewMetaDataController', {
 	extend: 'Ext.app.Controller',
 	views: ['Modnaut.view.ViewMetaDataContainer'],
+	history: {},
 	init: function () {
 		var controller = this;
 		this.control({
@@ -31,6 +32,10 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		Globals.on({
 			SubmitForm: function(options) {
 				controller.getContainerContent(options);
+			},
+			HistoryChange: function(token) {
+				controller.getContainerContent(controller.history[token], true);
+				console.log('HistoryChange', token, controller.history[token]);
 			}
 		});
 	},
@@ -52,7 +57,6 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		var controller = this;
 		var ownerCt = oldComponent.ownerCt;
 		if(ownerCt) {
-			var form = ownerCt.form;
 			var componentIndex = ownerCt.items.indexOf(oldComponent);
 			var resetActiveTab = false;
 			if(ownerCt.is('tabpanel') && ownerCt.getActiveTab() == oldComponent)
@@ -77,7 +81,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			containedFormFields[i].ownerCt.remove(containedFormFields[i]);
 		}
 	},
-	getContainerContent: function(options) {
+	getContainerContent: function(options, isHistoryEvent) {
 		var controller = this;
 		
 		options = Ext.clone(options);
@@ -144,6 +148,14 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 					}
 				}
 			} else {
+				if(isHistoryEvent !== true) {
+					var historyToken = Ext.Date.now();
+					controller.history[historyToken] = options;
+					Ext.History.suspendEvents();
+					Ext.History.add(historyToken);
+					Ext.defer(Ext.History.resumeEvents, 100, Ext.History);
+				}
+				
 				controller.safeSetLoading(container, false);
 				if(items) {
 					controller.removeDescendantFormFields(container);
