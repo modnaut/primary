@@ -41,5 +41,8 @@
 	<classpathentry kind="lib" path="web/WEB-INF/lib/logback-core-1.0.9.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/logback-classic-1.0.9.jar"/>
 	<classpathentry kind="lib" path="web/WEB-INF/lib/commons-jxpath-1.3.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/commons-codec-1.7-javadoc.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/commons-codec-1.7-sources.jar"/>
+	<classpathentry kind="lib" path="web/WEB-INF/lib/commons-codec-1.7.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

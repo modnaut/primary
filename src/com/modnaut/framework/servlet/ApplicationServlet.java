@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -90,8 +92,24 @@ public class ApplicationServlet extends HttpServlet
 
 		try
 		{
-			String className = StringUtils.trimToEmpty(request.getParameter(ICommonConstants.CLASS));
-			String methodName = StringUtils.trimToEmpty(request.getParameter(ICommonConstants.METHOD));
+			String className = ICommonConstants.NONE;
+			String methodName = ICommonConstants.NONE;
+
+			String invoke = StringUtils.trimToEmpty(request.getParameter("invoke"));
+			LOGGER.debug("Invoke: " + invoke);
+			if (!invoke.isEmpty())
+			{
+				String decodedInvoke = new String(Base64.decodeBase64(invoke));
+				LOGGER.debug("Decoded Invoke: " + decodedInvoke);
+				String[] invokeComponents = decodedInvoke.split(Pattern.quote(ICommonConstants.PIPE));
+				className = invokeComponents[0];
+				methodName = invokeComponents[1];
+			}
+			else
+			{
+				className = StringUtils.trimToEmpty(request.getParameter(ICommonConstants.CLASS));
+				methodName = StringUtils.trimToEmpty(request.getParameter(ICommonConstants.METHOD));
+			}
 
 			if (!className.equals(ICommonConstants.NONE) && !methodName.equals(ICommonConstants.NONE))
 			{

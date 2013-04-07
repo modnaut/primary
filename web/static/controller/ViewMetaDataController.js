@@ -87,6 +87,11 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		options = Ext.clone(options);
 		
 		var parameters = options.parameters;
+		if(parameters.Class && parameters.Method) {
+			parameters.invoke = Globals.encodeBase64(parameters.Class + '|' + parameters.Method);
+			delete parameters.Class;
+			delete parameters.Method;
+		}
 		
 		var component = options.component;
 		var container = component;
