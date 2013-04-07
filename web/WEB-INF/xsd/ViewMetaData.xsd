@@ -5,6 +5,7 @@
 	<xs:element name="viewMetaData">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="window" type="ModalWindow" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="notification" type="Notification" minOccurs="0" maxOccurs="unbounded"/>
 				<xs:element name="item" type="Item" minOccurs="1" maxOccurs="1"/>
 			</xs:sequence>
@@ -28,6 +29,55 @@
 		</xs:sequence>
 		<xs:attribute name="hideAfterMs" type="xs:int" use="optional"/>
 		<xs:attribute name="type" type="NotificationType" use="required"/>
+	</xs:complexType>
+	<xs:simpleType name="ModalWindowIcon">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="error"/>
+			<xs:enumeration value="info"/>
+			<xs:enumeration value="question"/>
+			<xs:enumeration value="warning"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="ModalWindow" abstract="true"/>
+	<xs:complexType name="MessageBox">
+		<xs:complexContent>
+			<xs:extension base="ModalWindow">
+				<xs:sequence>
+					<xs:element name="text" type="str:String" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="title" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="icon" type="ModalWindowIcon" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Alert">
+		<xs:complexContent>
+			<xs:extension base="MessageBox">
+				<xs:sequence>
+					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="2"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Confirm">
+		<xs:complexContent>
+			<xs:extension base="MessageBox">
+				<xs:sequence>
+					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="3"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Prompt">
+		<xs:complexContent>
+			<xs:extension base="MessageBox">
+				<xs:sequence>
+					<xs:element name="defaultValue" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="2"/>
+				</xs:sequence>
+				<xs:attribute name="multiline" type="xs:boolean" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:simpleType name="HideMode">
 		<xs:restriction base="xs:string">
@@ -183,10 +233,14 @@
 	</xs:complexType>
 	<xs:simpleType name="EventType">
 		<xs:restriction base="xs:string">
+			<xs:enumeration value="cancel"/>
 			<xs:enumeration value="change"/>
 			<xs:enumeration value="click"/>
+			<xs:enumeration value="ok"/>
+			<xs:enumeration value="no"/>
 			<xs:enumeration value="select"/>
 			<xs:enumeration value="selectionchange"/>
+			<xs:enumeration value="yes"/>
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="ActionType">

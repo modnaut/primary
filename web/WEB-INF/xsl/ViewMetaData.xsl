@@ -14,6 +14,7 @@
 	<xsl:template match="viewMetaData">
 		{
 			<xsl:call-template name="Notifications"/>
+			<xsl:call-template name="ModalWindows"/>
 			"items": [
 				<xsl:call-template name="Items"/>
 			],
@@ -21,7 +22,46 @@
 		}
 	</xsl:template>
 	
-		<xsl:template name="Notifications">
+	<xsl:template name="ModalWindows">
+		<xsl:if test="window">
+			"windows": [
+				<xsl:for-each select="window">
+					{
+						<xsl:apply-templates select="."/>
+						_d: 0
+					}
+					<xsl:call-template name="comma-delimit"/>
+				</xsl:for-each>
+			],
+		</xsl:if>
+	</xsl:template>
+
+	
+	<xsl:template name="MessageBox">
+		<xsl:value-of select="mn:childString(., 'text', ',')"/>
+		<xsl:value-of select="mn:childString(., 'title', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'icon', ',')"/>
+		<xsl:call-template name="Listeners"/>
+	</xsl:template>
+	
+	<xsl:template match="window[@xsi:type='Alert']">
+		<xsl:call-template name="MessageBox"/>
+		"type": "alert",
+	</xsl:template>
+	
+	<xsl:template match="window[@xsi:type='Confirm']">
+		<xsl:call-template name="MessageBox"/>
+		"type": "confirm",
+	</xsl:template>
+	
+	<xsl:template match="window[@xsi:type='Prompt']">
+		<xsl:call-template name="MessageBox"/>
+		<xsl:value-of select="mn:childString(., 'defaultValue', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'multiline', ',')"/>
+		"type": "prompt",
+	</xsl:template>
+	
+	<xsl:template name="Notifications">
 		<xsl:if test="notification">
 			"dockedItems": [
 				<xsl:for-each select="notification">

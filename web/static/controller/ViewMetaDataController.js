@@ -117,6 +117,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			var items = response.items;
 			var html = response.html;
 			var dockedItems = response.dockedItems;
+			var windows = response.windows;
 			var sessionId = response.sessionId;
 			
 			if(sessionId) {
@@ -158,6 +159,32 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				container.addDocked(dockedItems);
 			}
 			Ext.resumeLayouts(true);
+			
+			if(windows && windows.length) {
+				for(var i = 0, len = windows.length; i < len; i++) {
+					var windowConfig = windows[i];
+					
+					var callback = function(button, text, opts) {
+						if(windowConfig.listeners && windowConfig.listeners[button]) {
+							return windowConfig.listeners[button].call(container, text);
+						}
+					};
+					
+					var title = windowConfig.title || '';
+					
+					switch(windowConfig.type) {
+						case 'alert':
+							Ext.MessageBox.alert(title, windowConfig.text, callback, container);
+							break;
+						case 'confirm':
+							Ext.MessageBox.confirm(title, windowConfig.text, callback, container);
+							break;
+						case 'prompt':
+							Ext.MessageBox.prompt(title, windowConfig.text, callback, container, windowConfig.multiline, windowConfig.defualtValue);
+							break;
+					}
+				}
+			}
 			
 			eval(response.script);
 		};

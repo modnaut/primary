@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.framework.properties.viewmetadata.AbstractField;
 import com.modnaut.framework.properties.viewmetadata.AbstractStore;
+import com.modnaut.framework.properties.viewmetadata.Alert;
 import com.modnaut.framework.properties.viewmetadata.ComboBox;
 import com.modnaut.framework.properties.viewmetadata.DateField;
 import com.modnaut.framework.properties.viewmetadata.DisplayField;
@@ -223,6 +224,20 @@ public class VmdMethods
 	public static void populateAbstractField(AbstractField element, String data)
 	{
 		element.setValue(data);
+	}
+
+	public static void addModalAlert(ViewMetaData viewMetaData, JXPathContext context, String alertTextStringCd)
+	{
+
+	}
+
+	public static void addModalAlert(ViewMetaData viewMetaData, JXPathContext context, String alertTextStringCd, String alertTitleStringCd)
+	{
+		Alert alert = new Alert();
+		alert.setText(getStringObject(alertTextStringCd));
+		if (alertTitleStringCd != null)
+			alert.setTitle(getStringObject(alertTitleStringCd));
+		viewMetaData.getWindow().add(alert);
 	}
 
 	public static void addNotification(ViewMetaData viewMetaData, JXPathContext context, String notificationStringCd, NotificationType type)

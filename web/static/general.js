@@ -42,18 +42,24 @@ Ext.define('Globals', {
     eventListener: function(options) {
     	console.log('eventListener', options);
     	var component = options.component;
+    	
     	switch(options.actionType) {
     		case 'submit':
     			var parameters = options.parameters || {};
-    			if(options.eventType == 'selectionchange') {
-    				var selection = options.arguments[1];
-    				for(var r = 0, len = selection.length; r < len; r++) {
-    					var record = selection[r];
-    					var fields = record.fields.getRange();
-    					for(var f = 0, flen = fields.length; f < flen; f++) {
-    						parameters[fields[f].name + '-' + r ] = record.get(fields[f].name);
-    					}
-    				}
+    			
+    			switch(options.eventType) {
+    				case 'selectionchange':
+    					var selection = options.arguments[1];
+        				for(var r = 0, len = selection.length; r < len; r++) {
+        					var record = selection[r];
+        					var fields = record.fields.getRange();
+        					for(var f = 0, flen = fields.length; f < flen; f++) {
+        						parameters[fields[f].name + '-' + r ] = record.get(fields[f].name);
+        					}
+        				}
+    					break;
+    				case 'ok':
+    					parameters.text = options.arguments[0];
     			}
     			
 				Globals.submitForm({

@@ -69,6 +69,16 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 		VmdMethods.deleteElement(viewMetaData, jxPathContext, id);
 	}
 
+	protected void addModalAlert(String alertTextStringCd)
+	{
+		addModalAlert(alertTextStringCd, null);
+	}
+
+	protected void addModalAlert(String alertTextStringCd, String alertTitleStringCd)
+	{
+		VmdMethods.addModalAlert(viewMetaData, jxPathContext, alertTextStringCd, alertTitleStringCd);
+	}
+
 	protected void addNotification(String notificationStringCd, NotificationType type, String panelId)
 	{
 		VmdMethods.addNotification(viewMetaData, jxPathContext, notificationStringCd, type, panelId);

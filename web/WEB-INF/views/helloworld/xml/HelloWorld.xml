@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
+	<window xsi:type="Prompt">
+		<text stringCd="What is your name"/>
+		<title stringCd="Hi There"/>
+		<listener action="submit" event="ok" class="com.modnaut.apps.helloworld.HelloWorldCtrl" method="nameSubmitted"/>
+	</window>
 	<item xsi:type="Panel">
 		<items>
 			<item xsi:type="GridPanel" region="center" id="users" flex="1">
