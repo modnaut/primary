@@ -107,4 +107,37 @@
 		</xsl:if>
 	</xsl:function>
 	
+	<xsl:function name="mn:stringify-element">
+		<xsl:param name="node" as="node()"/>
+		<xsl:choose>
+			<xsl:when test="$node">
+				<xsl:message><xsl:copy-of select="$node"/></xsl:message>
+				<xsl:variable name="output">
+					<xsl:text>&lt;</xsl:text>
+					<xsl:value-of select="$node/name()"/>
+					<xsl:for-each select="$node/@*">
+						<xsl:text> </xsl:text>
+						<xsl:value-of select="name()"/>
+						<xsl:text>=\&quot;</xsl:text>
+						<xsl:value-of select="."/>
+						<xsl:text>\&quot;</xsl:text>
+					</xsl:for-each>
+					<xsl:text>&gt;</xsl:text>
+					<xsl:for-each select="$node/*">
+						<xsl:value-of select="mn:stringify-element(.)"/>
+					</xsl:for-each>
+					<xsl:value-of select="replace($node/text(), '\n', '')"/>
+					<xsl:text>&lt;/</xsl:text>
+					<xsl:value-of select="$node/name()"/>
+					<xsl:text>&gt;</xsl:text>
+				</xsl:variable>
+				<xsl:sequence select=" $output "/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:message>node is missing</xsl:message>
+				<xsl:sequence select=" '' "/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+	
 </xsl:stylesheet>

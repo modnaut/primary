@@ -58,7 +58,7 @@
 							<xsl:with-param name="displayField" select="$displayField"/>
 						</xsl:call-template>
 					</xsl:when>
-					<xsl:when test="../../@xsi:type='Chart' ">
+					<xsl:when test="../../@xsi:type='Chart' or ../../@xsi:type='DataView' ">
 						<xsl:call-template name="RecordSet">
 							<xsl:with-param name="mode" select=" 'chart' "/>
 							<xsl:with-param name="valueField" select="$valueField"/>

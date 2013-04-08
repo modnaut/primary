@@ -211,8 +211,17 @@
 		"xtype": "menucheckitem"
 	</xsl:template>
 	
-		<xsl:template match="item[@xsi:type='MenuSeparatorItem']">
+	<xsl:template match="item[@xsi:type='MenuSeparatorItem']">
 		<xsl:call-template name="MenuItem"/>
 		"xtype": "menuseparator"
+	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type='DataView']">
+		<xsl:for-each select="store">
+			<xsl:apply-templates select="."/>,
+		</xsl:for-each>
+		<xsl:value-of select="mn:attribute(., 'itemSelector', ',')"/>
+		"tpl": "<xsl:value-of select="mn:stringify-element(tpl/tpl)"/>",
+		"xtype": "dataview"
 	</xsl:template>
 </xsl:stylesheet>

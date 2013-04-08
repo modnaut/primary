@@ -273,6 +273,24 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="XTemplate">
+		<xs:sequence>
+			<xs:any minOccurs="1" maxOccurs="1" processContents="skip"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DataView">
+		<xs:complexContent>
+			<xs:extension base="Item">
+				<xs:sequence>
+					<xs:element name="store" type="AbstractStore" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="tpl" type="XTemplate" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="deferEmptyTest" type="xs:boolean" default="true"/>
+				<xs:attribute name="itemSelector" type="xs:string" use="required"/>
+				<xs:attribute name="mouseOverOutBuffer" type="xs:int" default="20"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="Container">
 		<xs:complexContent>
 			<xs:extension base="Item">
