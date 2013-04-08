@@ -84,6 +84,8 @@
 				<transaction src="sql/up_UpdateUser.sql"/>
 				<transaction src="sql/up_InsertUpdateSession.sql"/>
 				<transaction src="sql/up_GetAllServerAttributes.sql"/>
+				<transaction src="sql/up_CanPerformAction.sql"/>
+				<transaction src="sql/uf_CanPerformAction.sql"/>
 			</sql>
 	</target>
 		
