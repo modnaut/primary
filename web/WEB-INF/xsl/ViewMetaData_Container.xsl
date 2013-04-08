@@ -221,7 +221,7 @@
 			<xsl:apply-templates select="."/>,
 		</xsl:for-each>
 		<xsl:value-of select="mn:attribute(., 'itemSelector', ',')"/>
-		"tpl": "<xsl:value-of select="mn:stringify-element(tpl/tpl)"/>",
+		"tpl": "<xsl:for-each select="tpl/*"><xsl:value-of select="mn:stringify-element(.)"/></xsl:for-each>",
 		"xtype": "dataview"
 	</xsl:template>
 </xsl:stylesheet>
