@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
+	<item xsi:type="Container">
+		<items>
+			<item xsi:type="Panel" region="center" flex="1" bodyPadding="5">
+				<items>
+					<item xsi:type="DisplayField" id="MarketName" value="Miller Beach Farmer's Market">
+						<fieldLabel stringCd="Name"/>
+					</item>
+					<item xsi:type="DisplayField" id="Address" value="500 N Grand Blvd">
+						<fieldLabel stringCd="Address"/>
+					</item>
+					<item xsi:type="DisplayField" id="City" value="Gary">
+						<fieldLabel stringCd="City"/>
+					</item>
+					<item xsi:type="DisplayField" id="State" value="IN">
+						<fieldLabel stringCd="State"/>
+					</item>
+					<item xsi:type="DisplayField" id="ZipCode" value="46403">
+						<fieldLabel stringCd="Zip Code"/>
+					</item>
+					<item xsi:type="DisplayField" id="AverageReview" value="4.5">
+						<fieldLabel stringCd="Average Review"/>
+					</item>
+					<item xsi:type="DisplayField" id="Description" value="Our mission is to offer the community fresh, healthy foods from farmers and local businesses, to invite individuals &amp; businesses promoting gardening, health &amp; wellness, fitness &amp; healing, alternative energy &amp; sustainability and to invite artists &amp; craftspeople to sell handmade goods.">
+						<fieldLabel stringCd="Description"/>
+					</item>
+				</items>
+				<title stringCd="Miller Beach Farmer's Market"/>
+			</item>
+			<item xsi:type="GridPanel" region="south" flex="1">
+				<title stringCd="Reviews"/>
+				<column dataIndex="Stars" flex="1">
+					<text stringCd="Stars"/>
+				</column>
+				<column xsi:type="DateColumn" format="n/j/Y" dataIndex="Date" flex="1">
+					<text stringCd="Date"/>
+				</column>
+				<column dataIndex="Detail" flex="1">
+					<text stringCd="Detail"/>
+				</column>
+				<store xsi:type="Store">
+					<model idProperty="ReviewId">
+						<field name="ReviewId" type="int"/>
+						<field name="Stars" type="int"/>
+						<field name="Date" type="date"/>
+						<field name="Detail" type="string"/>
+					</model>
+					<data>
+						<record>
+							<field name="ReviewId" value="1"/>
+							<field name="Stars" value="4"/>
+							<field name="Date" value="1/1/2013"/>
+							<field name="Detail" value="This place is pretty cool, but parking is far"/>
+						</record>
+						<record>
+							<field name="ReviewId" value="2"/>
+							<field name="Stars" value="5"/>
+							<field name="Date" value="2/29/2013"/>
+							<field name="Detail" value="I've never been to a better farmer's market in my life!"/>
+						</record>
+					</data>
+				</store>
+			</item>
+		</items>
+		<layout xsi:type="BorderLayout"/>		
+	</item>
+</viewMetaData>

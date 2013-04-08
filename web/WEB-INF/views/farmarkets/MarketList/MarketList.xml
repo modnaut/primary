@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
+	<!--<item xsi:type="DataView" itemSelector="market">
+		<store xsi:type="Store">
+			<model idProperty="MarketId">
+				<field name="MarketId" type="int"/>
+				<field name="Name" type="string"/>
+				<field name="Address" type="string"/>
+				<field name="City" type="string"/>
+				<field name="State" type="string"/>
+				<field name="ZipCode" type="string"/>
+				<field name="AverageReview" type="float"/>
+			</model>
+			<data>
+				<record>
+					<field name="MarketId" value="1"/>
+					<field name="Name" value="Miller Beach Farmer's Market"/>
+					<field name="Address" value="500 N Grand Blvd"/>
+					<field name="City" value="Gary"/>
+					<field name="State" value="IN"/>
+					<field name="ZipCode" value="46403"/>
+					<field name="AverageReview" value="4.5"/>
+				</record>
+				<record>
+					<field name="MarketId" value="2"/>
+					<field name="Name" value="St. John Farmers' Market"/>
+					<field name="Address" value="9660 Wicker Ave"/>
+					<field name="City" value="St. John"/>
+					<field name="State" value="IN"/>
+					<field name="ZipCode" value="46373"/>
+					<field name="AverageReview" value="3.5"/>
+				</record>
+			</data>
+		</store>
+		<tpl>
+			<tpl for=".">
+				<div class="market">
+					<span>{Name}</span>
+				</div>
+			</tpl>
+		</tpl>
+	</item>-->
+	<item xsi:type="GridPanel">
+		<listener event="selectionchange" action="submit" class="com.modnaut.apps.farmarkets.MarketDetailCtrl" method="defaultAction"/>
+		<title stringCd="Markets"/>
+		<column dataIndex="Name" flex="1">
+			<text stringCd="Market Name"/>
+		</column>
+		<column dataIndex="Address" flex="1">
+			<text stringCd="Address"/>
+		</column>
+		<column dataIndex="City" flex="1">
+			<text stringCd="City"/>
+		</column>
+		<column dataIndex="State" flex="1">
+			<text stringCd="State"/>
+		</column>
+		<column dataIndex="ZipCode" flex="1">
+			<text stringCd="ZipCode"/>
+		</column>
+		<column dataIndex="AverageReview" flex="1">
+			<text stringCd="Average Review"/>
+		</column>
+		<store xsi:type="Store">
+			<model idProperty="MarketId">
+				<field name="MarketId" type="int"/>
+				<field name="Name" type="string"/>
+				<field name="Address" type="string"/>
+				<field name="City" type="string"/>
+				<field name="State" type="string"/>
+				<field name="ZipCode" type="string"/>
+				<field name="AverageReview" type="float"/>
+			</model>
+			<data>
+				<record>
+					<field name="MarketId" value="1"/>
+					<field name="Name" value="Miller Beach Farmer's Market"/>
+					<field name="Address" value="500 N Grand Blvd"/>
+					<field name="City" value="Gary"/>
+					<field name="State" value="IN"/>
+					<field name="ZipCode" value="46403"/>
+					<field name="AverageReview" value="4.5"/>
+				</record>
+				<record>
+					<field name="MarketId" value="2"/>
+					<field name="Name" value="St. John Farmers' Market"/>
+					<field name="Address" value="9660 Wicker Ave"/>
+					<field name="City" value="St. John"/>
+					<field name="State" value="IN"/>
+					<field name="ZipCode" value="46373"/>
+					<field name="AverageReview" value="3.5"/>
+				</record>
+			</data>
+		</store>
+	</item>
+</viewMetaData>

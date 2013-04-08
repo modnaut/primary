@@ -16,7 +16,7 @@ Ext.application({
 			items: [{
 				xtype: 'vmdContainer',
 				layout: 'fit',
-				Class: 'com.modnaut.apps.helloworld.HelloWorldCtrl',
+				Class: 'com.modnaut.apps.farmarkets.MarketListCtrl',
 				Method: 'defaultAction'
 			}]
 		});
