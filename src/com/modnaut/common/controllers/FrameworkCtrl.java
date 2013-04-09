@@ -23,6 +23,7 @@ import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
+import com.modnaut.framework.session.UserSession;
 import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.utilities.ServerMethods;
 
@@ -38,6 +39,7 @@ public class FrameworkCtrl
 {
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
+	protected UserSession userSession;
 
 	private static final String VIEW_META_DATA_FILE = "ViewMetaData.xsl";
 	private static final String VIEW_PATH = "WEB-INF/views";
@@ -54,6 +56,7 @@ public class FrameworkCtrl
 	{
 		this.request = webSession.getRequest();
 		this.response = webSession.getResponse();
+		this.userSession = webSession.getUserSession();
 	}
 
 	/**

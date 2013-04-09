@@ -2,16 +2,15 @@ package com.modnaut.framework.session;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import com.modnaut.common.interfaces.ICommonConstants;
-import com.modnaut.common.utilities.CommonMethods;
-import com.modnaut.common.utilities.DatabaseMethods;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.modnaut.common.utilities.StringMethods;
 import com.modnaut.framework.utilities.SessionMethods;
 
 /**
@@ -23,19 +22,12 @@ import com.modnaut.framework.utilities.SessionMethods;
  */
 public class WebSessionController
 {
-	// CONSTANTS
-	private static final int ITERATION_NUMBER = 1000;
-	private static final String PASSWORD_SALT = "MoDnaUt_SalT";
-
-	// SQL
-	private static final String AUTHENTICATE_USER = "AUTHENTICATE_USER";
-
-	// SQL Parms
-	private static final String EMAIL = "Email";
-	private static final String PASSWORD = "Password";
-	private static final String SESSION_ID = "sessionId";
+	private static final Logger LOGGER = LoggerFactory.getLogger(WebSessionController.class);
 
 	// CONSTANTS
+	private static final String MODNAUT_SESSION_ID = "MODNAUT_SESSION_ID";
+
+	// CLASS VARIABLES
 	private HttpServletRequest request = null;
 	private HttpServletResponse response = null;
 
@@ -47,136 +39,77 @@ public class WebSessionController
 
 	/**
 	 * 
-	 * @param email
-	 * @param password
 	 * @return
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public UserSession authenticate()
+	public UserSession getUserSession()
 	{
-		HttpSession httpSession = request.getSession(true);// create if it doesn't exist
+		UserSession userSession = null;
+		long session_id = -1;
 		Cookie cookie = null;
 		Cookie[] cookies = request.getCookies();
-		boolean new_cookie = false;
 
 		if (cookies != null)
 		{
 			for (int i = 0; i < cookies.length; i++)
 			{
-				if (cookies[i].getName().equals("modnaut"))
+				if (cookies[i].getName().equals(MODNAUT_SESSION_ID))
 				{
 					cookie = cookies[i];
+					session_id = StringMethods.StringToLong(cookie.getValue());
+					break;
 				}
 			}
 		}
 
-		if (cookie == null)
+		// User already has a WebSession. Get it from the database.
+		if (session_id > 0)
 		{
-			new_cookie = true;
-			int maxAge;
-			try
+			// TODO - check session age. Does session expire?
+
+			// Get from database and Deserialize Session object.
+			userSession = SessionMethods.getSession(session_id);
+
+			// Not found in database!!! Must have been cleared out.
+			if (userSession == null)
 			{
-				maxAge = new Integer(request.getServletContext().getInitParameter("cookie-age")).intValue();
-			}
-			catch (Exception e)
-			{
-				maxAge = -1;
-			}
+				int userId = 1; // guest user until they log in.
 
-			cookie = new Cookie("modnaut", "" + getNextCookieValue());
-			cookie.setPath(request.getContextPath());
-			cookie.setMaxAge(maxAge);
-			response.addCookie(cookie);
-		}
-
-		// We will always continue session if it is not new, even if they went through the login page again.
-		// TODO - Is this smart? Should we check for login credentials first? Probably. Right now, this lets them in with a valid session and incorrect email/password.
-		if (httpSession != null && !httpSession.isNew())
-		{
-			// User already has a WebSession. Get it from the database.
-			if (httpSession.getAttribute(SESSION_ID) != null)
-			{
-				long session_id = (long) httpSession.getAttribute(SESSION_ID);
-
-				// TODO - remove printlines. These should be logger messages anyway.
-				// System.out.println("##########     checkForValidSession     ##########");
-				// System.out.println("session.isNew(): " + httpSession.isNew());
-				// System.out.println("session.getLastAccessedTime(): " + httpSession.getLastAccessedTime());
-				// System.out.println("session.getCreationTime(): " + httpSession.getCreationTime());
-				// System.out.println("session.getMaxInactiveInterval(): " + httpSession.getMaxInactiveInterval());
-				// System.out.println("session has been set already: " + session_id);
-
-				// TODO - check session age
-
-				// Get from database and Deserialize Session object.
-				return SessionMethods.getSession(session_id);
-
-			}
-			else
-			{
-				// TODO
-				// Session is not new, but the sessionId cannot be found?
-				// Invalidate session and create a new session?
+				// create new Session object.
+				userSession = SessionMethods.createNewSession();
+				userSession.setUserId(userId);
+				// Insert into database.
+				SessionMethods.saveSession(userSession);
 			}
 		}
-
-		// HttpSession exists, but and is new.
-		if (httpSession != null)
+		else
 		{
-			String email = request.getParameter(EMAIL);
-			String password = request.getParameter(PASSWORD);
+			// No sessionId found in browser.
+			int userId = 1; // guest user until they log in.
 
-			if (email != null && password != null)
-			{
-				// The word 'password' will equal 'kLxNpX+0w9lWcamR3wSZ8O/828A=' after it has been salted and hashed
-				String saltedPassword = CommonMethods.encryptString(password, ITERATION_NUMBER, PASSWORD_SALT);
-
-				HashMap<String, Object> parms = new HashMap<String, Object>();
-				parms.put(EMAIL, email);
-				parms.put(PASSWORD, saltedPassword);
-
-				// See if this email/password combination exists in our database. If not, the stored procedure will increment the invalid login attempts.
-				String[] data = DatabaseMethods.getJustDataFirstRow(AUTHENTICATE_USER, ICommonConstants.COMMON, parms); // [0]UserId, [1]FirstName, [2]LastName, [3]EmailAddress, [4]UserPassword
-				if (data != null && data.length > 0)
-				{
-					int userId = CommonMethods.StringToInt(data[0]);
-
-					// Found the user in the database. Create a new WebSession.
-					long new_id = SessionMethods.generateSessionId();
-					// Store the sessionId in the httpSession object. This way we do not have to have a parameter on the page.
-					// This will only work if we do not have different session per request. No Session branching right now.
-					// TODO - still must make sure this cannot be intercepted - Man in the Middle attacks.
-					httpSession.setAttribute(SESSION_ID, new_id);
-
-					// create new Session object.
-					UserSession webSession = new UserSession(new_id);
-					webSession.setUserId(userId);
-					webSession.setEmail(email);
-					// Insert into database.
-					SessionMethods.saveSession(webSession);
-
-					return webSession;
-				}
-				else
-				{
-					// TODO - increment the invalid login count...
-
-					// If the user has not given a valid Email and Password combination, pass them to the invalid Login Page
-					// response.sendRedirect(INVALID_LOGIN_PAGE);
-					return null;
-				}
-			}
-
+			// create new Session object.
+			userSession = SessionMethods.createNewSession();
+			userSession.setUserId(userId);
+			// Insert into database.
+			SessionMethods.saveSession(userSession);
 		}
 
-		return null;
+		int maxAge;
+		try
+		{
+			maxAge = new Integer(request.getServletContext().getInitParameter("cookie-age")).intValue();
+		}
+		catch (Exception e)
+		{
+			maxAge = -1;
+		}
+
+		cookie = new Cookie(MODNAUT_SESSION_ID, Long.toString(userSession.getSessionId()));
+		cookie.setPath(request.getContextPath());
+		cookie.setMaxAge(maxAge); // time in seconds
+		response.addCookie(cookie);
+
+		return userSession;
 	}
-
-	private long getNextCookieValue()
-	{
-		return new java.util.Date().getTime();
-
-	}
-
 }
