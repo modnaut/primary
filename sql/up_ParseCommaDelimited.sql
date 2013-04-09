@@ -34,6 +34,7 @@ If(p_CommaDelimitedList <> '') Then
    END LOOP simple_loop;
 End If;
 
+Insert Into CommaDelimited (StringPart)
 Select StringPart From DataSet;
 
 DROP TABLE DataSet;

@@ -3,7 +3,7 @@
 -- Server version:               5.6.10-log - MySQL Community Server (GPL)
 -- Server OS:                    Win64
 -- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-04-09 00:22:36
+-- Date/time:                    2013-04-09 00:51:47
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -95,13 +95,14 @@ CREATE TABLE IF NOT EXISTS `language` (
   `FlagFileName` varchar(100) DEFAULT NULL,
   `IsoLanguageCd` varchar(2) NOT NULL,
   PRIMARY KEY (`LanguageId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.language: ~2 rows (approximately)
+-- Dumping data for table common.language: ~3 rows (approximately)
 /*!40000 ALTER TABLE `language` DISABLE KEYS */;
 INSERT INTO `language` (`LanguageId`, `Name`, `LocalName`, `FlagFileName`, `IsoLanguageCd`) VALUES
 	(1, 'English', 'English', NULL, 'en'),
-	(2, 'Spanish', 'Español', NULL, 'es');
+	(2, 'Spanish', 'Español', NULL, 'es'),
+	(3, 'Hebrew', 'עברית', NULL, 'he');
 /*!40000 ALTER TABLE `language` ENABLE KEYS */;
 
 
@@ -215,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `string` (
   UNIQUE KEY `Index 2` (`StringCd`(255))
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.string: ~2 rows (approximately)
+-- Dumping data for table common.string: ~5 rows (approximately)
 /*!40000 ALTER TABLE `string` DISABLE KEYS */;
 INSERT INTO `string` (`StringId`, `StringCd`) VALUES
 	(1, 'Name'),
@@ -238,10 +239,19 @@ CREATE TABLE IF NOT EXISTS `stringvalue` (
   CONSTRAINT `FK__language` FOREIGN KEY (`LanguageId`) REFERENCES `language` (`LanguageId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.stringvalue: ~0 rows (approximately)
+-- Dumping data for table common.stringvalue: ~10 rows (approximately)
 /*!40000 ALTER TABLE `stringvalue` DISABLE KEYS */;
 INSERT INTO `stringvalue` (`StringId`, `LanguageId`, `Value`) VALUES
-	(1, 2, 'nombre ');
+	(1, 2, 'nombre '),
+	(2, 2, 'dirección '),
+	(3, 2, 'ciudad'),
+	(4, 2, 'estado'),
+	(5, 2, 'código postal'),
+	(1, 3, 'שם'),
+	(2, 3, 'כתובת'),
+	(3, 3, 'עיר'),
+	(4, 3, 'מדינה'),
+	(5, 3, 'מיקוד');
 /*!40000 ALTER TABLE `stringvalue` ENABLE KEYS */;
 
 
