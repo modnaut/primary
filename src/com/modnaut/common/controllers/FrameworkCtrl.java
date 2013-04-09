@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +19,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
@@ -97,6 +100,33 @@ public class FrameworkCtrl
 	 */
 	public void marshall(ViewMetaData viewMetaData)
 	{
+		List list = jxPathContext.selectNodes("//*[@stringCd]");
+		String allStringCds = ICommonConstants.NONE;
+		HashMap<String, com.modnaut.framework.properties.string.String> stringObjects = new HashMap<String, com.modnaut.framework.properties.string.String>();
+		for (int i = 0, last = list.size() - 1; i < list.size(); i++)
+		{
+			com.modnaut.framework.properties.string.String string = (com.modnaut.framework.properties.string.String) list.get(i);
+			stringObjects.put(string.getStringCd(), string);
+			allStringCds += ((com.modnaut.framework.properties.string.String) list.get(i)).getStringCd();
+			if (i != last)
+				allStringCds += ",";
+		}
+
+		System.out.println("all strings: " + allStringCds);
+
+		HashMap<String, Object> parms = new HashMap<String, Object>();
+		parms.put("stringCds", allStringCds);
+		parms.put("languageCd", "he");
+
+		ArrayList<String[]> translatedValues = DatabaseMethods.getJustData("GET_TRANSLATED_STRINGS", ICommonConstants.COMMON, parms);
+
+		for (String[] value : translatedValues)
+		{
+			com.modnaut.framework.properties.string.String string = stringObjects.get(value[0]);
+			if (string != null)
+				string.setStringCd(value[1]);
+		}
+
 		try
 		{
 			XslPool.marshalAndTransform(viewMetaData, response.getOutputStream(), VIEW_META_DATA_FILE, null);

@@ -68,4 +68,11 @@
 			<parameter name="UserPassword" type="VARCHAR"/>
 		</parameters>
 	</query>
+	<query name="GET_TRANSLATED_STRINGS" action="SELECT" type="SP">
+		<statement value="Common.up_GetTranslatedStrings(?, ?)"/>
+		<parameters>
+			<parameter name="stringCds" type="VARCHAR"/>
+			<parameter name="languageCd" type="VARCHAR"/>
+		</parameters>
+	</query>
 </sqlMetaData>
