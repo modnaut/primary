@@ -27,6 +27,8 @@
 					</item>
 					<item xsi:type="Button" id="AddReviewAction" iconCls="icon-application_view_list">
 						<listener event="click" action="submit" class="com.modnaut.apps.login.LoginCtrl" method="defaultAction"/>
+						<text stringCd="Add Review"/>
+						<tooltip stringCd="This is not finished. It will always take you to the Login page right now."/>
 					</item>
 				</items>
 				<title stringCd="Miller Beach Farmer's Market"/>
