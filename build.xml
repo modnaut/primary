@@ -77,6 +77,7 @@
 			    userid="modnaut00"
 			    password="zp4X263tTSv06On"
 				delimiterType="row">
+				<transaction src="sql/up_ParseCommaDelimited.sql"/>
 				<transaction src="sql/up_GetAllUsersAlphabetically.sql"/>
 			    <transaction src="sql/up_AuthenticateUser.sql"/>
 				<transaction src="sql/up_GetUser.sql"/>
