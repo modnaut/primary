@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
-import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.session.UserSession;
+import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.session.WebSessionController;
 import com.modnaut.framework.utilities.ServerMethods;
 
@@ -82,7 +82,7 @@ public class ApplicationServlet extends HttpServlet
 
 		// This is where we will intercept every request and check for a valid, unexpired session.
 		WebSessionController wsController = new WebSessionController(request, response);
-		UserSession webSession = wsController.authenticate();
+		UserSession webSession = wsController.getUserSession();
 
 		if (webSession == null)
 			response.sendRedirect(ICommonConstants.INVALID_LOGIN_PAGE);

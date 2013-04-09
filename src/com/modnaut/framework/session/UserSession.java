@@ -20,15 +20,21 @@ public class UserSession implements java.io.Serializable
 
 	private long session_id = 0;
 	private int user_id = 0;
+	private boolean is_authenticated = false;
 	private String email = ICommonConstants.NONE;
+	private String firstName = ICommonConstants.NONE;
+	private String lastName = ICommonConstants.NONE;
 	private HashMap<String, Object> map = new HashMap<String, Object>();
+
+	private static final String GUEST = "guest";
 
 	/**
 	 * 
 	 */
 	public UserSession()
 	{
-		this.session_id = SessionMethods.generateSessionId();
+		long session_id = SessionMethods.generateSessionId();
+		new UserSession(session_id);
 	}
 
 	/**
@@ -37,6 +43,8 @@ public class UserSession implements java.io.Serializable
 	public UserSession(long session_id)
 	{
 		this.session_id = session_id;
+		this.firstName = GUEST;
+		this.lastName = GUEST;
 	}
 
 	/**
@@ -85,6 +93,54 @@ public class UserSession implements java.io.Serializable
 	public String getEmail()
 	{
 		return this.email;
+	}
+
+	/**
+	 * @param firstName
+	 */
+	public void setFirstName(String firstName)
+	{
+		this.firstName = firstName;
+	}
+
+	/**
+	 * @return firstName
+	 */
+	public String getFirstName()
+	{
+		return this.firstName;
+	}
+
+	/**
+	 * @param lastName
+	 */
+	public void setLastName(String lastName)
+	{
+		this.lastName = lastName;
+	}
+
+	/**
+	 * @return lastName
+	 */
+	public String getLastName()
+	{
+		return this.lastName;
+	}
+
+	/**
+	 * @param is_authenticated
+	 */
+	public void setIsAuthenticated(boolean is_authenticated)
+	{
+		this.is_authenticated = is_authenticated;
+	}
+
+	/**
+	 * @return is_authenticated
+	 */
+	public boolean isAuthenticated()
+	{
+		return this.is_authenticated;
 	}
 
 	/**

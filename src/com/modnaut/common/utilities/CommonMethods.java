@@ -7,8 +7,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.StringUtils;
-
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -106,22 +104,5 @@ public class CommonMethods
 	{
 		BASE64Encoder endecoder = new BASE64Encoder();
 		return endecoder.encode(data);
-	}
-
-	/**
-	 * 
-	 */
-	public static Integer StringToInt(String value)
-	{
-		Integer returnValue = null;
-		try
-		{
-			returnValue = Integer.parseInt(StringUtils.trimToEmpty(value));
-		}
-		catch (NumberFormatException nfe)
-		{
-			// Do nothing. This should be common.
-		}
-		return returnValue;
 	}
 }
