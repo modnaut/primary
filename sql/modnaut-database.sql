@@ -3,7 +3,7 @@
 -- Server version:               5.6.10-log - MySQL Community Server (GPL)
 -- Server OS:                    Win64
 -- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-03-17 22:36:55
+-- Date/time:                    2013-04-09 00:22:36
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `application` (
   PRIMARY KEY (`ApplicationId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.application: ~1 rows (approximately)
+-- Dumping data for table common.application: ~0 rows (approximately)
 /*!40000 ALTER TABLE `application` DISABLE KEYS */;
 INSERT INTO `application` (`ApplicationId`, `Name`) VALUES
 	(1, 'Modnaut Demo');
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `attribute` (
   CONSTRAINT `FK_attribute_attributetype` FOREIGN KEY (`AttributeTypeId`) REFERENCES `attributetype` (`AttributeTypeId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.attribute: ~1 rows (approximately)
+-- Dumping data for table common.attribute: ~0 rows (approximately)
 /*!40000 ALTER TABLE `attribute` DISABLE KEYS */;
 INSERT INTO `attribute` (`AttributeId`, `AttributeName`, `AttributeTypeId`) VALUES
 	(1, 'CacheXsl', 1);
@@ -105,6 +105,40 @@ INSERT INTO `language` (`LanguageId`, `Name`, `LocalName`, `FlagFileName`, `IsoL
 /*!40000 ALTER TABLE `language` ENABLE KEYS */;
 
 
+-- Dumping structure for table common.securitygroup
+DROP TABLE IF EXISTS `securitygroup`;
+CREATE TABLE IF NOT EXISTS `securitygroup` (
+  `SecurityGroupId` int(10) NOT NULL AUTO_INCREMENT,
+  `Description` varchar(50) NOT NULL,
+  PRIMARY KEY (`SecurityGroupId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.securitygroup: ~0 rows (approximately)
+/*!40000 ALTER TABLE `securitygroup` DISABLE KEYS */;
+INSERT INTO `securitygroup` (`SecurityGroupId`, `Description`) VALUES
+	(1, 'TestGroup');
+/*!40000 ALTER TABLE `securitygroup` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.securitygroupaction
+DROP TABLE IF EXISTS `securitygroupaction`;
+CREATE TABLE IF NOT EXISTS `securitygroupaction` (
+  `SecurityGroupId` int(10) NOT NULL,
+  `ActionId` int(10) NOT NULL,
+  PRIMARY KEY (`SecurityGroupId`,`ActionId`),
+  KEY `FK_SecurityGroupAction_ActionId` (`ActionId`),
+  CONSTRAINT `FK_SecurityGroupAction_SecurityGroupId` FOREIGN KEY (`SecurityGroupId`) REFERENCES `securitygroup` (`SecurityGroupId`),
+  CONSTRAINT `FK_SecurityGroupAction_ActionId` FOREIGN KEY (`ActionId`) REFERENCES `action` (`ActionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.securitygroupaction: ~2 rows (approximately)
+/*!40000 ALTER TABLE `securitygroupaction` DISABLE KEYS */;
+INSERT INTO `securitygroupaction` (`SecurityGroupId`, `ActionId`) VALUES
+	(1, 1),
+	(1, 2);
+/*!40000 ALTER TABLE `securitygroupaction` ENABLE KEYS */;
+
+
 -- Dumping structure for table common.server
 DROP TABLE IF EXISTS `server`;
 CREATE TABLE IF NOT EXISTS `server` (
@@ -114,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `server` (
   PRIMARY KEY (`ServerId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.server: ~1 rows (approximately)
+-- Dumping data for table common.server: ~0 rows (approximately)
 /*!40000 ALTER TABLE `server` DISABLE KEYS */;
 INSERT INTO `server` (`ServerId`, `ServerName`, `ServerDescription`) VALUES
 	(1, 'localhost', 'Local development PC');
@@ -133,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `serverattributevalue` (
   CONSTRAINT `FK_ServerAttributeValue_server` FOREIGN KEY (`ServerId`) REFERENCES `server` (`ServerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.serverattributevalue: ~1 rows (approximately)
+-- Dumping data for table common.serverattributevalue: ~0 rows (approximately)
 /*!40000 ALTER TABLE `serverattributevalue` DISABLE KEYS */;
 INSERT INTO `serverattributevalue` (`ServerId`, `AttributeId`, `AttributeValue`) VALUES
 	(1, 1, 'N');
@@ -150,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `session` (
   PRIMARY KEY (`SessionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.session: ~18 rows (approximately)
+-- Dumping data for table common.session: ~0 rows (approximately)
 /*!40000 ALTER TABLE `session` DISABLE KEYS */;
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 
@@ -164,9 +198,9 @@ CREATE TABLE IF NOT EXISTS `status` (
   UNIQUE KEY `StatusCd_UNIQUE` (`StatusCd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.status: ~0 rows (approximately)
+-- Dumping data for table common.status: ~2 rows (approximately)
 /*!40000 ALTER TABLE `status` DISABLE KEYS */;
-INSERT INTO `Status` (`StatusCd`, `StatusDescription`) VALUES
+INSERT INTO `status` (`StatusCd`, `StatusDescription`) VALUES
 	('A', 'Active'),
 	('D', 'Disabled');
 /*!40000 ALTER TABLE `status` ENABLE KEYS */;
@@ -175,17 +209,20 @@ INSERT INTO `Status` (`StatusCd`, `StatusDescription`) VALUES
 -- Dumping structure for table common.string
 DROP TABLE IF EXISTS `string`;
 CREATE TABLE IF NOT EXISTS `string` (
-  `StringId` int(10) NOT NULL,
+  `StringId` int(10) NOT NULL AUTO_INCREMENT,
   `StringCd` varchar(500) NOT NULL,
   PRIMARY KEY (`StringId`),
   UNIQUE KEY `Index 2` (`StringCd`(255))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.string: ~2 rows (approximately)
 /*!40000 ALTER TABLE `string` DISABLE KEYS */;
 INSERT INTO `string` (`StringId`, `StringCd`) VALUES
-	(1, 'Hello World'),
-	(2, 'Danny was here');
+	(1, 'Name'),
+	(2, 'Address'),
+	(3, 'City'),
+	(4, 'State'),
+	(5, 'Zip Code');
 /*!40000 ALTER TABLE `string` ENABLE KEYS */;
 
 
@@ -197,14 +234,14 @@ CREATE TABLE IF NOT EXISTS `stringvalue` (
   `Value` varchar(5000) NOT NULL,
   KEY `FK__string` (`StringId`),
   KEY `FK__language` (`LanguageId`),
-  CONSTRAINT `FK__language` FOREIGN KEY (`LanguageId`) REFERENCES `language` (`LanguageId`),
-  CONSTRAINT `FK__string` FOREIGN KEY (`StringId`) REFERENCES `string` (`StringId`)
+  CONSTRAINT `FK_stringvalue_string` FOREIGN KEY (`StringId`) REFERENCES `string` (`StringId`),
+  CONSTRAINT `FK__language` FOREIGN KEY (`LanguageId`) REFERENCES `language` (`LanguageId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.stringvalue: ~1 rows (approximately)
+-- Dumping data for table common.stringvalue: ~0 rows (approximately)
 /*!40000 ALTER TABLE `stringvalue` DISABLE KEYS */;
 INSERT INTO `stringvalue` (`StringId`, `LanguageId`, `Value`) VALUES
-	(1, 1, 'Hello World');
+	(1, 2, 'nombre ');
 /*!40000 ALTER TABLE `stringvalue` ENABLE KEYS */;
 
 
@@ -213,12 +250,14 @@ DROP TABLE IF EXISTS `useraction`;
 CREATE TABLE IF NOT EXISTS `useraction` (
   `UserId` int(10) NOT NULL,
   `ActionId` int(10) NOT NULL,
-  `CreatedByUserId` int(10) NOT NULL DEFAULT 0,
+  `CreatedByUserId` int(10) NOT NULL DEFAULT '0',
   `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`UserId`,`ActionId`),
+  KEY `FK_UserAction_ActionId` (`ActionId`),
+  KEY `FK_UserAction_CreatedByUserId` (`CreatedByUserId`),
   CONSTRAINT `FK_UserAction_ActionId` FOREIGN KEY (`ActionId`) REFERENCES `action` (`ActionId`) ON DELETE NO ACTION,
-  CONSTRAINT `FK_UserAction_UserId` FOREIGN KEY (`UserId`) REFERENCES `User` (`UserId`) ON DELETE NO ACTION,
-  CONSTRAINT `FK_UserAction_CreatedByUserId` FOREIGN KEY (`CreatedByUserId`) REFERENCES `User` (`UserId`) ON DELETE NO ACTION
+  CONSTRAINT `FK_UserAction_UserId` FOREIGN KEY (`UserId`) REFERENCES `user` (`UserId`) ON DELETE NO ACTION,
+  CONSTRAINT `FK_UserAction_CreatedByUserId` FOREIGN KEY (`CreatedByUserId`) REFERENCES `user` (`UserId`) ON DELETE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.useraction: ~2 rows (approximately)
@@ -241,28 +280,50 @@ CREATE TABLE IF NOT EXISTS `users` (
   `HireDate` datetime NOT NULL,
   `UserTypeCd` char(1) NOT NULL DEFAULT 'C',
   `UserStatusCd` char(1) NOT NULL DEFAULT 'A',
-  `InvalidLoginAttempts` int(2),
+  `InvalidLoginAttempts` int(2) DEFAULT NULL,
   PRIMARY KEY (`UserId`),
   UNIQUE KEY `EmailAddress` (`EmailAddress`),
   UNIQUE KEY `UserName` (`UserName`),
   KEY `FK_users_usertype` (`UserTypeCd`),
   CONSTRAINT `FK_users_usertype` FOREIGN KEY (`UserTypeCd`) REFERENCES `usertype` (`UserTypeCd`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.users: ~3 rows (approximately)
+-- Dumping data for table common.users: ~4 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`, `HireDate`, `UserTypeCd`, `UserStatusCd`, `InvalidLoginAttempts`) VALUES
-  (1, 'guest', 'guest', 'guest', '', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2000-01-01 00:00:00', 'C', 'A', 0),
-  (2, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0),
-  (3, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0),
-  (4, 'bdalgaard22', 'Ben', 'Dalgaardfasdfsa', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0);
+	(1, 'guest', 'guest', 'guest', '', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2000-01-01 00:00:00', 'C', 'A', 0),
+	(2, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0),
+	(3, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0),
+	(4, 'bdalgaard22', 'Ben', 'Dalgaardfasdfsa', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.usersecuritygroup
+DROP TABLE IF EXISTS `usersecuritygroup`;
+CREATE TABLE IF NOT EXISTS `usersecuritygroup` (
+  `UserId` int(10) NOT NULL,
+  `SecurityGroupId` int(10) NOT NULL,
+  `CreatedByUserId` int(10) NOT NULL DEFAULT '4',
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`UserId`,`SecurityGroupId`),
+  KEY `FK_UserSecurityGroup_SecurityGroupId` (`SecurityGroupId`),
+  KEY `FK_UserSecurityGroup_CreatedByUserId` (`CreatedByUserId`),
+  CONSTRAINT `FK_UserSecurityGroup_UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`),
+  CONSTRAINT `FK_UserSecurityGroup_SecurityGroupId` FOREIGN KEY (`SecurityGroupId`) REFERENCES `securitygroup` (`SecurityGroupId`),
+  CONSTRAINT `FK_UserSecurityGroup_CreatedByUserId` FOREIGN KEY (`CreatedByUserId`) REFERENCES `users` (`UserId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.usersecuritygroup: ~0 rows (approximately)
+/*!40000 ALTER TABLE `usersecuritygroup` DISABLE KEYS */;
+INSERT INTO `usersecuritygroup` (`UserId`, `SecurityGroupId`, `CreatedByUserId`, `CreatedDate`) VALUES
+	(3, 1, 3, '2013-04-08 22:24:18');
+/*!40000 ALTER TABLE `usersecuritygroup` ENABLE KEYS */;
 
 
 -- Dumping structure for table common.usersession
 DROP TABLE IF EXISTS `usersession`;
 CREATE TABLE IF NOT EXISTS `usersession` (
-  `UserId` int(10) NOT NULL DEFAULT 1,
+  `UserId` int(10) NOT NULL DEFAULT '1',
   `SessionId` bigint(19) NOT NULL,
   KEY `FK__user` (`UserId`),
   KEY `FK__session` (`SessionId`),
@@ -291,49 +352,3 @@ INSERT INTO `usertype` (`UserTypeCd`, `Description`) VALUES
 /*!40000 ALTER TABLE `usertype` ENABLE KEYS */;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-
-DROP TABLE IF EXISTS `SecurityGroup`;
-CREATE TABLE IF NOT EXISTS `SecurityGroup` (
-  `SecurityGroupId` int(10) NOT NULL AUTO_INCREMENT,
-  `Description` varchar(50) NOT NULL,
-  PRIMARY KEY (`SecurityGroupId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*!40000 ALTER TABLE `SecurityGroup` DISABLE KEYS */;
-INSERT INTO `SecurityGroup` (`SecurityGroupId`, `Description`) VALUES
-	(1, 'TestGroup');
-/*!40000 ALTER TABLE `SecurityGroup` ENABLE KEYS */;
-
-DROP TABLE IF EXISTS `SecurityGroupAction`;
-CREATE TABLE IF NOT EXISTS `SecurityGroupAction` (
-  `SecurityGroupId` int(10) NOT NULL,
-  `ActionId` int(10) NOT NULL,
-  PRIMARY KEY (`SecurityGroupId`, `ActionId`),
-  CONSTRAINT `FK_SecurityGroupAction_SecurityGroupId` FOREIGN KEY (`SecurityGroupId`) REFERENCES `SecurityGroup` (`SecurityGroupId`),
-  CONSTRAINT `FK_SecurityGroupAction_ActionId` FOREIGN KEY (`ActionId`) REFERENCES `Action` (`ActionId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*!40000 ALTER TABLE `SecurityGroupAction` DISABLE KEYS */;
-INSERT INTO `SecurityGroupAction` (`SecurityGroupId`, `ActionId`) VALUES
-	(1, 1),
-	(1, 2);
-/*!40000 ALTER TABLE `SecurityGroupAction` ENABLE KEYS */;
-
-
-DROP TABLE IF EXISTS `UserSecurityGroup`;
-CREATE TABLE IF NOT EXISTS `UserSecurityGroup` (
-  `UserId` int(10) NOT NULL,
-  `SecurityGroupId` int(10) NOT NULL,
-  `CreatedByUserId` int(10) NOT NULL DEFAULT 4,
-  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`UserId`, `SecurityGroupId`),
-  CONSTRAINT `FK_UserSecurityGroup_UserId` FOREIGN KEY (`UserId`) REFERENCES `Users` (`UserId`),
-  CONSTRAINT `FK_UserSecurityGroup_SecurityGroupId` FOREIGN KEY (`SecurityGroupId`) REFERENCES `SecurityGroup` (`SecurityGroupId`),
-  CONSTRAINT `FK_UserSecurityGroup_CreatedByUserId` FOREIGN KEY (`CreatedByUserId`) REFERENCES `Users` (`UserId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*!40000 ALTER TABLE `UserSecurityGroup` DISABLE KEYS */;
-INSERT INTO `UserSecurityGroup` (`UserId`, `SecurityGroupId`, `CreatedByUserId`) VALUES
-	(3, 1, 3);
-/*!40000 ALTER TABLE `UserSecurityGroup` ENABLE KEYS */;
-
