@@ -3,14 +3,12 @@ package com.modnaut.common.controllers;
 import java.io.File;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.application.Applications;
+import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.utilities.ServerMethods;
 
 /**
@@ -34,9 +32,9 @@ public class ApplicationCtrl extends FrameworkCtrl
 	 * @param request
 	 * @param response
 	 */
-	public ApplicationCtrl(HttpServletRequest request, HttpServletResponse response)
+	public ApplicationCtrl(WebSession userSessionObject)
 	{
-		super(request, response);
+		super(userSessionObject);
 	}
 
 	/**

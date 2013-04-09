@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.DatabaseMethods;
-import com.modnaut.framework.session.WebSession;
+import com.modnaut.framework.session.UserSession;
 
 /**
  * @author Ben
@@ -40,7 +40,7 @@ public class SessionMethods
 	 * @param sessionId
 	 * @return
 	 */
-	public static WebSession getSession(long session_id)
+	public static UserSession getSession(long session_id)
 	{
 		LOGGER.trace("Testing different logging levels on a clas-by-class basis.");
 
@@ -53,13 +53,13 @@ public class SessionMethods
 		if (objects != null && objects.size() > 0)
 		{
 			object = ((Object[]) objects.get(0))[0];
-			if (object instanceof WebSession)
+			if (object instanceof UserSession)
 			{
-				return (WebSession) object;
+				return (UserSession) object;
 			}
 		}
 
-		return new WebSession();
+		return new UserSession();
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class SessionMethods
 	 * @param session
 	 * @return
 	 */
-	public static long saveSession(WebSession session)
+	public static long saveSession(UserSession session)
 	{
 		HashMap<String, Object> parms = new HashMap<String, Object>();
 		parms.put(USER_ID, session.getUserId());

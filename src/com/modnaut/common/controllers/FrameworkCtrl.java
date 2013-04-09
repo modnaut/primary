@@ -20,6 +20,7 @@ import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
+import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.utilities.ServerMethods;
 
 /**
@@ -46,10 +47,10 @@ public class FrameworkCtrl
 	 * @param request
 	 * @param response
 	 */
-	public FrameworkCtrl(HttpServletRequest request, HttpServletResponse response)
+	public FrameworkCtrl(WebSession webSession)
 	{
-		this.request = request;
-		this.response = response;
+		this.request = webSession.getRequest();
+		this.response = webSession.getResponse();
 	}
 
 	/**

@@ -36,8 +36,8 @@ public class WebSessionController
 	private static final String SESSION_ID = "sessionId";
 
 	// CONSTANTS
-	HttpServletRequest request = null;
-	HttpServletResponse response = null;
+	private HttpServletRequest request = null;
+	private HttpServletResponse response = null;
 
 	public WebSessionController(HttpServletRequest request, HttpServletResponse response)
 	{
@@ -53,7 +53,7 @@ public class WebSessionController
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public WebSession authenticate()
+	public UserSession authenticate()
 	{
 		HttpSession httpSession = request.getSession(true);// create if it doesn't exist
 		Cookie cookie = null;
@@ -150,7 +150,7 @@ public class WebSessionController
 					httpSession.setAttribute(SESSION_ID, new_id);
 
 					// create new Session object.
-					WebSession webSession = new WebSession(new_id);
+					UserSession webSession = new UserSession(new_id);
 					webSession.setUserId(userId);
 					webSession.setEmail(email);
 					// Insert into database.

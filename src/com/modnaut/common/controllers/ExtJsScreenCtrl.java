@@ -2,15 +2,13 @@ package com.modnaut.common.controllers;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.VmdMethods;
 import com.modnaut.framework.properties.viewmetadata.AbstractField;
 import com.modnaut.framework.properties.viewmetadata.NotificationType;
+import com.modnaut.framework.session.WebSession;
 
 /**
  * 
@@ -27,9 +25,9 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	 * @param request
 	 * @param response
 	 */
-	public ExtJsScreenCtrl(HttpServletRequest request, HttpServletResponse response)
+	public ExtJsScreenCtrl(WebSession webSession)
 	{
-		super(request, response);
+		super(webSession);
 		response.setContentType(ICommonConstants.CONTENT_TYPE_JSON);
 	}
 

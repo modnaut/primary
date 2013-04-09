@@ -1,113 +1,56 @@
 package com.modnaut.framework.session;
 
-import java.util.HashMap;
-
-import com.modnaut.common.interfaces.ICommonConstants;
-import com.modnaut.framework.utilities.SessionMethods;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author Ben
+ * 
+ * @author bend
+ * 
+ *         This Object will contain the information about the user (stored in the UserSession Object) as well as the Request and Response information.
  * 
  */
-public class WebSession implements java.io.Serializable
+public class WebSession
 {
-	/**
-	 * generated serialVersionUID
-	 */
-	private static final long serialVersionUID = -4119815288345489125L;
+	// VARIABLES
+	private HttpServletRequest request = null;
+	private HttpServletResponse response = null;
+	private UserSession userSession = null;
 
-	private long session_id = 0;
-	private int user_id = 0;
-	private String email = ICommonConstants.NONE;
-	private HashMap<String, Object> map = new HashMap<String, Object>();
-
-	/**
-	 * 
-	 */
-	public WebSession()
+	public WebSession(HttpServletRequest request, HttpServletResponse response, UserSession webSession)
 	{
-		this.session_id = SessionMethods.generateSessionId();
+		this.request = request;
+		this.response = response;
+		this.userSession = webSession;
 	}
 
-	/**
-	 * @param session_id
-	 */
-	public WebSession(long session_id)
+	public void setRequest(HttpServletRequest request)
 	{
-		// TODO
-		this.session_id = session_id;
+		this.request = request;
 	}
 
-	/**
-	 * @param new_session_id
-	 */
-	public void setSessionId(long new_session_id)
+	public HttpServletRequest getRequest()
 	{
-		session_id = new_session_id;
+		return this.request;
 	}
 
-	/**
-	 * @return
-	 */
-	public long getSessionId()
+	public void setResponse(HttpServletResponse response)
 	{
-		return this.session_id;
+		this.response = response;
 	}
 
-	/**
-	 * @param new_user_id
-	 */
-	public void setUserId(int new_user_id)
+	public HttpServletResponse getResponse()
 	{
-		user_id = new_user_id;
+		return this.response;
 	}
 
-	/**
-	 * @return
-	 */
-	public int getUserId()
+	public void setUserSession(UserSession userSession)
 	{
-		return this.user_id;
+		this.userSession = userSession;
 	}
 
-	/**
-	 * @param newEmail
-	 */
-	public void setEmail(String newEmail)
+	public UserSession getUserSession()
 	{
-		email = newEmail;
-	}
-
-	/**
-	 * @return email
-	 */
-	public String getEmail()
-	{
-		return this.email;
-	}
-
-	/**
-	 * This is a method that allows objects to be stored in the session object using a HashMap. WARNING: Don't make a mess of this as it will increase the size of the session and decrease database speed. You have been warned!!!
-	 * 
-	 * @param key
-	 *            - key to access object by
-	 * @param value
-	 *            - value of the object
-	 * 
-	 */
-	public void addValue(String key, Object value)
-	{
-		map.put(key, value);
-	}
-
-	/**
-	 * This is the method used to retrieve objects being stored in session.
-	 * 
-	 * @param key
-	 * @return Object stored in HashMap.
-	 */
-	public Object getValue(String key)
-	{
-		return map.get(key);
+		return this.userSession;
 	}
 }

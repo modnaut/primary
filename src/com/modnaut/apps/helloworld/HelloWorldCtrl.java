@@ -3,9 +3,6 @@ package com.modnaut.apps.helloworld;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +13,7 @@ import com.modnaut.common.utilities.CommonMethods;
 import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.common.utilities.VmdMethods;
 import com.modnaut.framework.properties.viewmetadata.TextField;
+import com.modnaut.framework.session.WebSession;
 
 public class HelloWorldCtrl extends ExtJsScreenCtrl
 {
@@ -37,9 +35,9 @@ public class HelloWorldCtrl extends ExtJsScreenCtrl
 
 	private static final String GET_ALL_USERS_ALPHABETICALLY = "GET_ALL_USERS_ALPHABETICALLY";
 
-	public HelloWorldCtrl(HttpServletRequest request, HttpServletResponse response)
+	public HelloWorldCtrl(WebSession userSessionObject)
 	{
-		super(request, response);
+		super(userSessionObject);
 		unmarshall(XML_FILE);
 	}
 
