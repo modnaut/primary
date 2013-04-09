@@ -31,3 +31,7 @@
 .x-toolbar .notificationBar-message {
     white-space: normal !important;
 }
+
+.market.over {
+	background: rgb(162, 146, 121) !important;
+}

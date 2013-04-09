@@ -111,7 +111,6 @@
 		<xsl:param name="node" as="node()"/>
 		<xsl:choose>
 			<xsl:when test="$node">
-				<xsl:message><xsl:copy-of select="$node"/></xsl:message>
 				<xsl:variable name="output">
 					<xsl:text>&lt;</xsl:text>
 					<xsl:value-of select="$node/name()"/>
@@ -134,7 +133,6 @@
 				<xsl:sequence select=" $output "/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:message>node is missing</xsl:message>
 				<xsl:sequence select=" '' "/>
 			</xsl:otherwise>
 		</xsl:choose>

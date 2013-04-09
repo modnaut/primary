@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
-	<item xsi:type="DataView" itemSelector="div.market">
+	<item xsi:type="DataView" itemSelector="div.market" overItemCls="over">
 		<listener event="select" action="submit" class="com.modnaut.apps.farmarkets.MarketDetailCtrl" method="defaultAction"/>
 		<store xsi:type="Store">
 			<model idProperty="MarketId">

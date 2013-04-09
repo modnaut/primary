@@ -220,7 +220,18 @@
 		<xsl:for-each select="store">
 			<xsl:apply-templates select="."/>,
 		</xsl:for-each>
+		<xsl:value-of select="mn:attribute(., 'deferEmptyText', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'deferInitialRefresh', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'disableSelection', ',')"/>
+		<xsl:value-of select="mn:childString(., 'emptyText', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'itemSelector', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'loadMask', ',')"/>
+		<xsl:value-of select="mn:childString(., 'loadingText', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'mouseOverOutBuffer', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'overItemCls', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'preserveScrollOnRefresh', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'selectedItemCls', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'trackOver', ',')"/>
 		"tpl": "<xsl:for-each select="tpl/*"><xsl:value-of select="mn:stringify-element(.)"/></xsl:for-each>",
 		"xtype": "dataview"
 	</xsl:template>

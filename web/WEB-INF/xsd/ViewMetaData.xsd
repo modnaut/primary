@@ -282,12 +282,21 @@
 		<xs:complexContent>
 			<xs:extension base="Item">
 				<xs:sequence>
+					<xs:element name="emptyText" type="str:String" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="loadingText" type="str:String" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="store" type="AbstractStore" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="tpl" type="XTemplate" minOccurs="1" maxOccurs="1"/>
 				</xs:sequence>
-				<xs:attribute name="deferEmptyTest" type="xs:boolean" default="true"/>
+				<xs:attribute name="deferEmptyText" type="xs:boolean" default="true"/>
+				<xs:attribute name="deferInitialRefresh" type="xs:boolean" default="true"/>
+				<xs:attribute name="disableSelection" type="xs:boolean" default="false"/>
 				<xs:attribute name="itemSelector" type="xs:string" use="required"/>
+				<xs:attribute name="loadMask" type="xs:boolean" default="true"/>
 				<xs:attribute name="mouseOverOutBuffer" type="xs:int" default="20"/>
+				<xs:attribute name="overItemCls" type="xs:string"/>
+				<xs:attribute name="preserveScrollOnRefresh" type="xs:boolean" default="false"/>
+				<xs:attribute name="selectedItemCls" type="xs:string"/>
+				<xs:attribute name="trackOver" type="xs:boolean" default="false"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
