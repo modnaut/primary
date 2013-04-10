@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,12 +44,7 @@ public class DatabaseMethods
 
 	private static enum QUERY_METHOD
 	{
-		GET_DATA,
-		GET_OBJECTS,
-		GET_MULTIPLE,
-		GET_FIRST_ROW,
-		UPDATE,
-		INSERT
+		GET_DATA, GET_OBJECTS, GET_MULTIPLE, GET_FIRST_ROW, UPDATE, INSERT
 	}
 
 	/**
@@ -476,7 +472,9 @@ public class DatabaseMethods
 			}
 
 			fullStatement = String.format(statementString.replaceAll(REGEX_QUESTION_MARK, STRING_FORMAT_PLACEHOLDER), parametersForStatementString);
-			LOGGER.debug(fullStatement);
+
+			StopWatch clock = new StopWatch();
+			clock.start();
 
 			if (queryMethod == QUERY_METHOD.GET_DATA)
 				data = executeGetData(preparedStatement, return_column_names);
@@ -495,6 +493,9 @@ public class DatabaseMethods
 
 			else if (queryMethod == QUERY_METHOD.GET_MULTIPLE)
 				data = executeGetDataMultiple(preparedStatement, return_column_names);
+
+			clock.stop();
+			LOGGER.debug("{} ms: {}", clock.getTime(), fullStatement);
 		}
 		catch (SQLException e)
 		{

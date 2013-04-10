@@ -87,7 +87,7 @@
 				<transaction src="sql/up_CanPerformAction.sql"/>
 				<transaction src="sql/uf_CanPerformAction.sql"/>
 				<transaction src="sql/up_ParseCommaDelimited.sql"/>
-				<transaction src="sql/up_GetTranslatedStrings.sql"/>
+				<transaction src="sql/up_GetMultipleStringsForLanguage.sql"/>
 			</sql>
 	</target>
 		

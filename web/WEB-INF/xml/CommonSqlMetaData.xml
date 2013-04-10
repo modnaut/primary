@@ -68,11 +68,12 @@
 			<parameter name="UserPassword" type="VARCHAR"/>
 		</parameters>
 	</query>
-	<query name="GET_TRANSLATED_STRINGS" action="SELECT" type="SP">
-		<statement value="Common.up_GetTranslatedStrings(?, ?)"/>
+	<query name="GET_MULTIPLE_STRINGS_FOR_LANGUAGE" action="SELECT" type="SP">
+		<statement value="Common.up_GetMultipleStringsForLanguage(?, ?, ?)"/>
 		<parameters>
 			<parameter name="stringCds" type="VARCHAR"/>
 			<parameter name="languageCd" type="VARCHAR"/>
+			<parameter name="delimiter" type="VARCHAR"/>
 		</parameters>
 	</query>
 </sqlMetaData>

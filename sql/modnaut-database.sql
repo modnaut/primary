@@ -3,7 +3,7 @@
 -- Server version:               5.6.10-log - MySQL Community Server (GPL)
 -- Server OS:                    Win64
 -- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-04-09 00:51:47
+-- Date/time:                    2013-04-10 01:36:02
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `application` (
   PRIMARY KEY (`ApplicationId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.application: ~0 rows (approximately)
+-- Dumping data for table common.application: ~1 rows (approximately)
 /*!40000 ALTER TABLE `application` DISABLE KEYS */;
 INSERT INTO `application` (`ApplicationId`, `Name`) VALUES
 	(1, 'Modnaut Demo');
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `attribute` (
   CONSTRAINT `FK_attribute_attributetype` FOREIGN KEY (`AttributeTypeId`) REFERENCES `attributetype` (`AttributeTypeId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.attribute: ~0 rows (approximately)
+-- Dumping data for table common.attribute: ~1 rows (approximately)
 /*!40000 ALTER TABLE `attribute` DISABLE KEYS */;
 INSERT INTO `attribute` (`AttributeId`, `AttributeName`, `AttributeTypeId`) VALUES
 	(1, 'CacheXsl', 1);
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `securitygroup` (
   PRIMARY KEY (`SecurityGroupId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.securitygroup: ~0 rows (approximately)
+-- Dumping data for table common.securitygroup: ~1 rows (approximately)
 /*!40000 ALTER TABLE `securitygroup` DISABLE KEYS */;
 INSERT INTO `securitygroup` (`SecurityGroupId`, `Description`) VALUES
 	(1, 'TestGroup');
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `server` (
   PRIMARY KEY (`ServerId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.server: ~0 rows (approximately)
+-- Dumping data for table common.server: ~1 rows (approximately)
 /*!40000 ALTER TABLE `server` DISABLE KEYS */;
 INSERT INTO `server` (`ServerId`, `ServerName`, `ServerDescription`) VALUES
 	(1, 'localhost', 'Local development PC');
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `serverattributevalue` (
   CONSTRAINT `FK_ServerAttributeValue_server` FOREIGN KEY (`ServerId`) REFERENCES `server` (`ServerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.serverattributevalue: ~0 rows (approximately)
+-- Dumping data for table common.serverattributevalue: ~1 rows (approximately)
 /*!40000 ALTER TABLE `serverattributevalue` DISABLE KEYS */;
 INSERT INTO `serverattributevalue` (`ServerId`, `AttributeId`, `AttributeValue`) VALUES
 	(1, 1, 'N');
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `session` (
   PRIMARY KEY (`SessionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.session: ~0 rows (approximately)
+-- Dumping data for table common.session: ~54 rows (approximately)
 /*!40000 ALTER TABLE `session` DISABLE KEYS */;
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 
@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS `string` (
   `StringId` int(10) NOT NULL AUTO_INCREMENT,
   `StringCd` varchar(500) NOT NULL,
   PRIMARY KEY (`StringId`),
-  UNIQUE KEY `Index 2` (`StringCd`(255))
+  UNIQUE KEY `StringCd` (`StringCd`(255))
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.string: ~5 rows (approximately)
@@ -233,6 +233,7 @@ CREATE TABLE IF NOT EXISTS `stringvalue` (
   `StringId` int(10) NOT NULL,
   `LanguageId` smallint(3) NOT NULL,
   `Value` varchar(5000) NOT NULL,
+  PRIMARY KEY (`StringId`,`LanguageId`),
   KEY `FK__string` (`StringId`),
   KEY `FK__language` (`LanguageId`),
   CONSTRAINT `FK_stringvalue_string` FOREIGN KEY (`StringId`) REFERENCES `string` (`StringId`),
@@ -243,14 +244,14 @@ CREATE TABLE IF NOT EXISTS `stringvalue` (
 /*!40000 ALTER TABLE `stringvalue` DISABLE KEYS */;
 INSERT INTO `stringvalue` (`StringId`, `LanguageId`, `Value`) VALUES
 	(1, 2, 'nombre '),
-	(2, 2, 'dirección '),
-	(3, 2, 'ciudad'),
-	(4, 2, 'estado'),
-	(5, 2, 'código postal'),
 	(1, 3, 'שם'),
+	(2, 2, 'dirección '),
 	(2, 3, 'כתובת'),
+	(3, 2, 'ciudad'),
 	(3, 3, 'עיר'),
+	(4, 2, 'estado'),
 	(4, 3, 'מדינה'),
+	(5, 2, 'código postal'),
 	(5, 3, 'מיקוד');
 /*!40000 ALTER TABLE `stringvalue` ENABLE KEYS */;
 
@@ -323,7 +324,7 @@ CREATE TABLE IF NOT EXISTS `usersecuritygroup` (
   CONSTRAINT `FK_UserSecurityGroup_CreatedByUserId` FOREIGN KEY (`CreatedByUserId`) REFERENCES `users` (`UserId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.usersecuritygroup: ~0 rows (approximately)
+-- Dumping data for table common.usersecuritygroup: ~1 rows (approximately)
 /*!40000 ALTER TABLE `usersecuritygroup` DISABLE KEYS */;
 INSERT INTO `usersecuritygroup` (`UserId`, `SecurityGroupId`, `CreatedByUserId`, `CreatedDate`) VALUES
 	(3, 1, 3, '2013-04-08 22:24:18');
@@ -341,7 +342,7 @@ CREATE TABLE IF NOT EXISTS `usersession` (
   CONSTRAINT `FK__user` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.usersession: ~0 rows (approximately)
+-- Dumping data for table common.usersession: ~54 rows (approximately)
 /*!40000 ALTER TABLE `usersession` DISABLE KEYS */;
 /*!40000 ALTER TABLE `usersession` ENABLE KEYS */;
 

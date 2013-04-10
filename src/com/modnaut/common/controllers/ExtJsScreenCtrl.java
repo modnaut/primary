@@ -1,14 +1,34 @@
 package com.modnaut.common.controllers;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.StopWatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.StringMethods;
 import com.modnaut.common.utilities.VmdMethods;
+import com.modnaut.framework.pools.JaxbPool;
+import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.viewmetadata.AbstractField;
 import com.modnaut.framework.properties.viewmetadata.NotificationType;
+import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
 import com.modnaut.framework.session.WebSession;
+import com.modnaut.framework.utilities.ServerMethods;
 
 /**
  * 
@@ -20,6 +40,15 @@ import com.modnaut.framework.session.WebSession;
  */
 public class ExtJsScreenCtrl extends FrameworkCtrl
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(ExtJsScreenCtrl.class);
+	private static final String VIEW_META_DATA_FILE = "ViewMetaData.xsl";
+	private static final String VIEW_PATH = "WEB-INF/views";
+
+	private static final String ALL_STRING_OBJECTS = "//*[@stringCd]";
+
+	protected ViewMetaData viewMetaData;
+	protected JXPathContext jxPathContext;
+
 	/**
 	 * 
 	 * @param request
@@ -32,14 +61,160 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	}
 
 	/**
-	 * Returns a specific value from request based on name of the value in the request. For example, if the attribute name of a html element on screen is 'username', then it will return the value of this html element. Can also be used to retrieve the value off a url that contains parameters and hidden values on screen.
+	 * Unmarshalls xmlfile into a viewmetadata object that will be used by the java classes to manipulate, mold, break down into smaller sub objects and inject data.
 	 * 
-	 * @param name
+	 * @param xmlFileName
 	 * @return
 	 */
-	protected String getParameter(String name)
+	protected ViewMetaData unmarshall(String xmlFileName)
 	{
-		return this.request.getParameter(name);
+		try
+		{
+			Collection<File> files = FileUtils.listFiles(new File(ServerMethods.getRealPath() + VIEW_PATH), null, true);
+			String absoluteFilePath = ICommonConstants.NONE;
+			Iterator<File> iterator = files.iterator();
+			while (iterator.hasNext())
+			{
+				File file = iterator.next();
+				if (file.getName().equals(xmlFileName))
+					absoluteFilePath = file.getAbsolutePath();
+			}
+			if (!absoluteFilePath.isEmpty())
+			{
+				File file = new File(absoluteFilePath);
+				viewMetaData = JaxbPool.unmarshal(ViewMetaData.class, file);
+				if (viewMetaData != null)
+					jxPathContext = JXPathContext.newContext(viewMetaData);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return viewMetaData;
+	}
+
+	/**
+	 * Puts all pieces together and sets the response's output stream to the final output result which will be shown on screen.
+	 * 
+	 * @param viewMetaData
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	public void marshall(ViewMetaData viewMetaData)
+	{
+		getStringValues();
+
+		try
+		{
+			XslPool.marshalAndTransform(viewMetaData, response.getOutputStream(), VIEW_META_DATA_FILE, null);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void getStringValues()
+	{
+		StopWatch clock = new StopWatch();
+		clock.start();
+
+		StopWatch clock2 = new StopWatch();
+		clock2.start();
+		List<com.modnaut.framework.properties.string.String> list = jxPathContext.selectNodes(ALL_STRING_OBJECTS);
+		clock2.stop();
+		LOGGER.info("Select strings took {} ms", clock2.getTime());
+
+		if (list.size() > 0)
+		{
+			clock2.reset();
+			clock2.start();
+			ArrayList<String> stringCds = new ArrayList<String>();
+			for (com.modnaut.framework.properties.string.String string : list)
+			{
+				stringCds.add(string.getStringCd());
+			}
+			clock2.stop();
+			LOGGER.info("Collecting stringCds took {} ms", clock2.getTime());
+
+			HashMap<String, String> strings = StringMethods.getStringValues(stringCds, "he");
+			String stringValue = null;
+			clock2.reset();
+			clock2.start();
+			for (com.modnaut.framework.properties.string.String string : list)
+			{
+				stringValue = strings.get(string.getStringCd());
+				if (stringValue != null && stringValue != StringMethods.STRING_NOT_FOUND)
+					string.setStringCd(stringValue);
+			}
+			clock2.stop();
+			LOGGER.info("Replacing stringCds took {} ms", clock2.getTime());
+		}
+
+		clock.stop();
+		LOGGER.debug("Elapsed method time {}", clock.getTime());
+	}
+
+	public void marshallStoreJson(ArrayList<String[]> data)
+	{
+		try
+		{
+			marshallStoreJson(data, true);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void marshallStoreJson(ArrayList<String[]> data, boolean useSqlColumnNames)
+	{
+		try
+		{
+			String[] columnNames = null;
+			if (useSqlColumnNames)
+				columnNames = data.remove(0);
+			else
+			{
+				columnNames = new String[data.get(0).length];
+				for (int i = 0; i < columnNames.length; i++)
+					columnNames[i] = "column" + i;
+			}
+
+			marshallStoreJson(data, columnNames);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void marshallStoreJson(ArrayList<String[]> data, String[] columnNames)
+	{
+		try
+		{
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			JsonObject responseObject = new JsonObject();
+			JsonArray responseArray = new JsonArray();
+			responseObject.add("data", responseArray);
+
+			for (String[] rowData : data)
+			{
+				JsonObject row = new JsonObject();
+				responseArray.add(row);
+				for (int i = 0; i < rowData.length; i++)
+					row.addProperty(columnNames[i], rowData[i]);
+			}
+
+			String prettyJsonString = gson.toJson(responseObject);
+			response.getOutputStream().write(prettyJsonString.getBytes());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	protected Object findById(String id)
