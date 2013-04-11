@@ -76,4 +76,18 @@
 			<parameter name="delimiter" type="VARCHAR"/>
 		</parameters>
 	</query>
+	<query name="GET_ALL_STRING_VALUES" action="SELECT" type="QUERY">
+		<statement value="
+			SELECT
+				l.IsoLanguageCd
+				,s.StringCd
+				,sv.Value
+			FROM
+				Common.StringValue sv
+				LEFT JOIN Common.string s on s.StringId = sv.StringId
+				LEFT JOIN Common.language l on l.LanguageId = sv.LanguageId
+			ORDER BY
+				l.LanguageId ASC
+		"/>
+	</query>
 </sqlMetaData>

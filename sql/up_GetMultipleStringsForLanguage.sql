@@ -24,12 +24,12 @@ SELECT
 	sc.StringCd
 	,sv.Value
 FROM
-	StringCds sc
+	TEMP_StringCds sc
 	Left Join Common.string s on s.StringCd = sc.StringCd
 	Left Join Common.language l on l.IsoLanguageCd = p_LanguageCd
 	Left Join Common.stringvalue sv on sv.StringId = s.StringId and sv.LanguageId = l.LanguageId;
 
-DROP TABLE StringCds;
+DROP TABLE TEMP_StringCds;
 
 END
 ;

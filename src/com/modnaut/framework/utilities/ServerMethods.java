@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.StringMethods;
 
 public class ServerMethods
 {
@@ -28,6 +29,8 @@ public class ServerMethods
 
 		LOGGER.info("Real Path: {}", REAL_PATH);
 		LOGGER.info("Server Name: {}", SERVER_NAME);
+
+		StringMethods.cacheAllStringValues();
 
 		INITIALIZED = true;
 	}

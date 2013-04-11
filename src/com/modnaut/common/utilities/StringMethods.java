@@ -21,10 +21,38 @@ public class StringMethods
 	private static final String LANGUAGE_CD = "languageCd";
 	private static final String DELIMITER = "delimiter";
 	private static final String GET_MULTIPLE_STRINGS_FOR_LANGUAGE = "GET_MULTIPLE_STRINGS_FOR_LANGUAGE";
+	private static final String GET_ALL_STRING_VALUES = "GET_ALL_STRING_VALUES";
 	public static final String STRING_NOT_FOUND = "STRING NOT FOUND";
+
+	public static void cacheAllStringValues()
+	{
+		String currentLanguageCd = ICommonConstants.NONE;
+		ArrayList<String[]> allStringValues = DatabaseMethods.getJustData(GET_ALL_STRING_VALUES, ICommonConstants.COMMON);
+		ConcurrentHashMap<String, String> language = null;
+
+		for (String[] stringValue : allStringValues)
+		{
+			String languageCd = stringValue[0];
+			if (!currentLanguageCd.equals(languageCd) || language == null)
+			{
+				currentLanguageCd = languageCd;
+				language = LANGUAGE_STRINGS.get(languageCd);
+				if (language == null)
+				{
+					language = new ConcurrentHashMap<String, String>();
+					LANGUAGE_STRINGS.put(languageCd, language);
+				}
+			}
+
+			language.put(stringValue[1], stringValue[2]);
+		}
+		LOGGER.debug("Cached {} strings", allStringValues.size());
+		LOGGER.debug(LANGUAGE_STRINGS.toString());
+	}
 
 	public static HashMap<String, String> getStringValues(List<String> stringCds, String languageCd)
 	{
+		Integer totalStringCds = stringCds.size();
 		StopWatch clock = new StopWatch();
 		clock.start();
 
@@ -46,6 +74,7 @@ public class StringMethods
 			}
 		}
 
+		Integer cacheHits = strings.keySet().size();
 		stringCds.removeAll(strings.keySet());// remove any strings from the list that we already have cached translations for
 
 		if (!stringCds.isEmpty())
@@ -72,7 +101,7 @@ public class StringMethods
 		}
 
 		clock.stop();
-		LOGGER.debug("Elapsed method time {}", clock.getTime());
+		LOGGER.debug("Elapsed method time {}ms. Cache hit rate: {}/{}", new Object[] { clock.getTime(), cacheHits, totalStringCds });
 		return strings;
 	}
 

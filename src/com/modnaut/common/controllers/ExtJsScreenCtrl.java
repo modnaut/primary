@@ -125,7 +125,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 		clock2.start();
 		List<com.modnaut.framework.properties.string.String> list = jxPathContext.selectNodes(ALL_STRING_OBJECTS);
 		clock2.stop();
-		LOGGER.info("Select strings took {} ms", clock2.getTime());
+		LOGGER.info("Select strings took {}ms", clock2.getTime());
 
 		if (list.size() > 0)
 		{
@@ -137,7 +137,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 				stringCds.add(string.getStringCd());
 			}
 			clock2.stop();
-			LOGGER.info("Collecting stringCds took {} ms", clock2.getTime());
+			LOGGER.info("Collecting stringCds took {}ms", clock2.getTime());
 
 			HashMap<String, String> strings = StringMethods.getStringValues(stringCds, "he");
 			String stringValue = null;
@@ -150,11 +150,11 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 					string.setStringCd(stringValue);
 			}
 			clock2.stop();
-			LOGGER.info("Replacing stringCds took {} ms", clock2.getTime());
+			LOGGER.info("Replacing stringCds took {}ms", clock2.getTime());
 		}
 
 		clock.stop();
-		LOGGER.debug("Elapsed method time {}", clock.getTime());
+		LOGGER.debug("Elapsed method time {}ms", clock.getTime());
 	}
 
 	public void marshallStoreJson(ArrayList<String[]> data)
