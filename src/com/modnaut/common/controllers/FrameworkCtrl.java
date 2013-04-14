@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.modnaut.apps.login.InsufficientPrivilegeException;
+import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.framework.session.UserSession;
 import com.modnaut.framework.session.WebSession;
 
@@ -37,9 +38,9 @@ public class FrameworkCtrl
 	 * 
 	 * @param webSession
 	 */
-	public FrameworkCtrl(WebSession webSession)
+	public FrameworkCtrl(WebSession webSession, String contentType)
 	{
-		this(webSession, false);
+		this(webSession, false, contentType);
 	}
 
 	/**
@@ -47,12 +48,23 @@ public class FrameworkCtrl
 	 * @param webSession
 	 * @param needs_authentication
 	 */
-	public FrameworkCtrl(WebSession webSession, boolean needs_authentication) throws InsufficientPrivilegeException
+	public FrameworkCtrl(WebSession webSession, boolean needs_authentication, String contentType) throws InsufficientPrivilegeException
 	{
 		this.request = webSession.getRequest();
 		this.response = webSession.getResponse();
 		this.userSession = webSession.getUserSession();
 		this.needs_authentication = needs_authentication;
+
+		if (contentType != null && response != null)
+			response.setContentType(contentType);
+
+		LOGGER.debug("needs_authentication: " + needs_authentication + " isAuthenticated(): " + webSession.getUserSession().isAuthenticated());
+
+		if (needs_authentication && !webSession.getUserSession().isAuthenticated())
+		{
+			LOGGER.debug("NEEDS TO AUTHENTICATE FIRST!!!!");
+			throw new InsufficientPrivilegeException(CLASS_NAME_PATH, CONSTRUCTOR, ICommonConstants.AUTHORIZATION_LOG, ICommonConstants.WARNING, NEEDS_AUTHENTICATION);
+		}
 	}
 
 	/**

@@ -151,21 +151,21 @@ public class ApplicationServlet extends HttpServlet
 		{
 			LOGGER.debug("Invocation took {}ms", clock.getTime());
 			LOGGER.error(e.toString(), e);
-			sendErrorResponse(response, "An error has occurred");
+			sendErrorResponse(response, "An error has occurred", 2);
 		}
 		catch (InvocationTargetException e)// when method called by reflection throws an Exception it ends up here
 		{
+			LOGGER.debug("Invocation took {}ms", clock.getTime());
 			// Screen needs permission, but user is not logged in.
 			if (e.getCause() instanceof InsufficientPrivilegeException)
 			{
 				// TODO
-				sendErrorResponse(response, "You must login first.");
+				sendErrorResponse(response, "You must login first.", 1);
 			}
 			else
 			{
-				LOGGER.debug("Invocation took {}ms", clock.getTime());
 				LOGGER.error(e.getTargetException().toString(), e.getTargetException());
-				sendErrorResponse(response, "An error has occurred");
+				sendErrorResponse(response, "An error has occurred", 3);
 			}
 
 		}
@@ -176,7 +176,7 @@ public class ApplicationServlet extends HttpServlet
 			// 1. Java stack trace containing more detailed error messages will be printed to the console
 			// 2. A basic html error page will be shown on screen by the PrintWriter object to user to let them know an error has occurred.
 			LOGGER.error(e.toString(), e);
-			sendErrorResponse(response, "An error has occurred");
+			sendErrorResponse(response, "An error has occurred", 3);
 
 		}
 
@@ -200,7 +200,7 @@ public class ApplicationServlet extends HttpServlet
 		doGet(request, response);
 	}
 
-	private void sendErrorResponse(HttpServletResponse response, String errorMessage)
+	private void sendErrorResponse(HttpServletResponse response, String errorMessage, int warning_code)
 	{
 		StringBuilder builder = new StringBuilder();
 
@@ -210,13 +210,18 @@ public class ApplicationServlet extends HttpServlet
 		}
 		if (response.getContentType().equals(ICommonConstants.CONTENT_TYPE_JSON))
 		{
-			builder.append("{success: true, html: \"" + StringEscapeUtils.escapeEcmaScript(errorMessage) + "\"}");
+			builder.append("{success: true, html: \"");
+			builder.append(StringEscapeUtils.escapeEcmaScript(errorMessage));
+			builder.append("\"}");
 		}
 		else
 		{
 			builder.append("<html>");
 			builder.append("<body>");
-			builder.append("<p> An error occurred while trying to load this page. Please try again.</p>");
+			builder.append("<p>An error occurred while trying to load this page. Please try again.</p>");
+			builder.append("<p>");
+			builder.append(errorMessage);
+			builder.append("</p>");
 			builder.append("</body>");
 			builder.append("</html>");
 		}
@@ -224,6 +229,7 @@ public class ApplicationServlet extends HttpServlet
 		try
 		{
 			response.addHeader("Warning", errorMessage);
+			response.addHeader("WarningCode", warning_code + ICommonConstants.NONE);
 			response.getOutputStream().write(builder.toString().getBytes(ICommonConstants.UTF_8));
 		}
 		catch (Exception e)

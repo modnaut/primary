@@ -34,7 +34,7 @@ public class ApplicationCtrl extends FrameworkCtrl
 	 */
 	public ApplicationCtrl(WebSession userSessionObject)
 	{
-		super(userSessionObject);
+		super(userSessionObject, null);
 	}
 
 	/**

@@ -19,7 +19,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.modnaut.apps.login.InsufficientPrivilegeException;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.StringMethods;
 import com.modnaut.common.utilities.VmdMethods;
@@ -75,16 +74,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	 */
 	public ExtJsScreenCtrl(WebSession webSession, boolean needs_authentication)
 	{
-		super(webSession, needs_authentication);
-		response.setContentType(ICommonConstants.CONTENT_TYPE_JSON);
-
-		LOGGER.debug("needs_authentication: " + needs_authentication + " isAuthenticated(): " + webSession.getUserSession().isAuthenticated());
-
-		if (needs_authentication && !webSession.getUserSession().isAuthenticated())
-		{
-			LOGGER.debug("NEEDS TO AUTHENTICATE FIRST!!!!");
-			throw new InsufficientPrivilegeException(CLASS_NAME_PATH, CONSTRUCTOR, ICommonConstants.AUTHORIZATION_LOG, ICommonConstants.WARNING, NEEDS_AUTHENTICATION);
-		}
+		super(webSession, needs_authentication, ICommonConstants.CONTENT_TYPE_JSON);
 	}
 
 	/**
