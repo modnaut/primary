@@ -44,7 +44,12 @@ public class DatabaseMethods
 
 	private static enum QUERY_METHOD
 	{
-		GET_DATA, GET_OBJECTS, GET_MULTIPLE, GET_FIRST_ROW, UPDATE, INSERT
+		GET_DATA,
+		GET_OBJECTS,
+		GET_MULTIPLE,
+		GET_FIRST_ROW,
+		UPDATE,
+		INSERT
 	}
 
 	/**
@@ -557,6 +562,9 @@ public class DatabaseMethods
 
 			case ICommonConstants.BLOB:
 				return java.sql.Types.BLOB;
+
+			case ICommonConstants.BIGINT:
+				return java.sql.Types.BIGINT;
 		}
 
 		return 0;

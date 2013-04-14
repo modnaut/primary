@@ -25,10 +25,14 @@
 					<item xsi:type="DisplayField" id="Description" value="Our mission is to offer the community fresh, healthy foods from farmers and local businesses, to invite individuals &amp; businesses promoting gardening, health &amp; wellness, fitness &amp; healing, alternative energy &amp; sustainability and to invite artists &amp; craftspeople to sell handmade goods.">
 						<fieldLabel stringCd="Description"/>
 					</item>
-					<item xsi:type="Button" id="AddReviewAction" iconCls="icon-application_view_list">
+					<item xsi:type="Button" id="LoginAction" iconCls="icon-application_view_list">
 						<listener event="click" action="submit" class="com.modnaut.apps.login.LoginCtrl" method="defaultAction"/>
+						<text stringCd="Login"/>
+					</item>
+					<item xsi:type="Button" id="AddReviewAction" iconCls="icon-application_view_list">
+						<listener event="click" action="submit" class="com.modnaut.apps.farmarkets.AddReviewCtrl" method="defaultAction"/>
 						<text stringCd="Add Review"/>
-						<tooltip stringCd="This is not finished. It will always take you to the Login page right now."/>
+						<tooltip stringCd="You must be logged in for this to work."/>
 					</item>
 				</items>
 				<title stringCd="Miller Beach Farmer's Market"/>

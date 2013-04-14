@@ -20,6 +20,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.modnaut.apps.login.InsufficientPrivilegeException;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
 import com.modnaut.framework.session.UserSession;
@@ -87,12 +88,12 @@ public class ApplicationServlet extends HttpServlet
 		clock.start();
 		// This is where we will intercept every request and check for a valid, unexpired session.
 		WebSessionController wsController = new WebSessionController(request, response);
-		UserSession webSession = wsController.getUserSession();
+		UserSession userSession = wsController.getUserSession();
 
-		if (webSession == null)
-			response.sendRedirect(ICommonConstants.INVALID_LOGIN_PAGE);
+		if (userSession == null)
+			LOGGER.error("userSession is null.");
 
-		WebSession uso = new WebSession(request, response, webSession);
+		WebSession webSession = new WebSession(request, response, userSession);
 		Class<?> params[] = { WebSession.class };
 
 		clock.stop();
@@ -128,7 +129,7 @@ public class ApplicationServlet extends HttpServlet
 				Object instance;
 				Constructor<?> constructor = clazz.getConstructor(params);
 				if (constructor != null)
-					instance = constructor.newInstance(uso);
+					instance = constructor.newInstance(webSession);
 				else
 					instance = clazz.newInstance();
 
@@ -154,9 +155,19 @@ public class ApplicationServlet extends HttpServlet
 		}
 		catch (InvocationTargetException e)// when method called by reflection throws an Exception it ends up here
 		{
-			LOGGER.debug("Invocation took {}ms", clock.getTime());
-			LOGGER.error(e.getTargetException().toString(), e.getTargetException());
-			sendErrorResponse(response, "An error has occurred");
+			// Screen needs permission, but user is not logged in.
+			if (e.getCause() instanceof InsufficientPrivilegeException)
+			{
+				// TODO
+				sendErrorResponse(response, "You must login first.");
+			}
+			else
+			{
+				LOGGER.debug("Invocation took {}ms", clock.getTime());
+				LOGGER.error(e.getTargetException().toString(), e.getTargetException());
+				sendErrorResponse(response, "An error has occurred");
+			}
+
 		}
 		catch (Exception e)
 		{

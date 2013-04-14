@@ -30,14 +30,14 @@
 		<statement value="Common.up_InsertUpdateSession(?, ?, ?)"/>
 		<parameters>
 			<parameter name="UserId" type="INT"/>
-			<parameter name="SessionId" type="INT"/>
+			<parameter name="SessionId" type="BIGINT"/>
 			<parameter name="SessionObject" type="BLOB"/>
 		</parameters>
 	</query>
 	<query name="GET_SESSION" action="SELECT" type="QUERY">
 		<statement value="SELECT SessionObject, LastModifiedDate FROM Common.Session WHERE SessionId = ?"/>
 		<parameters>
-			<parameter name="SessionId" type="INT"/>
+			<parameter name="SessionId" type="BIGINT"/>
 		</parameters>
 	</query>
 	<query name="GET_USER_SESSION" action="SELECT" type="QUERY">

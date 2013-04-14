@@ -179,7 +179,7 @@ INSERT INTO `serverattributevalue` (`ServerId`, `AttributeId`, `AttributeValue`)
 DROP TABLE IF EXISTS `session`;
 CREATE TABLE IF NOT EXISTS `session` (
   `SessionId` bigint(19) NOT NULL,
-  `SessionObject` blob NOT NULL,
+  `SessionObject` VARBINARY(65500) NOT NULL,
   `CreatedDate` timestamp NULL DEFAULT '0000-00-00 00:00:00',
   `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`SessionId`)

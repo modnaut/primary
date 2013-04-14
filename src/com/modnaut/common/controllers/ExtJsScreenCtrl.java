@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.modnaut.apps.login.InsufficientPrivilegeException;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.StringMethods;
 import com.modnaut.common.utilities.VmdMethods;
@@ -40,7 +41,14 @@ import com.modnaut.framework.utilities.ServerMethods;
  */
 public class ExtJsScreenCtrl extends FrameworkCtrl
 {
+	// logging
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExtJsScreenCtrl.class);
+
+	// exception handling
+	private static final String CLASS_NAME_PATH = ExtJsScreenCtrl.class.getCanonicalName();
+	private static final String CONSTRUCTOR = "CONSTRUCTOR";
+	private static final String NEEDS_AUTHENTICATION = "Needs authentication.";
+
 	private static final String VIEW_META_DATA_FILE = "ViewMetaData.xsl";
 	private static final String VIEW_PATH = "WEB-INF/views";
 
@@ -50,14 +58,33 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	protected JXPathContext jxPathContext;
 
 	/**
+	 * Implicitly sets the permission of the superclass to not needs authentication.
 	 * 
-	 * @param request
-	 * @param response
+	 * @param webSession
 	 */
 	public ExtJsScreenCtrl(WebSession webSession)
 	{
-		super(webSession);
+		this(webSession, false);
+	}
+
+	/**
+	 * Explicitly sets the permission of the super class whether or not a user must be authenticated.
+	 * 
+	 * @param webSession
+	 * @param needs_authentication
+	 */
+	public ExtJsScreenCtrl(WebSession webSession, boolean needs_authentication)
+	{
+		super(webSession, needs_authentication);
 		response.setContentType(ICommonConstants.CONTENT_TYPE_JSON);
+
+		LOGGER.debug("needs_authentication: " + needs_authentication + " isAuthenticated(): " + webSession.getUserSession().isAuthenticated());
+
+		if (needs_authentication && !webSession.getUserSession().isAuthenticated())
+		{
+			LOGGER.debug("NEEDS TO AUTHENTICATE FIRST!!!!");
+			throw new InsufficientPrivilegeException(CLASS_NAME_PATH, CONSTRUCTOR, ICommonConstants.AUTHORIZATION_LOG, ICommonConstants.WARNING, NEEDS_AUTHENTICATION);
+		}
 	}
 
 	/**

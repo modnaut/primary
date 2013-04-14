@@ -42,8 +42,8 @@ public class SessionMethods
 	 */
 	public static long generateSessionId()
 	{
-		// TODO - think this through. Need it to be unique, "random" and can't be zero.
-		return (long) (System.nanoTime() * Math.random());
+		// TODO - think this through. Need it to be Positive, unique, "random" and can't be zero.
+		return (long) Math.abs(System.nanoTime() * Math.random());
 	}
 
 	/**
@@ -66,6 +66,10 @@ public class SessionMethods
 			if (object instanceof UserSession)
 			{
 				return (UserSession) object;
+			}
+			else
+			{
+				LOGGER.error("GET_SESSION did not return an instanceof UserSession.");
 			}
 		}
 

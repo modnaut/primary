@@ -106,6 +106,7 @@ public interface ICommonConstants
 	public static final String SERVLET_LOG = "SERVLET_LOG";
 	public static final String POOL_LOG = "POOL_LOG";
 	public static final String VMD_LOG = "VMD_LOG";
+	public static final String AUTHORIZATION_LOG = "AUTHORIZATION_LOG";
 
 	public static final String DEFAULT_ERROR_MESSAGE = "An error has occured while processing this request. Please try again.";
 	public static final String DEFAULT_FATAL_MESSAGE = "An error has occurred while processing this request.  Please contact customer support. Error Id: ";

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
+	<item xsi:type="Container">
+		<items>
+			<item xsi:type="Panel" region="center" flex="1" bodyPadding="5">
+				<items>
+					<item xsi:type="TextArea" id="Review" rows="4" value="Add your review here.">
+						<fieldLabel stringCd="Review"/>
+					</item>
+					<item xsi:type="Button" id="SubmitAction" iconCls="icon-application_view_list">
+						<listener event="click" action="submit" class="com.modnaut.apps.farmarkets.AddReviewCtrl" method="defaultAction"/>
+						<text stringCd="Submit"/>
+						<tooltip stringCd="Takes you back to defaultAction."/>
+					</item>
+				</items>
+				<title stringCd="Add Review Page"/>
+			</item>
+		</items>
+		<layout xsi:type="BorderLayout"/>		
+	</item>
+</viewMetaData>

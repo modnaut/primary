@@ -98,7 +98,8 @@ public class WebSessionController
 		int maxAge;
 		try
 		{
-			maxAge = new Integer(request.getServletContext().getInitParameter("cookie-age")).intValue();
+			// maxAge = new Integer(request.getServletContext().getInitParameter("cookie-age")).intValue();
+			maxAge = 86400; // 60 seconds * 60 minutes * 24 hours
 		}
 		catch (Exception e)
 		{
