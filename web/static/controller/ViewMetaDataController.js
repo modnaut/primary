@@ -123,6 +123,23 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		
 		var success =  function(response, action) {
 			console.log('success', arguments);
+			
+			var warningCode = action.response.getResponseHeader('WarningCode');
+			switch(warningCode) {
+				case '1':
+					controller.showLogin(options, isHistoryEvent);
+					return;
+					break;
+			}
+			
+			if(container.isLoginContainer === true) {
+				if(action.response.getResponseHeader('LoginSuccessful') === 'true') {
+					container.up('window').close();
+					controller.getContainerContent(controller.loginInitiator.options, controller.loginInitiator.isHistoryEvent);
+					return;
+				}
+			}
+			
 			var items = response.items;
 			var html = response.html;
 			var dockedItems = response.dockedItems;
@@ -307,5 +324,33 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				}
 			});
 		}
+	},
+	showLogin: function(options, isHistoryEvent) {
+		var controller = this;
+		
+		controller.loginInitiator = {
+			options: options,
+			isHistoryEvent: isHistoryEvent
+		};
+		
+		controller.loginWindow = Ext.create('Ext.window.Window', {
+			modal: true,
+			width: Ext.Element.getViewportWidth() * 0.75,
+			height: Ext.Element.getViewportHeight() * 0.75,
+			closable: false,
+			resizable: false,
+			draggable: false,
+			floating: true,
+			border: false,
+			layout: 'fit',
+			items: [{
+				xtype: 'vmdContainer',
+				layout: 'fit',
+				Class: 'com.modnaut.apps.login.LoginCtrl',
+				Method: 'defaultAction',
+				isLoginContainer: true
+			}]
+		});
+		controller.loginWindow.show();
 	}
 });

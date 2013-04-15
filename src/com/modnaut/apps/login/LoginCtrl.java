@@ -39,9 +39,7 @@ public class LoginCtrl extends ExtJsScreenCtrl
 		UserSession userSession = SessionMethods.authenticate(email, password, this.userSession);
 		if (userSession != null && userSession.isAuthenticated())
 		{
-			addModalAlert("Welcome " + userSession.getFirstName() + " " + userSession.getLastName());
-			// Set the sessionId to the current sessionId
-
+			response.setHeader("LoginSuccessful", String.valueOf(true));
 			SessionMethods.saveSession(userSession);
 		}
 		else

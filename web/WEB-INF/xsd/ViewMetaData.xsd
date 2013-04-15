@@ -930,6 +930,12 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="Password">
+		<xs:complexContent>
+			<xs:extension base="TextField">
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="TextArea">
 		<xs:complexContent>
 			<xs:extension base="TextField">

@@ -2,23 +2,18 @@
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
 	<item xsi:type="Container">
 		<items>
-			<item xsi:type="Panel" region="center" flex="1" bodyPadding="5">
-				<items>
-					<item xsi:type="TextField" id="Email" value="bdalgaard@modnaut.com">
-						<fieldLabel stringCd="Email"/>
-					</item>
-					<item xsi:type="TextField" id="Password" value="password">
-						<fieldLabel stringCd="Password"/>
-					</item>
-					<item xsi:type="Button" id="SubmitAction" iconCls="icon-application_view_list">
-						<listener event="click" action="submit" class="com.modnaut.apps.login.LoginCtrl" method="submit"/>
-						<text stringCd="Submit"/>
-						<tooltip stringCd="This is not finished. It will always take you to the Login page right now."/>
-					</item>
-				</items>
-				<title stringCd="Login Page"/>
+			<item xsi:type="TextField" id="Email" value="bdalgaard@modnaut.com">
+				<fieldLabel stringCd="Email"/>
+			</item>
+			<item xsi:type="Password" id="Password" value="password">
+				<fieldLabel stringCd="Password"/>
+			</item>
+			<item xsi:type="Button" id="SubmitAction" iconCls="icon-application_view_list">
+				<listener event="click" action="submit" class="com.modnaut.apps.login.LoginCtrl" method="submit"/>
+				<text stringCd="Submit"/>
+				<tooltip stringCd="This is not finished. It will always take you to the Login page right now."/>
 			</item>
 		</items>
-		<layout xsi:type="BorderLayout"/>		
+		<layout xsi:type="VBoxLayout" align="center" pack="center"/>
 	</item>
 </viewMetaData>

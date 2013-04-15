@@ -133,6 +133,12 @@
 		<xsl:call-template name="TextField"/>
 		"xtype": "textfield"
 	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type='Password']">
+		<xsl:call-template name="TextField"/>
+		"inputType": "password",
+		"xtype": "textfield"
+	</xsl:template>
 
 	<xsl:template match="item[@xsi:type='TextArea']">
 		<xsl:call-template name="TextField"/>
