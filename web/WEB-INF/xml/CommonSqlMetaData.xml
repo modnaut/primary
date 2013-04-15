@@ -31,7 +31,7 @@
 		<parameters>
 			<parameter name="UserId" type="INT"/>
 			<parameter name="SessionId" type="BIGINT"/>
-			<parameter name="SessionObject" type="BLOB"/>
+			<parameter name="SessionObject" type="VARBINARY"/>
 		</parameters>
 	</query>
 	<query name="GET_SESSION" action="SELECT" type="QUERY">

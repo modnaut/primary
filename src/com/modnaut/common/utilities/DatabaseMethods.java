@@ -529,6 +529,12 @@ public class DatabaseMethods
 		return data;
 	}
 
+	/**
+	 * http://dev.mysql.com/doc/refman/5.0/en/connector-j-reference-type-conversions.html
+	 * 
+	 * @param parameterTypeString
+	 * @return
+	 */
 	private static int getParameterTypeValue(String parameterTypeString)
 	{
 		switch (parameterTypeString)
@@ -562,9 +568,20 @@ public class DatabaseMethods
 
 			case ICommonConstants.BLOB:
 				return java.sql.Types.BLOB;
-
+			case ICommonConstants.TINYINT:
+				return java.sql.Types.TINYINT;
+			case ICommonConstants.SMALLINT:
+				return java.sql.Types.SMALLINT;
+			case ICommonConstants.MEDIUMINT:
+				return java.sql.Types.INTEGER;
 			case ICommonConstants.BIGINT:
 				return java.sql.Types.BIGINT;
+			case ICommonConstants.BIT:
+				return java.sql.Types.BOOLEAN;
+			case ICommonConstants.BINARY:
+				return java.sql.Types.BINARY;
+			case ICommonConstants.VARBINARY:
+				return java.sql.Types.VARBINARY;
 		}
 
 		return 0;

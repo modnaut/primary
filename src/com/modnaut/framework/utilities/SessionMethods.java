@@ -1,6 +1,12 @@
 package com.modnaut.framework.utilities;
 
-import java.util.ArrayList;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +17,10 @@ import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.CommonMethods;
 import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.common.utilities.StringMethods;
+import com.modnaut.framework.database.JdbcConnection;
+import com.modnaut.framework.database.SqlQueries;
+import com.modnaut.framework.properties.sqlmetadata.Query;
+import com.modnaut.framework.properties.sqlmetadata.StatementType;
 import com.modnaut.framework.session.UserSession;
 
 /**
@@ -54,23 +64,45 @@ public class SessionMethods
 	{
 		LOGGER.trace("Testing different logging levels on a clas-by-class basis.");
 
-		HashMap<String, Object> parms = new HashMap<String, Object>();
-		parms.put(SESSION_ID, session_id);
-
 		Object object = null;
 
-		ArrayList<Object[]> objects = DatabaseMethods.getJustDataObjects(GET_SESSION, ICommonConstants.COMMON, parms);
-		if (objects != null && objects.size() > 0)
+		try
 		{
-			object = ((Object[]) objects.get(0))[0];
-			if (object instanceof UserSession)
+			Connection con = JdbcConnection.getConnection();
+			// Statements allow to issue SQL queries to the database
+
+			PreparedStatement preparedStatement = con.prepareStatement("SELECT SessionObject, LastModifiedDate FROM Common.Session WHERE SessionId = ?");
+			// Parameters start with 1
+			preparedStatement.setLong(1, session_id);
+
+			// Result set get the result of the SQL query
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			if (resultSet != null)
 			{
-				return (UserSession) object;
+				if (resultSet.next())
+				{
+					object = resultSet.getObject(1);
+
+					if (object instanceof byte[])
+					{
+						object = deserialize((byte[]) object);
+					}
+
+					if (object instanceof com.modnaut.framework.session.UserSession)
+					{
+						return (com.modnaut.framework.session.UserSession) object;
+					}
+					else
+					{
+						System.out.println("GET_SESSION did not return an instanceof serializing.UserSession.");
+					}
+				}
 			}
-			else
-			{
-				LOGGER.error("GET_SESSION did not return an instanceof UserSession.");
-			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 
 		return null;
@@ -93,16 +125,68 @@ public class SessionMethods
 	 * @param session
 	 * @return
 	 */
-	public static long saveSession(UserSession session)
+	public static int saveSession(UserSession session)
 	{
-		HashMap<String, Object> parms = new HashMap<String, Object>();
-		parms.put(USER_ID, session.getUserId());
-		parms.put(SESSION_ID, session.getSessionId());
-		parms.put(SESSION_OBJECT, session);
+		// HashMap<String, Object> parms = new HashMap<String, Object>();
+		// parms.put(USER_ID, session.getUserId());
+		// parms.put(SESSION_ID, session.getSessionId());
+		// parms.put(SESSION_OBJECT, session);
+		//
+		// int row_count = DatabaseMethods.updateData(INSERT_UPDATE_SESSION, ICommonConstants.COMMON, parms);
+		//
+		// return row_count;
+		//
+		//
 
-		long row_count = DatabaseMethods.updateData(INSERT_UPDATE_SESSION, ICommonConstants.COMMON, parms);
+		PreparedStatement st = null;
+		Connection con = null;
+		int row_count = 0;
 
+		try
+		{
+			con = JdbcConnection.getConnection();
+			Query q = SqlQueries.getQuery(INSERT_UPDATE_SESSION, ICommonConstants.COMMON);
+			StatementType statement = q.getStatement();
+			String statementString = "CALL " + statement.getValue() + ";";
+
+			st = con.prepareStatement(statementString);
+			st.setInt(1, session.getUserId());
+			st.setLong(2, session.getSessionId());
+			st.setObject(3, session);
+
+			// executeUpdate() automatically returns row count affected. If none were affected, zero is returned.
+			row_count = st.executeUpdate();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally
+		{
+
+			try
+			{
+				if (st != null)
+				{
+					st.close();
+				}
+
+				if (con != null)
+				{
+					con.close();
+				}
+			}
+			catch (Exception ex)
+			{
+
+			}
+		}
 		return row_count;
+
 	}
 
 	public static UserSession authenticate(String email, String password)
@@ -155,5 +239,48 @@ public class SessionMethods
 		}
 
 		return userSession;
+	}
+
+	/**
+	 * 
+	 * @param serializedBytes
+	 * @return
+	 */
+	public static Object deserialize(byte[] serializedBytes)
+	{
+		ByteArrayInputStream bis = null;
+		ObjectInputStream ois = null;
+		try
+		{
+			bis = new ByteArrayInputStream(serializedBytes);
+			ois = new ObjectInputStream(bis);
+
+			Object o = null;
+			o = ois.readObject();
+
+			return o;
+		}
+		catch (IOException ioe)
+		{
+			LOGGER.info("Could not deserialize byte aray.");
+			return null;
+		}
+		catch (ClassNotFoundException cnfe)
+		{
+			LOGGER.info("Could not deserialize byte aray.");
+			return null;
+		}
+		finally
+		{
+			try
+			{
+				if (ois != null)
+					ois.close();
+			}
+			catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+			}
+		}
 	}
 }
