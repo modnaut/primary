@@ -5,6 +5,12 @@ Ext.Loader.setPath({
 
 Ext.require(['Ext.ux.layout.Center', 'Ext.ux.data.PagingMemoryProxy', 'Modnaut.view.NotificationBar']);
 
+Ext.onReady(function(){
+	Ext.tip.QuickTipManager.init();
+	Ext.apply(Ext.tip.QuickTipManager.getQuickTip(), {
+	    minWidth: 100
+	});
+});
 
 //Avoid 'console' errors in browsers that lack a console.
 (function() {
