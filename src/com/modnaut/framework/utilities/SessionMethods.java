@@ -66,9 +66,11 @@ public class SessionMethods
 
 		Object object = null;
 
+		Connection con = null;
+
 		try
 		{
-			Connection con = JdbcConnection.getConnection();
+			con = JdbcConnection.getConnection();
 			// Statements allow to issue SQL queries to the database
 
 			PreparedStatement preparedStatement = con.prepareStatement("SELECT SessionObject, LastModifiedDate FROM Common.Session WHERE SessionId = ?");
@@ -103,6 +105,18 @@ public class SessionMethods
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				if (con != null)
+					con.close();
+			}
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 		return null;
