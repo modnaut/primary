@@ -159,6 +159,80 @@ Ext.define('Globals', {
     	dec = tmp_arr.join('');
 
     	return dec;
+    },
+    LOG_LEVELS: {
+    	trace:	1,
+    	debug:	2,
+    	info:	3,
+    	warn:	4,
+    	error:	5
+    },
+    _logToSql: function(level, message, data) {
+    	if(!Ext.isDefined(Globals.LOG_LEVELS[level]))
+    		level = 'debug';
+    	
+    	var encodedData = '';
+    	if(data)
+    		encodedData= Ext.JSON.encode(data);
+    	
+    	Ext.Ajax.request({
+			url: 'ApplicationServlet',
+			params: {
+				Class: 'com.modnaut.common.controllers.LoggingCtrl',
+				Method: level,
+				message: message,
+				data: encodedData
+			}
+		});
+    },
+    trace: function(message, data) {
+    	Ext.Function.defer(function() {
+	    	console.log.apply(console, arguments);
+	    	console.trace();
+	    	Globals._logToSql('trace', message, data);
+    	}, 100);
+    },
+    debug: function(message, data) {
+    	Ext.Function.defer(function() {
+	    	console.debug.apply(console, arguments);
+	    	Globals._logToSql('debug', message, data);
+    	}, 100);
+    },
+    info: function(message, data) {
+    	Ext.Function.defer(function() {
+	    	console.info.apply(console, arguments);
+	    	Globals._logToSql('info', message, data);
+    	}, 100);
+    },
+    warn: function(message, data) {
+    	Ext.Function.defer(function() {
+	    	console.warn.apply(console, arguments);
+	    	Globals._logToSql('warn', message, data);
+    	}, 100);
+    },
+    error: function(message, data) {
+    	Ext.Function.defer(function() {
+	    	console.error.apply(console, arguments);
+	    	Globals._logToSql('error', message, data);
+    	}, 100);
+    },
+    _TIMERS: {},
+    time: function(name, level) {
+    	console.time.apply(console, [name]);
+    	Globals._TIMERS[name] = {
+    		name: name,
+    		level: level,
+    		start: Ext.Date.now()
+    	};
+    },
+    timeEnd: function(name) {
+    	console.timeEnd.apply(console, [name]);
+    	var timer = Globals._TIMERS[name];
+    	if(timer) {
+    		var duration = Ext.Date.now() - timer.start;
+    		Globals._logToSql(timer.level, name + ': ' + duration + 'ms');
+    		delete Globals._TIMERS[name];
+    	}
     }
 });
 
