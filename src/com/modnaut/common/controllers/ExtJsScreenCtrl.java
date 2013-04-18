@@ -11,7 +11,6 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +24,7 @@ import com.modnaut.common.utilities.VmdMethods;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.viewmetadata.AbstractField;
+import com.modnaut.framework.properties.viewmetadata.Item;
 import com.modnaut.framework.properties.viewmetadata.NotificationType;
 import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
 import com.modnaut.framework.session.WebSession;
@@ -43,15 +43,12 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	// logging
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExtJsScreenCtrl.class);
 
-	// exception handling
-	private static final String CLASS_NAME_PATH = ExtJsScreenCtrl.class.getCanonicalName();
-	private static final String CONSTRUCTOR = "CONSTRUCTOR";
-	private static final String NEEDS_AUTHENTICATION = "Needs authentication.";
-
 	private static final String VIEW_META_DATA_FILE = "ViewMetaData.xsl";
 	private static final String VIEW_PATH = "WEB-INF/views";
 
 	private static final String ALL_STRING_OBJECTS = "//*[@stringCd]";
+	private static final String ALL_ITEMS_WITH_ACTION_IDS = "//*[@actionId != '']";
+	private static final String ALL_ITEMS_REQUIRING_AUTHORIZATION = "//*[@requiresAuthorization=true]";
 
 	protected ViewMetaData viewMetaData;
 	protected JXPathContext jxPathContext;
@@ -122,6 +119,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	public void marshall(ViewMetaData viewMetaData)
 	{
 		getStringValues();
+		applyPermissions();
 
 		try
 		{
@@ -135,43 +133,56 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 
 	private void getStringValues()
 	{
-		StopWatch clock = new StopWatch();
-		clock.start();
-
-		StopWatch clock2 = new StopWatch();
-		clock2.start();
 		List<com.modnaut.framework.properties.string.String> list = jxPathContext.selectNodes(ALL_STRING_OBJECTS);
-		clock2.stop();
-		LOGGER.info("Select strings took {}ms", clock2.getTime());
 
 		if (list.size() > 0)
 		{
-			clock2.reset();
-			clock2.start();
 			ArrayList<String> stringCds = new ArrayList<String>();
 			for (com.modnaut.framework.properties.string.String string : list)
 			{
 				stringCds.add(string.getStringCd());
 			}
-			clock2.stop();
-			LOGGER.info("Collecting stringCds took {}ms", clock2.getTime());
 
 			HashMap<String, String> strings = StringMethods.getStringValues(stringCds, "he");
 			String stringValue = null;
-			clock2.reset();
-			clock2.start();
 			for (com.modnaut.framework.properties.string.String string : list)
 			{
 				stringValue = strings.get(string.getStringCd());
 				if (stringValue != null && stringValue != StringMethods.STRING_NOT_FOUND)
 					string.setStringCd(stringValue);
 			}
-			clock2.stop();
-			LOGGER.info("Replacing stringCds took {}ms", clock2.getTime());
 		}
+	}
 
-		clock.stop();
-		LOGGER.debug("Elapsed method time {}ms", clock.getTime());
+	private void applyPermissions()
+	{
+		List<Item> list = jxPathContext.selectNodes(ALL_ITEMS_WITH_ACTION_IDS);
+
+		if (list.size() > 0)
+		{
+			ArrayList<Integer> actionIds = new ArrayList<Integer>();
+			for (Item item : list)
+			{
+				actionIds.add(item.getActionId());
+			}
+
+			HashMap<Integer, Boolean> permissions = canPerformActions(actionIds);
+			for (Item item : list)
+			{
+				if (!permissions.get(item.getActionId()))
+				{
+					switch (item.getNoPermissionEffect())
+					{
+						case DISABLE:
+							item.setDisabled(true);
+							break;
+						case HIDE:
+							item.setHidden(true);
+							break;
+					}
+				}
+			}
+		}
 	}
 
 	public void marshallStoreJson(ArrayList<String[]> data)

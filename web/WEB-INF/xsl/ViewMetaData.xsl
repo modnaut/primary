@@ -107,6 +107,7 @@
 		<xsl:value-of select="mn:attribute(., 'colspan', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'cellId', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'cellCls', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'flex', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'height', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'hidden', ',')"/>

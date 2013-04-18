@@ -84,8 +84,11 @@
 				<transaction src="sql/up_UpdateUser.sql"/>
 				<transaction src="sql/up_InsertUpdateSession.sql"/>
 				<transaction src="sql/up_GetAllServerAttributes.sql"/>
-				<transaction src="sql/up_CanPerformAction.sql"/>
 				<transaction src="sql/uf_CanPerformAction.sql"/>
+				<transaction src="sql/up_CanPerformAction.sql"/>
+				<transaction src="sql/up_CanPerformActions.sql"/>
+				<transaction src="sql/uf_IsNumeric.sql"/>
+				<transaction src="sql/uf_IsInteger.sql"/>
 				<transaction src="sql/up_ParseCommaDelimited.sql"/>
 				<transaction src="sql/up_GetMultipleStringsForLanguage.sql"/>
 			</sql>

@@ -44,12 +44,7 @@ public class DatabaseMethods
 
 	private static enum QUERY_METHOD
 	{
-		GET_DATA,
-		GET_OBJECTS,
-		GET_MULTIPLE,
-		GET_FIRST_ROW,
-		UPDATE,
-		INSERT
+		GET_DATA, GET_OBJECTS, GET_MULTIPLE, GET_FIRST_ROW, GET_FIRST_ROW_FIRST_COLUMN, UPDATE, INSERT
 	}
 
 	/**
@@ -164,6 +159,42 @@ public class DatabaseMethods
 	public static String[] getJustDataFirstRow(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
 	{
 		return (String[]) executeQuery(queryName, queryFile, parms, connection, QUERY_METHOD.GET_FIRST_ROW, false);
+	}
+
+	/**
+	 * Overload method for getJustDataFirstRowFirstColumn
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @return
+	 */
+	public static String getJustDataFirstRowFirstColumn(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
+	{
+		return (String) executeQuery(queryName, queryFile, parms, connection, QUERY_METHOD.GET_FIRST_ROW_FIRST_COLUMN, false);
+	}
+
+	/**
+	 * Overload method for getJustDataFirstRowFirstColumn
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @return
+	 */
+	public static String getJustDataFirstRowFirstColumn(String queryName, String queryFile, HashMap<String, Object> parms)
+	{
+		return (String) executeQuery(queryName, queryFile, parms, null, QUERY_METHOD.GET_FIRST_ROW_FIRST_COLUMN, false);
+	}
+
+	/**
+	 * Overload method for getJustDataFirstRowFirstColumn
+	 * 
+	 * @param queryName
+	 * @param queryFile
+	 * @return
+	 */
+	public static String getJustDataFirstRowFirstColumn(String queryName, String queryFile)
+	{
+		return (String) executeQuery(queryName, queryFile, null, null, QUERY_METHOD.GET_FIRST_ROW_FIRST_COLUMN, false);
 	}
 
 	/**
@@ -487,6 +518,9 @@ public class DatabaseMethods
 			else if (queryMethod == QUERY_METHOD.GET_FIRST_ROW)
 				data = executeGetDataFirstRow(preparedStatement, return_column_names);
 
+			else if (queryMethod == QUERY_METHOD.GET_FIRST_ROW_FIRST_COLUMN)
+				data = executeGetDataFirstRowFirstColumn(preparedStatement);
+
 			else if (queryMethod == QUERY_METHOD.UPDATE)
 				data = executeUpdateData(preparedStatement);
 
@@ -743,6 +777,25 @@ public class DatabaseMethods
 					data[i] = resultSet.getString(i + 1);
 				}
 			}
+		}
+
+		return data;
+	}
+
+	private static String executeGetDataFirstRowFirstColumn(PreparedStatement preparedStatement) throws SQLException
+	{
+		ResultSet resultSet = null;
+		String data = null;
+
+		resultSet = preparedStatement.executeQuery();
+
+		if (resultSet.next())
+		{
+			// metadata output of ResultSetObject, allows for retrieving information about the statement dynamically
+			// without having to know exactly what the statement is. Puts results into a string array and then a final array to be returned.
+			ResultSetMetaData rsmd = resultSet.getMetaData();
+			if (rsmd.getColumnCount() > 0)
+				data = resultSet.getString(1);
 		}
 
 		return data;

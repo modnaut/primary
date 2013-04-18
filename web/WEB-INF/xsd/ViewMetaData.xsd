@@ -86,14 +86,29 @@
 			<xs:enumeration value="offsets"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="SecurityEffect">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="disable"/>
+			<xs:enumeration value="hide"/>
+			<xs:enumeration value="none"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:attributeGroup name="Security">
+		<xs:attribute name="actionId" type="xs:int"/>
+		<xs:attribute name="noPermissionEffect" type="SecurityEffect" default="disable"/>
+		<xs:attribute name="requiresAuthorization" type="xs:boolean" default="false"/>
+		<xs:attribute name="noAuthorizationEffect" type="SecurityEffect" default="none"/>
+	</xs:attributeGroup>
 	<xs:complexType name="Item" abstract="true">
 		<xs:sequence>
 			<xs:element name="listener" type="Listener" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attributeGroup ref="Security"/>
 		<xs:attribute name="anchor" type="xs:string"/>
 		<xs:attribute name="colspan" type="xs:int"/>
 		<xs:attribute name="cellId" type="xs:string"/>
 		<xs:attribute name="cellCls" type="xs:string"/>
+		<xs:attribute name="disabled" type="xs:boolean" default="false"/>
 		<xs:attribute name="flex" type="xs:int"/>
 		<xs:attribute name="height" type="xs:int"/>
 		<xs:attribute name="hidden" type="xs:boolean"/>
@@ -746,7 +761,6 @@
 		<xs:attribute name="preventMark" type="xs:boolean" default="false"/>
 	</xs:attributeGroup>
 	<xs:attributeGroup name="Field">
-		<xs:attribute name="disabled" type="xs:boolean" default="false"/>
 		<xs:attribute name="submitValue" type="xs:boolean" default="true"/>
 		<xs:attribute name="validateOnChange" type="xs:boolean" default="true"/>
 		<xs:attribute name="value" type="xs:string"/>
@@ -807,7 +821,6 @@
 				<xs:attribute name="allowDepress" type="xs:boolean" default="true"/>
 				<xs:attribute name="arrowAlign" type="ArrowAlign" default="right"/>
 				<xs:attribute name="border" type="xs:string"/>
-				<xs:attribute name="disabled" type="xs:boolean" default="false"/>
 				<xs:attribute name="enableToggle" type="xs:boolean" default="false"/>
 				<xs:attribute name="handleMouseEvents" type="xs:boolean" default="true"/>
 				<xs:attribute name="iconAlign" type="IconAlign" default="left"/>
@@ -932,8 +945,7 @@
 	</xs:complexType>
 	<xs:complexType name="Password">
 		<xs:complexContent>
-			<xs:extension base="TextField">
-			</xs:extension>
+			<xs:extension base="TextField"/>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="TextArea">

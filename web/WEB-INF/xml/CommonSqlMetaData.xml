@@ -90,4 +90,18 @@
 				l.LanguageId ASC
 		"/>
 	</query>
+	<query name="CAN_PERFORM_ACTION" action="SELECT" type="SP">
+		<statement value="Common.up_CanPerformAction(?, ?)"/>
+		<parameters>
+			<parameter name="userId" type="INT"/>
+			<parameter name="actionId" type="INT"/>
+		</parameters>
+	</query>
+	<query name="CAN_PERFORM_ACTIONS" action="SELECT" type="SP">
+		<statement value="Common.up_CanPerformActions(?, ?)"/>
+		<parameters>
+			<parameter name="userId" type="INT"/>
+			<parameter name="actionIds" type="VARCHAR"/>
+		</parameters>
+	</query>
 </sqlMetaData>

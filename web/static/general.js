@@ -175,6 +175,7 @@ Ext.define('Globals', {
     	if(data)
     		encodedData= Ext.JSON.encode(data);
     	
+    	return;
     	Ext.Ajax.request({
 			url: 'ApplicationServlet',
 			params: {

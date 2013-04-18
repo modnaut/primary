@@ -130,7 +130,6 @@
 		<xsl:value-of select="mn:attribute(., 'allowBlank', ',')"/>
 		<xsl:value-of select="mn:childString(., 'blankText', ',')"/>
 		<xsl:value-of select="mn:eval-attribute(., 'columns', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'submitValue', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'validateOnChange', ',')"/>
 		"xtype": "checkboxgroup"
@@ -142,7 +141,6 @@
 		<xsl:value-of select="mn:attribute(., 'allowBlank', ',')"/>
 		<xsl:value-of select="mn:childString(., 'blankText', ',')"/>
 		<xsl:value-of select="mn:eval-attribute(., 'columns', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'submitValue', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'validateOnChange', ',')"/>
 		"xtype": "radiogroup"

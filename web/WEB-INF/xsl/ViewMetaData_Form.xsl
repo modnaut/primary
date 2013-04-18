@@ -6,7 +6,6 @@
 		<xsl:value-of select="mn:attribute(., 'allowDepress', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'arrowAlign', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'border', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'enableToggle', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'handleMouseEvents', ',')"/>
 		<xsl:value-of select="mn:imageSpec(icon, 'icon', ',')"/>
@@ -57,7 +56,6 @@
 	</xsl:template>
 
 	<xsl:template name="Field">
-		<xsl:value-of select="mn:attribute(., 'disabled', ',')"/>
 		<xsl:if test="@id != '' and string(@radioGroupName) = ''">
 			"name": <xsl:value-of select="mn:wrap-string(@id)"/>,
 		</xsl:if>

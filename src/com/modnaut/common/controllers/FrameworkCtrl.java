@@ -1,5 +1,9 @@
 package com.modnaut.common.controllers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -76,5 +80,33 @@ public class FrameworkCtrl
 	protected String getParameter(String name)
 	{
 		return this.request.getParameter(name);
+	}
+
+	protected boolean canPerformAction(int actionId)
+	{
+		boolean can_perform_action = false;
+		if (userSession != null)
+			can_perform_action = userSession.canPerformAction(actionId);
+		return can_perform_action;
+	}
+
+	protected HashMap<Integer, Boolean> canPerformActions(List<Integer> actionIds)
+	{
+		HashMap<Integer, Boolean> permissions;
+		if (userSession != null)
+			permissions = userSession.canPerformActions(actionIds);
+		else
+			permissions = new HashMap<Integer, Boolean>();
+
+		return permissions;
+	}
+
+	protected HashMap<Integer, Boolean> canPerformActions(int... actionId)
+	{
+		ArrayList<Integer> actionIds = new ArrayList<Integer>();
+		for (int a : actionId)
+			actionIds.add(a);
+
+		return canPerformActions(actionIds);
 	}
 }

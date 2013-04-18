@@ -141,4 +141,8 @@ public interface ICommonConstants
 	public static final String DATETIME = "DATETIME";
 	public static final String OBJECT = "OBJECT";
 
+	public static final String USER_ID = "userId";
+	public static final String ACTION_ID = "actionId";
+	public static final String ACTION_IDS = "actionIds";
+
 }

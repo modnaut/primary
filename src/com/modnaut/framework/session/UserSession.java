@@ -1,8 +1,13 @@
 package com.modnaut.framework.session;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.framework.utilities.SessionMethods;
 
 /**
@@ -27,6 +32,8 @@ public class UserSession implements java.io.Serializable
 	private HashMap<String, Object> map = new HashMap<String, Object>();
 
 	private static final String GUEST = "guest";
+	private static final String CAN_PERFORM_ACTION = "CAN_PERFORM_ACTION";
+	private static final String CAN_PERFORM_ACTIONS = "CAN_PERFORM_ACTIONS";
 
 	/**
 	 * 
@@ -166,5 +173,43 @@ public class UserSession implements java.io.Serializable
 	public Object getValue(String key)
 	{
 		return map.get(key);
+	}
+
+	public boolean canPerformAction(int actionId)
+	{
+		HashMap<String, Object> parms = new HashMap<String, Object>();
+		parms.put(ICommonConstants.USER_ID, getUserId());
+		parms.put(ICommonConstants.ACTION_ID, actionId);
+
+		return ICommonConstants.LETTER_Y.equals(DatabaseMethods.getJustDataFirstRowFirstColumn(CAN_PERFORM_ACTION, ICommonConstants.COMMON, parms));
+	}
+
+	protected HashMap<Integer, Boolean> canPerformActions(int... actionId)
+	{
+		ArrayList<Integer> actionIds = new ArrayList<Integer>();
+		for (int a : actionId)
+			actionIds.add(a);
+
+		return canPerformActions(actionIds);
+	}
+
+	public HashMap<Integer, Boolean> canPerformActions(List<Integer> actionIds)
+	{
+		HashMap<Integer, Boolean> permissions = new HashMap<Integer, Boolean>();
+
+		HashMap<String, Object> parms = new HashMap<String, Object>();
+		parms.put(ICommonConstants.USER_ID, getUserId());
+		parms.put(ICommonConstants.ACTION_IDS, StringUtils.join(actionIds, ICommonConstants.COMMA));
+
+		ArrayList<String[]> permissionData = DatabaseMethods.getJustData(CAN_PERFORM_ACTIONS, ICommonConstants.COMMON, parms);
+		if (permissionData != null)
+		{
+			for (String[] permissionDataRecord : permissionData)
+			{
+				permissions.put(Integer.parseInt(permissionDataRecord[0]), ICommonConstants.LETTER_Y.equals(permissionDataRecord[1]));
+			}
+		}
+
+		return permissions;
 	}
 }

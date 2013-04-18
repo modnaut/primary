@@ -1,52 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
-	<item xsi:type="DataView" itemSelector="div.market" overItemCls="over">
-		<listener event="select" action="submit" class="com.modnaut.apps.farmarkets.MarketDetailCtrl" method="defaultAction"/>
-		<store xsi:type="Store">
-			<model idProperty="MarketId">
-				<field name="MarketId" type="int"/>
-				<field name="Name" type="string"/>
-				<field name="Address" type="string"/>
-				<field name="City" type="string"/>
-				<field name="State" type="string"/>
-				<field name="ZipCode" type="string"/>
-				<field name="AverageReview" type="float"/>
-			</model>
-			<data>
-				<record>
-					<field name="MarketId" value="1"/>
-					<field name="Name" value="Miller Beach Farmer's Market"/>
-					<field name="Address" value="500 N Grand Blvd"/>
-					<field name="City" value="Gary"/>
-					<field name="State" value="IN"/>
-					<field name="ZipCode" value="46403"/>
-					<field name="AverageReview" value="4.5"/>
-				</record>
-				<record>
-					<field name="MarketId" value="2"/>
-					<field name="Name" value="St. John Farmers' Market"/>
-					<field name="Address" value="9660 Wicker Ave"/>
-					<field name="City" value="St. John"/>
-					<field name="State" value="IN"/>
-					<field name="ZipCode" value="46373"/>
-					<field name="AverageReview" value="3.5"/>
-				</record>
-			</data>
-		</store>
-		<tpl>
-			<div style="padding: 15px; background: #efeae2">
-				<tpl for=".">
-					<div class="market" style="background: #fff; padding: 1em 1em 1em 3em; position: relative; margin: 0 0 1em 0; height: 350px;">
-						<div style="float: left">
-							<h3 style="margin-bottom: 0px;">{Name}</h3>
-							<p style="margin-bottom: 0px;">{Address}, {City}, {State} {ZipCode}</p>
-						</div>
-						<div style="float: left; padding-left: 15px;">
-							<img src="https://maps.googleapis.com/maps/api/staticmap?center={Address}, {City}, {State} {ZipCode}&amp;sensor=false&amp;zoom=13&amp;size=300x300&amp;markers={Address}, {City}, {State} {ZipCode}"/>
-						</div>
+	<item xsi:type="Panel" actionId="15" noPermissionEffect="disable">
+		<items>
+			<item xsi:type="DataView" itemSelector="div.market" overItemCls="over" region="center" flex="1">
+				<listener event="select" action="submit" class="com.modnaut.apps.farmarkets.MarketDetailCtrl" method="defaultAction"/>
+				<store xsi:type="Store">
+					<model idProperty="MarketId">
+						<field name="MarketId" type="int"/>
+						<field name="Name" type="string"/>
+						<field name="Address" type="string"/>
+						<field name="City" type="string"/>
+						<field name="State" type="string"/>
+						<field name="ZipCode" type="string"/>
+						<field name="AverageReview" type="float"/>
+					</model>
+					<data>
+						<record>
+							<field name="MarketId" value="1"/>
+							<field name="Name" value="Miller Beach Farmer's Market"/>
+							<field name="Address" value="500 N Grand Blvd"/>
+							<field name="City" value="Gary"/>
+							<field name="State" value="IN"/>
+							<field name="ZipCode" value="46403"/>
+							<field name="AverageReview" value="4.5"/>
+						</record>
+						<record>
+							<field name="MarketId" value="2"/>
+							<field name="Name" value="St. John Farmers' Market"/>
+							<field name="Address" value="9660 Wicker Ave"/>
+							<field name="City" value="St. John"/>
+							<field name="State" value="IN"/>
+							<field name="ZipCode" value="46373"/>
+							<field name="AverageReview" value="3.5"/>
+						</record>
+					</data>
+				</store>
+				<tpl>
+					<div style="padding: 15px; background: #efeae2">
+						<tpl for=".">
+							<div class="market" style="background: #fff; padding: 1em 1em 1em 3em; position: relative; margin: 0 0 1em 0; height: 350px;">
+								<div style="float: left">
+									<h3 style="margin-bottom: 0px;">{Name}</h3>
+									<p style="margin-bottom: 0px;">{Address}, {City}, {State} {ZipCode}</p>
+								</div>
+								<div style="float: left; padding-left: 15px;">
+									<img src="https://maps.googleapis.com/maps/api/staticmap?center={Address}, {City}, {State} {ZipCode}&amp;sensor=false&amp;zoom=13&amp;size=300x300&amp;markers={Address}, {City}, {State} {ZipCode}"/>
+								</div>
+							</div>
+						</tpl>
 					</div>
 				</tpl>
-			</div>
-		</tpl>
+			</item>
+		</items>
+		<layout xsi:type="FitLayout"/>
+		<toolbar position="top">
+			<items>
+				<item xsi:type="TextField" actionId="15" noPermissionEffect="disable" id="search">
+					<emptyText stringCd="Search Markets"/>
+				</item>
+				<item xsi:type="Button">
+					<text stringCd="Search"/>
+				</item>
+			</items>
+		</toolbar>
 	</item>
 </viewMetaData>
