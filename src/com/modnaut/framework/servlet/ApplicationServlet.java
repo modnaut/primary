@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +36,7 @@ import com.modnaut.framework.utilities.ServerMethods;
  * 
  */
 
-@WebServlet("/")
+@WebServlet("/ApplicationServlet/*")
 public class ApplicationServlet extends HttpServlet
 {
 	private static final String CLASS_NAME_PATH = ApplicationServlet.class.getCanonicalName();
@@ -79,13 +78,9 @@ public class ApplicationServlet extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		StopWatch totalClock = new StopWatch();
-		totalClock.start();
 		// sets output response shown in browser to html
 		response.setContentType(ICommonConstants.CONTENT_TYPE_HTML);// Set to HTML by default. ExtJS screens will set it to JSON
 
-		StopWatch clock = new StopWatch();
-		clock.start();
 		// This is where we will intercept every request and check for a valid, unexpired session.
 		WebSessionController wsController = new WebSessionController(request, response);
 		UserSession userSession = wsController.getUserSession();
@@ -95,10 +90,6 @@ public class ApplicationServlet extends HttpServlet
 
 		WebSession webSession = new WebSession(request, response, userSession);
 		Class<?> params[] = { WebSession.class };
-
-		clock.stop();
-		LOGGER.debug("Creating session object took {}ms", clock.getTime());
-		clock.reset();
 
 		try
 		{
@@ -121,9 +112,15 @@ public class ApplicationServlet extends HttpServlet
 				methodName = StringUtils.trimToEmpty(request.getParameter(ICommonConstants.METHOD));
 			}
 
+			// TODO: Load default class and method from server properties
+			if (className.equals(ICommonConstants.NONE) || methodName.equals(ICommonConstants.NONE))
+			{
+				className = "com.modnaut.common.controllers.ApplicationCtrl";
+				methodName = "defaultAction";
+			}
+
 			if (!className.equals(ICommonConstants.NONE) && !methodName.equals(ICommonConstants.NONE))
 			{
-				clock.start();
 				Class<?> clazz = Class.forName(className);
 
 				Object instance;
@@ -134,13 +131,7 @@ public class ApplicationServlet extends HttpServlet
 					instance = clazz.newInstance();
 
 				Method method = clazz.getDeclaredMethod(methodName);
-				clock.stop();
-				LOGGER.debug("Reflection took {}ms", clock.getTime());
-				clock.reset();
-				clock.start();
 				method.invoke(instance);
-				clock.stop();
-				LOGGER.debug("Invocation took {}ms", clock.getTime());
 			}
 			else
 			{
@@ -149,13 +140,11 @@ public class ApplicationServlet extends HttpServlet
 		}
 		catch (EnrichableException e)
 		{
-			LOGGER.debug("Invocation took {}ms", clock.getTime());
 			LOGGER.error(e.toString(), e);
 			sendErrorResponse(response, "An error has occurred", 2);
 		}
 		catch (InvocationTargetException e)// when method called by reflection throws an Exception it ends up here
 		{
-			LOGGER.debug("Invocation took {}ms", clock.getTime());
 			// Screen needs permission, but user is not logged in.
 			if (e.getCause() instanceof InsufficientPrivilegeException)
 			{
@@ -179,9 +168,6 @@ public class ApplicationServlet extends HttpServlet
 			sendErrorResponse(response, "An error has occurred", 3);
 
 		}
-
-		totalClock.stop();
-		LOGGER.debug("Entire doGet took {}ms", totalClock.getTime());
 	}
 
 	/**
