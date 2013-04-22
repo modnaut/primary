@@ -26,6 +26,7 @@ import com.modnaut.framework.session.UserSession;
 import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.session.WebSessionController;
 import com.modnaut.framework.utilities.ServerMethods;
+import com.modnaut.framework.utilities.UrlMethods;
 
 /**
  * 
@@ -97,8 +98,19 @@ public class ApplicationServlet extends HttpServlet
 			String methodName = ICommonConstants.NONE;
 
 			String invoke = StringUtils.trimToEmpty(request.getParameter("invoke"));
-			LOGGER.debug("Invoke: " + invoke);
-			if (!invoke.isEmpty())
+			String hashPath = StringUtils.trimToEmpty(request.getParameter("hashPath"));
+
+			if (!hashPath.isEmpty())
+			{
+				String[] classAndMethod = UrlMethods.retrieveClassAndMethod(hashPath);
+				if (classAndMethod != null && !StringUtils.isEmpty(classAndMethod[0]) && !StringUtils.isEmpty(classAndMethod[1]))
+				{
+					className = classAndMethod[0];
+					methodName = classAndMethod[1];
+				}
+			}
+
+			if (StringUtils.isEmpty(className) && StringUtils.isEmpty(methodName) && !invoke.isEmpty())
 			{
 				String decodedInvoke = new String(Base64.decodeBase64(invoke));
 				LOGGER.debug("Decoded Invoke: " + decodedInvoke);
@@ -106,14 +118,15 @@ public class ApplicationServlet extends HttpServlet
 				className = invokeComponents[0];
 				methodName = invokeComponents[1];
 			}
-			else
+
+			if (StringUtils.isEmpty(className) && StringUtils.isEmpty(methodName))
 			{
 				className = StringUtils.trimToEmpty(request.getParameter(ICommonConstants.CLASS));
 				methodName = StringUtils.trimToEmpty(request.getParameter(ICommonConstants.METHOD));
 			}
 
 			// TODO: Load default class and method from server properties
-			if (className.equals(ICommonConstants.NONE) || methodName.equals(ICommonConstants.NONE))
+			if (StringUtils.isEmpty(className) && StringUtils.isEmpty(methodName))
 			{
 				className = "com.modnaut.common.controllers.ApplicationCtrl";
 				methodName = "defaultAction";
@@ -132,6 +145,8 @@ public class ApplicationServlet extends HttpServlet
 
 				Method method = clazz.getDeclaredMethod(methodName);
 				method.invoke(instance);
+
+				UrlMethods.retrievePrettyUrl(webSession, className, methodName);
 			}
 			else
 			{

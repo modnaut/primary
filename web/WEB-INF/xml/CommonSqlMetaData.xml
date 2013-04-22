@@ -104,4 +104,17 @@
 			<parameter name="actionIds" type="VARCHAR"/>
 		</parameters>
 	</query>
+	<query name="GET_HASHPATH_BY_CLASS_AND_METHOD" action="SELECT" type="QUERY">
+		<statement value="SELECT HashPath FROM Common.HashPath WHERE Class = ? AND Method = ?"/>
+		<parameters>
+			<parameter name="Class" type="VARCHAR"/>
+			<parameter name="Method" type="VARCHAR"/>
+		</parameters>
+	</query>
+	<query name="GET_CLASS_AND_METHOD_FROM_HASHPATH" action="SELECT" type="QUERY">
+		<statement value="SELECT Class, Method FROM Common.HashPath WHERE HashPath = ?"/>
+		<parameters>
+			<parameter name="HashPath" type="VARCHAR"/>
+		</parameters>
+	</query>
 </sqlMetaData>

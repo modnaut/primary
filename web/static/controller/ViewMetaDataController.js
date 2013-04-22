@@ -33,10 +33,10 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			SubmitForm: function(options) {
 				controller.getContainerContent(options);
 			},
-			HistoryChange: function(token) {
-				controller.getContainerContent(controller.history[token], true);
-				console.log('HistoryChange', token, controller.history[token]);
-			}
+//			HistoryChange: function(token) {
+//				controller.getContainerContent(controller.history[token], true);
+//				console.log('HistoryChange', token, controller.history[token]);
+//			}
 		});
 	},
 	safeSetLoading: function(component, value) {
@@ -85,7 +85,6 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		var controller = this;
 		
 		var contentRequestId = Ext.util.Cookies.get('MODNAUT_SESSION_ID') + '-' + Ext.Date.now();
-		Globals.time(contentRequestId + '-total', 'info');
 		
 		options = Ext.clone(options);
 		
@@ -129,6 +128,13 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		var success =  function(response, action) {
 			console.log('success', arguments);
 			
+			var hashPath = action.response.getResponseHeader('HashPath');
+			if(hashPath) {
+				Ext.History.suspendEvents();
+				Ext.History.add(hashPath);
+				Ext.defer(Ext.History.resumeEvents, 100, Ext.History);
+			}
+			
 			var warningCode = action.response.getResponseHeader('WarningCode');
 			switch(warningCode) {
 				case '1':
@@ -140,7 +146,6 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			if(container.isLoginContainer === true) {
 				if(action.response.getResponseHeader('LoginSuccessful') === 'true') {
 					container.up('window').close();
-					Globals.timeEnd(contentRequestId + '-total');
 					controller.getContainerContent(controller.loginInitiator.options, controller.loginInitiator.isHistoryEvent);
 					return;
 				}
@@ -157,14 +162,11 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			}
 			
 			//remove old notifications from root
-			Globals.time(contentRequestId + '-destroy old notifications', 'debug');
 			Ext.each(container.query('>notificationBar'), function(notificationBar) {
 				notificationBar.destroyBar(true);
 			});
-			Globals.timeEnd(contentRequestId + '-destroy old notifications');
 			
 			Ext.suspendLayouts();
-			Globals.time(contentRequestId + '-update component tree', 'debug');
 			if(options.itemsToUpdate) {
 				for(var itemId in componentsToUpdate) {
 					var oldComponent = componentsToUpdate[itemId];
@@ -179,13 +181,13 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 					}
 				}
 			} else {
-				if(isHistoryEvent !== true) {
-					var historyToken = Ext.Date.now();
-					controller.history[historyToken] = options;
-					Ext.History.suspendEvents();
-					Ext.History.add(historyToken);
-					Ext.defer(Ext.History.resumeEvents, 100, Ext.History);
-				}
+//				if(isHistoryEvent !== true) {
+//					var historyToken = Ext.Date.now();
+//					controller.history[historyToken] = options;
+//					Ext.History.suspendEvents();
+//					Ext.History.add(historyToken);
+//					Ext.defer(Ext.History.resumeEvents, 100, Ext.History);
+//				}
 				
 				controller.safeSetLoading(container, false);
 				if(items) {
@@ -196,21 +198,15 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 					container.update(html);
 				}
 			}
-			Globals.timeEnd(contentRequestId + '-update component tree');
 			
 			
 			//add new notifications to root
-			Globals.time(contentRequestId + '-create new notifications', 'debug');
 			if(dockedItems && dockedItems.length) {
 				container.addDocked(dockedItems);
 			}
-			Globals.timeEnd(contentRequestId + '-create new notifications');
 			
-			Globals.time(contentRequestId + '-flush layouts after succes', 'debug');
 			Ext.resumeLayouts(true);
-			Globals.timeEnd(contentRequestId + '-flush layouts after succes');
 			
-			Globals.time(contentRequestId + '-create windows', 'debug');
 			if(windows && windows.length) {
 				for(var i = 0, len = windows.length; i < len; i++) {
 					var windowConfig = windows[i];
@@ -236,17 +232,11 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 					}
 				}
 			}
-			Globals.timeEnd(contentRequestId + '-create windows');
 			
 			if(response.script) {
 				Ext.Function.defer(function(){
-					Globals.time(contentRequestId + '-eval scripts', 'debug');
 					eval(response.script);
-					Globals.timeEnd(contentRequestId + '-eval scripts');
-					Globals.timeEnd(contentRequestId + '-total');
 				}, 100);
-			} else {
-				Globals.timeEnd(contentRequestId + '-total');
 			}
 		};
 		
@@ -255,7 +245,6 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			
 			Ext.suspendLayouts();
 			
-			Globals.time(contentRequestId + '-update component tree on failure', 'debug');
 			if(options.itemsToUpdate) {
 				for(var itemId in componentsToUpdate) {
 					var oldComponent = componentsToUpdate[itemId];
@@ -267,16 +256,12 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				container.removeAll();
 				container.update(text);
 			}
-			Globals.timeEnd(contentRequestId + '-update component tree on failure');
-			
-			Globals.time(contentRequestId + '-flush layouts after updating component tree on failure', 'debug');
+
 			Ext.resumeLayouts(true);
-			Globals.timeEnd(contentRequestId + '-flush layouts after updating component tree on failure');
 		};
 		
 		
 		Ext.suspendLayouts();
-		Globals.time(contentRequestId + '-mask components', 'debug');
 		if(options.loadMask !== false) {
 			if(options.itemsToUpdate) {
 				for(var itemId in componentsToUpdate) {
@@ -287,33 +272,24 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				controller.safeSetLoading(container, true);
 			}
 		}
-		Globals.timeEnd(contentRequestId + '-mask components');
 		
-		Globals.time(contentRequestId + '-flush layouts after masking components', 'debug');
 		Ext.resumeLayouts(true);
-		Globals.timeEnd(contentRequestId + '-flush layouts after masking components');
 		
 		if(options.download === true) {
 			
 		} else if (container.getForm()) {
 			if(container.getForm().hasUpload() && options.upload !== true) {
-				Globals.time(contentRequestId + '-remove descendant fields', 'debug');
 				container.getForm().getFields().each(function(field) {
 		            if(field.isFileUpload())
 		            	field.ownerCt.remove(field);
 		        });
-				Globals.timeEnd(contentRequestId + '-remove descendant fields');
 			}
 			
-			Globals.time(contentRequestId + '-server response', 'debug');
-			Globals.time(contentRequestId + '-form submit', 'debug');
 			container.getForm().submit({
 				clientValidation: false,
 				url: 'ApplicationServlet',
 				params: parameters,
 				handleResponse: function(response){
-					Globals.timeEnd(contentRequestId + '-server response');
-					Globals.time(contentRequestId + '-handleResponse', 'debug');
 					//copied from ExtJS
 					var form = this.form,
 			            errorReader = form.errorReader,
@@ -347,7 +323,6 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				        }
 			        }
 			        
-			        Globals.timeEnd(contentRequestId + '-handleResponse');
 			        return returnValue;
 				},
 				success: function(form, action) {
@@ -357,15 +332,11 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 					failure(action.result, action);
 				}
 			});
-			Globals.timeEnd(contentRequestId + '-form submit');
 		} else {
-			Globals.time(contentRequestId + '-server response', 'debug');
 			Ext.Ajax.request({
 				url: 'ApplicationServlet',
 				params: parameters,
 				success: function(response, options){
-					Globals.timeEnd(contentRequestId + '-server response');
-					Globals.time(contentRequestId + '-AJAX success', 'debug');
 					container.setLoading(false);
 					var decoded = Ext.decode(response.responseText, true);
 					if(Ext.isObject(decoded)) {
@@ -375,10 +346,8 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 							html: response.responseText
 						});
 					}
-					Globals.timeEnd(contentRequestId + '-AJAX success');
 				},
 				failure: function(response, options){
-					Globals.timeEnd(contentRequestId + '-server response');
 					failure('Request to server failed');
 				}
 			});
