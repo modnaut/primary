@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
@@ -43,7 +45,7 @@ public class ApplicationServlet extends HttpServlet
 	private static final String CLASS_NAME_PATH = ApplicationServlet.class.getCanonicalName();
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationServlet.class);
 	private static final String METHOD_NAME = "doGet";
-
+	private static Pattern HASHPATH_PATTERN = Pattern.compile("([^?]+)\\?(.*)");
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -90,23 +92,46 @@ public class ApplicationServlet extends HttpServlet
 			LOGGER.error("userSession is null.");
 
 		WebSession webSession = new WebSession(request, response, userSession);
-		Class<?> params[] = { WebSession.class };
 
 		try
 		{
 			String className = ICommonConstants.NONE;
 			String methodName = ICommonConstants.NONE;
+			HashMap<String, String> extraParameters = null;
 
 			String invoke = StringUtils.trimToEmpty(request.getParameter("invoke"));
 			String hashPath = StringUtils.trimToEmpty(request.getParameter("hashPath"));
 
 			if (!hashPath.isEmpty())
 			{
-				String[] classAndMethod = UrlMethods.retrieveClassAndMethod(hashPath);
-				if (classAndMethod != null && !StringUtils.isEmpty(classAndMethod[0]) && !StringUtils.isEmpty(classAndMethod[1]))
+				Matcher matcher = HASHPATH_PATTERN.matcher(hashPath);
+				if (matcher.find())
 				{
-					className = classAndMethod[0];
-					methodName = classAndMethod[1];
+					String[] classAndMethod = UrlMethods.retrieveClassAndMethod(matcher.group(1));
+					if (classAndMethod != null && !StringUtils.isEmpty(classAndMethod[0]) && !StringUtils.isEmpty(classAndMethod[1]))
+					{
+						className = classAndMethod[0];
+						methodName = classAndMethod[1];
+
+						String extraParametersString = matcher.group(2);
+						if (!StringUtils.isEmpty(extraParametersString))
+						{
+							String[] nameValueStrings = extraParametersString.split(ICommonConstants.AMPERSAND);
+							if (nameValueStrings.length > 0)
+							{
+								extraParameters = new HashMap<String, String>();
+								for (String nameValueString : nameValueStrings)
+								{
+									String[] parts = nameValueString.split(ICommonConstants.EQUALS);
+									if (parts.length == 2)
+									{
+										extraParameters.put(parts[0], parts[1]);
+									}
+								}
+							}
+						}
+					}
+
 				}
 			}
 
@@ -134,10 +159,13 @@ public class ApplicationServlet extends HttpServlet
 
 			if (!className.equals(ICommonConstants.NONE) && !methodName.equals(ICommonConstants.NONE))
 			{
+				if (extraParameters != null && webSession != null)
+					webSession.setExtraParameters(extraParameters);
+
 				Class<?> clazz = Class.forName(className);
 
 				Object instance;
-				Constructor<?> constructor = clazz.getConstructor(params);
+				Constructor<?> constructor = clazz.getConstructor(new Class[] { WebSession.class });
 				if (constructor != null)
 					instance = constructor.newInstance(webSession);
 				else

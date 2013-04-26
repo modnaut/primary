@@ -1,5 +1,7 @@
 package com.modnaut.framework.session;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,6 +18,7 @@ public class WebSession
 	private HttpServletRequest request = null;
 	private HttpServletResponse response = null;
 	private UserSession userSession = null;
+	private HashMap<String, String> extraParameters = null;
 
 	public WebSession(HttpServletRequest request, HttpServletResponse response, UserSession webSession)
 	{
@@ -52,5 +55,33 @@ public class WebSession
 	public UserSession getUserSession()
 	{
 		return this.userSession;
+	}
+
+	public void setExtraParameters(HashMap<String, String> extraParameters)
+	{
+		this.extraParameters = extraParameters;
+	}
+
+	public HashMap<String, String> getExtraParameters()
+	{
+		return this.extraParameters;
+	}
+
+	public String getParameter(String name)
+	{
+		String value = null;
+
+		if (name != null)
+		{
+			if (this.extraParameters != null)
+			{
+				value = this.extraParameters.get(name);
+			}
+
+			if (value == null && this.request != null)
+				value = this.request.getParameter(name);
+		}
+
+		return value;
 	}
 }

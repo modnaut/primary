@@ -81,6 +81,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			containedFormFields[i].ownerCt.remove(containedFormFields[i]);
 		}
 	},
+	hashPathRegex: new RegExp(/([^?]+)\?(.*)/),
 	getContainerContent: function(options, isHistoryEvent) {
 		var controller = this;
 		
@@ -91,11 +92,11 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		var parameters = options.parameters;
 		parameters.contentRequestId = contentRequestId;
 		
-		if(parameters.Class && parameters.Method) {
-			parameters.invoke = Globals.encodeBase64(parameters.Class + '|' + parameters.Method);
-			delete parameters.Class;
-			delete parameters.Method;
-		}
+//		if(parameters.Class && parameters.Method) {
+//			parameters.invoke = Globals.encodeBase64(parameters.Class + '|' + parameters.Method);
+//			delete parameters.Class;
+//			delete parameters.Method;
+//		}
 		
 		var component = options.component;
 		var container = component;
@@ -130,6 +131,28 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			
 			var hashPath = action.response.getResponseHeader('HashPath');
 			if(hashPath) {
+				var hashPathParameters = {};
+				var currentHashPath = location.hash;
+				if(controller.hashPathRegex.test(currentHashPath)) {
+					var currentHashPathParameterString = controller.hashPathRegex.exec(currentHashPath)[2];
+					hashPathParameters = Ext.Object.fromQueryString(currentHashPathParameterString);
+				}
+				
+				var hashPathParameters = Ext.Object.merge(hashPathParameters, parameters);
+				
+				if(container.getForm())
+					Ext.Object.merge(hashPathParameters, container.getForm().getValues());
+					
+				
+				var deleteParameters = ['hashPath', 'Class', 'Method', 'invoke', 'contentRequestId'];
+				for(var i = 0, len = deleteParameters.length; i < len; i++) {
+					delete hashPathParameters[deleteParameters[i]];
+				}
+				for(key in hashPathParameters) {
+					if(!hashPathParameters[key])
+						delete hashPathParameters[key];
+				}
+				hashPath = hashPath + '?' + Ext.Object.toQueryString(hashPathParameters);
 				Ext.History.suspendEvents();
 				Ext.History.add(hashPath);
 				Ext.defer(Ext.History.resumeEvents, 100, Ext.History);
@@ -191,11 +214,15 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				
 				controller.safeSetLoading(container, false);
 				if(items) {
+					console.log('updating page');
 					controller.removeDescendantFormFields(container);
 					container.removeAll();
 					container.add(items);
+					console.log('updated page');
 				} else {
+					console.log('updating html');
 					container.update(html);
+					console.log('updated html');
 				}
 			}
 			
@@ -289,6 +316,7 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 				clientValidation: false,
 				url: 'ApplicationServlet',
 				params: parameters,
+				submitEmptyText: false,
 				handleResponse: function(response){
 					//copied from ExtJS
 					var form = this.form,

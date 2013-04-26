@@ -94,6 +94,7 @@
 							<xsl:call-template name="comma-delimit"/>
 						</xsl:for-each>
 					],
+					<xsl:value-of select="mn:attribute(., 'idProperty', ',')"/>
 				</xsl:for-each>
 			</xsl:when>
 			<xsl:when test="@modelName != '' ">

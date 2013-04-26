@@ -2,7 +2,7 @@
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
 	<item xsi:type="Container">
 		<items>
-			<item xsi:type="Panel" region="center" flex="1" bodyPadding="5">
+			<item xsi:type="Panel" region="center" flex="1" bodyPadding="5" id="detailPanel">
 				<items>
 					<item xsi:type="DisplayField" id="MarketName" value="Miller Beach Farmer's Market">
 						<fieldLabel stringCd="Name"/>

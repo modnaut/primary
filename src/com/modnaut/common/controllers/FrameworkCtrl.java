@@ -36,6 +36,7 @@ public class FrameworkCtrl
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
 	protected UserSession userSession;
+	protected WebSession webSession;
 	protected boolean needs_authentication = false;
 
 	/**
@@ -57,6 +58,7 @@ public class FrameworkCtrl
 		this.request = webSession.getRequest();
 		this.response = webSession.getResponse();
 		this.userSession = webSession.getUserSession();
+		this.webSession = webSession;
 		this.needs_authentication = needs_authentication;
 
 		if (contentType != null && response != null)
@@ -79,7 +81,7 @@ public class FrameworkCtrl
 	 */
 	protected String getParameter(String name)
 	{
-		return this.request.getParameter(name);
+		return this.webSession.getParameter(name);
 	}
 
 	protected boolean canPerformAction(int actionId)

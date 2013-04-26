@@ -66,6 +66,16 @@ Ext.define('Globals', {
     					break;
     				case 'ok':
     					parameters.text = options.arguments[0];
+    					break;
+    				case 'select':
+    					var record = options.arguments[1];
+    					var idProperty = component.getStore().idProperty;
+    					parameters[idProperty] = record.get(idProperty);
+//    					var fields = record.fields.getRange();
+//    					for(var f = 0, flen = fields.length; f < flen; f++) {
+//    						parameters[fields[f].name] = record.get(fields[f].name);
+//    					}
+    					break;
     			}
     			
 				Globals.submitForm({

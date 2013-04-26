@@ -55,7 +55,7 @@
 		<layout xsi:type="FitLayout"/>
 		<toolbar position="top">
 			<items>
-				<item xsi:type="TextField" actionId="15" noPermissionEffect="disable" id="search">
+				<item xsi:type="TextField" id="search">
 					<emptyText stringCd="Search Markets"/>
 				</item>
 				<item xsi:type="Button">
