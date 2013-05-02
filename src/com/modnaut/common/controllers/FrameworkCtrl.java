@@ -94,13 +94,13 @@ public class FrameworkCtrl
 
 	protected HashMap<Integer, Boolean> hasPowers(List<Integer> powerIds)
 	{
-		HashMap<Integer, Boolean> permissions;
+		HashMap<Integer, Boolean> powers;
 		if (ninjaSession != null)
-			permissions = ninjaSession.hasPowers(powerIds);
+			powers = ninjaSession.hasPowers(powerIds);
 		else
-			permissions = new HashMap<Integer, Boolean>();
+			powers = new HashMap<Integer, Boolean>();
 
-		return permissions;
+		return powers;
 	}
 
 	protected HashMap<Integer, Boolean> hasPowers(int... powerId)

@@ -119,7 +119,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	public void marshall(ViewMetaData viewMetaData)
 	{
 		getStringValues();
-		applyPermissions();
+		restrictByPower();
 
 		try
 		{
@@ -154,7 +154,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 		}
 	}
 
-	private void applyPermissions()
+	private void restrictByPower()
 	{
 		List<Item> list = jxPathContext.selectNodes(ALL_ITEMS_WITH_POWER_IDS);
 
@@ -166,10 +166,10 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 				powerIds.add(item.getPowerId());
 			}
 
-			HashMap<Integer, Boolean> permissions = hasPowers(powerIds);
+			HashMap<Integer, Boolean> powers = hasPowers(powerIds);
 			for (Item item : list)
 			{
-				if (!permissions.get(item.getPowerId()))
+				if (!powers.get(item.getPowerId()))
 				{
 					switch (item.getNoPowerEffect())
 					{
