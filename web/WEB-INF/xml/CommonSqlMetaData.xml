@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sqlMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/SqlMetaData.xsd">
-	<query name="GET_USER_LIST" action="SELECT" type="QUERY">
-		<statement value="Select UserName, FirstName, LastName, EmailAddress From Users Where UserId = ?"/>
-		<parameters>
-			<parameter name="UserId" type="INT"/>
-		</parameters>
-	</query>
-	<query name="GET_ALL_USERS_ALPHABETICALLY" action="SELECT" type="SP">
-		<statement value="Common.up_GetAllUsersAlphabetically()"/>
-	</query>
-	<query name="INSERT_USER" action="ACTION" type="QUERY">
-		<statement value="INSERT INTO users (UserName, FirstName, LastName, EmailAddress) 
-						  VALUES (?, ?, ?, ?)"/>
-		<parameters>
-			<parameter name="UserName" type="VARCHAR"/>
-			<parameter name="FirstName" type="VARCHAR"/>
-			<parameter name="LastName" type="VARCHAR"/>
-			<parameter name="EmailAddress" type="VARCHAR"/>
-		</parameters>
-	</query>
-	<query name="AUTHENTICATE_USER" action="SELECT" type="SP">
-		<statement value="Common.up_AuthenticateUser(?, ?)"/>
+	<query name="AUTHENTICATE_NINJA" action="SELECT" type="SP">
+		<statement value="Common.up_AuthenticateNinja(?, ?)"/>
 		<parameters>
 			<parameter name="Email" type="VARCHAR"/>
 			<parameter name="Password" type="VARCHAR"/>
@@ -29,7 +10,7 @@
 	<query name="INSERT_UPDATE_SESSION" action="ACTION" type="SP">
 		<statement value="Common.up_InsertUpdateSession(?, ?, ?)"/>
 		<parameters>
-			<parameter name="UserId" type="INT"/>
+			<parameter name="NinjaId" type="INT"/>
 			<parameter name="SessionId" type="BIGINT"/>
 			<parameter name="SessionObject" type="VARBINARY"/>
 		</parameters>
@@ -40,32 +21,10 @@
 			<parameter name="SessionId" type="BIGINT"/>
 		</parameters>
 	</query>
-	<query name="GET_USER_SESSION" action="SELECT" type="QUERY">
-		<statement value="Common.up_GetUserSession(?)"/>
+	<query name="GET_NINJA_SESSION" action="SELECT" type="QUERY">
+		<statement value="Common.up_GetNinjaSession(?)"/>
 		<parameters>
-			<parameter name="UserId" type="INT"/>
-		</parameters>
-	</query>
-	<query name="GET_USER" action="SELECT" type="SP">
-		<statement value="Common.up_GetUser(?)"/>
-		<parameters>
-			<parameter name="UserId" type="INT"/>
-		</parameters>
-	</query>
-	<query name="GET_USER_TYPES" action="SELECT" type="QUERY">
-		<statement value="Select UserTypeCd, Description From Common.UserType Order By Description ASC"/>
-	</query>
-	<query name="UPDATE_USER" action="ACTION" type="SP">
-		<statement value="Common.up_UpdateUser(?, ?, ?, ?, ?, ?, ?, ?)"/>
-		<parameters>
-			<parameter name="UserId" type="INT"/>
-			<parameter name="UserName" type="VARCHAR"/>
-			<parameter name="FirstName" type="VARCHAR"/>
-			<parameter name="LastName" type="VARCHAR"/>
-			<parameter name="EmailAddress" type="VARCHAR"/>
-			<parameter name="HireDateDisabled" type="VARCHAR"/>
-			<parameter name="UserTypeCd" type="VARCHAR"/>
-			<parameter name="UserPassword" type="VARCHAR"/>
+			<parameter name="NinjaId" type="INT"/>
 		</parameters>
 	</query>
 	<query name="GET_MULTIPLE_STRINGS_FOR_LANGUAGE" action="SELECT" type="SP">
@@ -90,18 +49,18 @@
 				l.LanguageId ASC
 		"/>
 	</query>
-	<query name="CAN_PERFORM_ACTION" action="SELECT" type="SP">
-		<statement value="Common.up_CanPerformAction(?, ?)"/>
+	<query name="NINJA_HAS_POWER" action="SELECT" type="SP">
+		<statement value="Common.up_NinjaHasPower(?, ?)"/>
 		<parameters>
-			<parameter name="userId" type="INT"/>
-			<parameter name="actionId" type="INT"/>
+			<parameter name="ninjaId" type="INT"/>
+			<parameter name="powerId" type="INT"/>
 		</parameters>
 	</query>
-	<query name="CAN_PERFORM_ACTIONS" action="SELECT" type="SP">
-		<statement value="Common.up_CanPerformActions(?, ?)"/>
+	<query name="NINJA_HAS_POWERS" action="SELECT" type="SP">
+		<statement value="Common.up_NinjaHasPowers(?, ?)"/>
 		<parameters>
-			<parameter name="userId" type="INT"/>
-			<parameter name="actionIds" type="VARCHAR"/>
+			<parameter name="ninjaId" type="INT"/>
+			<parameter name="powerIds" type="VARCHAR"/>
 		</parameters>
 	</query>
 	<query name="GET_HASHPATH_BY_CLASS_AND_METHOD" action="SELECT" type="QUERY">

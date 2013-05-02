@@ -21,7 +21,7 @@ import com.modnaut.framework.database.JdbcConnection;
 import com.modnaut.framework.database.SqlQueries;
 import com.modnaut.framework.properties.sqlmetadata.Query;
 import com.modnaut.framework.properties.sqlmetadata.StatementType;
-import com.modnaut.framework.session.UserSession;
+import com.modnaut.framework.session.NinjaSession;
 
 /**
  * @author Ben
@@ -32,7 +32,7 @@ public class SessionMethods
 	private static final Logger LOGGER = LoggerFactory.getLogger(SessionMethods.class);
 
 	// SQL Parms
-	private static final String USER_ID = "UserId";
+	private static final String NINJA_ID = "NinjaId";
 	private static final String SESSION_ID = "SessionId";
 	private static final String SESSION_OBJECT = "SessionObject";
 	private static final String EMAIL = "Email";
@@ -41,7 +41,7 @@ public class SessionMethods
 	// SQL QUERIES
 	private static final String GET_SESSION = "GET_SESSION";
 	private static final String INSERT_UPDATE_SESSION = "INSERT_UPDATE_SESSION";
-	private static final String AUTHENTICATE_USER = "AUTHENTICATE_USER";
+	private static final String AUTHENTICATE_NINJA = "AUTHENTICATE_NINJA";
 
 	// CONSTANTS
 	private static final int ITERATION_NUMBER = 1000;
@@ -60,7 +60,7 @@ public class SessionMethods
 	 * @param sessionId
 	 * @return
 	 */
-	public static UserSession getSession(long session_id)
+	public static NinjaSession getSession(long session_id)
 	{
 		LOGGER.trace("Testing different logging levels on a clas-by-class basis.");
 
@@ -91,13 +91,13 @@ public class SessionMethods
 						object = deserialize((byte[]) object);
 					}
 
-					if (object instanceof com.modnaut.framework.session.UserSession)
+					if (object instanceof com.modnaut.framework.session.NinjaSession)
 					{
-						return (com.modnaut.framework.session.UserSession) object;
+						return (com.modnaut.framework.session.NinjaSession) object;
 					}
 					else
 					{
-						System.out.println("GET_SESSION did not return an instanceof serializing.UserSession.");
+						System.out.println("GET_SESSION did not return an instanceof serializing.NinjaSession.");
 					}
 				}
 			}
@@ -123,15 +123,15 @@ public class SessionMethods
 	}
 
 	/**
-	 * This method will create a new, empty UserSession.
+	 * This method will create a new, empty NinjaSession.
 	 * 
 	 * @return
 	 */
-	public static UserSession createNewSession()
+	public static NinjaSession createNewSession()
 	{
 		long new_id = SessionMethods.generateSessionId();
-		UserSession userSession = new UserSession(new_id); // create new Session object.
-		return userSession;
+		NinjaSession ninjaSession = new NinjaSession(new_id); // create new Session object.
+		return ninjaSession;
 	}
 
 	/**
@@ -139,10 +139,10 @@ public class SessionMethods
 	 * @param session
 	 * @return
 	 */
-	public static int saveSession(UserSession session)
+	public static int saveSession(NinjaSession session)
 	{
 		// HashMap<String, Object> parms = new HashMap<String, Object>();
-		// parms.put(USER_ID, session.getUserId());
+		// parms.put(NINJA_ID, session.getNinjaId());
 		// parms.put(SESSION_ID, session.getSessionId());
 		// parms.put(SESSION_OBJECT, session);
 		//
@@ -164,7 +164,7 @@ public class SessionMethods
 			String statementString = "CALL " + statement.getValue() + ";";
 
 			st = con.prepareStatement(statementString);
-			st.setInt(1, session.getUserId());
+			st.setInt(1, session.getNinjaId());
 			st.setLong(2, session.getSessionId());
 			st.setObject(3, session);
 
@@ -203,12 +203,12 @@ public class SessionMethods
 
 	}
 
-	public static UserSession authenticate(String email, String password)
+	public static NinjaSession authenticate(String email, String password)
 	{
 		return authenticate(email, password, null);
 	}
 
-	public static UserSession authenticate(String email, String password, UserSession userSession)
+	public static NinjaSession authenticate(String email, String password, NinjaSession ninjaSession)
 	{
 		if (email != null && password != null)
 		{
@@ -220,39 +220,39 @@ public class SessionMethods
 			parms.put(PASSWORD, saltedPassword);
 
 			// See if this email/password combination exists in our database. If not, the stored procedure will increment the invalid login attempts.
-			String[] data = DatabaseMethods.getJustDataFirstRow(AUTHENTICATE_USER, ICommonConstants.COMMON, parms); // [0]UserId, [1]FirstName, [2]LastName, [3]EmailAddress, [4]UserPassword
+			String[] data = DatabaseMethods.getJustDataFirstRow(AUTHENTICATE_NINJA, ICommonConstants.COMMON, parms); // [0]NinjaId, [1]FirstName, [2]LastName, [3]EmailAddress, [4]Password
 			if (data != null && data.length > 3)
 			{
-				if (userSession == null)
+				if (ninjaSession == null)
 				{
 					// create new Session object.
 					long new_id = SessionMethods.generateSessionId();
-					userSession = new UserSession(new_id);
+					ninjaSession = new NinjaSession(new_id);
 				}
 
-				// Set the UserSession properties.
-				int userId = StringMethods.StringToInt(data[0]);
-				userSession.setUserId(userId);
-				userSession.setEmail(email);
-				userSession.setIsAuthenticated(true);
-				userSession.setFirstName(StringUtils.trimToEmpty(data[1]));
-				userSession.setLastName(StringUtils.trimToEmpty(data[2]));
+				// Set the NinjaSession properties.
+				int ninjaId = StringMethods.StringToInt(data[0]);
+				ninjaSession.setNinjaId(ninjaId);
+				ninjaSession.setEmail(email);
+				ninjaSession.setIsAuthenticated(true);
+				ninjaSession.setFirstName(StringUtils.trimToEmpty(data[1]));
+				ninjaSession.setLastName(StringUtils.trimToEmpty(data[2]));
 				// Insert into database.
-				SessionMethods.saveSession(userSession);
+				SessionMethods.saveSession(ninjaSession);
 
-				return userSession;
+				return ninjaSession;
 			}
 			else
 			{
 				// TODO - increment the invalid login count...
 
-				// If the user has not given a valid Email and Password combination, pass them to the invalid Login Page
+				// If the ninja has not given a valid Email and Password combination, pass them to the invalid Login Page
 				// response.sendRedirect(INVALID_LOGIN_PAGE);
-				return userSession;
+				return ninjaSession;
 			}
 		}
 
-		return userSession;
+		return ninjaSession;
 	}
 
 	/**

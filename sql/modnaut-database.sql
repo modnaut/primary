@@ -3,7 +3,7 @@
 -- Server version:               5.6.10-log - MySQL Community Server (GPL)
 -- Server OS:                    Win64
 -- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-04-28 09:29:05
+-- Date/time:                    2013-05-02 00:07:58
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -14,24 +14,6 @@
 DROP DATABASE IF EXISTS `common`;
 CREATE DATABASE IF NOT EXISTS `common` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `common`;
-
-
--- Dumping structure for table common.action
-DROP TABLE IF EXISTS `action`;
-CREATE TABLE IF NOT EXISTS `action` (
-  `ActionId` int(10) NOT NULL AUTO_INCREMENT,
-  `ActionDescription` varchar(100) NOT NULL,
-  `ActionStatusCd` char(1) NOT NULL DEFAULT 'A',
-  PRIMARY KEY (`ActionId`),
-  UNIQUE KEY `ActionId_UNIQUE` (`ActionId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
--- Dumping data for table common.action: ~2 rows (approximately)
-/*!40000 ALTER TABLE `action` DISABLE KEYS */;
-INSERT INTO `action` (`ActionId`, `ActionDescription`, `ActionStatusCd`) VALUES
-	(1, 'Application Access', 'A'),
-	(2, 'Admin Access', 'A');
-/*!40000 ALTER TABLE `action` ENABLE KEYS */;
 
 
 -- Dumping structure for table common.application
@@ -86,6 +68,40 @@ INSERT INTO `attributetype` (`AttributeTypeId`, `Description`) VALUES
 /*!40000 ALTER TABLE `attributetype` ENABLE KEYS */;
 
 
+-- Dumping structure for table common.clan
+DROP TABLE IF EXISTS `clan`;
+CREATE TABLE IF NOT EXISTS `clan` (
+  `ClanId` int(10) NOT NULL AUTO_INCREMENT,
+  `ClanDescription` varchar(50) NOT NULL,
+  PRIMARY KEY (`ClanId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.clan: ~0 rows (approximately)
+/*!40000 ALTER TABLE `clan` DISABLE KEYS */;
+INSERT INTO `clan` (`ClanId`, `ClanDescription`) VALUES
+	(1, 'TestGroup');
+/*!40000 ALTER TABLE `clan` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.clanpower
+DROP TABLE IF EXISTS `clanpower`;
+CREATE TABLE IF NOT EXISTS `clanpower` (
+  `ClanId` int(10) NOT NULL,
+  `PowerId` int(10) NOT NULL,
+  PRIMARY KEY (`ClanId`,`PowerId`),
+  KEY `FK_ClanPower_power` (`PowerId`),
+  CONSTRAINT `FK_ClanPower_power` FOREIGN KEY (`PowerId`) REFERENCES `power` (`PowerId`),
+  CONSTRAINT `FK_ClanPower_clan` FOREIGN KEY (`ClanId`) REFERENCES `clan` (`ClanId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.clanpower: ~2 rows (approximately)
+/*!40000 ALTER TABLE `clanpower` DISABLE KEYS */;
+INSERT INTO `clanpower` (`ClanId`, `PowerId`) VALUES
+	(1, 1),
+	(1, 2);
+/*!40000 ALTER TABLE `clanpower` ENABLE KEYS */;
+
+
 -- Dumping structure for table common.hashpath
 DROP TABLE IF EXISTS `hashpath`;
 CREATE TABLE IF NOT EXISTS `hashpath` (
@@ -125,38 +141,155 @@ INSERT INTO `language` (`LanguageId`, `Name`, `LocalName`, `FlagFileName`, `IsoL
 /*!40000 ALTER TABLE `language` ENABLE KEYS */;
 
 
--- Dumping structure for table common.securitygroup
-DROP TABLE IF EXISTS `securitygroup`;
-CREATE TABLE IF NOT EXISTS `securitygroup` (
-  `SecurityGroupId` int(10) NOT NULL AUTO_INCREMENT,
-  `Description` varchar(50) NOT NULL,
-  PRIMARY KEY (`SecurityGroupId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+-- Dumping structure for table common.ninja
+DROP TABLE IF EXISTS `ninja`;
+CREATE TABLE IF NOT EXISTS `ninja` (
+  `NinjaId` int(10) NOT NULL AUTO_INCREMENT,
+  `FirstName` varchar(50) NOT NULL,
+  `LastName` varchar(50) NOT NULL,
+  `EmailAddress` varchar(100) NOT NULL,
+  `Password` varchar(100) NOT NULL,
+  `NinjaTypeCd` char(1) NOT NULL DEFAULT 'C',
+  `InvalidLoginAttempts` int(2) DEFAULT NULL,
+  PRIMARY KEY (`NinjaId`),
+  UNIQUE KEY `EmailAddress` (`EmailAddress`),
+  KEY `FK_Ninja_ninjatype` (`NinjaTypeCd`),
+  CONSTRAINT `FK_Ninja_ninjatype` FOREIGN KEY (`NinjaTypeCd`) REFERENCES `ninjatype` (`NinjaTypeCd`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.securitygroup: ~0 rows (approximately)
-/*!40000 ALTER TABLE `securitygroup` DISABLE KEYS */;
-INSERT INTO `securitygroup` (`SecurityGroupId`, `Description`) VALUES
-	(1, 'TestGroup');
-/*!40000 ALTER TABLE `securitygroup` ENABLE KEYS */;
+-- Dumping data for table common.ninja: ~4 rows (approximately)
+/*!40000 ALTER TABLE `ninja` DISABLE KEYS */;
+INSERT INTO `ninja` (`NinjaId`, `FirstName`, `LastName`, `EmailAddress`, `Password`, `NinjaTypeCd`, `InvalidLoginAttempts`) VALUES
+	(1, 'guest', 'guest', '', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', 'C', 0),
+	(2, 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', 'C', 0),
+	(3, 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', 'C', 0),
+	(4, 'Ben', 'Dalgaardfasdfsa', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', 'C', 0);
+/*!40000 ALTER TABLE `ninja` ENABLE KEYS */;
 
 
--- Dumping structure for table common.securitygroupaction
-DROP TABLE IF EXISTS `securitygroupaction`;
-CREATE TABLE IF NOT EXISTS `securitygroupaction` (
-  `SecurityGroupId` int(10) NOT NULL,
-  `ActionId` int(10) NOT NULL,
-  PRIMARY KEY (`SecurityGroupId`,`ActionId`),
-  KEY `FK_SecurityGroupAction_ActionId` (`ActionId`),
-  CONSTRAINT `FK_SecurityGroupAction_ActionId` FOREIGN KEY (`ActionId`) REFERENCES `action` (`ActionId`),
-  CONSTRAINT `FK_SecurityGroupAction_SecurityGroupId` FOREIGN KEY (`SecurityGroupId`) REFERENCES `securitygroup` (`SecurityGroupId`)
+-- Dumping structure for table common.ninjaclan
+DROP TABLE IF EXISTS `ninjaclan`;
+CREATE TABLE IF NOT EXISTS `ninjaclan` (
+  `NinjaId` int(10) NOT NULL,
+  `ClanId` int(10) NOT NULL,
+  `CreatedByNinjaId` int(10) NOT NULL DEFAULT '4',
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`NinjaId`,`ClanId`),
+  KEY `FK_ninjaclan_clan` (`ClanId`),
+  KEY `FK_ninjaclan_ninja_2` (`CreatedByNinjaId`),
+  CONSTRAINT `FK_ninjaclan_ninja` FOREIGN KEY (`NinjaId`) REFERENCES `ninja` (`NinjaId`),
+  CONSTRAINT `FK_ninjaclan_clan` FOREIGN KEY (`ClanId`) REFERENCES `clan` (`ClanId`),
+  CONSTRAINT `FK_ninjaclan_ninja_2` FOREIGN KEY (`CreatedByNinjaId`) REFERENCES `ninja` (`NinjaId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.securitygroupaction: ~2 rows (approximately)
-/*!40000 ALTER TABLE `securitygroupaction` DISABLE KEYS */;
-INSERT INTO `securitygroupaction` (`SecurityGroupId`, `ActionId`) VALUES
-	(1, 1),
-	(1, 2);
-/*!40000 ALTER TABLE `securitygroupaction` ENABLE KEYS */;
+-- Dumping data for table common.ninjaclan: ~0 rows (approximately)
+/*!40000 ALTER TABLE `ninjaclan` DISABLE KEYS */;
+INSERT INTO `ninjaclan` (`NinjaId`, `ClanId`, `CreatedByNinjaId`, `CreatedDate`) VALUES
+	(3, 1, 3, '2013-04-08 22:24:18');
+/*!40000 ALTER TABLE `ninjaclan` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.ninjapower
+DROP TABLE IF EXISTS `ninjapower`;
+CREATE TABLE IF NOT EXISTS `ninjapower` (
+  `NinjaId` int(10) NOT NULL,
+  `PowerId` int(10) NOT NULL,
+  `CreatedByNinjaId` int(10) NOT NULL DEFAULT '0',
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`NinjaId`,`PowerId`),
+  KEY `FK_ninjapower_power` (`PowerId`),
+  KEY `FK_ninjapower_ninja_2` (`CreatedByNinjaId`),
+  CONSTRAINT `FK_ninjapower_ninja` FOREIGN KEY (`NinjaId`) REFERENCES `ninja` (`NinjaId`),
+  CONSTRAINT `FK_ninjapower_power` FOREIGN KEY (`PowerId`) REFERENCES `power` (`PowerId`),
+  CONSTRAINT `FK_ninjapower_ninja_2` FOREIGN KEY (`CreatedByNinjaId`) REFERENCES `ninja` (`NinjaId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.ninjapower: ~3 rows (approximately)
+/*!40000 ALTER TABLE `ninjapower` DISABLE KEYS */;
+INSERT INTO `ninjapower` (`NinjaId`, `PowerId`, `CreatedByNinjaId`, `CreatedDate`) VALUES
+	(1, 1, 1, '2013-02-26 11:12:16'),
+	(1, 2, 1, '2013-02-26 11:12:59'),
+	(4, 1, 4, '2013-04-18 00:19:26');
+/*!40000 ALTER TABLE `ninjapower` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.ninjasession
+DROP TABLE IF EXISTS `ninjasession`;
+CREATE TABLE IF NOT EXISTS `ninjasession` (
+  `NinjaId` int(10) NOT NULL DEFAULT '1',
+  `SessionId` bigint(19) NOT NULL,
+  KEY `FK__session` (`SessionId`),
+  KEY `FK_ninja` (`NinjaId`),
+  CONSTRAINT `FK_ninjasession_ninja` FOREIGN KEY (`NinjaId`) REFERENCES `ninja` (`NinjaId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.ninjasession: ~4 rows (approximately)
+/*!40000 ALTER TABLE `ninjasession` DISABLE KEYS */;
+INSERT INTO `ninjasession` (`NinjaId`, `SessionId`) VALUES
+	(1, 49011134908463),
+	(1, 48901518670645),
+	(1, 50598574804944),
+	(1, 32251260971221),
+	(1, 1421803741431),
+	(1, 84372113594917),
+	(1, 74719183675245),
+	(1, 48141645438663),
+	(1, 36718319568316),
+	(1, 47317398351750),
+	(1, 87885303489936),
+	(1, 65228519829580),
+	(1, 1518482104972),
+	(1, 21667041122018),
+	(1, 85248830870300),
+	(1, 1280943998500),
+	(1, 64647346791760),
+	(1, 31529240140173),
+	(1, 67640732791092),
+	(1, 28468652207485),
+	(1, 20197005102032),
+	(1, 89854080286583),
+	(1, 35882475430787),
+	(1, 45862402860532),
+	(1, 14002628028403),
+	(1, 91012452841973),
+	(1, 232301322124912),
+	(1, 318596625811),
+	(1, 134918452066364),
+	(1, 176310867738078);
+/*!40000 ALTER TABLE `ninjasession` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.ninjatype
+DROP TABLE IF EXISTS `ninjatype`;
+CREATE TABLE IF NOT EXISTS `ninjatype` (
+  `NinjaTypeCd` char(1) NOT NULL,
+  `NinjaTypeDescription` varchar(50) NOT NULL,
+  PRIMARY KEY (`NinjaTypeCd`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.ninjatype: ~2 rows (approximately)
+/*!40000 ALTER TABLE `ninjatype` DISABLE KEYS */;
+INSERT INTO `ninjatype` (`NinjaTypeCd`, `NinjaTypeDescription`) VALUES
+	('A', 'Administrator'),
+	('C', 'Customer');
+/*!40000 ALTER TABLE `ninjatype` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.power
+DROP TABLE IF EXISTS `power`;
+CREATE TABLE IF NOT EXISTS `power` (
+  `PowerId` int(10) NOT NULL AUTO_INCREMENT,
+  `PowerDescription` varchar(100) NOT NULL,
+  `PowerStatusCd` char(1) NOT NULL DEFAULT 'A',
+  PRIMARY KEY (`PowerId`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.power: ~2 rows (approximately)
+/*!40000 ALTER TABLE `power` DISABLE KEYS */;
+INSERT INTO `power` (`PowerId`, `PowerDescription`, `PowerStatusCd`) VALUES
+	(1, 'Application Access', 'A'),
+	(2, 'Admin Access', 'A');
+/*!40000 ALTER TABLE `power` ENABLE KEYS */;
 
 
 -- Dumping structure for table common.server
@@ -204,7 +337,7 @@ CREATE TABLE IF NOT EXISTS `session` (
   PRIMARY KEY (`SessionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.session: ~27 rows (approximately)
+-- Dumping data for table common.session: ~28 rows (approximately)
 /*!40000 ALTER TABLE `session` DISABLE KEYS */;
 INSERT INTO `session` (`SessionId`, `SessionObject`, `CreatedDate`, `LastModifiedDate`) VALUES
 	(318596625811, _binary 0xACED000573720029636F6D2E6D6F646E6175742E6672616D65776F726B2E73657373696F6E2E5573657253657373696F6EC6D379D2ADF1911B0200075A001069735F61757468656E746963617465644A000A73657373696F6E5F6964490007757365725F69644C0005656D61696C7400124C6A6176612F6C616E672F537472696E673B4C000966697273744E616D6571007E00014C00086C6173744E616D6571007E00014C00036D61707400134C6A6176612F7574696C2F486173684D61703B7870000000004A2DD6B59300000001740000740005677565737471007E0005737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000078, '2013-04-23 23:28:40', '2013-04-23 23:28:40'),
@@ -235,6 +368,7 @@ INSERT INTO `session` (`SessionId`, `SessionObject`, `CreatedDate`, `LastModifie
 	(89854080286583, _binary 0xACED000573720029636F6D2E6D6F646E6175742E6672616D65776F726B2E73657373696F6E2E5573657253657373696F6EC6D379D2ADF1911B0200075A001069735F61757468656E746963617465644A000A73657373696F6E5F6964490007757365725F69644C0005656D61696C7400124C6A6176612F6C616E672F537472696E673B4C000966697273744E616D6571007E00014C00086C6173744E616D6571007E00014C00036D61707400134C6A6176612F7574696C2F486173684D61703B787000000051B8C8897F7700000001740000740005677565737471007E0005737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000078, '2013-04-18 22:57:40', '2013-04-18 22:57:40'),
 	(91012452841973, _binary 0xACED000573720029636F6D2E6D6F646E6175742E6672616D65776F726B2E73657373696F6E2E5573657253657373696F6EC6D379D2ADF1911B0200075A001069735F61757468656E746963617465644A000A73657373696F6E5F6964490007757365725F69644C0005656D61696C7400124C6A6176612F6C616E672F537472696E673B4C000966697273744E616D6571007E00014C00086C6173744E616D6571007E00014C00036D61707400134C6A6176612F7574696C2F486173684D61703B787000000052C67CEBF9F500000001740000740005677565737471007E0005737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000078, '2013-04-18 22:58:05', '2013-04-18 22:58:05'),
 	(134918452066364, _binary 0xACED000573720029636F6D2E6D6F646E6175742E6672616D65776F726B2E73657373696F6E2E5573657253657373696F6EC6D379D2ADF1911B0200075A001069735F61757468656E746963617465644A000A73657373696F6E5F6964490007757365725F69644C0005656D61696C7400124C6A6176612F6C616E672F537472696E673B4C000966697273744E616D6571007E00014C00086C6173744E616D6571007E00014C00036D61707400134C6A6176612F7574696C2F486173684D61703B78700000007AB52668B83C00000001740000740005677565737471007E0005737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000078, '2013-04-25 19:46:43', '2013-04-25 19:46:43'),
+	(176310867738078, _binary 0xACED000573720029636F6D2E6D6F646E6175742E6672616D65776F726B2E73657373696F6E2E5573657253657373696F6EC6D379D2ADF1911B0200075A001069735F61757468656E746963617465644A000A73657373696F6E5F6964490007757365725F69644C0005656D61696C7400124C6A6176612F6C616E672F537472696E673B4C000966697273744E616D6571007E00014C00086C6173744E616D6571007E00014C00036D61707400134C6A6176612F7574696C2F486173684D61703B7870000000A05A92A43DDE00000001740000740005677565737471007E0005737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000078, '2013-05-01 20:52:21', '2013-05-01 20:52:21'),
 	(232301322124912, _binary 0xACED000573720029636F6D2E6D6F646E6175742E6672616D65776F726B2E73657373696F6E2E5573657253657373696F6EC6D379D2ADF1911B0200075A001069735F61757468656E746963617465644A000A73657373696F6E5F6964490007757365725F69644C0005656D61696C7400124C6A6176612F6C616E672F537472696E673B4C000966697273744E616D6571007E00014C00086C6173744E616D6571007E00014C00036D61707400134C6A6176612F7574696C2F486173684D61703B7870000000D346DDC93E7000000001740000740005677565737471007E0005737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000078, '2013-04-21 23:52:43', '2013-04-21 23:52:43');
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 
@@ -303,143 +437,5 @@ INSERT INTO `stringvalue` (`StringId`, `LanguageId`, `Value`) VALUES
 	(5, 2, 'código postal'),
 	(5, 3, 'מיקוד');
 /*!40000 ALTER TABLE `stringvalue` ENABLE KEYS */;
-
-
--- Dumping structure for table common.useraction
-DROP TABLE IF EXISTS `useraction`;
-CREATE TABLE IF NOT EXISTS `useraction` (
-  `UserId` int(10) NOT NULL,
-  `ActionId` int(10) NOT NULL,
-  `CreatedByUserId` int(10) NOT NULL DEFAULT '0',
-  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`UserId`,`ActionId`),
-  KEY `FK_UserAction_ActionId` (`ActionId`),
-  KEY `FK_UserAction_CreatedByUserId` (`CreatedByUserId`),
-  CONSTRAINT `FK_UserAction_ActionId` FOREIGN KEY (`ActionId`) REFERENCES `action` (`ActionId`) ON DELETE NO ACTION,
-  CONSTRAINT `FK_UserAction_CreatedByUserId` FOREIGN KEY (`CreatedByUserId`) REFERENCES `users` (`UserId`) ON DELETE NO ACTION,
-  CONSTRAINT `FK_UserAction_UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`) ON DELETE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table common.useraction: ~2 rows (approximately)
-/*!40000 ALTER TABLE `useraction` DISABLE KEYS */;
-INSERT INTO `useraction` (`UserId`, `ActionId`, `CreatedByUserId`, `CreatedDate`) VALUES
-	(1, 1, 1, '2013-02-26 11:12:16'),
-	(1, 2, 1, '2013-02-26 11:12:59'),
-	(4, 1, 4, '2013-04-18 00:19:26');
-/*!40000 ALTER TABLE `useraction` ENABLE KEYS */;
-
-
--- Dumping structure for table common.users
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `UserId` int(10) NOT NULL AUTO_INCREMENT,
-  `UserName` varchar(50) NOT NULL,
-  `FirstName` varchar(50) NOT NULL,
-  `LastName` varchar(50) NOT NULL,
-  `EmailAddress` varchar(100) NOT NULL,
-  `UserPassword` varchar(100) NOT NULL,
-  `HireDate` datetime NOT NULL,
-  `UserTypeCd` char(1) NOT NULL DEFAULT 'C',
-  `UserStatusCd` char(1) NOT NULL DEFAULT 'A',
-  `InvalidLoginAttempts` int(2) DEFAULT NULL,
-  PRIMARY KEY (`UserId`),
-  UNIQUE KEY `EmailAddress` (`EmailAddress`),
-  UNIQUE KEY `UserName` (`UserName`),
-  KEY `FK_users_usertype` (`UserTypeCd`),
-  CONSTRAINT `FK_users_usertype` FOREIGN KEY (`UserTypeCd`) REFERENCES `usertype` (`UserTypeCd`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
--- Dumping data for table common.users: ~4 rows (approximately)
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`UserId`, `UserName`, `FirstName`, `LastName`, `EmailAddress`, `UserPassword`, `HireDate`, `UserTypeCd`, `UserStatusCd`, `InvalidLoginAttempts`) VALUES
-	(1, 'guest', 'guest', 'guest', '', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2000-01-01 00:00:00', 'C', 'A', 0),
-	(2, 'jlamarche11', 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0),
-	(3, 'dcohn33', 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0),
-	(4, 'bdalgaard22', 'Ben', 'Dalgaardfasdfsa', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', '2013-02-05 18:34:51', 'C', 'A', 0);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-
-
--- Dumping structure for table common.usersecuritygroup
-DROP TABLE IF EXISTS `usersecuritygroup`;
-CREATE TABLE IF NOT EXISTS `usersecuritygroup` (
-  `UserId` int(10) NOT NULL,
-  `SecurityGroupId` int(10) NOT NULL,
-  `CreatedByUserId` int(10) NOT NULL DEFAULT '4',
-  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`UserId`,`SecurityGroupId`),
-  KEY `FK_UserSecurityGroup_SecurityGroupId` (`SecurityGroupId`),
-  KEY `FK_UserSecurityGroup_CreatedByUserId` (`CreatedByUserId`),
-  CONSTRAINT `FK_UserSecurityGroup_CreatedByUserId` FOREIGN KEY (`CreatedByUserId`) REFERENCES `users` (`UserId`),
-  CONSTRAINT `FK_UserSecurityGroup_SecurityGroupId` FOREIGN KEY (`SecurityGroupId`) REFERENCES `securitygroup` (`SecurityGroupId`),
-  CONSTRAINT `FK_UserSecurityGroup_UserId` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table common.usersecuritygroup: ~0 rows (approximately)
-/*!40000 ALTER TABLE `usersecuritygroup` DISABLE KEYS */;
-INSERT INTO `usersecuritygroup` (`UserId`, `SecurityGroupId`, `CreatedByUserId`, `CreatedDate`) VALUES
-	(3, 1, 3, '2013-04-08 22:24:18');
-/*!40000 ALTER TABLE `usersecuritygroup` ENABLE KEYS */;
-
-
--- Dumping structure for table common.usersession
-DROP TABLE IF EXISTS `usersession`;
-CREATE TABLE IF NOT EXISTS `usersession` (
-  `UserId` int(10) NOT NULL DEFAULT '1',
-  `SessionId` bigint(19) NOT NULL,
-  KEY `FK__user` (`UserId`),
-  KEY `FK__session` (`SessionId`),
-  CONSTRAINT `FK__session` FOREIGN KEY (`SessionId`) REFERENCES `session` (`SessionId`),
-  CONSTRAINT `FK__user` FOREIGN KEY (`UserId`) REFERENCES `users` (`UserId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table common.usersession: ~28 rows (approximately)
-/*!40000 ALTER TABLE `usersession` DISABLE KEYS */;
-INSERT INTO `usersession` (`UserId`, `SessionId`) VALUES
-	(1, 49011134908463),
-	(1, 48901518670645),
-	(1, 50598574804944),
-	(1, 32251260971221),
-	(1, 1421803741431),
-	(1, 84372113594917),
-	(1, 74719183675245),
-	(1, 48141645438663),
-	(1, 36718319568316),
-	(1, 47317398351750),
-	(1, 87885303489936),
-	(1, 65228519829580),
-	(1, 1518482104972),
-	(1, 21667041122018),
-	(1, 85248830870300),
-	(1, 1280943998500),
-	(1, 64647346791760),
-	(1, 31529240140173),
-	(1, 67640732791092),
-	(1, 28468652207485),
-	(1, 20197005102032),
-	(1, 89854080286583),
-	(1, 35882475430787),
-	(1, 45862402860532),
-	(1, 14002628028403),
-	(1, 91012452841973),
-	(1, 232301322124912),
-	(1, 318596625811),
-	(1, 134918452066364);
-/*!40000 ALTER TABLE `usersession` ENABLE KEYS */;
-
-
--- Dumping structure for table common.usertype
-DROP TABLE IF EXISTS `usertype`;
-CREATE TABLE IF NOT EXISTS `usertype` (
-  `UserTypeCd` char(1) NOT NULL,
-  `Description` varchar(50) NOT NULL,
-  PRIMARY KEY (`UserTypeCd`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table common.usertype: ~2 rows (approximately)
-/*!40000 ALTER TABLE `usertype` DISABLE KEYS */;
-INSERT INTO `usertype` (`UserTypeCd`, `Description`) VALUES
-	('A', 'Administrator'),
-	('C', 'Customer');
-/*!40000 ALTER TABLE `usertype` ENABLE KEYS */;
 /*!40014 SET FOREIGN_KEY_CHECKS=1 */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

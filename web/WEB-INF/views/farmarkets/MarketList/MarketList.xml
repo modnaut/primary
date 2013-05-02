@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
-	<item xsi:type="Panel" actionId="1" noPermissionEffect="disable">
+	<item xsi:type="Panel" powerId="1" noPowerEffect="disable">
 		<items>
 			<item xsi:type="DataView" itemSelector="div.market" overItemCls="over" region="center" flex="1">
 				<listener event="select" action="submit" class="com.modnaut.apps.farmarkets.MarketDetailCtrl" method="defaultAction"/>

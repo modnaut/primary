@@ -13,10 +13,10 @@ import com.modnaut.framework.utilities.SessionMethods;
 /**
  * @author Ben
  * 
- *         This Object contains specific information about the user and what they are currently doing.
+ *         This Object contains specific information about the ninja and what they are currently doing.
  * 
  */
-public class UserSession implements java.io.Serializable
+public class NinjaSession implements java.io.Serializable
 {
 	/**
 	 * generated serialVersionUID
@@ -24,7 +24,7 @@ public class UserSession implements java.io.Serializable
 	private static final long serialVersionUID = -4119815288345489125L;
 
 	private long session_id = 0;
-	private int user_id = 0;
+	private int ninja_id = 0;
 	private boolean is_authenticated = false;
 	private String email = ICommonConstants.NONE;
 	private String firstName = ICommonConstants.NONE;
@@ -32,22 +32,22 @@ public class UserSession implements java.io.Serializable
 	private HashMap<String, Object> map = new HashMap<String, Object>();
 
 	private static final String GUEST = "guest";
-	private static final String CAN_PERFORM_ACTION = "CAN_PERFORM_ACTION";
-	private static final String CAN_PERFORM_ACTIONS = "CAN_PERFORM_ACTIONS";
+	private static final String NINJA_HAS_POWER = "NINJA_HAS_POWER";
+	private static final String NINJA_HAS_POWERS = "NINJA_HAS_POWERS";
 
 	/**
 	 * 
 	 */
-	public UserSession()
+	public NinjaSession()
 	{
 		long session_id = SessionMethods.generateSessionId();
-		new UserSession(session_id);
+		new NinjaSession(session_id);
 	}
 
 	/**
 	 * @param session_id
 	 */
-	public UserSession(long session_id)
+	public NinjaSession(long session_id)
 	{
 		this.session_id = session_id;
 		this.firstName = GUEST;
@@ -71,19 +71,19 @@ public class UserSession implements java.io.Serializable
 	}
 
 	/**
-	 * @param new_user_id
+	 * @param new_ninja_id
 	 */
-	public void setUserId(int new_user_id)
+	public void setNinjaId(int new_ninja_id)
 	{
-		user_id = new_user_id;
+		ninja_id = new_ninja_id;
 	}
 
 	/**
 	 * @return
 	 */
-	public int getUserId()
+	public int getNinjaId()
 	{
-		return this.user_id;
+		return this.ninja_id;
 	}
 
 	/**
@@ -175,41 +175,41 @@ public class UserSession implements java.io.Serializable
 		return map.get(key);
 	}
 
-	public boolean canPerformAction(int actionId)
+	public boolean hasPower(int powerId)
 	{
 		HashMap<String, Object> parms = new HashMap<String, Object>();
-		parms.put(ICommonConstants.USER_ID, getUserId());
-		parms.put(ICommonConstants.ACTION_ID, actionId);
+		parms.put(ICommonConstants.NINJA_ID, getNinjaId());
+		parms.put(ICommonConstants.POWER_ID, powerId);
 
-		return ICommonConstants.LETTER_Y.equals(DatabaseMethods.getJustDataFirstRowFirstColumn(CAN_PERFORM_ACTION, ICommonConstants.COMMON, parms));
+		return ICommonConstants.LETTER_Y.equals(DatabaseMethods.getJustDataFirstRowFirstColumn(NINJA_HAS_POWER, ICommonConstants.COMMON, parms));
 	}
 
-	protected HashMap<Integer, Boolean> canPerformActions(int... actionId)
+	protected HashMap<Integer, Boolean> hasPowers(int... powerId)
 	{
-		ArrayList<Integer> actionIds = new ArrayList<Integer>();
-		for (int a : actionId)
-			actionIds.add(a);
+		ArrayList<Integer> powerIds = new ArrayList<Integer>();
+		for (int p : powerId)
+			powerIds.add(p);
 
-		return canPerformActions(actionIds);
+		return hasPowers(powerIds);
 	}
 
-	public HashMap<Integer, Boolean> canPerformActions(List<Integer> actionIds)
+	public HashMap<Integer, Boolean> hasPowers(List<Integer> powerIds)
 	{
-		HashMap<Integer, Boolean> permissions = new HashMap<Integer, Boolean>();
+		HashMap<Integer, Boolean> powers = new HashMap<Integer, Boolean>();
 
 		HashMap<String, Object> parms = new HashMap<String, Object>();
-		parms.put(ICommonConstants.USER_ID, getUserId());
-		parms.put(ICommonConstants.ACTION_IDS, StringUtils.join(actionIds, ICommonConstants.COMMA));
+		parms.put(ICommonConstants.NINJA_ID, getNinjaId());
+		parms.put(ICommonConstants.POWER_IDS, StringUtils.join(powerIds, ICommonConstants.COMMA));
 
-		ArrayList<String[]> permissionData = DatabaseMethods.getJustData(CAN_PERFORM_ACTIONS, ICommonConstants.COMMON, parms);
-		if (permissionData != null)
+		ArrayList<String[]> powerData = DatabaseMethods.getJustData(NINJA_HAS_POWERS, ICommonConstants.COMMON, parms);
+		if (powerData != null)
 		{
-			for (String[] permissionDataRecord : permissionData)
+			for (String[] powerDataRecord : powerData)
 			{
-				permissions.put(Integer.parseInt(permissionDataRecord[0]), ICommonConstants.LETTER_Y.equals(permissionDataRecord[1]));
+				powers.put(Integer.parseInt(powerDataRecord[0]), ICommonConstants.LETTER_Y.equals(powerDataRecord[1]));
 			}
 		}
 
-		return permissions;
+		return powers;
 	}
 }

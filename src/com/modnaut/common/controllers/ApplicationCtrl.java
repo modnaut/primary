@@ -32,9 +32,9 @@ public class ApplicationCtrl extends FrameworkCtrl
 	 * @param request
 	 * @param response
 	 */
-	public ApplicationCtrl(WebSession userSessionObject)
+	public ApplicationCtrl(WebSession ninjaSessionObject)
 	{
-		super(userSessionObject, null);
+		super(ninjaSessionObject, null);
 	}
 
 	/**

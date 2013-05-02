@@ -12,7 +12,7 @@ public class AddReviewCtrl extends ExtJsScreenCtrl
 	private static final Logger LOGGER = LoggerFactory.getLogger(AddReviewCtrl.class);
 
 	/**
-	 * Constructor that requires user be authenticated to see page.
+	 * Constructor that requires ninja be authenticated to see page.
 	 * 
 	 * @param webSession
 	 */

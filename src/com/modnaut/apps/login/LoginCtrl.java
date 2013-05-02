@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.controllers.ExtJsScreenCtrl;
-import com.modnaut.framework.session.UserSession;
+import com.modnaut.framework.session.NinjaSession;
 import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.utilities.SessionMethods;
 
@@ -36,11 +36,11 @@ public class LoginCtrl extends ExtJsScreenCtrl
 		String password = getParameter("Password");
 
 		// TODO - Don't want to do this. Need to keep current session alive, not overwrite it.
-		UserSession userSession = SessionMethods.authenticate(email, password, this.userSession);
-		if (userSession != null && userSession.isAuthenticated())
+		NinjaSession ninjaSession = SessionMethods.authenticate(email, password, this.ninjaSession);
+		if (ninjaSession != null && ninjaSession.isAuthenticated())
 		{
 			response.setHeader("LoginSuccessful", String.valueOf(true));
-			SessionMethods.saveSession(userSession);
+			SessionMethods.saveSession(ninjaSession);
 		}
 		else
 		{

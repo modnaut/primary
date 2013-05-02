@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.modnaut.apps.login.InsufficientPrivilegeException;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
-import com.modnaut.framework.session.UserSession;
+import com.modnaut.framework.session.NinjaSession;
 import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.session.WebSessionController;
 import com.modnaut.framework.utilities.ServerMethods;
@@ -88,12 +88,12 @@ public class ApplicationServlet extends HttpServlet
 
 		// This is where we will intercept every request and check for a valid, unexpired session.
 		WebSessionController wsController = new WebSessionController(request, response);
-		UserSession userSession = wsController.getUserSession();
+		NinjaSession ninjaSession = wsController.getNinjaSession();
 
-		if (userSession == null)
-			LOGGER.error("userSession is null.");
+		if (ninjaSession == null)
+			LOGGER.error("ninjaSession is null.");
 
-		WebSession webSession = new WebSession(request, response, userSession);
+		WebSession webSession = new WebSession(request, response, ninjaSession);
 
 		try
 		{
@@ -194,7 +194,7 @@ public class ApplicationServlet extends HttpServlet
 		}
 		catch (InvocationTargetException e)// when method called by reflection throws an Exception it ends up here
 		{
-			// Screen needs permission, but user is not logged in.
+			// Screen needs permission, but ninja is not logged in.
 			if (e.getCause() instanceof InsufficientPrivilegeException)
 			{
 				// TODO
@@ -212,7 +212,7 @@ public class ApplicationServlet extends HttpServlet
 			// SHOULD NEVER HAPPEN - will need more advanced handling as we go live
 			// In the event of an error while trying to load the page the following will occur:
 			// 1. Java stack trace containing more detailed error messages will be printed to the console
-			// 2. A basic html error page will be shown on screen by the PrintWriter object to user to let them know an error has occurred.
+			// 2. A basic html error page will be shown on screen by the PrintWriter object to ninja to let them know an error has occurred.
 			LOGGER.error(e.toString(), e);
 			sendErrorResponse(response, "An error has occurred", 3);
 

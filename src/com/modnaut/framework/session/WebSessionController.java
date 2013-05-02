@@ -43,9 +43,9 @@ public class WebSessionController
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
 	 */
-	public UserSession getUserSession()
+	public NinjaSession getNinjaSession()
 	{
-		UserSession userSession = null;
+		NinjaSession ninjaSession = null;
 		long session_id = -1;
 		Cookie cookie = null;
 		Cookie[] cookies = request.getCookies();
@@ -63,36 +63,36 @@ public class WebSessionController
 			}
 		}
 
-		// User already has a WebSession. Get it from the database.
+		// Ninja already has a WebSession. Get it from the database.
 		if (session_id > 0)
 		{
 			// TODO - check session age. Does session expire?
 
 			// Get from database and Deserialize Session object.
-			userSession = SessionMethods.getSession(session_id);
+			ninjaSession = SessionMethods.getSession(session_id);
 
 			// Not found in database!!! Must have been cleared out.
-			if (userSession == null)
+			if (ninjaSession == null)
 			{
-				int userId = 1; // guest user until they log in.
+				int ninjaId = 1; // guest ninja until they log in.
 
 				// create new Session object.
-				userSession = SessionMethods.createNewSession();
-				userSession.setUserId(userId);
+				ninjaSession = SessionMethods.createNewSession();
+				ninjaSession.setNinjaId(ninjaId);
 				// Insert into database.
-				SessionMethods.saveSession(userSession);
+				SessionMethods.saveSession(ninjaSession);
 			}
 		}
 		else
 		{
 			// No sessionId found in browser.
-			int userId = 1; // guest user until they log in.
+			int ninjaId = 1; // guest ninja until they log in.
 
 			// create new Session object.
-			userSession = SessionMethods.createNewSession();
-			userSession.setUserId(userId);
+			ninjaSession = SessionMethods.createNewSession();
+			ninjaSession.setNinjaId(ninjaId);
 			// Insert into database.
-			SessionMethods.saveSession(userSession);
+			SessionMethods.saveSession(ninjaSession);
 		}
 
 		int maxAge;
@@ -106,11 +106,11 @@ public class WebSessionController
 			maxAge = -1;
 		}
 
-		cookie = new Cookie(MODNAUT_SESSION_ID, Long.toString(userSession.getSessionId()));
+		cookie = new Cookie(MODNAUT_SESSION_ID, Long.toString(ninjaSession.getSessionId()));
 		cookie.setPath(request.getContextPath());
 		cookie.setMaxAge(maxAge); // time in seconds
 		response.addCookie(cookie);
 
-		return userSession;
+		return ninjaSession;
 	}
 }

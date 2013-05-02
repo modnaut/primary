@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.apps.login.InsufficientPrivilegeException;
 import com.modnaut.common.interfaces.ICommonConstants;
-import com.modnaut.framework.session.UserSession;
+import com.modnaut.framework.session.NinjaSession;
 import com.modnaut.framework.session.WebSession;
 
 /**
@@ -35,7 +35,7 @@ public class FrameworkCtrl
 
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
-	protected UserSession userSession;
+	protected NinjaSession ninjaSession;
 	protected WebSession webSession;
 	protected boolean needs_authentication = false;
 
@@ -57,16 +57,16 @@ public class FrameworkCtrl
 	{
 		this.request = webSession.getRequest();
 		this.response = webSession.getResponse();
-		this.userSession = webSession.getUserSession();
+		this.ninjaSession = webSession.getNinjaSession();
 		this.webSession = webSession;
 		this.needs_authentication = needs_authentication;
 
 		if (contentType != null && response != null)
 			response.setContentType(contentType);
 
-		LOGGER.debug("needs_authentication: " + needs_authentication + " isAuthenticated(): " + webSession.getUserSession().isAuthenticated());
+		LOGGER.debug("needs_authentication: " + needs_authentication + " isAuthenticated(): " + webSession.getNinjaSession().isAuthenticated());
 
-		if (needs_authentication && !webSession.getUserSession().isAuthenticated())
+		if (needs_authentication && !webSession.getNinjaSession().isAuthenticated())
 		{
 			LOGGER.debug("NEEDS TO AUTHENTICATE FIRST!!!!");
 			throw new InsufficientPrivilegeException(CLASS_NAME_PATH, CONSTRUCTOR, ICommonConstants.AUTHORIZATION_LOG, ICommonConstants.WARNING, NEEDS_AUTHENTICATION);
@@ -84,31 +84,31 @@ public class FrameworkCtrl
 		return this.webSession.getParameter(name);
 	}
 
-	protected boolean canPerformAction(int actionId)
+	protected boolean hasPower(int powerId)
 	{
-		boolean can_perform_action = false;
-		if (userSession != null)
-			can_perform_action = userSession.canPerformAction(actionId);
-		return can_perform_action;
+		boolean ninja_has_power = false;
+		if (ninjaSession != null)
+			ninja_has_power = ninjaSession.hasPower(powerId);
+		return ninja_has_power;
 	}
 
-	protected HashMap<Integer, Boolean> canPerformActions(List<Integer> actionIds)
+	protected HashMap<Integer, Boolean> hasPowers(List<Integer> powerIds)
 	{
 		HashMap<Integer, Boolean> permissions;
-		if (userSession != null)
-			permissions = userSession.canPerformActions(actionIds);
+		if (ninjaSession != null)
+			permissions = ninjaSession.hasPowers(powerIds);
 		else
 			permissions = new HashMap<Integer, Boolean>();
 
 		return permissions;
 	}
 
-	protected HashMap<Integer, Boolean> canPerformActions(int... actionId)
+	protected HashMap<Integer, Boolean> hasPowers(int... powerId)
 	{
-		ArrayList<Integer> actionIds = new ArrayList<Integer>();
-		for (int a : actionId)
-			actionIds.add(a);
+		ArrayList<Integer> powerIds = new ArrayList<Integer>();
+		for (int p : powerId)
+			powerIds.add(p);
 
-		return canPerformActions(actionIds);
+		return hasPowers(powerIds);
 	}
 }

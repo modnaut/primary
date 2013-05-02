@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
  * 
  * @author bend
  * 
- *         This Object will contain the information about the user (stored in the UserSession Object) as well as the Request and Response information.
+ *         This Object will contain the information about the ninja (stored in the NinjaSession Object) as well as the Request and Response information.
  * 
  */
 public class WebSession
@@ -17,14 +17,14 @@ public class WebSession
 	// VARIABLES
 	private HttpServletRequest request = null;
 	private HttpServletResponse response = null;
-	private UserSession userSession = null;
+	private NinjaSession ninjaSession = null;
 	private HashMap<String, String> extraParameters = null;
 
-	public WebSession(HttpServletRequest request, HttpServletResponse response, UserSession webSession)
+	public WebSession(HttpServletRequest request, HttpServletResponse response, NinjaSession webSession)
 	{
 		this.request = request;
 		this.response = response;
-		this.userSession = webSession;
+		this.ninjaSession = webSession;
 	}
 
 	public void setRequest(HttpServletRequest request)
@@ -47,14 +47,14 @@ public class WebSession
 		return this.response;
 	}
 
-	public void setUserSession(UserSession userSession)
+	public void setNinjaSession(NinjaSession ninjaSession)
 	{
-		this.userSession = userSession;
+		this.ninjaSession = ninjaSession;
 	}
 
-	public UserSession getUserSession()
+	public NinjaSession getNinjaSession()
 	{
-		return this.userSession;
+		return this.ninjaSession;
 	}
 
 	public void setExtraParameters(HashMap<String, String> extraParameters)

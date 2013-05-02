@@ -94,8 +94,8 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:attributeGroup name="Security">
-		<xs:attribute name="actionId" type="xs:int"/>
-		<xs:attribute name="noPermissionEffect" type="SecurityEffect" default="disable"/>
+		<xs:attribute name="powerId" type="xs:int"/>
+		<xs:attribute name="noPowerEffect" type="SecurityEffect" default="disable"/>
 		<xs:attribute name="requiresAuthorization" type="xs:boolean" default="false"/>
 		<xs:attribute name="noAuthorizationEffect" type="SecurityEffect" default="none"/>
 	</xs:attributeGroup>

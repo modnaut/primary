@@ -47,7 +47,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	private static final String VIEW_PATH = "WEB-INF/views";
 
 	private static final String ALL_STRING_OBJECTS = "//*[@stringCd]";
-	private static final String ALL_ITEMS_WITH_ACTION_IDS = "//*[@actionId != '']";
+	private static final String ALL_ITEMS_WITH_POWER_IDS = "//*[@powerId != '']";
 	private static final String ALL_ITEMS_REQUIRING_AUTHORIZATION = "//*[@requiresAuthorization=true]";
 
 	protected ViewMetaData viewMetaData;
@@ -64,7 +64,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	}
 
 	/**
-	 * Explicitly sets the permission of the super class whether or not a user must be authenticated.
+	 * Explicitly sets the permission of the super class whether or not a ninja must be authenticated.
 	 * 
 	 * @param webSession
 	 * @param needs_authentication
@@ -156,22 +156,22 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 
 	private void applyPermissions()
 	{
-		List<Item> list = jxPathContext.selectNodes(ALL_ITEMS_WITH_ACTION_IDS);
+		List<Item> list = jxPathContext.selectNodes(ALL_ITEMS_WITH_POWER_IDS);
 
 		if (list.size() > 0)
 		{
-			ArrayList<Integer> actionIds = new ArrayList<Integer>();
+			ArrayList<Integer> powerIds = new ArrayList<Integer>();
 			for (Item item : list)
 			{
-				actionIds.add(item.getActionId());
+				powerIds.add(item.getPowerId());
 			}
 
-			HashMap<Integer, Boolean> permissions = canPerformActions(actionIds);
+			HashMap<Integer, Boolean> permissions = hasPowers(powerIds);
 			for (Item item : list)
 			{
-				if (!permissions.get(item.getActionId()))
+				if (!permissions.get(item.getPowerId()))
 				{
-					switch (item.getNoPermissionEffect())
+					switch (item.getNoPowerEffect())
 					{
 						case DISABLE:
 							item.setDisabled(true);
