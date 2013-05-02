@@ -1,7 +1,6 @@
 Ext.define('Modnaut.controller.ViewMetaDataController', {
 	extend: 'Ext.app.Controller',
 	views: ['Modnaut.view.ViewMetaDataContainer'],
-	history: {},
 	init: function () {
 		var controller = this;
 		this.control({
@@ -33,10 +32,15 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 			SubmitForm: function(options) {
 				controller.getContainerContent(options);
 			},
-//			HistoryChange: function(token) {
-//				controller.getContainerContent(controller.history[token], true);
-//				console.log('HistoryChange', token, controller.history[token]);
-//			}
+			HistoryChange: function(token) {
+				var container = Ext.ComponentQuery.query('viewport>vmdContainer')[0];
+				controller.getContainerContent({
+					component: container,
+					parameters: {
+						hashPath: token
+					}
+				}, true);
+			}
 		});
 	},
 	safeSetLoading: function(component, value) {
@@ -129,35 +133,6 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 		var success =  function(response, action) {
 			console.log('success', arguments);
 			
-			var hashPath = action.response.getResponseHeader('HashPath');
-			if(hashPath) {
-				var hashPathParameters = {};
-				var currentHashPath = location.hash;
-				if(controller.hashPathRegex.test(currentHashPath)) {
-					var currentHashPathParameterString = controller.hashPathRegex.exec(currentHashPath)[2];
-					hashPathParameters = Ext.Object.fromQueryString(currentHashPathParameterString);
-				}
-				
-				var hashPathParameters = Ext.Object.merge(hashPathParameters, parameters);
-				
-				if(container.getForm())
-					Ext.Object.merge(hashPathParameters, container.getForm().getValues());
-					
-				
-				var deleteParameters = ['hashPath', 'Class', 'Method', 'invoke', 'contentRequestId'];
-				for(var i = 0, len = deleteParameters.length; i < len; i++) {
-					delete hashPathParameters[deleteParameters[i]];
-				}
-				for(key in hashPathParameters) {
-					if(!hashPathParameters[key])
-						delete hashPathParameters[key];
-				}
-				hashPath = hashPath + '?' + Ext.Object.toQueryString(hashPathParameters);
-				Ext.History.suspendEvents();
-				Ext.History.add(hashPath);
-				Ext.defer(Ext.History.resumeEvents, 100, Ext.History);
-			}
-			
 			var warningCode = action.response.getResponseHeader('WarningCode');
 			switch(warningCode) {
 				case '1':
@@ -204,25 +179,41 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 					}
 				}
 			} else {
-//				if(isHistoryEvent !== true) {
-//					var historyToken = Ext.Date.now();
-//					controller.history[historyToken] = options;
-//					Ext.History.suspendEvents();
-//					Ext.History.add(historyToken);
-//					Ext.defer(Ext.History.resumeEvents, 100, Ext.History);
-//				}
+				if(isHistoryEvent !== true) {
+					var hashPath = action.response.getResponseHeader('HashPath');
+					if(hashPath) {
+						var hashPathParameters = {};
+						var currentHashPath = location.hash;
+						if(controller.hashPathRegex.test(currentHashPath)) {
+							var currentHashPathParameterString = controller.hashPathRegex.exec(currentHashPath)[2];
+							hashPathParameters = Ext.Object.fromQueryString(currentHashPathParameterString);
+						}
+						
+						var hashPathParameters = Ext.Object.merge(hashPathParameters, parameters);
+						
+						if(container.getForm())
+							Ext.Object.merge(hashPathParameters, container.getForm().getValues());
+							
+						
+						var deleteParameters = ['hashPath', 'Class', 'Method', 'invoke', 'contentRequestId'];
+						for(var i = 0, len = deleteParameters.length; i < len; i++) {
+							delete hashPathParameters[deleteParameters[i]];
+						}
+						
+						hashPath = hashPath + '?' + Ext.Object.toQueryString(hashPathParameters);
+						Ext.History.suspendEvents();
+						Ext.History.add(hashPath);
+						Ext.defer(Ext.History.resumeEvents, 100, Ext.History);
+					}
+				}
 				
 				controller.safeSetLoading(container, false);
 				if(items) {
-					console.log('updating page');
 					controller.removeDescendantFormFields(container);
 					container.removeAll();
 					container.add(items);
-					console.log('updated page');
 				} else {
-					console.log('updating html');
 					container.update(html);
-					console.log('updated html');
 				}
 			}
 			

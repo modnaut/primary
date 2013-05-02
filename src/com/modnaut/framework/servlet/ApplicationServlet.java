@@ -46,6 +46,8 @@ public class ApplicationServlet extends HttpServlet
 	private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationServlet.class);
 	private static final String METHOD_NAME = "doGet";
 	private static Pattern HASHPATH_PATTERN = Pattern.compile("([^?]+)\\?(.*)");
+	private static final String INVOKE = "invoke";
+	private static final String HASH_PATH = "hashPath";
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -99,8 +101,8 @@ public class ApplicationServlet extends HttpServlet
 			String methodName = ICommonConstants.NONE;
 			HashMap<String, String> extraParameters = null;
 
-			String invoke = StringUtils.trimToEmpty(request.getParameter("invoke"));
-			String hashPath = StringUtils.trimToEmpty(request.getParameter("hashPath"));
+			String invoke = StringUtils.trimToEmpty(request.getParameter(INVOKE));
+			String hashPath = StringUtils.trimToEmpty(request.getParameter(HASH_PATH));
 
 			if (!hashPath.isEmpty())
 			{
@@ -126,6 +128,10 @@ public class ApplicationServlet extends HttpServlet
 									if (parts.length == 2)
 									{
 										extraParameters.put(parts[0], parts[1]);
+									}
+									else if (parts.length == 1)
+									{
+										extraParameters.put(parts[0], ICommonConstants.NONE);
 									}
 								}
 							}

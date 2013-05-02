@@ -4,9 +4,9 @@ Ext.application({
 	controllers: ['Modnaut.controller.ViewMetaDataController'],
 	launch: function() {
 		Ext.History.init(function(){
-//			Ext.History.on('change', function(token) {
-//				Globals.fireEvent('HistoryChange', token);
-//			});
+			Ext.History.on('change', function(token) {
+				Globals.fireEvent('HistoryChange', token);
+			});
 		});
 		
 		
