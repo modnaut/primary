@@ -17,3 +17,12 @@ properties/
 
 # Log Files #
 testFile.log
+
+
+#ExtJS Package Builds#
+web/static/extjs/resources/ext-theme-access
+web/static/extjs/resources/ext-theme-classic
+web/static/extjs/resources/ext-theme-classic-sandbox
+web/static/extjs/resources/ext-theme-gray
+web/static/extjs/resources/ext-theme-neptune
+resources/repo
