@@ -34,6 +34,12 @@
 		<xsl:apply-templates select="items"/>
 	</xsl:template>
 	
+	<xsl:template match="item[@xsi:type='FieldContainer']">
+		<xsl:call-template name="Container"/>
+		<xsl:call-template name="Labelable"/>
+		"xtype": "fieldcontainer"
+	</xsl:template>
+	
 	<xsl:template name="Tools">
 		<xsl:if test="tool">
 			"tools": [
