@@ -1,39 +1,35 @@
 <project name="primary" default="" basedir=".">
-
-<!-- ===================== Property Definitions =========================== -->
-
-  <property file="build-local.properties"/>
-  <property file="${basedir}/build.properties"/>	
-		
-<!-- ==================== Compilation Classpath =========================== -->
-
+	<!-- ===================== Property Definitions =========================== -->
+	<property file="build-local.properties"/>
+	<property file="${basedir}/build.properties"/>
+	<property name="database.url" value="jdbc:mysql://localhost:3306/"/>
+	<property name="database.userid" value="modnaut00"/>
+	<property name="database.password" value="zp4X263tTSv06On"/>
+	<property name="extjs.dir" value="${basedir}/web/static/extjs"/>
+	<property name="sencha.dir" value="${basedir}/resources/senchacmd"/>
+	<property name="ruby.dir" value="${basedir}/resources/ruby/bin"/>
+	<!-- ==================== Compilation Classpath =========================== -->
 	<path id="compile.classpath">
-	    <fileset dir="${catalina.home}/bin">
-	      <include name="*.jar"/>
-	    </fileset>
-	    <pathelement location="${catalina.home}/lib"/>
-	    <fileset dir="${catalina.home}/lib">
-	      <include name="*.jar"/>
-	    </fileset>
-	  	<pathelement location="${basedir}/web/WEB-INF/lib"/>
-		<fileset dir="${basedir}/web/WEB-INF/lib">
-	  		<include name="*.jar"/>
+		<fileset dir="${catalina.home}/bin">
+			<include name="*.jar"/>
 		</fileset>
-  	</path>
-	
-<!--  ==================== Create java classes from xsd using extjs  ==================== -->
-
+		<pathelement location="${catalina.home}/lib"/>
+		<fileset dir="${catalina.home}/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<pathelement location="${basedir}/web/WEB-INF/lib"/>
+		<fileset dir="${basedir}/web/WEB-INF/lib">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
 	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" classpathref="compile.classpath"/>
-		
-
-<!--  ==================== Create SQLQuery Classes  ==================== -->
-	
+	<target name="generate-classes" description="Generates all dynamic Java classes">
+		<antcall target="generate-sqlquery-classes"/>
+		<antcall target="generate-view-classes"/>
+	</target>
 	<target name="generate-sqlquery-classes">
 		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/SqlMetaData.xsd" destdir="src" package="com.modnaut.framework.properties.sqlmetadata"/>
 	</target>
-
-<!--  ==================== Create ViewMetaData Classes  ==================== -->
-	
 	<target name="generate-view-classes">
 		<delete file="web/WEB-INF/xsd/String.episode"/>
 		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/String.xsd" destdir="src" package="com.modnaut.framework.properties.string">
@@ -47,48 +43,69 @@
 			<arg value="web/WEB-INF/xsd/String.episode"/>
 		</xjc>
 		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/ViewMetaData.xsd" destdir="src" package="com.modnaut.framework.properties.viewmetadata">
-		  	<arg value="-extension"/>
+			<arg value="-extension"/>
 			<arg value="-b"/>
 			<arg value="web/WEB-INF/xsd/String.episode"/>
 		</xjc>
 		<delete file="web/WEB-INF/xsd/String.episode"/>
-	</target>	
-
-<!--  ==================== Generate Database Structure  ==================== -->
-	
-	<target name="generate-mysql-structure"
-			description="deletes and rebuilds mysql database structure">
-			<sql
-			    driver="com.mysql.jdbc.Driver"
-			    url="jdbc:mysql://localhost:3306/"
-			    userid="modnaut00"
-			    password="zp4X263tTSv06On">
-			    <transaction src="sql/modnaut-database.sql"/>
-			</sql>
 	</target>
-	
-<!--  ==================== Create Stored Procedures  ==================== -->
-	
-	<target name="generate-mysql-procedures"
-			description="Runs mysql procedures.  Seperate so that we can define a row delimeter without changing modnaut-database.sql">
-			<sql
-			    driver="com.mysql.jdbc.Driver"
-			    url="jdbc:mysql://localhost:3306/"
-			    userid="modnaut00"
-			    password="zp4X263tTSv06On"
-				delimiterType="row">
-				<transaction src="sql/up_AuthenticateNinja.sql"/>
-				<transaction src="sql/up_GetNinjaSession.sql"/>
-				<transaction src="sql/up_InsertUpdateSession.sql"/>
-				<transaction src="sql/up_GetAllServerAttributes.sql"/>
-				<transaction src="sql/uf_NinjaHasPower.sql"/>
-				<transaction src="sql/up_NinjaHasPower.sql"/>
-				<transaction src="sql/up_NinjaHasPowers.sql"/>
-				<transaction src="sql/uf_IsNumeric.sql"/>
-				<transaction src="sql/uf_IsInteger.sql"/>
-				<transaction src="sql/up_ParseCommaDelimited.sql"/>
-				<transaction src="sql/up_GetMultipleStringsForLanguage.sql"/>
-			</sql>
+	<target name="mysql" description="Regenerates entire MySQL structure from file">
+		<antcall target="generate-mysql-structure"/>
+		<antcall target="generate-mysql-procedures"/>
 	</target>
-		
+	<target name="generate-mysql-structure">
+		<!--deletes and rebuilds mysql database structure-->
+		<sql driver="com.mysql.jdbc.Driver" url="${database.url}" userid="${database.userid}" password="${database.password}">
+			<transaction src="sql/modnaut-database.sql"/>
+		</sql>
+	</target>
+	<target name="generate-mysql-procedures">
+		<!--Runs mysql procedures.  Seperate so that we can define a row delimeter without changing modnaut-database.sql-->
+		<sql driver="com.mysql.jdbc.Driver" url="${database.url}" userid="${database.userid}" password="${database.password}" delimiterType="row">
+			<transaction src="sql/up_AuthenticateNinja.sql"/>
+			<transaction src="sql/up_GetNinjaSession.sql"/>
+			<transaction src="sql/up_InsertUpdateSession.sql"/>
+			<transaction src="sql/up_GetAllServerAttributes.sql"/>
+			<transaction src="sql/uf_NinjaHasPower.sql"/>
+			<transaction src="sql/up_NinjaHasPower.sql"/>
+			<transaction src="sql/up_NinjaHasPowers.sql"/>
+			<transaction src="sql/uf_IsNumeric.sql"/>
+			<transaction src="sql/uf_IsInteger.sql"/>
+			<transaction src="sql/up_ParseCommaDelimited.sql"/>
+			<transaction src="sql/up_GetMultipleStringsForLanguage.sql"/>
+		</sql>
+	</target>
+	<target name="build-all-extjs-packages" description="Builds all ExtJS theme packages">
+		<antcall target="build-extjs-package">
+			<param name="package.name" value="ext-theme-access"/>
+		</antcall>
+		<antcall target="build-extjs-package">
+			<param name="package.name" value="ext-theme-classic"/>
+		</antcall>
+		<antcall target="build-extjs-package">
+			<param name="package.name" value="ext-theme-classic-sandbox"/>
+		</antcall>
+		<antcall target="build-extjs-package">
+			<param name="package.name" value="ext-theme-gray"/>
+		</antcall>
+		<antcall target="build-extjs-package">
+			<param name="package.name" value="ext-theme-neptune"/>
+		</antcall>
+	</target>
+	<target name="build-extjs-package">
+		<echo message="Building ExtJS Package ${package.name}"/>
+		<property environment="env"/>
+		<exec dir="${extjs.dir}/packages/${package.name}" executable="${sencha.dir}/sencha.exe" failonerror="false">
+			<env key="PATH" path="${env.Path}${ruby.dir}"/>
+			<arg value="--quiet"/>
+			<arg value="package"/>
+			<arg value="build"/>
+		</exec>
+		<delete dir="${extjs.dir}/resources/${package.name}"/>
+		<move todir="${extjs.dir}/resources/${package.name}">
+			<fileset dir="${extjs.dir}/packages/${package.name}/build/resources"/>
+		</move>
+		<delete dir="${extjs.dir}/packages/${package.name}/build"/>
+		<delete dir="${extjs.dir}/.build"/>
+	</target>
 </project>
