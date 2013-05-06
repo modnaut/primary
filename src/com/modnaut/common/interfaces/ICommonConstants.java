@@ -86,6 +86,7 @@ public interface ICommonConstants
 
 	// sql meta data files
 	public static final String COMMON = "CommonSqlMetaData";
+	public static final String MARKET_LINK = "MarketLinkSqlMetaData";
 
 	// html files
 	public static final String LOGIN_PAGE = "/primary/login.html";

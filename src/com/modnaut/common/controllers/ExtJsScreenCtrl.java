@@ -143,7 +143,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 				stringCds.add(string.getStringCd());
 			}
 
-			HashMap<String, String> strings = StringMethods.getStringValues(stringCds, "he");
+			HashMap<String, String> strings = StringMethods.getStringValues(stringCds, "en");
 			String stringValue = null;
 			for (com.modnaut.framework.properties.string.String string : list)
 			{

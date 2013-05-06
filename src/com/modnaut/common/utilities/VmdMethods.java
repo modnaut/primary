@@ -11,6 +11,7 @@ import com.modnaut.framework.properties.viewmetadata.AbstractField;
 import com.modnaut.framework.properties.viewmetadata.AbstractStore;
 import com.modnaut.framework.properties.viewmetadata.Alert;
 import com.modnaut.framework.properties.viewmetadata.ComboBox;
+import com.modnaut.framework.properties.viewmetadata.DataView;
 import com.modnaut.framework.properties.viewmetadata.DateField;
 import com.modnaut.framework.properties.viewmetadata.DisplayField;
 import com.modnaut.framework.properties.viewmetadata.GridPanel;
@@ -120,6 +121,8 @@ public class VmdMethods
 	{
 		if (element instanceof GridPanel)
 			populateGrid((GridPanel) element, data);
+		if (element instanceof DataView)
+			populateDataView((DataView) element, data);
 		else if (element instanceof ComboBox)
 			populateComboBox((ComboBox) element, data);
 	}
@@ -151,6 +154,26 @@ public class VmdMethods
 		if (recordSet == null)
 		{
 			recordSet = gridPanel.getData();
+		}
+
+		if (recordSet != null)
+		{
+			populateRecordSet(recordSet, data);
+		}
+	}
+
+	/**
+	 * @param dataView
+	 * @param data
+	 */
+	public static void populateDataView(DataView dataView, List<Object[]> data)
+	{
+		AbstractStore abstractStore = dataView.getStore();
+		RecordSet recordSet = null;
+		if (abstractStore instanceof Store)
+		{
+			Store store = (Store) abstractStore;
+			recordSet = store.getData();
 		}
 
 		if (recordSet != null)

@@ -1,10 +1,13 @@
 package com.modnaut.apps.farmarkets;
 
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.controllers.ExtJsScreenCtrl;
-import com.modnaut.framework.properties.viewmetadata.Panel;
+import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.framework.session.WebSession;
 
 public class MarketDetailCtrl extends ExtJsScreenCtrl
@@ -21,9 +24,15 @@ public class MarketDetailCtrl extends ExtJsScreenCtrl
 	public void defaultAction()
 	{
 		String marketId = getParameter("MarketId");
-		String search = getParameter("search");
-		Panel detailPanel = (Panel) findById("detailPanel");
-		detailPanel.getTitle().setStringCd("Searched for: '" + search + "' Market ID " + marketId);
+		HashMap<String, Object> parms = new HashMap<String, Object>();
+		parms.put("MarketId", marketId);
+		String[] marketDetails = DatabaseMethods.getJustDataFirstRow("GET_MARKET_DETAILS", ICommonConstants.MARKET_LINK, parms);
+		populateData("MarketName", marketDetails[0]);
+		populateData("Address", marketDetails[1]);
+		populateData("City", marketDetails[2]);
+		populateData("State", marketDetails[3]);
+		populateData("ZipCode", marketDetails[4]);
+		populateData("Url", marketDetails[5]);
 		marshall(viewMetaData);
 	}
 }

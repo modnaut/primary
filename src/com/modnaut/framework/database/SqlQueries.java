@@ -42,6 +42,7 @@ public class SqlQueries
 		private static final long serialVersionUID = -6540054895936607379L;
 		{
 			add(ICommonConstants.COMMON);
+			add(ICommonConstants.MARKET_LINK);
 		}
 	};
 
@@ -50,6 +51,7 @@ public class SqlQueries
 	 */
 	private static void unmarshalSqlMetaData()
 	{
+		allQueries = new HashMap<String, HashMap<String, Query>>();
 		for (String file : sqlFiles)
 		{
 			loadFile(file);
@@ -67,7 +69,6 @@ public class SqlQueries
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		String filePath = classLoader.getResource(XML_PATH).getPath();
 
-		allQueries = new HashMap<String, HashMap<String, Query>>();
 		HashMap<String, Query> hashMap = new HashMap<String, Query>();
 
 		File file = new File(filePath + fileName + XML_EXTENSION);

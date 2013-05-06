@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/SqlMetaData.xsd">
+	<query name="GET_ALL_MARKETS" action="SELECT" type="QUERY">
+		<statement value="
+			Select
+				m.MarketId
+				,m.Name
+				,a.Address1
+				,c.Name
+				,s.Abbreviation
+				,a.ZipCode
+				,Y(a.Location)
+				,X(a.Location)
+			From
+				MarketLink.Market m
+				Left Join Common.Address a on a.AddressId = m.AddressId
+				Left Join Common.City c on c.CityId = a.CityId
+				Left Join Common.State s on s.StateId = c.StateId
+				Left Join Common.Country co on co.CountryId = s.CountryId
+		"/>
+	</query>
+	<query name="GET_MARKET_DETAILS" action="SELECT" type="QUERY">
+		<statement value="
+			Select
+				m.Name
+				,a.Address1
+				,c.Name
+				,s.Abbreviation
+				,a.ZipCode
+				,m.Url
+			From
+				MarketLink.Market m
+				Left Join Common.Address a on a.AddressId = m.AddressId
+				Left Join Common.City c on c.CityId = a.CityId
+				Left Join Common.State s on s.StateId = c.StateId
+			Where
+				MarketId = ?
+		"/>
+		<parameters>
+			<parameter name="MarketId" type="INT"/>
+		</parameters>
+	</query>
+</sqlMetaData>

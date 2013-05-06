@@ -1,9 +1,13 @@
 package com.modnaut.apps.farmarkets;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.controllers.ExtJsScreenCtrl;
+import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.framework.session.WebSession;
 
 public class MarketListCtrl extends ExtJsScreenCtrl
@@ -19,6 +23,8 @@ public class MarketListCtrl extends ExtJsScreenCtrl
 
 	public void defaultAction()
 	{
+		ArrayList<String[]> allMarkets = DatabaseMethods.getJustData("GET_ALL_MARKETS", ICommonConstants.MARKET_LINK);
+		populateData("marketView", allMarkets);
 		marshall(viewMetaData);
 	}
 }

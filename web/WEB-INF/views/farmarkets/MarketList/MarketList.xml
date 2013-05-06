@@ -2,7 +2,7 @@
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
 	<item xsi:type="Panel" powerId="1" noPowerEffect="disable">
 		<items>
-			<item xsi:type="DataView" itemSelector="div.market" overItemCls="over" region="center" flex="1">
+			<item xsi:type="DataView" itemSelector="div.market" overItemCls="over" region="center" flex="1" id="marketView">
 				<listener event="select" action="submit" class="com.modnaut.apps.farmarkets.MarketDetailCtrl" method="defaultAction"/>
 				<store xsi:type="Store">
 					<model idProperty="MarketId">
@@ -12,26 +12,19 @@
 						<field name="City" type="string"/>
 						<field name="State" type="string"/>
 						<field name="ZipCode" type="string"/>
-						<field name="AverageReview" type="float"/>
+						<field name="Latitude" type="float"/>
+						<field name="Longitude" type="float"/>
 					</model>
 					<data>
 						<record>
-							<field name="MarketId" value="1"/>
-							<field name="Name" value="Miller Beach Farmer's Market"/>
-							<field name="Address" value="500 N Grand Blvd"/>
-							<field name="City" value="Gary"/>
-							<field name="State" value="IN"/>
-							<field name="ZipCode" value="46403"/>
-							<field name="AverageReview" value="4.5"/>
-						</record>
-						<record>
-							<field name="MarketId" value="2"/>
-							<field name="Name" value="St. John Farmers' Market"/>
-							<field name="Address" value="9660 Wicker Ave"/>
-							<field name="City" value="St. John"/>
-							<field name="State" value="IN"/>
-							<field name="ZipCode" value="46373"/>
-							<field name="AverageReview" value="3.5"/>
+							<field name="MarketId" value=""/>
+							<field name="Name" value=""/>
+							<field name="Address" value=""/>
+							<field name="City" value=""/>
+							<field name="State" value=""/>
+							<field name="ZipCode" value=""/>
+							<field name="Latitude" value=""/>
+							<field name="Longitude" value=""/>
 						</record>
 					</data>
 				</store>
@@ -44,7 +37,7 @@
 									<p style="margin-bottom: 0px;">{Address}, {City}, {State} {ZipCode}</p>
 								</div>
 								<div style="float: left; padding-left: 15px;">
-									<img src="https://maps.googleapis.com/maps/api/staticmap?center={Address}, {City}, {State} {ZipCode}&amp;sensor=false&amp;zoom=13&amp;size=300x300&amp;markers={Address}, {City}, {State} {ZipCode}"/>
+									<img src="https://maps.googleapis.com/maps/api/staticmap?center={Latitude},{Longitude}&amp;sensor=false&amp;zoom=13&amp;size=300x300&amp;markers={Latitude},{Longitude}"/>
 								</div>
 							</div>
 						</tpl>
