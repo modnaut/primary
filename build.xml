@@ -2,12 +2,6 @@
 	<!-- ===================== Property Definitions =========================== -->
 	<property file="build-local.properties"/>
 	<property file="${basedir}/build.properties"/>
-	<property name="database.url" value="jdbc:mysql://localhost:3306/"/>
-	<property name="database.userid" value="modnaut00"/>
-	<property name="database.password" value="zp4X263tTSv06On"/>
-	<property name="extjs.dir" value="${basedir}/web/static/extjs"/>
-	<property name="sencha.dir" value="${basedir}/resources/senchacmd"/>
-	<property name="ruby.dir" value="${basedir}/resources/ruby/bin"/>
 	<!-- ==================== Compilation Classpath =========================== -->
 	<path id="compile.classpath">
 		<fileset dir="${catalina.home}/bin">
@@ -22,7 +16,25 @@
 			<include name="*.jar"/>
 		</fileset>
 	</path>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="compile.classpath"/>
 	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" classpathref="compile.classpath"/>
+	<property name="database.url" value="jdbc:mysql://localhost:3306/"/>
+	<property name="database.userid" value="modnaut00"/>
+	<property name="database.password" value="zp4X263tTSv06On"/>
+	<condition property="isMacOS">
+	    <os family="mac"/>
+	</condition>
+	<if>
+		<equals arg1="${isMacOS}" arg2="true"/>
+		<then>
+			<property name="sencha.dir" value="${basedir}/resources/senchacmd"/>	
+		</then>
+		<else>
+			<property name="sencha.dir" value="${basedir}/resources/senchacmdmac"/>
+		</else>
+	</if>
+	<property name="extjs.dir" value="${basedir}/web/static/extjs"/>
+	<property name="ruby.dir" value="${basedir}/resources/ruby/bin"/>
 	<target name="generate-classes" description="Generates all dynamic Java classes">
 		<antcall target="generate-sqlquery-classes"/>
 		<antcall target="generate-view-classes"/>
@@ -94,13 +106,27 @@
 	</target>
 	<target name="build-extjs-package">
 		<echo message="Building ExtJS Package ${package.name}"/>
-		<property environment="env"/>
-		<exec dir="${extjs.dir}/packages/${package.name}" executable="${sencha.dir}/sencha.exe" failonerror="false">
-			<env key="PATH" path="${env.Path}${ruby.dir}"/>
-			<arg value="--quiet"/>
-			<arg value="package"/>
-			<arg value="build"/>
-		</exec>
+		<if>
+			<equals arg1="${isMacOS}" arg2="true"/>
+			<then>
+				<echo message="Building for mac"/>
+				<exec dir="${extjs.dir}/packages/${package.name}" executable="${sencha.dir}/sencha" failonerror="false" >
+					<arg value="--quiet"/>
+					<arg value="package"/>
+					<arg value="build"/>
+				</exec>
+			</then>
+			<else>
+				<echo message="Building for Windows"/>
+				<property environment="env"/>
+				<exec dir="${extjs.dir}/packages/${package.name}" executable="${sencha.dir}/sencha.exe" failonerror="false">
+					<env key="PATH" path="${env.Path}${ruby.dir}"/>
+					<arg value="--quiet"/>
+					<arg value="package"/>
+					<arg value="build"/>
+				</exec>
+			</else>
+		</if>
 		<delete dir="${extjs.dir}/resources/${package.name}"/>
 		<move todir="${extjs.dir}/resources/${package.name}">
 			<fileset dir="${extjs.dir}/packages/${package.name}/build/resources"/>

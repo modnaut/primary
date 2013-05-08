@@ -1,0 +1,384 @@
+<project name="cmd-root-plugin" basedir=".">
+
+    <target name="init-sencha-command">
+        <taskdef resource="com/sencha/ant/antlib.xml" classpath="${cmd.dir}/sencha.jar"/>
+    </target>
+
+    <target name="init-properties">
+        <property name="senchadir" value=".sencha"/>
+    </target>
+
+    <target name="init" depends="init-properties,init-sencha-command">
+        <x-script-def name="x-list-mvc-files" language="javascript">
+            <attribute name="dir"/>
+            <attribute name="property"/>
+            <![CDATA[
+                importPackage(java.lang);
+                importPackage(java.io);
+                importPackage(com.sencha.util);
+                importPackage(com.sencha.logging);
+
+                var _logger = SenchaLogManager.getLogger('x-list-mvc-files'),
+                    scanDir = attributes.get('dir'),
+                    propName  = attributes.get('property'),
+                    dirStack = [],
+                    classNames = [],
+                    processFile = function(filename) {
+                        var className = filename.replace(".js", ""),
+                            namespace = dirStack.join('.'),
+                            qualifiedName = namespace + '.' + className;
+                        if(qualifiedName.indexOf('.') == 0) {
+                            qualifiedName = qualifiedName.substring(1);
+                        }
+                        _logger.debug("Detected mvc component {}", qualifiedName);
+                        classNames.push(qualifiedName);
+                    },
+                    walkDirectory = function(scanDir) {
+                        _logger.debug("Scanning for mvc components in {}",
+                            PathUtil.getAbsolutePath(scanDir));
+                        var file, f, name,
+                            files = scanDir.listFiles();
+                        if(files) {
+                            for (f = 0; f < files.length; f++) {
+                                file = files[f];
+                                name = file.getName();
+                                _logger.debug('processing file {}',
+                                    PathUtil.getAbsolutePath(file));
+                                if(file.isDirectory()) {
+                                    dirStack.push(name);
+                                    walkDirectory(file);
+                                    dirStack.pop();
+                                } else {
+                                    if(name.endsWith('.js')) {
+                                        processFile(name);
+                                    }
+                                }
+                            }
+                        }
+                    };
+
+                walkDirectory(new File(scanDir));
+                classNames.sort();
+                project.setProperty(propName, classNames.join(','));
+            ]]>
+        </x-script-def>
+
+    </target>
+
+    <target name="copy-framework-to-workspace-impl">
+        <propertyfile file="${args.path}/${senchadir}/workspace/sencha.cfg">
+            <entry type="string"
+                   operation="="
+                   key="workspace.cmd.version" 
+                   value="${cmd.version}"/>
+        </propertyfile>
+    </target>
+    <target name="-before-copy-framework-to-workspace"/>
+    <target name="-after-copy-framework-to-workspace"/>
+    <target name="copy-framework-to-workspace"
+            depends="init,
+                     -before-copy-framework-to-workspace,
+                     copy-framework-to-workspace-impl,
+                     -after-copy-framework-to-workspace"
+            unless="args.skipCopy"/>
+
+    <target name="generate-workspace-impl" unless="args.skipCreate">
+        <echo>generating into ${args.path} from ${cmd.config.dir}/templates/workspace</echo>
+        <mkdir dir="${args.path}/packages"/>
+        <x-generate dir="${cmd.config.dir}/templates/workspace"
+                    todir="${args.path}">
+            <param name="senchadir" value="${senchadir}"/>
+        </x-generate>
+    </target>
+    <target name="-before-generate-workspace"/>
+    <target name="-after-generate-workspace"/>
+    <target name="generate-workspace"
+            depends="init,
+                     -before-generate-workspace,
+                     generate-workspace-impl,
+                     copy-framework-to-workspace,
+                     -after-generate-workspace"/>
+
+
+    <target name="generate-app-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="-before-generate-app"/>
+    <target name="-after-generate-app"/>
+    <target name="generate-app"
+            depends="init,-before-generate-app,generate-app-impl,-after-generate-app"/>
+
+    <!-- ****************************************************************** -->
+
+    <target name="generate-package-impl">
+        <echo>Generating package ${args.name} of type ${args.type} to ${args.path}</echo>
+        <local name="ext.rel.path"/>
+        <local name="touch.rel.path"/>
+        
+        <x-get-relative-path
+            from="${args.path}"
+            to="${ext.dir}"
+            property="ext.rel.path"/>
+        
+        <x-get-relative-path
+            from="${args.path}"
+            to="${touch.dir}"
+            property="touch.rel.path"/>
+      
+        <x-generate dir="${cmd.dir}/templates/package" todir="${args.path}"
+                    store="${args.path}/${senchadir}/package/codegen.json"
+                    basedir="${args.path}">
+            <param name="pkgName" value="${args.name}"/>
+            <param name="pkgType" value="${args.type}"/>
+            <param name="extRelPath" value="${ext.rel.path}"/>
+            <param name="touchRelPath" value="${touch.rel.path}"/>
+            <param name="senchadir" value="${senchadir}"/>
+        </x-generate>
+
+        <propertyfile file="${args.path}/${senchadir}/package/sencha.cfg">
+            <entry type="string"
+                   operation="="
+                   key="package.cmd.version" 
+                   value="${cmd.version}"/>
+        </propertyfile>
+    </target>
+    <target name="-before-generate-package"/>
+    <target name="-after-generate-package"/>
+    <target name="generate-package"
+            depends="init,-before-generate-package,generate-package-impl,-after-generate-package"/>
+
+    <!-- ****************************************************************** -->
+
+    <target name="generate-theme-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="-before-generate-theme"/>
+    <target name="-after-generate-theme"/>
+    <target name="generate-theme"
+            depends="init,-before-generate-theme,generate-theme-impl,-after-generate-theme"/>
+
+    <target name="generate-controller-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+
+    <target name="-before-generate-controller"/>
+    <target name="-after-generate-controller"/>
+    <target name="generate-controller"
+            depends="init,-before-generate-controller,generate-controller-impl,-after-generate-controller"/>
+
+    <target name="generate-profile-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="-before-generate-profile"/>
+    <target name="-after-generate-profile"/>
+    <target name="generate-profile"
+            depends="init,-before-generate-profile,generate-profile-impl,-after-generate-profile"/>
+
+
+    <target name="generate-model-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="-before-generate-model"/>
+    <target name="-after-generate-model"/>
+    <target name="generate-model"
+            depends="init,-before-generate-model,generate-model-impl,-after-generate-model"/>
+
+    <target name="generate-form-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="-before-generate-form"/>
+    <target name="-after-generate-form"/>
+    <target name="generate-form"
+            depends="init,-before-generate-form,generate-form-impl,-after-generate-form"/>
+
+
+    <target name="generate-view-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="-before-generate-view"/>
+    <target name="-after-generate-view"/>
+    <target name="generate-view"
+            depends="init,-before-generate-view,generate-view-impl,-after-generate-view"/>
+
+    <target name="app-build-impl">
+        <local name="bld-clean"/>
+        <condition property="bld-clean" value="clean">
+            <isset property="args.clean"/>
+        </condition>
+        <property name="bld-clean" value=""/>
+
+        <x-sencha-command dir="${app.dir}">
+            ant
+                ${args.environment}
+                ${bld-clean}
+                build
+        </x-sencha-command>
+    </target>
+    <target name="-before-app-build"/>
+    <target name="-after-app-build"/>
+    <target name="app-build"
+            depends="init,-before-app-build,app-build-impl,-after-app-build"/>
+
+    <target name="pkg-build-impl">
+        <!--default some variables to empty string if not supplied-->
+        <property name="package.base.names" value=""/>
+        <property name="package.requires.names" value=""/>
+
+        <local name="bld-clean"/>
+        <condition property="bld-clean" value="clean">
+            <isset property="args.clean"/>
+        </condition>
+        <property name="bld-clean" value=""/>
+    
+        <x-sencha-command dir="${package.dir}">
+            ant
+                ${bld-clean}
+                build
+        </x-sencha-command>
+    </target>
+    <target name="-before-pkg-build"/>
+    <target name="-after-pkg-build"/>
+    <target name="pkg-build"
+            depends="init,-before-pkg-build,pkg-build-impl,-after-pkg-build"/>
+
+
+    <target name="app-upgrade-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="-before-app-upgrade"/>
+    <target name="-after-app-upgrade"/>
+    <target name="app-upgrade"
+            depends="init,-before-app-upgrade,app-upgrade-impl,-after-app-upgrade"/>
+
+    <target name="pkg-upgrade-impl">
+        <echo>Upgrading package ${args.name} ...</echo>
+        <local name="ext.rel.path"/>
+        <local name="touch.rel.path"/>
+        
+        <x-get-relative-path from="${args.path}" to="${ext.dir}"
+                             property="ext.rel.path"/>
+        
+        <x-get-relative-path from="${args.path}" to="${touch.dir}"
+                             property="touch.rel.path"/>
+
+        <x-generate dir="${cmd.dir}/templates/package" todir="${args.path}"
+                    store="${args.path}/${senchadir}/package/codegen.json"
+                    basedir="${args.path}">
+            <param name="pkgName" value="${args.name}"/>
+            <param name="pkgType" value="${args.type}"/>
+            <param name="extRelPath" value="${ext.rel.path}"/>
+            <param name="touchRelPath" value="${touch.rel.path}"/>
+            <param name="senchadir" value="${senchadir}"/>
+        </x-generate>
+
+        <propertyfile file="${args.path}/${senchadir}/package/sencha.cfg">
+            <entry type="string"
+                   operation="="
+                   key="package.cmd.version" 
+                   value="${cmd.version}"/>
+        </propertyfile>
+    </target>
+    <target name="-before-pkg-upgrade"/>
+    <target name="-after-pkg-upgrade"/>
+    <target name="pkg-upgrade"
+            depends="init,-before-pkg-upgrade,pkg-upgrade-impl,-after-pkg-upgrade"/>
+
+    <target name="app-resolve-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="-before-app-resolve"/>
+    <target name="-after-app-resolve"/>
+    <target name="app-resolve"
+            depends="init,-before-app-resolve,app-resolve-impl,-after-app-resolve"/>
+
+    <target name="app-refresh-impl">
+        <fail>This is the default implementation from Sencha CMD and must be overriden by the framework.</fail>
+    </target>
+    <target name="-before-app-refresh"/>
+    <target name="-after-app-refresh"/>
+    <target name="app-refresh"
+            depends="init,-before-app-refresh,app-refresh-impl,-after-app-refresh"/>
+    
+    <!-- 
+    TODO: evaluate the option of using a class path scope (minus resolveDependencies)
+    to find the appropriate classes in the specified directory
+    -->
+    
+    <!-- 
+        Adds mvc class references to the main app.js script
+    -->
+    <macrodef name="x-app-update">
+        <attribute name="tplpath"/>
+        <attribute name="appjspath"/>
+        <attribute name="appdir"/>
+        <attribute name="appname"/>
+        <attribute name="legacypath" default="no-legacy"/>
+        <sequential>
+            <echo>Updating @{appjspath} mvc references</echo>
+            <local name="models"/>
+            <local name="views"/>
+            <local name="controllers"/>
+            <local name="stores"/>
+            <local name="framework.rel.path"/>
+            <local name="framework.workspace.path"/>
+            <property name="framework.workspace.path" 
+                      value="--unset--"/>
+
+            <script language="javascript">
+                <![CDATA[ 
+                    var fwName = project.getProperty("framework.name") + '',
+                        fwDir = project.getProperty(fwName + ".dir") + '';
+                    if(fwDir && (fwDir != 'null')) {
+                        project.setProperty("framework.workspace.path", fwDir);
+                    }
+                ]]>
+            </script>
+
+            <if>
+                <equals arg1="${framework.workspace.path}" arg2="--unset--"/>
+                <then>
+                    <property name="framework.rel.path" 
+                              value="${framework.path}"/>
+                </then>
+                <else>
+                    <x-get-relative-path
+                        from="@{appdir}"
+                        to="${framework.workspace.path}"
+                        property="framework.rel.path"/>
+                </else>
+            </if>
+
+            <x-list-mvc-files dir="@{appdir}/app/model" 
+                              property="models"/>
+
+            <x-list-mvc-files dir="@{appdir}/app/view" 
+                              property="views"/>
+
+            <x-list-mvc-files dir="@{appdir}/app/controller" 
+                              property="controllers"/>
+
+            <x-list-mvc-files dir="@{appdir}/app/store" 
+                              property="stores"/>
+
+
+            <echo>Detected models       : ${models}</echo>
+            <echo>Detected views        : ${views}</echo>
+            <echo>Detected controllers  : ${controllers}</echo>
+            <echo>Detected stores       : ${stores}</echo>
+
+            <x-generate file="@{tplpath}/@{appjspath}.tpl.merge" 
+                        tofile="@{appdir}/@{appjspath}"
+                        store="@{appdir}/${senchadir}/app/codegen.json"
+                        basedir="@{appdir}"
+                        original="@{legacypath}">
+                <param name="appName" value="@{appname}"/>
+                <param name="frameworkPath" value="${framework.rel.path}"/>
+                <param name="appModels" value="${models}"/>
+                <param name="appViews" value="${views}"/>
+                <param name="appControllers" value="${controllers}"/>
+                <param name="appStores" value="${stores}"/>
+            </x-generate>
+        </sequential>
+    </macrodef>
+    
+</project>
