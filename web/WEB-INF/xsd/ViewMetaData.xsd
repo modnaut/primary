@@ -269,10 +269,10 @@
 			<xs:element name="parameter" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="action" type="ActionType" use="required"/>
-		<xs:attribute name="class" type="xs:string" use="optional"/>
+		<xs:attribute name="Class" type="xs:string" use="optional"/>
 		<xs:attribute name="event" type="EventType" use="required"/>
 		<xs:attribute name="itemsToUpdate" type="xs:string"/>
-		<xs:attribute name="method" type="xs:string" use="optional"/>
+		<xs:attribute name="Method" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ImageSpec">
 		<xs:attribute name="path" type="xs:string" use="required"/>

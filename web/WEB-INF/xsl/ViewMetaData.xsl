@@ -153,12 +153,12 @@
 				actionType: <xsl:value-of select="mn:wrap-string(@action)"/>,
 				itemsToUpdate: <xsl:value-of select="mn:wrap-string(@itemsToUpdate)"/>,
 				parameters: {
-					<xsl:if test="@class != ''">
-						"Class": <xsl:value-of select="mn:wrap-string(@class)"/>
-						<xsl:if test="@method != '' or parameter">,</xsl:if>
+					<xsl:if test="@Class != ''">
+						"Class": <xsl:value-of select="mn:wrap-string(@Class)"/>
+						<xsl:if test="@Method != '' or parameter">,</xsl:if>
 					</xsl:if>
-					<xsl:if test="@method != ''">
-						"Method": <xsl:value-of select="mn:wrap-string(@method)"/>
+					<xsl:if test="@Method != ''">
+						"Method": <xsl:value-of select="mn:wrap-string(@Method)"/>
 						<xsl:if test="parameter">,</xsl:if>
 					</xsl:if>
 					<xsl:for-each select="parameter">

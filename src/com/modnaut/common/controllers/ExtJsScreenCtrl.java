@@ -14,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,11 +31,14 @@ import com.modnaut.common.utilities.VmdMethods;
 import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.viewmetadata.AbstractField;
+import com.modnaut.framework.properties.viewmetadata.AjaxProxy;
 import com.modnaut.framework.properties.viewmetadata.Item;
+import com.modnaut.framework.properties.viewmetadata.Listener;
 import com.modnaut.framework.properties.viewmetadata.NotificationType;
 import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
 import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.utilities.ServerMethods;
+import com.modnaut.framework.utilities.UrlMethods;
 
 /**
  * 
@@ -59,6 +63,8 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	private static final String ALL_STRING_OBJECTS = "//*[@stringCd]";
 	private static final String ALL_ITEMS_WITH_POWER_IDS = "//*[@powerId != '']";
 	private static final String ALL_ITEMS_REQUIRING_AUTHORIZATION = "//*[@requiresAuthorization=true]";
+	private static final String ALL_ELEMENTS_WITH_CLASS = "//*[@clazz]";
+	private static final String ALL_ELEMENTS_WITH_METHOD = "//*[@method]";
 
 	protected ViewMetaData viewMetaData;
 	protected JXPathContext jxPathContext;
@@ -162,6 +168,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	{
 		getStringValues();
 		restrictByPower();
+		encryptClassAndMethod();
 
 		try
 		{
@@ -225,6 +232,47 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 				}
 			}
 		}
+	}
+
+	private void encryptClassAndMethod()
+	{
+		StopWatch sw = new StopWatch();
+		sw.start();
+		List<Object> elementsWithClass = jxPathContext.selectNodes(ALL_ELEMENTS_WITH_CLASS);
+		for (Object element : elementsWithClass)
+		{
+			if (element instanceof Listener)
+			{
+				Listener listener = (Listener) element;
+				if (!StringUtils.isEmpty(listener.getClazz()))
+					listener.setClazz(UrlMethods.encrypt(listener.getClazz()));
+			}
+			else if (element instanceof AjaxProxy)
+			{
+				AjaxProxy proxy = (AjaxProxy) element;
+				if (!StringUtils.isEmpty(proxy.getClazz()))
+					proxy.setClazz(UrlMethods.encrypt(proxy.getClazz()));
+			}
+		}
+
+		List<Object> elementsWithMethod = jxPathContext.selectNodes(ALL_ELEMENTS_WITH_METHOD);
+		for (Object element : elementsWithMethod)
+		{
+			if (element instanceof Listener)
+			{
+				Listener listener = (Listener) element;
+				if (!StringUtils.isEmpty(listener.getMethod()))
+					listener.setMethod(UrlMethods.encrypt(listener.getMethod()));
+			}
+			else if (element instanceof AjaxProxy)
+			{
+				AjaxProxy proxy = (AjaxProxy) element;
+				if (!StringUtils.isEmpty(proxy.getMethod()))
+					proxy.setMethod(UrlMethods.encrypt(proxy.getMethod()));
+			}
+		}
+		sw.stop();
+		LOGGER.debug("Encryption of Class and Method took {}", sw.getTime());
 	}
 
 	public void marshallStoreJson(ArrayList<String[]> data)

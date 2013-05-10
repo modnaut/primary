@@ -3,7 +3,7 @@
 	<item xsi:type="Panel" powerId="1" noPowerEffect="disable">
 		<items>
 			<item xsi:type="DataView" itemSelector="div.market" overItemCls="over" region="center" flex="1" id="marketView">
-				<listener event="select" action="submit" class="com.modnaut.apps.farmarkets.MarketDetailCtrl" method="defaultAction"/>
+				<listener event="select" action="submit" Class="com.modnaut.apps.farmarkets.MarketDetailCtrl" Method="defaultAction"/>
 				<store xsi:type="Store">
 					<model idProperty="MarketId">
 						<field name="MarketId" type="int"/>

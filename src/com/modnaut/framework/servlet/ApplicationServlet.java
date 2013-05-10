@@ -165,6 +165,9 @@ public class ApplicationServlet extends HttpServlet
 
 			if (!className.equals(ICommonConstants.NONE) && !methodName.equals(ICommonConstants.NONE))
 			{
+				className = UrlMethods.decrypt(className);
+				methodName = UrlMethods.decrypt(methodName);
+
 				if (extraParameters != null && webSession != null)
 					webSession.setExtraParameters(extraParameters);
 
