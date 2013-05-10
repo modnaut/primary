@@ -315,10 +315,16 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="HTML">
+		<xs:sequence>
+			<xs:any processContents="skip" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
 	<xs:complexType name="Container">
 		<xs:complexContent>
 			<xs:extension base="Item">
 				<xs:sequence>
+					<xs:element name="html" type="HTML" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="items" type="ItemSet" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="layout" type="AbstractLayout" minOccurs="0" maxOccurs="1"/>
 				</xs:sequence>
@@ -326,7 +332,6 @@
 				<xs:attribute name="border" type="xs:string"/>
 				<xs:attribute name="cls" type="xs:string"/>
 				<xs:attribute name="columnWidth" type="xs:string"/>
-				<xs:attribute name="html" type="xs:string"/>
 				<xs:attribute name="margin" type="xs:string"/>
 				<xs:attribute name="minHeight" type="xs:int"/>
 				<xs:attribute name="maxHeight" type="xs:int"/>

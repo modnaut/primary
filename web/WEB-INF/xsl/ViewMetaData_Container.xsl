@@ -22,7 +22,9 @@
 		<xsl:value-of select="mn:attribute(., 'border', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'cls', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'columnWidth', ',')"/>
-		<xsl:value-of select="mn:attribute(., 'html', ',')"/>
+		<xsl:if test="html">
+			"html": "<xsl:for-each select="html/*"><xsl:value-of select="mn:stringify-element(.)"/></xsl:for-each>",
+		</xsl:if>
 		<xsl:value-of select="mn:attribute(., 'margin', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'minHeight', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'maxHeight', ',')"/>
