@@ -9,7 +9,7 @@
 				<fieldLabel stringCd="Password"/>
 			</item>
 			<item xsi:type="Button" id="SubmitAction" iconCls="icon-application_view_list">
-				<listener event="click" action="submit" class="com.modnaut.apps.login.LoginCtrl" method="submit"/>
+				<listener event="click" action="submit" Class="com.modnaut.apps.login.LoginCtrl" Method="submit"/>
 				<text stringCd="Submit"/>
 				<tooltip stringCd="This is not finished. It will always take you to the Login page right now."/>
 			</item>

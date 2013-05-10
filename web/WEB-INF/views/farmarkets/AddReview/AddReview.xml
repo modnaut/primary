@@ -8,7 +8,7 @@
 						<fieldLabel stringCd="Review"/>
 					</item>
 					<item xsi:type="Button" id="SubmitAction" iconCls="icon-application_view_list">
-						<listener event="click" action="submit" class="com.modnaut.apps.farmarkets.AddReviewCtrl" method="defaultAction"/>
+						<listener event="click" action="submit" Class="com.modnaut.apps.farmarkets.AddReviewCtrl" Method="defaultAction"/>
 						<text stringCd="Submit"/>
 						<tooltip stringCd="Takes you back to defaultAction."/>
 					</item>

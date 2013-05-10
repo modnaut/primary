@@ -23,11 +23,11 @@
 						<fieldLabel stringCd="URL"/>
 					</item>
 					<item xsi:type="Button" id="LoginAction" iconCls="icon-application_view_list">
-						<listener event="click" action="submit" class="com.modnaut.apps.login.LoginCtrl" method="defaultAction"/>
+						<listener event="click" action="submit" Class="com.modnaut.apps.login.LoginCtrl" Method="defaultAction"/>
 						<text stringCd="Login"/>
 					</item>
 					<item xsi:type="Button" id="AddReviewAction" iconCls="icon-application_view_list">
-						<listener event="click" action="submit" class="com.modnaut.apps.farmarkets.AddReviewCtrl" method="defaultAction"/>
+						<listener event="click" action="submit" Class="com.modnaut.apps.farmarkets.AddReviewCtrl" Method="defaultAction"/>
 						<text stringCd="Add Review"/>
 						<tooltip stringCd="You must be logged in for this to work."/>
 					</item>
