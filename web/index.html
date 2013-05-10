@@ -1,7 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-		<meta http-equiv="refresh" content="0;url=/ApplicationServlet"/>
+		<script type="text/javascript" src="/static/touch/sencha-touch.js"></script>
+		<script type="text/javascript">
+			Ext.onReady(function(){
+				if(Ext.os.is('Desktop')) {
+					window.location = '/ApplicationServlet';
+				} else {
+					window.location = '/static/touch/Modnaut';
+				}
+			});
+		</script>
 	</head>
 	<body>
 	</body>

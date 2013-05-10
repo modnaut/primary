@@ -1,0 +1,12 @@
+{
+	"markets": [{
+		"marketId": null,
+		"name": null,
+		"address1": null,
+		"city": null,
+		"state": null,
+		"zip": null,
+		"latitude": null,
+		"longitude": null
+	}]
+}

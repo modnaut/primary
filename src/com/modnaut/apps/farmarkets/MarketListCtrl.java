@@ -27,4 +27,12 @@ public class MarketListCtrl extends ExtJsScreenCtrl
 		populateData("marketView", allMarkets);
 		marshall(viewMetaData);
 	}
+
+	public void getMarketsJson()
+	{
+		unmarshallJson("Markets.json");
+		ArrayList<String[]> allMarkets = DatabaseMethods.getJustData("GET_ALL_MARKETS", ICommonConstants.MARKET_LINK);
+		populateDataJson("markets", allMarkets);
+		marshall(json);
+	}
 }

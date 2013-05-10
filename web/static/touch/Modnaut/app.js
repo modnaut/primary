@@ -28,10 +28,17 @@ Ext.application({
     ],
 
     views: [
-        'Main'
+        'Home'
     ],
     
-    profiles: ['Phone', 'Tablet'],
+    models: [
+        'Market'
+	],
+    
+    stores: [
+        'Markets'
+	],
+    
 
     icon: {
         '57': 'resources/icons/Icon.png',
@@ -52,76 +59,8 @@ Ext.application({
     },
 
     launch: function() {
-        // Destroy the #appLoadingIndicator element
         Ext.fly('appLoadingIndicator').destroy();
-
-        Ext.create("Ext.tab.Panel", {
-            fullscreen: true,
-            tabBarPosition: 'bottom',
-            items: [{
-            	title: 'Contact',
-            	iconCls: 'user',
-            	xtype: 'formpanel',
-            	url: '/ApplicationServlet',
-            	baseParams: {
-            		Class: 'com.modnaut.apps.mobile.ContactUsCtrl',
-            		Method: 'submitMobile'
-            	},
-            	layout: 'vbox',
-            	items: [{
-            		xtype: 'fieldset',
-            		title: 'Contact Us',
-            		instructions: '(email address is optional)',
-            		items: [{
-            			xtype: 'textfield',
-            			label: 'Name'
-            		}, {
-            			xtype: 'emailfield',
-            			label: 'Email'
-            		}, {
-            			xtype: 'textareafield',
-            			label: 'Message'
-            		}]
-            	}, {
-            		xtype: 'button',
-            		text: 'Send',
-            		ui: 'confirm',
-            		handler: function() {
-            			this.up('formpanel').submit();
-            		}
-            	}]
-            }, {
-					xtype: 'nestedlist',
-					title: 'Blog',
-					iconCls: 'star',
-					displayField: 'title',
-					store: {
-						type: 'tree',
-						fields: ['title', 'link', 'author', 'contentSnippet', 'content', {name: 'leaf', defaultValue: true}],
-						root: {
-							leaf: false
-						},
-						proxy: {
-							type: 'jsonp',
-							url: 'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=http://feeds.feedburner.com/SenchaBlog',
-							reader: {
-								type: 'json',
-								rootProperty: 'responseData.feed.entries'
-							}
-						}
-					},
-					detailCard: {
-						xtype: 'panel',
-						scrollable: true,
-						styleHtmlContent: true
-					},
-					listeners: {
-						itemtap: function(nestedList, list, index, element, node) {
-							this.getDetailCard().setHtml(node.get('content'));
-						}
-					}
-            }]
-        });
+        Ext.Viewport.add(Ext.create('Modnaut.view.Home'));
     },
 
     onUpdated: function() {

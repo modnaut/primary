@@ -1,24 +1,30 @@
 package com.modnaut.common.controllers;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.common.utilities.EnrichableException;
+import com.modnaut.common.utilities.JsonMethods;
 import com.modnaut.common.utilities.StringMethods;
 import com.modnaut.common.utilities.VmdMethods;
 import com.modnaut.framework.pools.JaxbPool;
@@ -42,9 +48,13 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 {
 	// logging
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExtJsScreenCtrl.class);
+	private static final String CLASS_NAME_PATH = ExtJsScreenCtrl.class.getCanonicalName();
+	private static final String MARSHAL_JSON = "marshall(json)";
+	private static final String UNMARSHAL_JSON = "unmarshallJson";
 
 	private static final String VIEW_META_DATA_FILE = "ViewMetaData.xsl";
 	private static final String VIEW_PATH = "WEB-INF/views";
+	private static final String JSON_PATH = "WEB-INF/json";
 
 	private static final String ALL_STRING_OBJECTS = "//*[@stringCd]";
 	private static final String ALL_ITEMS_WITH_POWER_IDS = "//*[@powerId != '']";
@@ -52,6 +62,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 
 	protected ViewMetaData viewMetaData;
 	protected JXPathContext jxPathContext;
+	protected Map json;
 
 	/**
 	 * Implicitly sets the permission of the superclass to not needs authentication.
@@ -107,6 +118,37 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 		}
 
 		return viewMetaData;
+	}
+
+	protected Map unmarshallJson(String jsonFileName)
+	{
+		try
+		{
+			Collection<File> files = FileUtils.listFiles(new File(ServerMethods.getRealPath() + JSON_PATH), null, true);
+			String absoluteFilePath = ICommonConstants.NONE;
+			Iterator<File> iterator = files.iterator();
+			while (iterator.hasNext())
+			{
+				File file = iterator.next();
+				if (file.getName().equals(jsonFileName))
+					absoluteFilePath = file.getAbsolutePath();
+			}
+			if (!absoluteFilePath.isEmpty())
+			{
+				String jsonString = IOUtils.toString(new FileInputStream(absoluteFilePath));
+				if (jsonString != null)
+				{
+					ObjectMapper mapper = new ObjectMapper();
+					json = mapper.readValue(jsonString, Map.class);
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			throw new EnrichableException(CLASS_NAME_PATH, UNMARSHAL_JSON, ICommonConstants.JSON_LOG, ICommonConstants.FATAL, "Error unmarshalling JSON file");
+		}
+
+		return json;
 	}
 
 	/**
@@ -308,5 +350,24 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 		}
 
 		return isNotEmpty;
+	}
+
+	protected boolean populateDataJson(String id, List data)
+	{
+		return JsonMethods.populateData(json, id, data);
+	}
+
+	protected void marshall(Map json)
+	{
+		ObjectMapper mapper = new ObjectMapper();
+		try
+		{
+			mapper.writeValue(response.getOutputStream(), json);
+		}
+		catch (Exception e)
+		{
+			throw new EnrichableException(CLASS_NAME_PATH, MARSHAL_JSON, ICommonConstants.JSON_LOG, ICommonConstants.FATAL, "", e);
+		}
+
 	}
 }
