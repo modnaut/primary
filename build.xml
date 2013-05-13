@@ -110,7 +110,8 @@
 			<equals arg1="${isMacOS}" arg2="true"/>
 			<then>
 				<echo message="Building for mac"/>
-				<exec dir="${extjs.dir}/packages/${package.name}" executable="${sencha.dir}/sencha" failonerror="false" >
+				<echo message="Directory: ${sencha.dir}"/>
+				<exec dir="${extjs.dir}/packages/${package.name}" executable="${sencha.dir}mac/sencha" failonerror="false" >
 					<arg value="--quiet"/>
 					<arg value="package"/>
 					<arg value="build"/>
