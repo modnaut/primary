@@ -33,6 +33,10 @@ public class FrameworkCtrl
 	private static final String CONSTRUCTOR = "CONSTRUCTOR";
 	private static final String NEEDS_AUTHENTICATION = "Needs authentication.";
 
+	// constants
+	protected static final String NINJA_ID = "NinjaId";
+	protected static final String SESSION_ID = "SessionId";
+
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
 	protected NinjaSession ninjaSession;
@@ -110,5 +114,13 @@ public class FrameworkCtrl
 			powerIds.add(p);
 
 		return hasPowers(powerIds);
+	}
+
+	protected HashMap<String, Object> getDefaultParms()
+	{
+		HashMap<String, Object> parms = new HashMap<String, Object>();
+		parms.put(NINJA_ID, ninjaSession.getNinjaId());
+		parms.put(SESSION_ID, ninjaSession.getSessionId());
+		return parms;
 	}
 }
