@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.DatabaseMethods;
+import com.modnaut.framework.database.SqlQueries.QUERY_FILE;
 import com.modnaut.framework.session.WebSession;
 
 public class UrlMethods
@@ -44,7 +45,7 @@ public class UrlMethods
 		parms.put(ICommonConstants.CLASS, className);
 		parms.put(ICommonConstants.METHOD, methodName);
 
-		String hashPath = DatabaseMethods.getJustDataFirstRowFirstColumn("GET_HASHPATH_BY_CLASS_AND_METHOD", ICommonConstants.COMMON, parms);
+		String hashPath = DatabaseMethods.getJustDataFirstRowFirstColumn("GET_HASHPATH_BY_CLASS_AND_METHOD", QUERY_FILE.COMMON, parms);
 
 		if (!StringUtils.isEmpty(hashPath))
 		{
@@ -56,7 +57,7 @@ public class UrlMethods
 	{
 		HashMap<String, Object> parms = new HashMap<String, Object>();
 		parms.put("HashPath", hashPath);
-		return DatabaseMethods.getJustDataFirstRow("GET_CLASS_AND_METHOD_FROM_HASHPATH", ICommonConstants.COMMON, parms);
+		return DatabaseMethods.getJustDataFirstRow("GET_CLASS_AND_METHOD_FROM_HASHPATH", QUERY_FILE.COMMON, parms);
 	}
 
 	public static String encrypt(String string)

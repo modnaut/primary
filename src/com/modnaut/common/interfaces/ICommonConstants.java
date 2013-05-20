@@ -84,10 +84,6 @@ public interface ICommonConstants
 	public static final String CONTENT_TYPE_HTML = "text/html";
 	public static final String CONTENT_TYPE_JSON = "application/json";
 
-	// sql meta data files
-	public static final String COMMON = "CommonSqlMetaData";
-	public static final String MARKET_LINK = "MarketLinkSqlMetaData";
-
 	// html files
 	public static final String LOGIN_PAGE = "/primary/login.html";
 	public static final String INVALID_LOGIN_PAGE = "/primary/invalid_login.html";

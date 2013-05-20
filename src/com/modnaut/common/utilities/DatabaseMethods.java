@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.framework.database.JdbcConnection;
 import com.modnaut.framework.database.SqlQueries;
+import com.modnaut.framework.database.SqlQueries.QUERY_FILE;
 import com.modnaut.framework.properties.sqlmetadata.Parameter;
 import com.modnaut.framework.properties.sqlmetadata.ParameterType;
 import com.modnaut.framework.properties.sqlmetadata.Parameters;
@@ -44,7 +45,18 @@ public class DatabaseMethods
 
 	private static enum QUERY_METHOD
 	{
-		GET_DATA, GET_OBJECTS, GET_MULTIPLE, GET_FIRST_ROW, GET_FIRST_ROW_FIRST_COLUMN, UPDATE, INSERT
+		GET_DATA,
+		GET_OBJECTS,
+		GET_MULTIPLE,
+		GET_FIRST_ROW,
+		GET_FIRST_ROW_FIRST_COLUMN,
+		UPDATE,
+		INSERT
+	}
+
+	public enum SQL_META_DATA_FILE
+	{
+
 	}
 
 	/**
@@ -54,7 +66,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static ArrayList<String[]> getData(String queryName, String queryFile)
+	public static ArrayList<String[]> getData(String queryName, QUERY_FILE queryFile)
 	{
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, null, null, QUERY_METHOD.GET_DATA, true);
 	}
@@ -67,7 +79,7 @@ public class DatabaseMethods
 	 * @param parms
 	 * @return
 	 */
-	public static ArrayList<String[]> getData(String queryName, String queryFile, HashMap<String, Object> parms)
+	public static ArrayList<String[]> getData(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms)
 	{
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, parms, null, QUERY_METHOD.GET_DATA, true);
 	}
@@ -80,7 +92,7 @@ public class DatabaseMethods
 	 * @param con
 	 * @return
 	 */
-	public static ArrayList<String[]> getData(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
+	public static ArrayList<String[]> getData(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms, Connection connection)
 	{
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, parms, connection, QUERY_METHOD.GET_DATA, true);
 	}
@@ -92,7 +104,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static ArrayList<String[]> getJustData(String queryName, String queryFile)
+	public static ArrayList<String[]> getJustData(String queryName, QUERY_FILE queryFile)
 	{
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, null, null, QUERY_METHOD.GET_DATA, false);
 	}
@@ -105,7 +117,7 @@ public class DatabaseMethods
 	 * @param parms
 	 * @return
 	 */
-	public static ArrayList<String[]> getJustData(String queryName, String queryFile, HashMap<String, Object> parms)
+	public static ArrayList<String[]> getJustData(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms)
 	{
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, parms, null, QUERY_METHOD.GET_DATA, false);
 	}
@@ -118,7 +130,7 @@ public class DatabaseMethods
 	 * @param con
 	 * @return
 	 */
-	public static ArrayList<String[]> getJustData(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
+	public static ArrayList<String[]> getJustData(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms, Connection connection)
 	{
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, parms, connection, QUERY_METHOD.GET_DATA, false);
 	}
@@ -130,7 +142,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static String[] getJustDataFirstRow(String queryName, String queryFile)
+	public static String[] getJustDataFirstRow(String queryName, QUERY_FILE queryFile)
 	{
 		return (String[]) executeQuery(queryName, queryFile, null, null, QUERY_METHOD.GET_FIRST_ROW, false);
 	}
@@ -143,7 +155,7 @@ public class DatabaseMethods
 	 * @param parms
 	 * @return
 	 */
-	public static String[] getJustDataFirstRow(String queryName, String queryFile, HashMap<String, Object> parms)
+	public static String[] getJustDataFirstRow(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms)
 	{
 		return (String[]) executeQuery(queryName, queryFile, parms, null, QUERY_METHOD.GET_FIRST_ROW, false);
 	}
@@ -156,7 +168,7 @@ public class DatabaseMethods
 	 * @param con
 	 * @return
 	 */
-	public static String[] getJustDataFirstRow(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
+	public static String[] getJustDataFirstRow(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms, Connection connection)
 	{
 		return (String[]) executeQuery(queryName, queryFile, parms, connection, QUERY_METHOD.GET_FIRST_ROW, false);
 	}
@@ -168,7 +180,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static String getJustDataFirstRowFirstColumn(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
+	public static String getJustDataFirstRowFirstColumn(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms, Connection connection)
 	{
 		return (String) executeQuery(queryName, queryFile, parms, connection, QUERY_METHOD.GET_FIRST_ROW_FIRST_COLUMN, false);
 	}
@@ -180,7 +192,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static String getJustDataFirstRowFirstColumn(String queryName, String queryFile, HashMap<String, Object> parms)
+	public static String getJustDataFirstRowFirstColumn(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms)
 	{
 		return (String) executeQuery(queryName, queryFile, parms, null, QUERY_METHOD.GET_FIRST_ROW_FIRST_COLUMN, false);
 	}
@@ -192,7 +204,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static String getJustDataFirstRowFirstColumn(String queryName, String queryFile)
+	public static String getJustDataFirstRowFirstColumn(String queryName, QUERY_FILE queryFile)
 	{
 		return (String) executeQuery(queryName, queryFile, null, null, QUERY_METHOD.GET_FIRST_ROW_FIRST_COLUMN, false);
 	}
@@ -204,7 +216,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static ArrayList<Object[]> getDataObjects(String queryName, String queryFile)
+	public static ArrayList<Object[]> getDataObjects(String queryName, QUERY_FILE queryFile)
 	{
 		return (ArrayList<Object[]>) executeQuery(queryName, queryFile, null, null, QUERY_METHOD.GET_OBJECTS, true);
 	}
@@ -217,7 +229,7 @@ public class DatabaseMethods
 	 * @param parms
 	 * @return
 	 */
-	public static ArrayList<Object[]> getDataObjects(String queryName, String queryFile, HashMap<String, Object> parms)
+	public static ArrayList<Object[]> getDataObjects(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms)
 	{
 		return (ArrayList<Object[]>) executeQuery(queryName, queryFile, parms, null, QUERY_METHOD.GET_OBJECTS, true);
 	}
@@ -230,7 +242,7 @@ public class DatabaseMethods
 	 * @param con
 	 * @return
 	 */
-	public static ArrayList<Object[]> getDataObjects(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
+	public static ArrayList<Object[]> getDataObjects(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms, Connection connection)
 	{
 		return (ArrayList<Object[]>) executeQuery(queryName, queryFile, parms, connection, QUERY_METHOD.GET_OBJECTS, true);
 	}
@@ -242,7 +254,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static ArrayList<Object[]> getJustDataObjects(String queryName, String queryFile)
+	public static ArrayList<Object[]> getJustDataObjects(String queryName, QUERY_FILE queryFile)
 	{
 		return (ArrayList<Object[]>) executeQuery(queryName, queryFile, null, null, QUERY_METHOD.GET_OBJECTS, false);
 	}
@@ -255,7 +267,7 @@ public class DatabaseMethods
 	 * @param parms
 	 * @return
 	 */
-	public static ArrayList<Object[]> getJustDataObjects(String queryName, String queryFile, HashMap<String, Object> parms)
+	public static ArrayList<Object[]> getJustDataObjects(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms)
 	{
 		return (ArrayList<Object[]>) executeQuery(queryName, queryFile, parms, null, QUERY_METHOD.GET_OBJECTS, false);
 	}
@@ -268,7 +280,7 @@ public class DatabaseMethods
 	 * @param con
 	 * @return
 	 */
-	public static ArrayList<Object[]> getJustDataObjects(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
+	public static ArrayList<Object[]> getJustDataObjects(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms, Connection connection)
 	{
 		return (ArrayList<Object[]>) executeQuery(queryName, queryFile, parms, connection, QUERY_METHOD.GET_OBJECTS, false);
 	}
@@ -280,7 +292,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static ArrayList<ArrayList<String[]>> getMultipleResults(String queryName, String queryFile)
+	public static ArrayList<ArrayList<String[]>> getMultipleResults(String queryName, QUERY_FILE queryFile)
 	{
 		return (ArrayList<ArrayList<String[]>>) executeQuery(queryName, queryFile, null, null, QUERY_METHOD.GET_MULTIPLE, true);
 	}
@@ -293,7 +305,7 @@ public class DatabaseMethods
 	 * @param parms
 	 * @return
 	 */
-	public static ArrayList<ArrayList<String[]>> getMulitpleResults(String queryName, String queryFile, HashMap<String, Object> parms)
+	public static ArrayList<ArrayList<String[]>> getMulitpleResults(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms)
 	{
 		return (ArrayList<ArrayList<String[]>>) executeQuery(queryName, queryFile, parms, null, QUERY_METHOD.GET_MULTIPLE, true);
 	}
@@ -306,7 +318,7 @@ public class DatabaseMethods
 	 * @param con
 	 * @return
 	 */
-	public static ArrayList<ArrayList<String[]>> getMultipleResults(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
+	public static ArrayList<ArrayList<String[]>> getMultipleResults(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms, Connection connection)
 	{
 		return (ArrayList<ArrayList<String[]>>) executeQuery(queryName, queryFile, parms, connection, QUERY_METHOD.GET_MULTIPLE, true);
 	}
@@ -318,7 +330,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static int insertDataReturnId(String queryName, String queryFile)
+	public static int insertDataReturnId(String queryName, QUERY_FILE queryFile)
 	{
 		return (int) executeQuery(queryName, queryFile, null, null, QUERY_METHOD.INSERT, false);
 	}
@@ -331,7 +343,7 @@ public class DatabaseMethods
 	 * @param parms
 	 * @return
 	 */
-	public static int insertDataReturnId(String queryName, String queryFile, HashMap<String, Object> parms)
+	public static int insertDataReturnId(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms)
 	{
 		return (int) executeQuery(queryName, queryFile, parms, null, QUERY_METHOD.INSERT, false);
 	}
@@ -344,7 +356,7 @@ public class DatabaseMethods
 	 * @param con
 	 * @return
 	 */
-	public static int insertDataReturnId(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
+	public static int insertDataReturnId(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms, Connection connection)
 	{
 		return (int) executeQuery(queryName, queryFile, parms, connection, QUERY_METHOD.INSERT, false);
 	}
@@ -356,7 +368,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static int updateData(String queryName, String queryFile)
+	public static int updateData(String queryName, QUERY_FILE queryFile)
 	{
 		return (int) executeQuery(queryName, queryFile, null, null, QUERY_METHOD.UPDATE, false);
 	}
@@ -369,7 +381,7 @@ public class DatabaseMethods
 	 * @param parms
 	 * @return
 	 */
-	public static int updateData(String queryName, String queryFile, HashMap<String, Object> parms)
+	public static int updateData(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms)
 	{
 		return (int) executeQuery(queryName, queryFile, parms, null, QUERY_METHOD.UPDATE, false);
 	}
@@ -382,7 +394,7 @@ public class DatabaseMethods
 	 * @param con
 	 * @return
 	 */
-	public static int updateData(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
+	public static int updateData(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms, Connection connection)
 	{
 		return (int) executeQuery(queryName, queryFile, null, connection, QUERY_METHOD.UPDATE, false);
 	}
@@ -394,7 +406,7 @@ public class DatabaseMethods
 	 * @param queryFile
 	 * @return
 	 */
-	public static ArrayList<String[]> getColumnNames(String queryName, String queryFile)
+	public static ArrayList<String[]> getColumnNames(String queryName, QUERY_FILE queryFile)
 	{
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, null, null, QUERY_METHOD.GET_FIRST_ROW, true);
 	}
@@ -407,7 +419,7 @@ public class DatabaseMethods
 	 * @param parms
 	 * @return
 	 */
-	public static ArrayList<String[]> getColumnNames(String queryName, String queryFile, HashMap<String, Object> parms)
+	public static ArrayList<String[]> getColumnNames(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms)
 	{
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, parms, null, QUERY_METHOD.GET_FIRST_ROW, true);
 	}
@@ -420,7 +432,7 @@ public class DatabaseMethods
 	 * @param con
 	 * @return
 	 */
-	public static ArrayList<String[]> getColumnNames(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection)
+	public static ArrayList<String[]> getColumnNames(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms, Connection connection)
 	{
 		return (ArrayList<String[]>) executeQuery(queryName, queryFile, parms, connection, QUERY_METHOD.GET_FIRST_ROW, true);
 	}
@@ -435,7 +447,7 @@ public class DatabaseMethods
 	 * @param include_column_names
 	 * @return
 	 */
-	public static Object executeQuery(String queryName, String queryFile, HashMap<String, Object> parms, Connection connection, QUERY_METHOD queryMethod, boolean return_column_names)
+	public static Object executeQuery(String queryName, QUERY_FILE queryFile, HashMap<String, Object> parms, Connection connection, QUERY_METHOD queryMethod, boolean return_column_names)
 	{
 		// use a prepared statement for sql queries and sps that have input and output parameters.
 		PreparedStatement preparedStatement = null;

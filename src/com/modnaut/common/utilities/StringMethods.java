@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
+import com.modnaut.framework.database.SqlQueries.QUERY_FILE;
 
 public class StringMethods
 {
@@ -27,7 +28,7 @@ public class StringMethods
 	public static void cacheAllStringValues()
 	{
 		String currentLanguageCd = ICommonConstants.NONE;
-		ArrayList<String[]> allStringValues = DatabaseMethods.getJustData(GET_ALL_STRING_VALUES, ICommonConstants.COMMON);
+		ArrayList<String[]> allStringValues = DatabaseMethods.getJustData(GET_ALL_STRING_VALUES, QUERY_FILE.COMMON);
 		ConcurrentHashMap<String, String> language = null;
 
 		for (String[] stringValue : allStringValues)
@@ -83,7 +84,7 @@ public class StringMethods
 			parms.put(STRING_CDS, StringUtils.join(stringCds, STRING_CD_DELIMITER));
 			parms.put(LANGUAGE_CD, languageCd);
 			parms.put(DELIMITER, STRING_CD_DELIMITER);
-			ArrayList<String[]> stringValues = DatabaseMethods.getJustData(GET_MULTIPLE_STRINGS_FOR_LANGUAGE, ICommonConstants.COMMON, parms);
+			ArrayList<String[]> stringValues = DatabaseMethods.getJustData(GET_MULTIPLE_STRINGS_FOR_LANGUAGE, QUERY_FILE.COMMON, parms);
 
 			for (String[] stringValue : stringValues)
 			{

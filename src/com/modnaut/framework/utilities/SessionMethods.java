@@ -13,12 +13,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.CommonMethods;
 import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.common.utilities.StringMethods;
 import com.modnaut.framework.database.JdbcConnection;
 import com.modnaut.framework.database.SqlQueries;
+import com.modnaut.framework.database.SqlQueries.QUERY_FILE;
 import com.modnaut.framework.properties.sqlmetadata.Query;
 import com.modnaut.framework.properties.sqlmetadata.StatementType;
 import com.modnaut.framework.session.NinjaSession;
@@ -32,8 +32,6 @@ public class SessionMethods
 	private static final Logger LOGGER = LoggerFactory.getLogger(SessionMethods.class);
 
 	// SQL Parms
-	private static final String NINJA_ID = "NinjaId";
-	private static final String SESSION_ID = "SessionId";
 	private static final String SESSION_OBJECT = "SessionObject";
 	private static final String EMAIL = "Email";
 	private static final String PASSWORD = "Password";
@@ -159,7 +157,7 @@ public class SessionMethods
 		try
 		{
 			con = JdbcConnection.getConnection();
-			Query q = SqlQueries.getQuery(INSERT_UPDATE_SESSION, ICommonConstants.COMMON);
+			Query q = SqlQueries.getQuery(INSERT_UPDATE_SESSION, QUERY_FILE.COMMON);
 			StatementType statement = q.getStatement();
 			String statementString = "CALL " + statement.getValue() + ";";
 
@@ -220,7 +218,7 @@ public class SessionMethods
 			parms.put(PASSWORD, saltedPassword);
 
 			// See if this email/password combination exists in our database. If not, the stored procedure will increment the invalid login attempts.
-			String[] data = DatabaseMethods.getJustDataFirstRow(AUTHENTICATE_NINJA, ICommonConstants.COMMON, parms); // [0]NinjaId, [1]FirstName, [2]LastName, [3]EmailAddress, [4]Password
+			String[] data = DatabaseMethods.getJustDataFirstRow(AUTHENTICATE_NINJA, QUERY_FILE.COMMON, parms); // [0]NinjaId, [1]FirstName, [2]LastName, [3]EmailAddress, [4]Password
 			if (data != null && data.length > 3)
 			{
 				if (ninjaSession == null)

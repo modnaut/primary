@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.DatabaseMethods;
+import com.modnaut.framework.database.SqlQueries.QUERY_FILE;
 import com.modnaut.framework.utilities.SessionMethods;
 
 /**
@@ -181,7 +182,7 @@ public class NinjaSession implements java.io.Serializable
 		parms.put(ICommonConstants.NINJA_ID, getNinjaId());
 		parms.put(ICommonConstants.POWER_ID, powerId);
 
-		return ICommonConstants.LETTER_Y.equals(DatabaseMethods.getJustDataFirstRowFirstColumn(NINJA_HAS_POWER, ICommonConstants.COMMON, parms));
+		return ICommonConstants.LETTER_Y.equals(DatabaseMethods.getJustDataFirstRowFirstColumn(NINJA_HAS_POWER, QUERY_FILE.COMMON, parms));
 	}
 
 	protected HashMap<Integer, Boolean> hasPowers(int... powerId)
@@ -201,7 +202,7 @@ public class NinjaSession implements java.io.Serializable
 		parms.put(ICommonConstants.NINJA_ID, getNinjaId());
 		parms.put(ICommonConstants.POWER_IDS, StringUtils.join(powerIds, ICommonConstants.COMMA));
 
-		ArrayList<String[]> powerData = DatabaseMethods.getJustData(NINJA_HAS_POWERS, ICommonConstants.COMMON, parms);
+		ArrayList<String[]> powerData = DatabaseMethods.getJustData(NINJA_HAS_POWERS, QUERY_FILE.COMMON, parms);
 		if (powerData != null)
 		{
 			for (String[] powerDataRecord : powerData)

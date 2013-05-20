@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.controllers.ExtJsScreenCtrl;
-import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.DatabaseMethods;
+import com.modnaut.framework.database.SqlQueries.QUERY_FILE;
 import com.modnaut.framework.session.WebSession;
 
 public class MarketDetailCtrl extends ExtJsScreenCtrl
@@ -26,7 +26,7 @@ public class MarketDetailCtrl extends ExtJsScreenCtrl
 		String marketId = getParameter("MarketId");
 		HashMap<String, Object> parms = new HashMap<String, Object>();
 		parms.put("MarketId", marketId);
-		String[] marketDetails = DatabaseMethods.getJustDataFirstRow("GET_MARKET_DETAILS", ICommonConstants.MARKET_LINK, parms);
+		String[] marketDetails = DatabaseMethods.getJustDataFirstRow("GET_MARKET_DETAILS", QUERY_FILE.MARKET_LINK, parms);
 		populateData("MarketName", marketDetails[0]);
 		populateData("Address", marketDetails[1]);
 		populateData("City", marketDetails[2]);

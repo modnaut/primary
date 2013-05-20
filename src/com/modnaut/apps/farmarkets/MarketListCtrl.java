@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.controllers.ExtJsScreenCtrl;
-import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.DatabaseMethods;
+import com.modnaut.framework.database.SqlQueries.QUERY_FILE;
 import com.modnaut.framework.session.WebSession;
 
 public class MarketListCtrl extends ExtJsScreenCtrl
@@ -23,7 +23,7 @@ public class MarketListCtrl extends ExtJsScreenCtrl
 
 	public void defaultAction()
 	{
-		ArrayList<String[]> allMarkets = DatabaseMethods.getJustData("GET_ALL_MARKETS", ICommonConstants.MARKET_LINK);
+		ArrayList<String[]> allMarkets = DatabaseMethods.getJustData("GET_ALL_MARKETS", QUERY_FILE.MARKET_LINK);
 		populateData("marketView", allMarkets);
 		marshall(viewMetaData);
 	}
@@ -31,7 +31,7 @@ public class MarketListCtrl extends ExtJsScreenCtrl
 	public void getMarketsJson()
 	{
 		unmarshallJson("Markets.json");
-		ArrayList<String[]> allMarkets = DatabaseMethods.getJustData("GET_ALL_MARKETS", ICommonConstants.MARKET_LINK);
+		ArrayList<String[]> allMarkets = DatabaseMethods.getJustData("GET_ALL_MARKETS", QUERY_FILE.MARKET_LINK);
 		populateDataJson("markets", allMarkets);
 		marshall(json);
 	}

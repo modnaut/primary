@@ -1,7 +1,6 @@
 package com.modnaut.framework.database;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,27 +31,30 @@ public class SqlQueries
 	private static final String XML_PATH = "../xml";
 
 	// private variables
-	private static HashMap<String, HashMap<String, Query>> allQueries = null;
+	private static HashMap<QUERY_FILE, HashMap<String, Query>> allQueries = null;
 
-	/**
-	 * Puts all existing sql meta data files as defined into array list of strings
-	 */
-	private static final ArrayList<String> sqlFiles = new ArrayList<String>()
+	// sql meta data files
+	public enum QUERY_FILE
 	{
-		private static final long serialVersionUID = -6540054895936607379L;
+		COMMON("CommonSqlMetaData"),
+		MARKET_LINK("MarketLinkSqlMetaData");
+
+		private String fileName = ICommonConstants.NONE;
+
+		private QUERY_FILE(String fileName)
 		{
-			add(ICommonConstants.COMMON);
-			add(ICommonConstants.MARKET_LINK);
+			this.fileName = fileName;
 		}
-	};
+	}
 
 	/**
 	 * Loops through every file that exists in the sqlFiles arraylist and builds a central repository hashmap that contains of sql queries within those sqlmetadata.xml files.
 	 */
 	private static void unmarshalSqlMetaData()
 	{
-		allQueries = new HashMap<String, HashMap<String, Query>>();
-		for (String file : sqlFiles)
+		allQueries = new HashMap<QUERY_FILE, HashMap<String, Query>>();
+
+		for (QUERY_FILE file : QUERY_FILE.values())
 		{
 			loadFile(file);
 		}
@@ -64,14 +66,14 @@ public class SqlQueries
 	 * 
 	 * @param fileName
 	 */
-	private static void loadFile(String fileName)
+	private static void loadFile(QUERY_FILE queryFile)
 	{
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		String filePath = classLoader.getResource(XML_PATH).getPath();
 
 		HashMap<String, Query> hashMap = new HashMap<String, Query>();
 
-		File file = new File(filePath + fileName + XML_EXTENSION);
+		File file = new File(filePath + queryFile.fileName + XML_EXTENSION);
 		SqlMetaData sqlmetadata = JaxbPool.unmarshal(SqlMetaData.class, file);
 
 		List<Query> queryList = sqlmetadata.getQuery();
@@ -84,7 +86,7 @@ public class SqlQueries
 			}
 		}
 
-		allQueries.put(fileName, hashMap);
+		allQueries.put(queryFile, hashMap);
 	}
 
 	/**
@@ -94,7 +96,7 @@ public class SqlQueries
 	 * @param applicationId
 	 * @return
 	 */
-	public static Query getQuery(String queryName, String queryFile)
+	public static Query getQuery(String queryName, QUERY_FILE queryFile)
 	{
 		allQueries = null;// TODO: This is for development so we dont have to restart server. Make this config-based
 
