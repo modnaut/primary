@@ -27,10 +27,10 @@
 	<if>
 		<equals arg1="${isMacOS}" arg2="true"/>
 		<then>
-			<property name="sencha.dir" value="${basedir}/resources/senchacmd"/>	
+			<property name="sencha.dir" value="${basedir}/resources/senchacmdmac"/>	
 		</then>
 		<else>
-			<property name="sencha.dir" value="${basedir}/resources/senchacmdmac"/>
+			<property name="sencha.dir" value="${basedir}/resources/senchacmd"/>
 		</else>
 	</if>
 	<property name="extjs.dir" value="${basedir}/web/static/extjs"/>
