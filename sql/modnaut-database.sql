@@ -1,14 +1,14 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               5.6.10-log - MySQL Community Server (GPL)
+-- Server version:               5.5.31-log - MySQL Community Server (GPL)
 -- Server OS:                    Win64
--- HeidiSQL version:             7.0.0.4053
--- Date/time:                    2013-05-05 21:39:57
+-- HeidiSQL Version:             8.0.0.4396
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
-/*!40014 SET FOREIGN_KEY_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- Dumping database structure for common
 DROP DATABASE IF EXISTS `common`;
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `address` (
   CONSTRAINT `FK_address_city` FOREIGN KEY (`CityId`) REFERENCES `city` (`CityId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.address: ~0 rows (approximately)
+-- Dumping data for table common.address: ~2 rows (approximately)
 /*!40000 ALTER TABLE `address` DISABLE KEYS */;
 INSERT INTO `address` (`AddressId`, `Address1`, `Address2`, `CityId`, `ZipCode`, `Location`) VALUES
 	(1, '201 Market Street', NULL, 1, '23462', _binary 0x000000000101000000D9092FC1A90853C019FF3EE3C26B4240),
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `application` (
   PRIMARY KEY (`ApplicationId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.application: ~0 rows (approximately)
+-- Dumping data for table common.application: ~1 rows (approximately)
 /*!40000 ALTER TABLE `application` DISABLE KEYS */;
 INSERT INTO `application` (`ApplicationId`, `Name`) VALUES
 	(1, 'Modnaut Demo');
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `attribute` (
   CONSTRAINT `FK_attribute_attributetype` FOREIGN KEY (`AttributeTypeId`) REFERENCES `attributetype` (`AttributeTypeId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.attribute: ~0 rows (approximately)
+-- Dumping data for table common.attribute: ~1 rows (approximately)
 /*!40000 ALTER TABLE `attribute` DISABLE KEYS */;
 INSERT INTO `attribute` (`AttributeId`, `AttributeName`, `AttributeTypeId`) VALUES
 	(1, 'CacheXsl', 1);
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `city` (
   CONSTRAINT `FK_City_state` FOREIGN KEY (`StateId`) REFERENCES `state` (`StateId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.city: ~1 rows (approximately)
+-- Dumping data for table common.city: ~2 rows (approximately)
 /*!40000 ALTER TABLE `city` DISABLE KEYS */;
 INSERT INTO `city` (`CityId`, `Name`, `StateId`) VALUES
 	(1, 'Virginia Beach', 46),
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `clan` (
   PRIMARY KEY (`ClanId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.clan: ~0 rows (approximately)
+-- Dumping data for table common.clan: ~1 rows (approximately)
 /*!40000 ALTER TABLE `clan` DISABLE KEYS */;
 INSERT INTO `clan` (`ClanId`, `ClanDescription`) VALUES
 	(1, 'TestGroup');
@@ -162,6 +162,44 @@ INSERT INTO `country` (`CountryId`, `Name`, `Abbreviation`, `DefaultLanguageId`)
 /*!40000 ALTER TABLE `country` ENABLE KEYS */;
 
 
+-- Dumping structure for table common.entityattributevalue
+DROP TABLE IF EXISTS `entityattributevalue`;
+CREATE TABLE IF NOT EXISTS `entityattributevalue` (
+  `EntityAttributeValueId` int(10) NOT NULL AUTO_INCREMENT,
+  `EntityTypeId` int(10) NOT NULL,
+  `EntityId` int(10) NOT NULL,
+  `AttributeId` int(10) NOT NULL,
+  `AttributeValue` varchar(20000) DEFAULT NULL,
+  PRIMARY KEY (`EntityAttributeValueId`),
+  KEY `FK_EntityAttributeValue_entitytype` (`EntityTypeId`),
+  KEY `FK_EntityAttributeValue_attribute` (`AttributeId`),
+  CONSTRAINT `FK_EntityAttributeValue_entitytype` FOREIGN KEY (`EntityTypeId`) REFERENCES `entitytype` (`EntityTypeId`),
+  CONSTRAINT `FK_EntityAttributeValue_attribute` FOREIGN KEY (`AttributeId`) REFERENCES `attribute` (`AttributeId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.entityattributevalue: ~0 rows (approximately)
+/*!40000 ALTER TABLE `entityattributevalue` DISABLE KEYS */;
+INSERT INTO `entityattributevalue` (`EntityAttributeValueId`, `EntityTypeId`, `EntityId`, `AttributeId`, `AttributeValue`) VALUES
+	(1, 1, 1, 1, 'N');
+/*!40000 ALTER TABLE `entityattributevalue` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.entitytype
+DROP TABLE IF EXISTS `entitytype`;
+CREATE TABLE IF NOT EXISTS `entitytype` (
+  `EntityTypeId` int(10) NOT NULL AUTO_INCREMENT,
+  `Description` varchar(50) NOT NULL,
+  `Table` varchar(255) NOT NULL,
+  PRIMARY KEY (`EntityTypeId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.entitytype: ~1 rows (approximately)
+/*!40000 ALTER TABLE `entitytype` DISABLE KEYS */;
+INSERT INTO `entitytype` (`EntityTypeId`, `Description`, `Table`) VALUES
+	(1, 'Server', 'Common.Server');
+/*!40000 ALTER TABLE `entitytype` ENABLE KEYS */;
+
+
 -- Dumping structure for table common.hashpath
 DROP TABLE IF EXISTS `hashpath`;
 CREATE TABLE IF NOT EXISTS `hashpath` (
@@ -171,9 +209,9 @@ CREATE TABLE IF NOT EXISTS `hashpath` (
   `Method` varchar(200) NOT NULL,
   PRIMARY KEY (`HashPathId`),
   FULLTEXT KEY `Index 2` (`HashPath`,`Class`,`Method`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.hashpath: ~2 rows (approximately)
+-- Dumping data for table common.hashpath: 2 rows
 /*!40000 ALTER TABLE `hashpath` DISABLE KEYS */;
 INSERT INTO `hashpath` (`HashPathId`, `HashPath`, `Class`, `Method`) VALUES
 	(1, 'Market/List', 'com.modnaut.apps.farmarkets.MarketListCtrl', 'defaultAction'),
@@ -242,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `ninjaclan` (
   CONSTRAINT `FK_ninjaclan_ninja_2` FOREIGN KEY (`CreatedByNinjaId`) REFERENCES `ninja` (`NinjaId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.ninjaclan: ~0 rows (approximately)
+-- Dumping data for table common.ninjaclan: ~1 rows (approximately)
 /*!40000 ALTER TABLE `ninjaclan` DISABLE KEYS */;
 INSERT INTO `ninjaclan` (`NinjaId`, `ClanId`, `CreatedByNinjaId`, `CreatedDate`) VALUES
 	(3, 1, 3, '2013-04-08 22:24:18');
@@ -363,30 +401,11 @@ CREATE TABLE IF NOT EXISTS `server` (
   PRIMARY KEY (`ServerId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.server: ~0 rows (approximately)
+-- Dumping data for table common.server: ~1 rows (approximately)
 /*!40000 ALTER TABLE `server` DISABLE KEYS */;
 INSERT INTO `server` (`ServerId`, `ServerName`, `ServerDescription`) VALUES
 	(1, 'localhost', 'Local development PC');
 /*!40000 ALTER TABLE `server` ENABLE KEYS */;
-
-
--- Dumping structure for table common.serverattributevalue
-DROP TABLE IF EXISTS `serverattributevalue`;
-CREATE TABLE IF NOT EXISTS `serverattributevalue` (
-  `ServerId` int(10) NOT NULL,
-  `AttributeId` int(10) NOT NULL,
-  `AttributeValue` varchar(2000) NOT NULL,
-  KEY `FK_ServerAttributeValue_server` (`ServerId`),
-  KEY `FK_ServerAttributeValue_attribute` (`AttributeId`),
-  CONSTRAINT `FK_ServerAttributeValue_attribute` FOREIGN KEY (`AttributeId`) REFERENCES `attribute` (`AttributeId`),
-  CONSTRAINT `FK_ServerAttributeValue_server` FOREIGN KEY (`ServerId`) REFERENCES `server` (`ServerId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Dumping data for table common.serverattributevalue: ~0 rows (approximately)
-/*!40000 ALTER TABLE `serverattributevalue` DISABLE KEYS */;
-INSERT INTO `serverattributevalue` (`ServerId`, `AttributeId`, `AttributeValue`) VALUES
-	(1, 1, 'N');
-/*!40000 ALTER TABLE `serverattributevalue` ENABLE KEYS */;
 
 
 -- Dumping structure for table common.session
@@ -586,14 +605,15 @@ CREATE TABLE IF NOT EXISTS `market` (
   `AddressId` int(11) DEFAULT NULL,
   PRIMARY KEY (`MarketId`),
   KEY `FK_market_common.address` (`AddressId`),
-  CONSTRAINT `FK_market_common.address` FOREIGN KEY (`AddressId`) REFERENCES `common`.`address` (`AddressId`)
+  CONSTRAINT `FK_market_common?address` FOREIGN KEY (`AddressId`) REFERENCES `common`.`address` (`AddressId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Dumping data for table marketlink.market: ~0 rows (approximately)
+-- Dumping data for table marketlink.market: ~2 rows (approximately)
 /*!40000 ALTER TABLE `market` DISABLE KEYS */;
 INSERT INTO `market` (`MarketId`, `Name`, `Url`, `AddressId`) VALUES
 	(1, 'Y Not Wednesday Farmers Market at Town Center', 'http://www.sandlercenter.org/index/ynotwednesdays', 1),
 	(2, '10:10 Farmers Market', 'http://www.1010farmersmarket.com', 2);
 /*!40000 ALTER TABLE `market` ENABLE KEYS */;
-/*!40014 SET FOREIGN_KEY_CHECKS=1 */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

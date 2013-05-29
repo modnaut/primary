@@ -67,13 +67,13 @@
 	</target>
 	<target name="generate-mysql-structure">
 		<!--deletes and rebuilds mysql database structure-->
-		<sql driver="com.mysql.jdbc.Driver" url="${database.url}" userid="${database.userid}" password="${database.password}">
+		<sql driver="com.mysql.jdbc.Driver" classpathref="compile.classpath" url="${database.url}" userid="${database.userid}" password="${database.password}">
 			<transaction src="sql/modnaut-database.sql"/>
 		</sql>
 	</target>
 	<target name="generate-mysql-procedures">
 		<!--Runs mysql procedures.  Seperate so that we can define a row delimeter without changing modnaut-database.sql-->
-		<sql driver="com.mysql.jdbc.Driver" url="${database.url}" userid="${database.userid}" password="${database.password}" delimiterType="row">
+		<sql driver="com.mysql.jdbc.Driver" classpathref="compile.classpath" url="${database.url}" userid="${database.userid}" password="${database.password}" delimiterType="row">
 			<transaction src="sql/up_AuthenticateNinja.sql"/>
 			<transaction src="sql/up_GetNinjaSession.sql"/>
 			<transaction src="sql/up_InsertUpdateSession.sql"/>
@@ -85,6 +85,8 @@
 			<transaction src="sql/uf_IsInteger.sql"/>
 			<transaction src="sql/up_ParseCommaDelimited.sql"/>
 			<transaction src="sql/up_GetMultipleStringsForLanguage.sql"/>
+			<transaction src="sql/uf_GetEntityAttributeValue.sql"/>
+			<transaction src="sql/uf_GetServerAttributeValue.sql"/>
 		</sql>
 	</target>
 	<target name="build-all-extjs-packages" description="Builds all ExtJS theme packages">

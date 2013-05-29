@@ -14,12 +14,12 @@ CREATE TEMPORARY TABLE TEMP_Powers (
 	HasPower CHAR(1)
 );
 
-CALL Common.up_ParseCommaDelimited(p_PowerIds, ',', 'TEMP_Powers', 'PowerId');
+CALL common.up_ParseCommaDelimited(p_PowerIds, ',', 'TEMP_Powers', 'PowerId');
 
-DELETE FROM TEMP_Powers WHERE Common.uf_IsInteger(PowerId) = 0;
+DELETE FROM TEMP_Powers WHERE common.uf_IsInteger(PowerId) = 0;
 
 UPDATE TEMP_Powers SET
-	HasPower = Common.uf_NinjaHasPower(p_NinjaId, PowerId);
+	HasPower = common.uf_NinjaHasPower(p_NinjaId, PowerId);
 	
 	
 SELECT
