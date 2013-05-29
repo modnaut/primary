@@ -13,7 +13,7 @@ BEGIN
 	
 	SELECT av.AttributeValue INTO AttributeValue
 	FROM
-		Common.AttributeValue av
+		Common.EntityAttributeValue av
 	WHERE
 		av.EntityTypeId = p_EntityTypeId
 		AND

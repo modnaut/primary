@@ -131,8 +131,8 @@ CREATE TABLE IF NOT EXISTS `clanpower` (
   `PowerId` int(10) NOT NULL,
   PRIMARY KEY (`ClanId`,`PowerId`),
   KEY `FK_ClanPower_power` (`PowerId`),
-  CONSTRAINT `FK_ClanPower_power` FOREIGN KEY (`PowerId`) REFERENCES `power` (`PowerId`),
-  CONSTRAINT `FK_ClanPower_clan` FOREIGN KEY (`ClanId`) REFERENCES `clan` (`ClanId`)
+  CONSTRAINT `FK_ClanPower_clan` FOREIGN KEY (`ClanId`) REFERENCES `clan` (`ClanId`),
+  CONSTRAINT `FK_ClanPower_power` FOREIGN KEY (`PowerId`) REFERENCES `power` (`PowerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.clanpower: ~2 rows (approximately)
@@ -173,11 +173,11 @@ CREATE TABLE IF NOT EXISTS `entityattributevalue` (
   PRIMARY KEY (`EntityAttributeValueId`),
   KEY `FK_EntityAttributeValue_entitytype` (`EntityTypeId`),
   KEY `FK_EntityAttributeValue_attribute` (`AttributeId`),
-  CONSTRAINT `FK_EntityAttributeValue_entitytype` FOREIGN KEY (`EntityTypeId`) REFERENCES `entitytype` (`EntityTypeId`),
-  CONSTRAINT `FK_EntityAttributeValue_attribute` FOREIGN KEY (`AttributeId`) REFERENCES `attribute` (`AttributeId`)
+  CONSTRAINT `FK_EntityAttributeValue_attribute` FOREIGN KEY (`AttributeId`) REFERENCES `attribute` (`AttributeId`),
+  CONSTRAINT `FK_EntityAttributeValue_entitytype` FOREIGN KEY (`EntityTypeId`) REFERENCES `entitytype` (`EntityTypeId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.entityattributevalue: ~0 rows (approximately)
+-- Dumping data for table common.entityattributevalue: ~1 rows (approximately)
 /*!40000 ALTER TABLE `entityattributevalue` DISABLE KEYS */;
 INSERT INTO `entityattributevalue` (`EntityAttributeValueId`, `EntityTypeId`, `EntityId`, `AttributeId`, `AttributeValue`) VALUES
 	(1, 1, 1, 1, 'N');
@@ -196,8 +196,24 @@ CREATE TABLE IF NOT EXISTS `entitytype` (
 -- Dumping data for table common.entitytype: ~1 rows (approximately)
 /*!40000 ALTER TABLE `entitytype` DISABLE KEYS */;
 INSERT INTO `entitytype` (`EntityTypeId`, `Description`, `Table`) VALUES
-	(1, 'Server', 'Common.Server');
+	(1, 'Environment', 'Common.Environment');
 /*!40000 ALTER TABLE `entitytype` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.environment
+DROP TABLE IF EXISTS `environment`;
+CREATE TABLE IF NOT EXISTS `environment` (
+  `EnvironmentId` int(10) NOT NULL AUTO_INCREMENT,
+  `EnvironmentName` varchar(200) NOT NULL,
+  `EnvironmentDescription` varchar(200) NOT NULL,
+  PRIMARY KEY (`EnvironmentId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.environment: ~1 rows (approximately)
+/*!40000 ALTER TABLE `environment` DISABLE KEYS */;
+INSERT INTO `environment` (`EnvironmentId`, `EnvironmentName`, `EnvironmentDescription`) VALUES
+	(1, 'localhost-web', 'Local development PC running web server');
+/*!40000 ALTER TABLE `environment` ENABLE KEYS */;
 
 
 -- Dumping structure for table common.hashpath
@@ -275,8 +291,8 @@ CREATE TABLE IF NOT EXISTS `ninjaclan` (
   PRIMARY KEY (`NinjaId`,`ClanId`),
   KEY `FK_ninjaclan_clan` (`ClanId`),
   KEY `FK_ninjaclan_ninja_2` (`CreatedByNinjaId`),
-  CONSTRAINT `FK_ninjaclan_ninja` FOREIGN KEY (`NinjaId`) REFERENCES `ninja` (`NinjaId`),
   CONSTRAINT `FK_ninjaclan_clan` FOREIGN KEY (`ClanId`) REFERENCES `clan` (`ClanId`),
+  CONSTRAINT `FK_ninjaclan_ninja` FOREIGN KEY (`NinjaId`) REFERENCES `ninja` (`NinjaId`),
   CONSTRAINT `FK_ninjaclan_ninja_2` FOREIGN KEY (`CreatedByNinjaId`) REFERENCES `ninja` (`NinjaId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -298,8 +314,8 @@ CREATE TABLE IF NOT EXISTS `ninjapower` (
   KEY `FK_ninjapower_power` (`PowerId`),
   KEY `FK_ninjapower_ninja_2` (`CreatedByNinjaId`),
   CONSTRAINT `FK_ninjapower_ninja` FOREIGN KEY (`NinjaId`) REFERENCES `ninja` (`NinjaId`),
-  CONSTRAINT `FK_ninjapower_power` FOREIGN KEY (`PowerId`) REFERENCES `power` (`PowerId`),
-  CONSTRAINT `FK_ninjapower_ninja_2` FOREIGN KEY (`CreatedByNinjaId`) REFERENCES `ninja` (`NinjaId`)
+  CONSTRAINT `FK_ninjapower_ninja_2` FOREIGN KEY (`CreatedByNinjaId`) REFERENCES `ninja` (`NinjaId`),
+  CONSTRAINT `FK_ninjapower_power` FOREIGN KEY (`PowerId`) REFERENCES `power` (`PowerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table common.ninjapower: ~3 rows (approximately)
@@ -390,22 +406,6 @@ INSERT INTO `power` (`PowerId`, `PowerDescription`, `PowerStatusCd`) VALUES
 	(1, 'Application Access', 'A'),
 	(2, 'Admin Access', 'A');
 /*!40000 ALTER TABLE `power` ENABLE KEYS */;
-
-
--- Dumping structure for table common.server
-DROP TABLE IF EXISTS `server`;
-CREATE TABLE IF NOT EXISTS `server` (
-  `ServerId` int(10) NOT NULL AUTO_INCREMENT,
-  `ServerName` varchar(200) NOT NULL,
-  `ServerDescription` varchar(200) NOT NULL,
-  PRIMARY KEY (`ServerId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- Dumping data for table common.server: ~1 rows (approximately)
-/*!40000 ALTER TABLE `server` DISABLE KEYS */;
-INSERT INTO `server` (`ServerId`, `ServerName`, `ServerDescription`) VALUES
-	(1, 'localhost', 'Local development PC');
-/*!40000 ALTER TABLE `server` ENABLE KEYS */;
 
 
 -- Dumping structure for table common.session

@@ -13,7 +13,7 @@ public class ServerMethods
 	private static Logger LOGGER = LoggerFactory.getLogger(ServerMethods.class);
 	private static final String CLASS_NAME_PATH = ServerMethods.class.getCanonicalName();
 	private static boolean INITIALIZED = false;
-	private static String SERVER_NAME = null;
+	private static String ENVIRONMENT_NAME = null;
 	private static String REAL_PATH = null;
 
 	public static void initializeServer(ServletContext context)
@@ -25,10 +25,10 @@ public class ServerMethods
 	synchronized private static void initialize(ServletContext context)
 	{
 		REAL_PATH = context.getRealPath(ICommonConstants.SLASH);
-		SERVER_NAME = context.getInitParameter("serverName");
+		ENVIRONMENT_NAME = context.getInitParameter("environmentName");
 
 		LOGGER.info("Real Path: {}", REAL_PATH);
-		LOGGER.info("Server Name: {}", SERVER_NAME);
+		LOGGER.info("Environment Name: {}", ENVIRONMENT_NAME);
 
 		StringMethods.cacheAllStringValues();
 
@@ -42,6 +42,6 @@ public class ServerMethods
 
 	public static String getServerName()
 	{
-		return SERVER_NAME;
+		return ENVIRONMENT_NAME;
 	}
 }

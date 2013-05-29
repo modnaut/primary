@@ -86,7 +86,7 @@
 			<transaction src="sql/up_ParseCommaDelimited.sql"/>
 			<transaction src="sql/up_GetMultipleStringsForLanguage.sql"/>
 			<transaction src="sql/uf_GetEntityAttributeValue.sql"/>
-			<transaction src="sql/uf_GetServerAttributeValue.sql"/>
+			<transaction src="sql/uf_GetEnvironmentAttributeValue.sql"/>
 		</sql>
 	</target>
 	<target name="build-all-extjs-packages" description="Builds all ExtJS theme packages">
