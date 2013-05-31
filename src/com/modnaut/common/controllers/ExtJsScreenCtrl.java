@@ -37,7 +37,7 @@ import com.modnaut.framework.properties.viewmetadata.Listener;
 import com.modnaut.framework.properties.viewmetadata.NotificationType;
 import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
 import com.modnaut.framework.session.WebSession;
-import com.modnaut.framework.utilities.ServerMethods;
+import com.modnaut.framework.utilities.EnvironmentMethods;
 import com.modnaut.framework.utilities.UrlMethods;
 
 /**
@@ -101,7 +101,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	{
 		try
 		{
-			Collection<File> files = FileUtils.listFiles(new File(ServerMethods.getRealPath() + VIEW_PATH), null, true);
+			Collection<File> files = FileUtils.listFiles(new File(EnvironmentMethods.getRealPath() + VIEW_PATH), null, true);
 			String absoluteFilePath = ICommonConstants.NONE;
 			Iterator<File> iterator = files.iterator();
 			while (iterator.hasNext())
@@ -130,7 +130,7 @@ public class ExtJsScreenCtrl extends FrameworkCtrl
 	{
 		try
 		{
-			Collection<File> files = FileUtils.listFiles(new File(ServerMethods.getRealPath() + JSON_PATH), null, true);
+			Collection<File> files = FileUtils.listFiles(new File(EnvironmentMethods.getRealPath() + JSON_PATH), null, true);
 			String absoluteFilePath = ICommonConstants.NONE;
 			Iterator<File> iterator = files.iterator();
 			while (iterator.hasNext())

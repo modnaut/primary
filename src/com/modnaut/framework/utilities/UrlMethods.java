@@ -9,6 +9,7 @@ import javax.crypto.spec.DESKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +65,8 @@ public class UrlMethods
 	{
 		String encrypted = string;
 
+		StopWatch timer = new StopWatch();
+		timer.start();
 		try
 		{
 			byte[] cleartext = string.getBytes(ICommonConstants.UTF_8);
@@ -75,7 +78,8 @@ public class UrlMethods
 		{
 			encrypted = string;
 		}
-		LOGGER.debug("Encrypting {} -> {}, {}ms", string, encrypted);
+		timer.stop();
+		LOGGER.debug("Encrypting {} -> {}, {}ms", new String[]{string, encrypted, timer.getTime() + ""});
 		return encrypted;
 	}
 
@@ -83,6 +87,8 @@ public class UrlMethods
 	{
 		String decrypted = string;
 
+		StopWatch timer = new StopWatch();
+		timer.start();
 		try
 		{
 			byte[] encryptedBytes = Base64.decodeBase64(string);
@@ -95,7 +101,8 @@ public class UrlMethods
 		{
 			decrypted = string;
 		}
-		LOGGER.debug("Decrypting {} -> {}, {}ms", string, decrypted);
+		timer.stop();
+		LOGGER.debug("Decrypting {} -> {}, {}ms", new String[]{string, decrypted, timer.getTime() + ""});
 		return decrypted;
 	}
 }

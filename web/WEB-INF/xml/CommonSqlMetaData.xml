@@ -76,4 +76,12 @@
 			<parameter name="HashPath" type="VARCHAR"/>
 		</parameters>
 	</query>
+	<query name="GET_ENTITY_ATTRIBUTE_VALUE_BY_NAMES" action="SELECT" type="QUERY">
+		<statement value="SELECT Common.uf_GetEntityAttributeValueByNames(?, ?, ?)"/>
+		<parameters>
+			<parameter name="entityTypeName" type="VARCHAR"/>
+			<parameter name="entityName" type="VARCHAR"/>
+			<parameter name="attributeName" type="VARCHAR"/>
+		</parameters>
+	</query>
 </sqlMetaData>

@@ -9,7 +9,7 @@ import com.modnaut.framework.pools.JaxbPool;
 import com.modnaut.framework.pools.XslPool;
 import com.modnaut.framework.properties.application.Applications;
 import com.modnaut.framework.session.WebSession;
-import com.modnaut.framework.utilities.ServerMethods;
+import com.modnaut.framework.utilities.EnvironmentMethods;
 
 /**
  * 
@@ -44,7 +44,7 @@ public class ApplicationCtrl extends FrameworkCtrl
 	{
 		try
 		{
-			Applications apps = JaxbPool.unmarshal(Applications.class, new File(ServerMethods.getRealPath() + APPLICATION_XML));
+			Applications apps = JaxbPool.unmarshal(Applications.class, new File(EnvironmentMethods.getRealPath() + APPLICATION_XML));
 			HashMap<String, Object> parms = new HashMap<String, Object>();
 			parms.put(APPLICATION_ID, 1);
 			XslPool.marshalAndTransform(apps, response.getOutputStream(), APPLICATION_XSL, parms);

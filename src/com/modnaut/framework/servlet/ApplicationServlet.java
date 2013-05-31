@@ -27,7 +27,7 @@ import com.modnaut.common.utilities.EnrichableException;
 import com.modnaut.framework.session.NinjaSession;
 import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.session.WebSessionController;
-import com.modnaut.framework.utilities.ServerMethods;
+import com.modnaut.framework.utilities.EnvironmentMethods;
 import com.modnaut.framework.utilities.UrlMethods;
 
 /**
@@ -64,7 +64,7 @@ public class ApplicationServlet extends HttpServlet
 	@Override
 	public void init(ServletConfig config) throws ServletException
 	{
-		ServerMethods.initializeServer(config.getServletContext());
+		EnvironmentMethods.initializeServer(config.getServletContext());
 		super.init(config);
 	}
 

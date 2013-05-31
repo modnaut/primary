@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.StringMethods;
 
-public class ServerMethods
+public class EnvironmentMethods
 {
-	private static Logger LOGGER = LoggerFactory.getLogger(ServerMethods.class);
-	private static final String CLASS_NAME_PATH = ServerMethods.class.getCanonicalName();
+	private static final Logger LOGGER = LoggerFactory.getLogger(EnvironmentMethods.class);
+	private static final String CLASS_NAME_PATH = EnvironmentMethods.class.getCanonicalName();
 	private static boolean INITIALIZED = false;
 	private static String ENVIRONMENT_NAME = null;
 	private static String REAL_PATH = null;
@@ -25,7 +25,7 @@ public class ServerMethods
 	synchronized private static void initialize(ServletContext context)
 	{
 		REAL_PATH = context.getRealPath(ICommonConstants.SLASH);
-		ENVIRONMENT_NAME = context.getInitParameter("environmentName");
+		ENVIRONMENT_NAME = context.getInitParameter(ICommonConstants.ENVIRONMENT_NAME);
 
 		LOGGER.info("Real Path: {}", REAL_PATH);
 		LOGGER.info("Environment Name: {}", ENVIRONMENT_NAME);
@@ -40,7 +40,7 @@ public class ServerMethods
 		return REAL_PATH;
 	}
 
-	public static String getServerName()
+	public static String getEnvironmentName()
 	{
 		return ENVIRONMENT_NAME;
 	}

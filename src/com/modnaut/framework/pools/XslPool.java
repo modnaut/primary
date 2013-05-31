@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
-import com.modnaut.framework.utilities.ServerMethods;
+import com.modnaut.framework.utilities.EnvironmentAttributeMethods;
+import com.modnaut.framework.utilities.EnvironmentMethods;
+import com.modnaut.framework.utilities.EntityAttributeMethods.ATTRIBUTES;
 
 /**
  * 
@@ -146,7 +148,7 @@ public class XslPool
 			try
 			{
 				javax.xml.transform.TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
-				Source xsltSource = new StreamSource(ServerMethods.getRealPath() + WEB_DIRECTORY + key.xslFileName);
+				Source xsltSource = new StreamSource(EnvironmentMethods.getRealPath() + WEB_DIRECTORY + key.xslFileName);
 				Transformer transformer = factory.newTransformer(xsltSource);
 				return transformer;
 			}
@@ -216,7 +218,10 @@ public class XslPool
 
 		try
 		{
-			TRANSFORMER_POOL.clear();
+			if(!EnvironmentAttributeMethods.getAttributeBoolean(ATTRIBUTES.CACHE_XSL))
+			{
+				TRANSFORMER_POOL.clear();
+			}
 			transformer = TRANSFORMER_POOL.borrowObject(key);
 			if (parameters != null)
 			{

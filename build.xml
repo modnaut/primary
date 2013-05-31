@@ -77,7 +77,6 @@
 			<transaction src="sql/up_AuthenticateNinja.sql"/>
 			<transaction src="sql/up_GetNinjaSession.sql"/>
 			<transaction src="sql/up_InsertUpdateSession.sql"/>
-			<transaction src="sql/up_GetAllServerAttributes.sql"/>
 			<transaction src="sql/uf_NinjaHasPower.sql"/>
 			<transaction src="sql/up_NinjaHasPower.sql"/>
 			<transaction src="sql/up_NinjaHasPowers.sql"/>
@@ -86,7 +85,13 @@
 			<transaction src="sql/up_ParseCommaDelimited.sql"/>
 			<transaction src="sql/up_GetMultipleStringsForLanguage.sql"/>
 			<transaction src="sql/uf_GetEntityAttributeValue.sql"/>
-			<transaction src="sql/uf_GetEnvironmentAttributeValue.sql"/>
+			<transaction src="sql/uf_GetEntityTypeIdByName.sql"/>
+			<transaction src="sql/uf_GetEnvironmentIdByName.sql"/>
+			<transaction src="sql/uf_GetEntityIdByName.sql"/>
+			<transaction src="sql/uf_GetAttributeIdByName.sql"/>
+			<transaction src="sql/uf_GetEntityAttributeValueByNames.sql"/>
+			<transaction src="sql/uf_GetParentEnvironmentId.sql"/>
+			<transaction src="sql/uf_GetParentEntityId.sql"/>
 		</sql>
 	</target>
 	<target name="build-all-extjs-packages" description="Builds all ExtJS theme packages">
