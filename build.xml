@@ -92,6 +92,7 @@
 			<transaction src="sql/uf_GetEntityAttributeValueByNames.sql"/>
 			<transaction src="sql/uf_GetParentEnvironmentId.sql"/>
 			<transaction src="sql/uf_GetParentEntityId.sql"/>
+			<transaction src="sql/up_UpsertAttributeValueByName.sql"/>
 		</sql>
 	</target>
 	<target name="build-all-extjs-packages" description="Builds all ExtJS theme packages">

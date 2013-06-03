@@ -84,4 +84,13 @@
 			<parameter name="attributeName" type="VARCHAR"/>
 		</parameters>
 	</query>
+	<query name="UPSERT_ATTRIBUTE_VALUE" action="ACTION" type="SP">
+		<statement value="Common.up_UpsertAttributeValueByName(?, ?, ?)"/>
+		<parameters>
+			<parameter name="entityTypeName" type="VARCHAR"/>
+			<parameter name="entityId" type="VARCHAR"/>
+			<parameter name="attributeName" type="VARCHAR"/>
+			<parameter name="attributeValue" type="VARCHAR"/>
+		</parameters>
+	</query>
 </sqlMetaData>

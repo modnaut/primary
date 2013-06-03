@@ -20,6 +20,7 @@ public abstract class EntityAttributeMethods {
 	private static final String ENTITY_NAME = "entityName";
 	private static final String ENTITY_ID = "entityId";
 	private static final String ATTRIBUTE_NAME = "attributeName";
+	private static final String ATTRIBUTE_VALUE = "attributeValue";
 	
 	public static enum ENTITY_TYPES
 	{
@@ -134,12 +135,13 @@ public abstract class EntityAttributeMethods {
 		return value;
 	}
 	
-//	public static void upsertEntityAttribute(ENTITY_TYPES entityType, int entityId, ATTRIBUTES attribute)
-//	{
-//		HashMap<String, Object> parms = new HashMap<String, Object>();
-//		parms.put(ENTITY_TYPE_NAME, entityType.toString());
-//		parms.put(ENTITY_ID, entityId);
-//		parms.put(ATTRIBUTE_NAME, attribute.toString());
-//		DatabaseMethods.updateData(UPSERT_ATTRIBUTE_VALUE, QUERY_FILE.COMMON, parms);
-//	}
+	public static void upsertEntityAttribute(ENTITY_TYPES entityType, int entityId, ATTRIBUTES attribute, String attributeValue)
+	{
+		HashMap<String, Object> parms = new HashMap<String, Object>();
+		parms.put(ENTITY_TYPE_NAME, entityType.toString());
+		parms.put(ENTITY_ID, entityId);
+		parms.put(ATTRIBUTE_NAME, attribute.toString());
+		parms.put(ATTRIBUTE_VALUE, attributeValue);
+		DatabaseMethods.updateData(UPSERT_ATTRIBUTE_VALUE, QUERY_FILE.COMMON, parms);
+	}
 }
