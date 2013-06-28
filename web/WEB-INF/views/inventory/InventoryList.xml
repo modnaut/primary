@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../xsd/viewmetadata.xsd">
+	<item xsi:type="Container">
+		<items>
+			<item xsi:type="Panel" region="center" flex="1" bodyPadding="5">
+				<items>
+					<item xsi:type="TextArea" id="Review" rows="4" value="Add your review here.">
+						<fieldLabel stringCd="Review"/>
+					</item>
+					<item xsi:type="GridPanel" region="south" flex="1">
+						<title stringCd="Inventory List"/>
+						<column dataIndex="ProductId" flex="1">
+							<text stringCd="ID"/>
+						</column>
+						<column dataIndex="Date" flex="1">
+							<text stringCd="Name"/>
+						</column>
+						<column dataIndex="Description" flex="1">
+							<text stringCd="Description"/>
+						</column>
+						<store xsi:type="Store">
+							<model idProperty="ProductId">
+								<field name="ProductId" type="int"/>
+								<field name="Name" type="int"/>
+								<field name="Description" type="date"/>
+							</model>
+							<data>
+								<record>
+									<field name="ProductId" value="1"/>
+									<field name="Name" value="Abalone Mushroom"/>
+									<field name="Description" value="Delicious mushroom from Asia"/>
+								</record>
+							</data>
+						</store>
+					</item>
+				</items>
+				<title stringCd="Inventory List"/>
+			</item>
+		</items>
+		<layout xsi:type="BorderLayout"/>		
+	</item>
+</viewMetaData>

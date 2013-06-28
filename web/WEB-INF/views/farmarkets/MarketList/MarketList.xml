@@ -54,6 +54,12 @@
 				<item xsi:type="Button">
 					<text stringCd="Search"/>
 				</item>
+				
+				<item xsi:type="Button">
+					<listener event="click" action="submit" Class="com.modnaut.apps.inventory.InventoryListCtrl" Method="defaultAction"/>
+					<text stringCd="Phase 1 - Inventory Management"/>
+				</item>
+				
 			</items>
 		</toolbar>
 	</item>
