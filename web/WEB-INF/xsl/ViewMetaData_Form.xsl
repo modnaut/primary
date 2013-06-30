@@ -364,4 +364,18 @@
 		<xsl:value-of select="mn:imageSpec(image, 'src', ',')"/>
 		"xtype": "image"
 	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type='Uploader']">
+		<xsl:value-of select="mn:attribute(., 'filePostName', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'sendMultiPartFormData', ',')"/>
+		"extraParams": {
+			<xsl:for-each select="extraParam">
+				<xsl:call-template name="Parameter"/>
+			</xsl:for-each>
+			<xsl:value-of select="mn:attribute(., 'Class', ',')"/>
+			<xsl:value-of select="mn:attribute(., 'Method', '')"/>
+		},
+		"url": "ApplicationServlet",
+		"xtype": "uploader"
+	</xsl:template>
 </xsl:stylesheet>

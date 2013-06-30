@@ -222,7 +222,12 @@ public class XslPool
 			{
 				TRANSFORMER_POOL.clear();
 			}
+			
 			transformer = TRANSFORMER_POOL.borrowObject(key);
+			
+			if(transformer == null)
+				throw new Exception("No transformer");
+			
 			if (parameters != null)
 			{
 				for (String parameter : parameters.keySet())
@@ -242,7 +247,8 @@ public class XslPool
 			{
 				// if an exception occurred during transformation, invalidate
 				// the transformer in case it's the cause of the problem
-				TRANSFORMER_POOL.invalidateObject(key, transformer);
+				if(transformer != null)
+					TRANSFORMER_POOL.invalidateObject(key, transformer);
 			}
 			catch (Exception ex)
 			{

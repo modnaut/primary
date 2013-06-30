@@ -990,6 +990,19 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="Uploader">
+		<xs:complexContent>
+			<xs:extension base="Item">
+				<xs:sequence>
+					<xs:element name="extraParam" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="Class" type="xs:string" use="required"/>
+				<xs:attribute name="filePostName" type="xs:string"/>
+				<xs:attribute name="Method" type="xs:string" use="required"/>
+				<xs:attribute name="sendMultiPartFormData" type="xs:boolean"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="PickerField" abstract="true">
 		<xs:complexContent>
 			<xs:extension base="TriggerField">

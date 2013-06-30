@@ -1,9 +1,11 @@
 package com.modnaut.framework.session;
 
-import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+
+import com.modnaut.framework.utilities.RequestParameterParser;
 
 /**
  * 
@@ -18,13 +20,16 @@ public class WebSession
 	private HttpServletRequest request = null;
 	private HttpServletResponse response = null;
 	private NinjaSession ninjaSession = null;
-	private HashMap<String, String> extraParameters = null;
+	private RequestParameterParser requestParameterParser = null;
 
-	public WebSession(HttpServletRequest request, HttpServletResponse response, NinjaSession webSession)
+	// private HashMap<String, String> extraParameters = null;
+
+	public WebSession(HttpServletRequest request, HttpServletResponse response, NinjaSession webSession, RequestParameterParser requestParameterParser)
 	{
 		this.request = request;
 		this.response = response;
 		this.ninjaSession = webSession;
+		this.requestParameterParser = requestParameterParser;
 	}
 
 	public void setRequest(HttpServletRequest request)
@@ -57,31 +62,24 @@ public class WebSession
 		return this.ninjaSession;
 	}
 
-	public void setExtraParameters(HashMap<String, String> extraParameters)
-	{
-		this.extraParameters = extraParameters;
-	}
-
-	public HashMap<String, String> getExtraParameters()
-	{
-		return this.extraParameters;
-	}
-
 	public String getParameter(String name)
 	{
 		String value = null;
-
 		if (name != null)
 		{
-			if (this.extraParameters != null)
+			if (requestParameterParser != null)
 			{
-				value = this.extraParameters.get(name);
+				value = requestParameterParser.getParameter(name);
 			}
-
-			if (value == null && this.request != null)
-				value = this.request.getParameter(name);
+			if (value == null && request != null)
+				value = request.getParameter(name);
 		}
 
 		return value;
+	}
+
+	public FileItem getUploadedFile()
+	{
+		return requestParameterParser.getUploadedFile();
 	}
 }

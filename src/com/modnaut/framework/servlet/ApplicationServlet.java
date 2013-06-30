@@ -28,6 +28,8 @@ import com.modnaut.framework.session.NinjaSession;
 import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.session.WebSessionController;
 import com.modnaut.framework.utilities.EnvironmentMethods;
+import com.modnaut.framework.utilities.RequestParameterParser;
+import com.modnaut.framework.utilities.SessionMethods;
 import com.modnaut.framework.utilities.UrlMethods;
 
 /**
@@ -49,6 +51,7 @@ public class ApplicationServlet extends HttpServlet
 	private static final String INVOKE = "invoke";
 	private static final String HASH_PATH = "hashPath";
 	private static final long serialVersionUID = 1L;
+	private RequestParameterParser requestParameterParser;
 
 	/**
 	 * Constructor method
@@ -68,6 +71,11 @@ public class ApplicationServlet extends HttpServlet
 		super.init(config);
 	}
 
+	private String getParameter(String name, HttpServletRequest request)
+	{
+		return requestParameterParser.getParameter(name);
+	}
+
 	/**
 	 * Method used every time this class is called from the browser. Retrieves the class name, method and parameters contained within the servlet request. Uses reflection to create the java class instance based on class name, which then invokes the method for that class instance with the parameters (if any).
 	 * 
@@ -80,9 +88,10 @@ public class ApplicationServlet extends HttpServlet
 	 * @exception IOException
 	 * 
 	 */
-	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		requestParameterParser = new RequestParameterParser(request);
+
 		// sets output response shown in browser to html
 		response.setContentType(ICommonConstants.CONTENT_TYPE_HTML);// Set to HTML by default. ExtJS screens will set it to JSON
 
@@ -93,7 +102,7 @@ public class ApplicationServlet extends HttpServlet
 		if (ninjaSession == null)
 			LOGGER.error("ninjaSession is null.");
 
-		WebSession webSession = new WebSession(request, response, ninjaSession);
+		WebSession webSession = new WebSession(request, response, ninjaSession, requestParameterParser);
 
 		try
 		{
@@ -101,8 +110,8 @@ public class ApplicationServlet extends HttpServlet
 			String methodName = ICommonConstants.NONE;
 			HashMap<String, String> extraParameters = null;
 
-			String invoke = StringUtils.trimToEmpty(request.getParameter(INVOKE));
-			String hashPath = StringUtils.trimToEmpty(request.getParameter(HASH_PATH));
+			String invoke = StringUtils.trimToEmpty(getParameter(INVOKE, request));
+			String hashPath = StringUtils.trimToEmpty(getParameter(HASH_PATH, request));
 
 			if (!hashPath.isEmpty())
 			{
@@ -152,8 +161,8 @@ public class ApplicationServlet extends HttpServlet
 
 			if (StringUtils.isEmpty(className) && StringUtils.isEmpty(methodName))
 			{
-				className = StringUtils.trimToEmpty(request.getParameter(ICommonConstants.CLASS));
-				methodName = StringUtils.trimToEmpty(request.getParameter(ICommonConstants.METHOD));
+				className = StringUtils.trimToEmpty(getParameter(ICommonConstants.CLASS, request));
+				methodName = StringUtils.trimToEmpty(getParameter(ICommonConstants.METHOD, request));
 			}
 
 			// TODO: Load default class and method from server properties
@@ -168,8 +177,8 @@ public class ApplicationServlet extends HttpServlet
 				className = UrlMethods.decrypt(className);
 				methodName = UrlMethods.decrypt(methodName);
 
-				if (extraParameters != null && webSession != null)
-					webSession.setExtraParameters(extraParameters);
+				if (extraParameters != null)
+					requestParameterParser.setExtraParameters(extraParameters);
 
 				Class<?> clazz = Class.forName(className);
 
@@ -218,12 +227,13 @@ public class ApplicationServlet extends HttpServlet
 			// 2. A basic html error page will be shown on screen by the PrintWriter object to ninja to let them know an error has occurred.
 			LOGGER.error(e.toString(), e);
 			sendErrorResponse(response, "An error has occurred", 3);
-
 		}
+
+		SessionMethods.saveSession(ninjaSession);
 	}
 
 	/**
-	 * Calls doGet method for processing and logic.
+	 * Calls service method for processing and logic.
 	 * 
 	 * @param HttpServletRequest
 	 * @param HttpServletResponse
@@ -235,7 +245,23 @@ public class ApplicationServlet extends HttpServlet
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		doGet(request, response);
+		service(request, response);
+	}
+
+	/**
+	 * Calls service method for processing and logic.
+	 * 
+	 * @param HttpServletRequest
+	 * @param HttpServletResponse
+	 * 
+	 * @exception ServletException
+	 *                , IOException
+	 * 
+	 */
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		service(request, response);
 	}
 
 	private void sendErrorResponse(HttpServletResponse response, String errorMessage, int warning_code)

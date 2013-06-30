@@ -44,8 +44,9 @@
 					</div>
 				</tpl>
 			</item>
+			<item xsi:type="Uploader" region="south" flex="1" sendMultiPartFormData="true" filePostName="danny" Class="com.modnaut.apps.farmarkets.MarketListCtrl" Method="uploadFile"/>
 		</items>
-		<layout xsi:type="FitLayout"/>
+		<layout xsi:type="BorderLayout"/>
 		<toolbar position="top">
 			<items>
 				<item xsi:type="TextField" id="search">

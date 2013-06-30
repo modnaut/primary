@@ -139,6 +139,9 @@ Ext.define('Modnaut.controller.ViewMetaDataController', {
 					controller.showLogin(options, isHistoryEvent);
 					return;
 					break;
+				case '3':
+					Ext.MessageBox.alert('Error!', response.html || 'An error has occurred.');
+					break;
 			}
 			
 			if(container.isLoginContainer === true) {

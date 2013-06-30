@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +86,12 @@ public class FrameworkCtrl
 	 */
 	protected String getParameter(String name)
 	{
-		return this.webSession.getParameter(name);
+		return webSession.getParameter(name);
+	}
+
+	protected FileItem getUploadedFile()
+	{
+		return webSession.getUploadedFile();
 	}
 
 	protected boolean hasPower(int powerId)
