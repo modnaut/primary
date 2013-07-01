@@ -1,6 +1,7 @@
 package com.modnaut.framework.database;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -68,8 +69,21 @@ public class SqlQueries
 	 */
 	private static void loadFile(QUERY_FILE queryFile)
 	{
+		String filePath = ICommonConstants.NONE;
+
+		// TODO - This is used for batches, for now. This isn't a good solution. Should be in a properties file.
+		try
+		{
+			filePath = new File(".").getCanonicalPath() + "/web/WEB-INF/xml/";
+		}
+		catch (IOException e)
+		{
+		}
+
+		// This is used for Tomcat.
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		String filePath = classLoader.getResource(XML_PATH).getPath();
+		if (classLoader.getResource(XML_PATH) != null)
+			filePath = classLoader.getResource(XML_PATH).getPath();
 
 		HashMap<String, Query> hashMap = new HashMap<String, Query>();
 

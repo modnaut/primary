@@ -3,11 +3,7 @@ package com.modnaut.framework.database;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
+import com.jolbox.bonecp.BoneCPDataSource;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
 
@@ -26,30 +22,25 @@ public class JdbcConnection
 	private static final String CONFIGURATION_ERROR_MESSAGE = "Error with database configuration file settings. Check configuration settings and files (JdbcConnection.java, context.xml, web.xml).";
 	private static final String CONNECTION_ERROR_MESSAGE = "Error accessing connection with database. Make sure database server is running. Check configuration settings and files (JdbcConnection.java, context.xml, web.xml).";
 
+	private static boolean INITIALIZED = false;
+
+	private static BoneCPDataSource dataSource = null;
+
 	/**
 	 * Uses datasource to get and return a pooled connection.
 	 * 
 	 * @return
 	 */
-
 	public static Connection getConnection()
 	{
+		if (!INITIALIZED)
+			initialize();
+
 		Connection con = null;
 
 		try
 		{
-			Context initCtx = new InitialContext();
-			Context envCtx = (Context) initCtx.lookup("java:comp/env");
-
-			// grabs database settings (username, password, etc) from the context.xml file based on the res-ref-name in web.xml (ie: 'jdbc/modnaut')
-			DataSource ds = (DataSource) envCtx.lookup("jdbc/modnaut");
-
-			con = ds.getConnection();
-		}
-		catch (NamingException e)
-		{
-			// e.printStackTrace();
-			throw new EnrichableException(CLASS_NAME_PATH, CONNECTION_METHOD, ICommonConstants.DB_LOG, ICommonConstants.FATAL, CONFIGURATION_ERROR_MESSAGE, e);
+			con = dataSource.getConnection();
 		}
 		catch (SQLException e)
 		{
@@ -58,5 +49,26 @@ public class JdbcConnection
 		}
 
 		return con;
+	}
+
+	private static void initialize()
+	{
+		try
+		{
+			// TODO - This needs to be initialized with properties from a file.
+			Class.forName("com.mysql.jdbc.Driver"); // load the DB driver
+			dataSource = new BoneCPDataSource(); // create a new datasource object
+			dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/common"); // set the JDBC url
+			dataSource.setUsername("modnaut00"); // set the username
+			dataSource.setPassword("zp4X263tTSv06On"); // set the password
+
+			INITIALIZED = true;
+		}
+		catch (ClassNotFoundException e)
+		{
+			// e.printStackTrace();
+			throw new EnrichableException(CLASS_NAME_PATH, CONNECTION_METHOD, ICommonConstants.DB_LOG, ICommonConstants.FATAL, CONFIGURATION_ERROR_MESSAGE, e);
+		}
+
 	}
 }
