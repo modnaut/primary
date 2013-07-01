@@ -996,6 +996,7 @@
 				<xs:sequence>
 					<xs:element name="extraParam" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
+				<xs:attribute name="autoStartUpload" type="xs:boolean" default="true"/>
 				<xs:attribute name="Class" type="xs:string" use="required"/>
 				<xs:attribute name="filePostName" type="xs:string"/>
 				<xs:attribute name="Method" type="xs:string" use="required"/>

@@ -14,7 +14,7 @@ Ext.define('Modnaut.data.XHRUpload', {
 			extraParamsPrefix: 'extraParam_',
 			sendMultiPartFormData: false
 		});
-		me.addEvents('loadstart', 'progress', 'abort', 'error', 'load', 'loadend');
+//		me.addEvents('loadstart', 'progress', 'abort', 'error', 'load', 'loadend');
 	},
 	send: function(config) {
 		var me = this;
@@ -59,7 +59,7 @@ Ext.define('Modnaut.data.XHRUpload', {
 	},
 	relayUploadEvent: function(event) {
 		var me = this;
-		me.fireEvent('upload' + event.type, event);
+		me.fireEvent('upload' + event.type.substring(0,1).toUpperCase() + event.type.substring(1), event);
 	},
 	sendFileUpload: function() {
 		var me = this;

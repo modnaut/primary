@@ -17,8 +17,13 @@ Ext.define('Modnaut.view.UploaderGrid', {
 		text: 'Remove All',
 		itemId: 'removeAll'
 	}],
+	selModel: {
+		selType: 'rowmodel',
+		mode: 'multi'
+	},
 	store: {
-		fields: ['id', 'fileName', 'size', 'status', 'progress']
+		fields: ['id', 'fileName', 'size', 'status', 'progress'],
+		idProperty: 'id'
 	},
 	columns: [{
 		text: 'File Name',

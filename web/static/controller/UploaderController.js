@@ -6,8 +6,45 @@ Ext.define('Modnaut.controller.UploaderController', {
 		var controller = this;
 		this.control({
 			'uploader': {
-				render: function(uploader) {
+				afterrender: function(uploader) {
 					controller.initDNDUpload(uploader);
+					controller.initStandardUpload(uploader);
+				}
+			},
+			'uploader button#startUpload': {
+				click: function(button, event, opts) {
+					var uploader = button.up('uploader');
+					controller.startAll(uploader);
+				}
+			},
+			'uploader button#abortAll': {
+				click: function(button, event, opts) {
+					var uploader = button.up('uploader');
+					controller.abortAll(uploader);
+				}
+			},
+			'uploader button#abort': {
+				click: function(button, event, opts) {
+					var uploader = button.up('uploader');
+					var selection = controller.getGridSelection(uploader);
+					for(var i = 0, len = selection.length; i < len; i++) {
+						controller.abort(uploader.fileQueue[selection[i].get('id')]);
+					}
+				}
+			},
+			'uploader button#removeAll': {
+				click: function(button, event, opts) {
+					var uploader = button.up('uploader');
+					controller.removeAll(uploader);
+				}
+			},
+			'uploader button#remove': {
+				click: function(button, event, opts) {
+					var uploader = button.up('uploader');
+					var selection = controller.getGridSelection(uploader);
+					for(var i = 0, len = selection.length; i < len; i++) {
+						controller.remove(uploader.fileQueue[selection[i].get('id')]);
+					}
 				}
 			}
 		});
@@ -54,18 +91,17 @@ Ext.define('Modnaut.controller.UploaderController', {
 	initStandardUpload: function(uploader) {
 		var controller = this;
 		if(uploader.standardUploader){
-			uploader.standardUploader.uploader.fileInput = null; //remove reference to file field. necessary to prevent destroying file field during an active upload.
+//			uploader.standardUploader.uploader.fileInput = null; //remove reference to file field. necessary to prevent destroying file field during an active upload.
 			Ext.destroy(uploader.standardUploader);
 		}
 
 		uploader.standardUploader = new Ext.ux.form.FileUploadField({
-			renderTo: uploader.items.items[0].el.dom,
-//			buttonText: me.standardButtonText,
+			renderTo: uploader.items.first().el.dom,
 			buttonOnly: true,
 			name: uploader.standardUploadFilePostName,
 			listeners: {
-				fileselected: function() {
-					controller.standardUploadFileSelected(uploader);
+				change: function(fileInput, fileName, opts) {
+					controller.standardUploadFileSelected(uploader, fileInput, fileName);
 				}
 			}
 		});
@@ -89,24 +125,23 @@ Ext.define('Modnaut.controller.UploaderController', {
 		
 		var fileInfo = {
 			id:	uploader.fileId++,
-			name: file.name,
+			fileName: file.name,
 			size: file.size,
-			status: 'queued',
+			status: 'Pending',
+			progress: 0,
 			method: 'dnd',
 			file: file
 		};
 		
 		if(fileInfo.size > uploader.maxFileSize) {
 			controller.alert(uploader, file.name + ' File size exceeds allowed limit');
-			uploader.fireEvent('fileselectionerror', uploader, Ext.apply({}, fileInfo), 'File size exceeds allowed limit');
 			return true;
 		}
 		
-		if(uploader.fireEvent('fileselected', uploader, Ext.apply({}, fileInfo)) !== false) {
-			uploader.fileQueue[fileInfo.id] = fileInfo;
-			if(uploader.autoStartUpload) {
-				controller.dndUploadStart(uploader, fileInfo);
-			}
+		uploader.fileQueue[fileInfo.id] = fileInfo;
+		controller.addFileToGrid(uploader, fileInfo);
+		if(uploader.autoStartUpload) {
+			controller.dndUploadStart(uploader, fileInfo);
 		}
 	},
 	dndUploadStart: function(uploader, fileInfo) {
@@ -120,29 +155,18 @@ Ext.define('Modnaut.controller.UploaderController', {
 			sendMultiPartFormData: uploader.sendMultiPartFormData,
 			file: fileInfo.file,
 			listeners: {
-				uploadstart: function(event) {
-					uploader.fireEvent('uploadstart', uploader, Ext.apply({}, fileInfo));
-				},
-				uploadprogress: function(event) {
-					uploader.fireEvent('uploadprogress', uploader, fileInfo.id, event.loaded, event.total);
-				},
 				loadstart: function(event) {
-					fileInfo.status = 'started';
-					uploader.fireEvent('start', uploader, Ext.apply({}, fileInfo));
+					fileInfo.status = 'Sending';
+					controller.updateGrid(uploader, fileInfo);
 				},
-				progress: function(event) {
-					uploader.fireEvent('progress', uploader, Ext.apply({}, fileInfo), event.loaded, event.total);
-				},
-				abort: function(event) {
-					fileInfo.status = 'aborted';
-					uploader.fireEvent('abort', uploader, Ext.apply({}, fileInfo), 'XHR upload aborted');
-				},
-				error: function(event) {
-					fileInfo.status = 'error';
-					uploader.fireEvent('error', uploader, Ext.apply({}, fileInfo), 'XHR upload error');
+				uploadProgress: function(event) {
+					fileInfo.progress = Math.round((event.loaded / event.total) * 100);
+					controller.updateGrid(uploader, fileInfo);
 				},
 				load: function(event) {
-					controller.processUploadResult(uploader, fileInfo, upload.xhr.responseText);
+					console.log(arguments);
+					fileInfo.status = 'Complete';
+					controller.updateGrid(uploader, fileInfo);
 				}
 			}
 		});
@@ -151,59 +175,142 @@ Ext.define('Modnaut.controller.UploaderController', {
 	},
 	processUploadResult: function(uploader, fileInfo, serverData) {
 		var controller = this;
-		var uploadCompleteData = {};
-		if(uploader.fireEvent('uploadcomplete', uploader, Ext.apply({}, fileInfo), serverData, uploadCompleteData) !== false) {
-			fileInfo.status = 'completed';
-		} else {
-			controller.alert(uploader, 'Error uploading file:' + fileInfo.name);
-			fileInfo.status = 'error';
-			uploader.fireEvent('uploaderror', uploader, Ext.apply({}, fileInfo), serverData, uploadCompleteData);
-		}
+		fileInfo.status = 'Completed';
 	},
-	standardUploadFileSelected: function(uploader, fileBrowser, fileName) {
+	standardUploadFileSelected: function(uploader, fileInput, fileName) {
 		var controller = this;
+		
+		var domInput = fileInput.extractFileInput();
 		
 		var fileInfo = {
 			id: uploader.fileId++,
-			name: fileName,
-			status: 'queued',
+			fileName: domInput.files[0].name,
+			status: 'Pending',
 			method: 'standard',
-			size: '0'
-		};
-		
-		if(Ext.isDefined(fileBrowser.fileInput.dom.files) ){
-			fileInfo.size = fileBrowser.fileInput.dom.files[0].size;
+			size: domInput.files[0].size,
+			progress: 0
 		};
 		
 		if(fileInfo.size > uploader.maxFileSize){
-			controller.alert(uploader, file.name + ' File size exceeds allowed limit');
-			uploader.fireEvent('fileselectionerror', uploader, Ext.apply({}, fileInfo), 'File size exceeds allowed limit');
+			controller.alert(uploader, fileInfo.fileName + ' File size exceeds allowed limit');
 			return true;
 		}
 		
-		fileInfo.fileBrowser = fileBrowser;
+		fileInfo.domInput = domInput;
 		
 		var formEl = uploader.items.items[0].el.appendChild(document.createElement('form'));
 		var extraPost;
 		
-		fileInfo.fileBrowser.fileInput.addClass('au-hidden');
-		formEl.appendChild(fileBrowser.fileInput);
-		formEl.addClass('au-hidden');
+		Ext.get(domInput).addCls('au-hidden');
+		formEl.appendChild(domInput);
+		Ext.get(formEl).addCls('au-hidden');
 		fileInfo.form = formEl;
 		
 		controller.initStandardUpload(uploader); //re-init uploader for multiple simultaneous uploads
 		
-		if(uploader.fireEvent('fileselected', uploader, Ext.apply({}, fileInfo) !== false) ) {
-			if(uploader.autoStartUpload){
-				controller.standardUploadStart(uploader, fileInfo);
-			}
-			uploader.fileQueue[fileInfo.id] = fileInfo;
+		uploader.fileQueue[fileInfo.id] = fileInfo;
+		controller.addFileToGrid(uploader, fileInfo);
+		if(uploader.autoStartUpload){
+			controller.standardUploadStart(uploader, fileInfo);
 		}
 	},
 	standardUploadStart: function(uploader, fileInfo) {
 		var controller = this;
 		controller.doFormUpload(uploader, fileInfo);
-		fileInfo.status = 'started';
-		uploader.fireEvent('uploadstart', uploader, Ext.apply({}, fileInfo));
+		fileInfo.status = 'Sending';
+	},
+	getGrid: function(uploader) {
+		var grid = false;
+		gridQuery = uploader.query('uploaderGrid');
+		if(gridQuery.length === 1)
+			{
+			grid = gridQuery[0];
+			}
+		return grid;
+	},
+	getGridSelection: function(uploader) {
+		var controller = this;
+		var selection = [];
+		var grid = controller.getGrid(uploader);
+		if(grid) {
+			selection = grid.getSelectionModel().getSelection();
+		}
+		return selection;
+	},
+	addFileToGrid: function(uploader, fileInfo) {
+		var controller = this;
+		var grid = controller.getGrid(uploader);
+		if(grid) {
+			grid.getStore().add({
+				id: fileInfo.id,
+				fileName: fileInfo.fileName,
+				size: fileInfo.size,
+				status: fileInfo.status,
+				progress: fileInfo.progress
+			});
+		}
+	},
+	updateGrid: function(uploader, fileInfo) {
+		var controller = this;
+		var grid = controller.getGrid(uploader);
+		if(grid) {
+			var record = grid.getStore().getById(fileInfo.id);
+			record.set({
+				fileName: fileInfo.fileName,
+				size: fileInfo.size,
+				status: fileInfo.status,
+				progress: fileInfo.progress
+			});
+			record.commit();
+		}
+	},
+	startAll: function(uploader) {
+		var controller = this;
+		for(id in uploader.fileQueue) {
+			fileInfo = uploader.fileQueue[id];
+			if(fileInfo.status === 'Pending' || fileInfo.status === 'Aborted') {
+				switch(fileInfo.method) {
+					case 'dnd':
+						controller.dndUploadStart(uploader, fileInfo);
+						break;
+				}
+			}
+		}
+	},
+	abortAll: function(uploader) {
+		var controller = this;
+		for(id in uploader.fileQueue) {
+			controller.abort(uploader, uploader.fileQueue[id]);
+		}
+	},
+	abort: function(uploader, fileInfo) {
+		var controller = this;
+		if(fileInfo.status === 'Sending') {
+			switch(fileInfo.method) {
+				case 'dnd':
+					fileInfo.upload.xhr.abort();
+					fileInfo.status = 'Aborted';
+					fileInfo.progress = 0;
+					controller.updateGrid(uploader, fileInfo);
+					break;
+			}
+		}
+	},
+	removeAll: function(uploader) {
+		var controller = this;
+		for(id in uploader.fileQueue) {
+			controller.remove(uploader, uploader.fileQueue[id]);
+		}
+	},
+	remove: function(uploader, fileInfo) {
+		var controller = this;
+		if(fileInfo.status === 'Sending') {
+			controller.abort(uploader, fileInfo);
+		}
+		var grid = controller.getGrid(uploader);
+		if(grid) {
+			grid.getStore().remove(grid.getStore().getById(fileInfo.id));
+		}
+		delete uploader.fileQueue[fileInfo.id];
 	}
 });

@@ -366,6 +366,7 @@
 	</xsl:template>
 	
 	<xsl:template match="item[@xsi:type='Uploader']">
+	<xsl:value-of select="mn:attribute(., 'autoStartUpload', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'filePostName', ',')"/>
 		<xsl:value-of select="mn:attribute(., 'sendMultiPartFormData', ',')"/>
 		"extraParams": {

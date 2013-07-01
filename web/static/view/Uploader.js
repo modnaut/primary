@@ -6,7 +6,7 @@ Ext.define('Modnaut.view.Uploader', {
 	standardUploadFilePostName: 'file',
 	fileNameHeader: 'X-File-Name',
 	fileId: 1,
-	maxFileSize: 3145728,//MB
+	maxFileSize: 104857600,//100MB
 	autoStartUpload: true,
 	extraParams: {},
 	sendMultiPartFormData: false,
