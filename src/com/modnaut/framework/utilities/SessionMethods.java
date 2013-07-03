@@ -3,10 +3,8 @@ package com.modnaut.framework.utilities;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,11 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.modnaut.common.utilities.CommonMethods;
 import com.modnaut.common.utilities.DatabaseMethods;
 import com.modnaut.common.utilities.StringMethods;
-import com.modnaut.framework.database.JdbcConnection;
-import com.modnaut.framework.database.SqlQueries;
 import com.modnaut.framework.database.SqlQueries.QUERY_FILE;
-import com.modnaut.framework.properties.sqlmetadata.Query;
-import com.modnaut.framework.properties.sqlmetadata.StatementType;
 import com.modnaut.framework.session.NinjaSession;
 
 /**
@@ -32,6 +26,8 @@ public class SessionMethods
 	private static final Logger LOGGER = LoggerFactory.getLogger(SessionMethods.class);
 
 	// SQL Parms
+	private static final String NINJA_ID = "NinjaId";
+	private static final String SESSION_ID = "SessionId";
 	private static final String SESSION_OBJECT = "SessionObject";
 	private static final String EMAIL = "Email";
 	private static final String PASSWORD = "Password";
@@ -40,6 +36,7 @@ public class SessionMethods
 	private static final String GET_SESSION = "GET_SESSION";
 	private static final String INSERT_UPDATE_SESSION = "INSERT_UPDATE_SESSION";
 	private static final String AUTHENTICATE_NINJA = "AUTHENTICATE_NINJA";
+	private static final String INCREMENT_LOGIN_ATTEMPTS = "INCREMENT_LOGIN_ATTEMPTS";
 
 	// CONSTANTS
 	private static final int ITERATION_NUMBER = 1000;
@@ -64,57 +61,34 @@ public class SessionMethods
 
 		Object object = null;
 
-		Connection con = null;
-
 		try
 		{
-			con = JdbcConnection.getConnection();
-			// Statements allow to issue SQL queries to the database
-
-			PreparedStatement preparedStatement = con.prepareStatement("SELECT SessionObject, LastModifiedDate FROM Common.Session WHERE SessionId = ?");
-			// Parameters start with 1
-			preparedStatement.setLong(1, session_id);
-
-			// Result set get the result of the SQL query
-			ResultSet resultSet = preparedStatement.executeQuery();
-
-			if (resultSet != null)
+			HashMap<String, Object> parms = new HashMap<String, Object>();
+			parms.put(SESSION_ID, session_id);
+			
+			ArrayList<Object[]> sessionObject = DatabaseMethods.getJustDataObjects(GET_SESSION, QUERY_FILE.COMMON, parms);
+			if (sessionObject != null && sessionObject.size() > 0)
 			{
-				if (resultSet.next())
+				object = sessionObject.get(0);
+
+				if (object instanceof byte[])
 				{
-					object = resultSet.getObject(1);
+					object = deserialize((byte[]) object);
+				}
 
-					if (object instanceof byte[])
-					{
-						object = deserialize((byte[]) object);
-					}
-
-					if (object instanceof com.modnaut.framework.session.NinjaSession)
-					{
-						return (com.modnaut.framework.session.NinjaSession) object;
-					}
-					else
-					{
-						System.out.println("GET_SESSION did not return an instanceof serializing.NinjaSession.");
-					}
+				if (object instanceof com.modnaut.framework.session.NinjaSession)
+				{
+					return (com.modnaut.framework.session.NinjaSession) object;
+				}
+				else
+				{
+					System.out.println("GET_SESSION did not return an instanceof serializing.NinjaSession.");
 				}
 			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		}
-		finally
-		{
-			try
-			{
-				if (con != null)
-					con.close();
-			}
-			catch (SQLException e)
-			{
-				e.printStackTrace();
-			}
 		}
 
 		return null;
@@ -139,66 +113,25 @@ public class SessionMethods
 	 */
 	public static int saveSession(NinjaSession session)
 	{
-		// HashMap<String, Object> parms = new HashMap<String, Object>();
-		// parms.put(NINJA_ID, session.getNinjaId());
-		// parms.put(SESSION_ID, session.getSessionId());
-		// parms.put(SESSION_OBJECT, session);
-		//
-		// int row_count = DatabaseMethods.updateData(INSERT_UPDATE_SESSION, ICommonConstants.COMMON, parms);
-		//
-		// return row_count;
-		//
-		//
-
 		PreparedStatement st = null;
-		Connection con = null;
 		int row_count = 0;
 
 		try
 		{
-			con = JdbcConnection.getConnection();
-			Query q = SqlQueries.getQuery(INSERT_UPDATE_SESSION, QUERY_FILE.COMMON);
-			StatementType statement = q.getStatement();
-			String statementString = "CALL " + statement.getValue() + ";";
-
-			st = con.prepareStatement(statementString);
-			st.setInt(1, session.getNinjaId());
-			st.setLong(2, session.getSessionId());
-			st.setObject(3, session);
-
-			// executeUpdate() automatically returns row count affected. If none were affected, zero is returned.
-			row_count = st.executeUpdate();
-		}
-		catch (SQLException ex)
-		{
-			ex.printStackTrace();
+			HashMap<String, Object> parms = new HashMap<String, Object>();
+			parms.put(NINJA_ID, session.getNinjaId());
+			parms.put(SESSION_ID, session.getSessionId());
+			parms.put(SESSION_OBJECT, session);
+			
+			row_count = DatabaseMethods.updateData(INSERT_UPDATE_SESSION, QUERY_FILE.COMMON, parms);
+			
 		}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
 		}
-		finally
-		{
 
-			try
-			{
-				if (st != null)
-				{
-					st.close();
-				}
-
-				if (con != null)
-				{
-					con.close();
-				}
-			}
-			catch (Exception ex)
-			{
-
-			}
-		}
 		return row_count;
-
 	}
 
 	public static NinjaSession authenticate(String email, String password)
@@ -243,7 +176,8 @@ public class SessionMethods
 			else
 			{
 				// TODO - increment the invalid login count...
-
+				DatabaseMethods.updateData(INCREMENT_LOGIN_ATTEMPTS, QUERY_FILE.COMMON, parms);				
+				
 				// If the ninja has not given a valid Email and Password combination, pass them to the invalid Login Page
 				// response.sendRedirect(INVALID_LOGIN_PAGE);
 				return ninjaSession;

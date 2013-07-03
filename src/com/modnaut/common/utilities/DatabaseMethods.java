@@ -54,10 +54,6 @@ public class DatabaseMethods
 		INSERT
 	}
 
-	public enum SQL_META_DATA_FILE
-	{
-
-	}
 
 	/**
 	 * Overload method for getData
