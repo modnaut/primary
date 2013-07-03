@@ -41,6 +41,7 @@
 	</target>
 	<target name="generate-sqlquery-classes">
 		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/SqlMetaData.xsd" destdir="src" package="com.modnaut.framework.properties.sqlmetadata"/>
+		<xjc removeOldOutput="yes" schema="web/WEB-INF/xsd/DatabaseProperties.xsd" destdir="src" package="com.modnaut.framework.properties.dbproperties"/>
 	</target>
 	<target name="generate-view-classes">
 		<delete file="web/WEB-INF/xsd/String.episode"/>

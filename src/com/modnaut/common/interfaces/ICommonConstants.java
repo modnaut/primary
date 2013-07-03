@@ -142,5 +142,7 @@ public interface ICommonConstants
 	public static final String NINJA_ID = "ninjaId";
 	public static final String POWER_ID = "powerId";
 	public static final String POWER_IDS = "powerIds";
+	
 	public static final String ENVIRONMENT_NAME = "environmentName";
+	public static final String SERVER_NAME = "serverName";
 }

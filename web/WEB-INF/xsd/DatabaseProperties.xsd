@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="databaseMetaData">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="database" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="database">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="driverclassname" type="property" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="url" type="property" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="username" type="property" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="password" type="property" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="maxactive" type="property" minOccurs="0" maxOccurs="1"/>
+				<xs:element name="maxidle" type="property" minOccurs="0" maxOccurs="1"/>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string" use="required"/>
+			<xs:attribute name="type" type="databaseType" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="property">
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:simpleType name="databaseType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="MYSQL"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
