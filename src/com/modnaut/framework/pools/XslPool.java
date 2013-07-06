@@ -19,9 +19,10 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
-import com.modnaut.framework.utilities.EnvironmentAttributeMethods;
-import com.modnaut.framework.utilities.EnvironmentMethods;
+import com.modnaut.framework.utilities.EntityAttributeMethods;
 import com.modnaut.framework.utilities.EntityAttributeMethods.ATTRIBUTES;
+import com.modnaut.framework.utilities.EntityAttributeMethods.ENTITY_TYPES;
+import com.modnaut.framework.utilities.EnvironmentMethods;
 
 /**
  * 
@@ -218,16 +219,16 @@ public class XslPool
 
 		try
 		{
-			if(!EnvironmentAttributeMethods.getAttributeBoolean(ATTRIBUTES.CACHE_XSL))
+			if (!EntityAttributeMethods.getEntityAttributeBoolean(ENTITY_TYPES.ENVIRONMENT, EnvironmentMethods.getEnvironmentName(), ATTRIBUTES.CACHE_XSL))
 			{
 				TRANSFORMER_POOL.clear();
 			}
-			
+
 			transformer = TRANSFORMER_POOL.borrowObject(key);
-			
-			if(transformer == null)
+
+			if (transformer == null)
 				throw new Exception("No transformer");
-			
+
 			if (parameters != null)
 			{
 				for (String parameter : parameters.keySet())
@@ -247,7 +248,7 @@ public class XslPool
 			{
 				// if an exception occurred during transformation, invalidate
 				// the transformer in case it's the cause of the problem
-				if(transformer != null)
+				if (transformer != null)
 					TRANSFORMER_POOL.invalidateObject(key, transformer);
 			}
 			catch (Exception ex)
