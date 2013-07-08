@@ -54,7 +54,6 @@ public class DatabaseMethods
 		INSERT
 	}
 
-
 	/**
 	 * Overload method for getData
 	 * 
@@ -491,12 +490,18 @@ public class DatabaseMethods
 							if (parms.containsKey(parameter.getName()))
 							{
 								Object parameterValue = parms.get(parameter.getName());
-								preparedStatement.setObject(i + 1, parameterValue, parameter_type_value);
+								if (parameterType.value().equals(ICommonConstants.OBJECT))
+									preparedStatement.setObject(i + 1, parameterValue);
+								else
+									preparedStatement.setObject(i + 1, parameterValue, parameter_type_value);
 								parametersForStatementString[i] = parameterValue;
 							}
 							else
 							{
-								preparedStatement.setObject(i + 1, parameter.getValue(), parameter_type_value);
+								if (parameterType.value().equals(ICommonConstants.OBJECT))
+									preparedStatement.setObject(i + 1, parameter.getValue());
+								else
+									preparedStatement.setObject(i + 1, parameter.getValue(), parameter_type_value);
 								parametersForStatementString[i] = parameter.getValue();
 							}
 						}

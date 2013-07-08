@@ -65,11 +65,11 @@ public class SessionMethods
 		{
 			HashMap<String, Object> parms = new HashMap<String, Object>();
 			parms.put(SESSION_ID, session_id);
-			
-			ArrayList<Object[]> sessionObject = DatabaseMethods.getJustDataObjects(GET_SESSION, QUERY_FILE.COMMON, parms);
-			if (sessionObject != null && sessionObject.size() > 0)
+
+			ArrayList<Object[]> data = DatabaseMethods.getJustDataObjects(GET_SESSION, QUERY_FILE.COMMON, parms);
+			if (data != null && data.size() > 0)
 			{
-				object = sessionObject.get(0);
+				object = data.get(0)[0];
 
 				if (object instanceof byte[])
 				{
@@ -82,7 +82,7 @@ public class SessionMethods
 				}
 				else
 				{
-					System.out.println("GET_SESSION did not return an instanceof serializing.NinjaSession.");
+					LOGGER.error("GET_SESSION did not return an instanceof serializing.NinjaSession. Object is of class {}", object.getClass().getCanonicalName());
 				}
 			}
 		}
@@ -122,9 +122,9 @@ public class SessionMethods
 			parms.put(NINJA_ID, session.getNinjaId());
 			parms.put(SESSION_ID, session.getSessionId());
 			parms.put(SESSION_OBJECT, session);
-			
+
 			row_count = DatabaseMethods.updateData(INSERT_UPDATE_SESSION, QUERY_FILE.COMMON, parms);
-			
+
 		}
 		catch (Exception ex)
 		{
@@ -176,8 +176,8 @@ public class SessionMethods
 			else
 			{
 				// TODO - increment the invalid login count...
-				DatabaseMethods.updateData(INCREMENT_LOGIN_ATTEMPTS, QUERY_FILE.COMMON, parms);				
-				
+				DatabaseMethods.updateData(INCREMENT_LOGIN_ATTEMPTS, QUERY_FILE.COMMON, parms);
+
 				// If the ninja has not given a valid Email and Password combination, pass them to the invalid Login Page
 				// response.sendRedirect(INVALID_LOGIN_PAGE);
 				return ninjaSession;
@@ -208,12 +208,12 @@ public class SessionMethods
 		}
 		catch (IOException ioe)
 		{
-			LOGGER.info("Could not deserialize byte aray.");
+			LOGGER.error("Could not deserialize byte aray.", ioe);
 			return null;
 		}
 		catch (ClassNotFoundException cnfe)
 		{
-			LOGGER.info("Could not deserialize byte aray.");
+			LOGGER.error("Could not deserialize byte aray.", cnfe);
 			return null;
 		}
 		finally

@@ -12,7 +12,7 @@
 		<parameters>
 			<parameter name="NinjaId" type="INT"/>
 			<parameter name="SessionId" type="BIGINT"/>
-			<parameter name="SessionObject" type="VARBINARY"/>
+			<parameter name="SessionObject" type="OBJECT"/>
 		</parameters>
 	</query>
 	<query name="GET_SESSION" action="SELECT" type="QUERY">
