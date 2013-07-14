@@ -91,8 +91,9 @@ Ext.define('Modnaut.controller.UploaderController', {
 	initStandardUpload: function(uploader) {
 		var controller = this;
 		if(uploader.standardUploader){
-//			uploader.standardUploader.uploader.fileInput = null; //remove reference to file field. necessary to prevent destroying file field during an active upload.
-			Ext.destroy(uploader.standardUploader);
+//			uploader.standardUploader.fileInputEl = null; //remove reference to file field. necessary to prevent destroying file field during an active upload.
+//			Ext.destroy(uploader.standardUploader);
+			uploader.standardUploader.hide();
 		}
 
 		uploader.standardUploader = new Ext.ux.form.FileUploadField({
@@ -181,7 +182,6 @@ Ext.define('Modnaut.controller.UploaderController', {
 		var controller = this;
 		
 		var domInput = fileInput.extractFileInput();
-		
 		var fileInfo = {
 			id: uploader.fileId++,
 			fileName: domInput.files[0].name,
@@ -201,9 +201,12 @@ Ext.define('Modnaut.controller.UploaderController', {
 		var formEl = uploader.items.items[0].el.appendChild(document.createElement('form'));
 		var extraPost;
 		
-		Ext.get(domInput).addCls('au-hidden');
+		
+		Ext.get(domInput).addCls('uploader');
+		Ext.get(domInput).addCls('hidden');
 		formEl.appendChild(domInput);
-		Ext.get(formEl).addCls('au-hidden');
+		Ext.get(formEl).addCls('uploader');
+		Ext.get(formEl).addCls('hidden');
 		fileInfo.form = formEl;
 		
 		controller.initStandardUpload(uploader); //re-init uploader for multiple simultaneous uploads
@@ -272,6 +275,9 @@ Ext.define('Modnaut.controller.UploaderController', {
 				switch(fileInfo.method) {
 					case 'dnd':
 						controller.dndUploadStart(uploader, fileInfo);
+						break;
+					case 'standard':
+						controller.standardUploadStart(uploader, fileInfo);
 						break;
 				}
 			}

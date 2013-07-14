@@ -35,3 +35,12 @@
 .market.over {
 	background: rgb(162, 146, 121) !important;
 }
+
+.uploader.hidden {
+	visibility: hidden;
+	width:1px;
+	height:1px;
+	display:block;
+	z-index:-99;
+	position:absolute;
+}
