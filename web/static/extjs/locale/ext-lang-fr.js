@@ -13,7 +13,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
 */
 /**
  * France (France) translation
@@ -23,12 +23,6 @@ Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
  * updated by Thylia (20 Apr 2010)
  */
 Ext.onReady(function() {
-    var cm = Ext.ClassManager,
-        exists = Ext.Function.bind(cm.get, cm);
-
-    if (Ext.Updater) {
-        Ext.Updater.defaults.indicatorText = '<div class="loading-indicator">En cours de chargement...</div>';
-    }
 
     if (Ext.Date) {
         Ext.Date.shortMonthNames = ["Janv", "Févr", "Mars", "Avr", "Mai", "Juin", "Juil", "Août", "Sept", "Oct", "Nov", "Déc"];
@@ -44,7 +38,6 @@ Ext.onReady(function() {
             "Janv": 0,
             "Février": 1,
             "Févr": 1,
-            "Mars": 2,
             "Mars": 2,
             "Avril": 3,
             "Avr": 3,
@@ -75,37 +68,18 @@ Ext.onReady(function() {
 
         Ext.Date.parseCodes.S.s = "(?:er)";
 
-        Ext.override(Date, {
-            getSuffix: function() {
-                return (this.getDate() == 1) ? "er" : "";
-            }
-        });
-    }
-    if (Ext.MessageBox) {
-        Ext.MessageBox.buttonText = {
-            ok: "OK",
-            cancel: "Annuler",
-            yes: "Oui",
-            no: "Non"
+        Ext.Date.getSuffix = function() {
+            return (this.getDate() == 1) ? "er" : "";
         };
     }
 
-    if (Ext.util.Format) {
+    if (Ext.util && Ext.util.Format) {
         Ext.apply(Ext.util.Format, {
             thousandSeparator: '.',
             decimalSeparator: ',',
             currencySign: '\u20ac',
             // French Euro
             dateFormat: 'd/m/Y'
-        });
-    }
-
-    if (exists("Ext.form.field.VTypes")) {
-        Ext.apply(Ext.form.field.VTypes, {
-            emailText: 'Ce champ doit contenir une adresse email au format: "usager@example.com"',
-            urlText: 'Ce champ doit contenir une URL au format suivant: "http:/' + '/www.example.com"',
-            alphaText: 'Ce champ ne peut contenir que des lettres et le caractère souligné (_)',
-            alphanumText: 'Ce champ ne peut contenir que des caractères alphanumériques ainsi que le caractère souligné (_)'
         });
     }
 });
@@ -120,10 +94,15 @@ Ext.define("Ext.locale.fr.grid.plugin.DragDrop", {
     dragText: "{0} ligne{1} sélectionnée{1}"
 });
 
+Ext.define("Ext.locale.fr.tab.Tab", {
+    override: "Ext.tab.Tab",
+    closeText: "Fermer cette onglet"
+});
+
 // changing the msg text below will affect the LoadMask
 Ext.define("Ext.locale.fr.view.AbstractView", {
     override: "Ext.view.AbstractView",
-    msg: "En cours de chargement..."
+    loadingText: "En cours de chargement..."
 });
 
 Ext.define("Ext.locale.fr.picker.Date", {
@@ -133,8 +112,6 @@ Ext.define("Ext.locale.fr.picker.Date", {
     maxText: "Cette date est postérieure à la date maximum",
     disabledDaysText: "",
     disabledDatesText: "",
-    monthNames: Ext.Date.monthNames,
-    dayNames: Ext.Date.dayNames,
     nextText: 'Mois suivant (CTRL+Flèche droite)',
     prevText: "Mois précédent (CTRL+Flèche gauche)",
     monthYearText: "Choisissez un mois (CTRL+Flèche haut ou bas pour changer d'année.)",
@@ -187,7 +164,8 @@ Ext.define("Ext.locale.fr.form.field.Number", {
     decimalPrecision: 2,
     minText: "La valeur minimum de ce champ doit être de {0}",
     maxText: "La valeur maximum de ce champ doit être de {0}",
-    nanText: "{0} n'est pas un nombre valide"
+    nanText: "{0} n'est pas un nombre valide",
+    negativeText: "La valeur de ce champ ne peut être négative"    
 });
 
 Ext.define("Ext.locale.fr.form.field.File", { 
@@ -213,6 +191,14 @@ Ext.define("Ext.locale.fr.form.field.ComboBox", {
     Ext.apply(Ext.form.field.ComboBox.prototype.defaultListConfig, {
         loadingText: "En cours de chargement..."
     });
+});
+
+Ext.define("Ext.locale.fr.form.field.VTypes", {
+    override: "Ext.form.field.VTypes",
+    emailText: 'Ce champ doit contenir une adresse email au format: "usager@example.com"',
+    urlText: 'Ce champ doit contenir une URL au format suivant: "http:/' + '/www.example.com"',
+    alphaText: 'Ce champ ne peut contenir que des lettres et le caractère souligné (_)',
+    alphanumText: 'Ce champ ne peut contenir que des caractères alphanumériques ainsi que le caractère souligné (_)'
 });
 
 Ext.define("Ext.locale.fr.form.field.HtmlEditor", {
@@ -335,6 +321,16 @@ Ext.define("Ext.locale.fr.form.CheckboxGroup", {
 Ext.define("Ext.locale.fr.form.RadioGroup", {
     override: "Ext.form.RadioGroup",
     blankText: "Vous devez sélectionner au moins un élément dans ce groupe"
+});
+
+Ext.define("Ext.locale.fr.window.MessageBox", {
+    override: "Ext.window.MessageBox",
+    buttonText: {
+        ok: "OK",
+        cancel: "Annuler",
+        yes: "Oui",
+        no: "Non"
+    }    
 });
 
 // This is needed until we can refactor all of the locales into individual files

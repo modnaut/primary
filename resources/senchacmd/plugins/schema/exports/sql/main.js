@@ -99,7 +99,7 @@ function main (args) {
     });
 
     generateTpl({
-        file: joinPath(args.baseDir, args.dbType + '.tpl'),
+        file: joinPath(args.exporterDir, args.dbType + '.tpl'),
         tofile: args.out,
 
         params: {

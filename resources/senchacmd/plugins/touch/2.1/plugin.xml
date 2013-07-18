@@ -80,6 +80,9 @@
             <param name="appViews" value=""/>
             <param name="appControllers" value=""/>
             <param name="appStores" value=""/>
+            <param name="controllerNamespace" value="${args.name}.controller"/>
+            <param name="modelNamespace" value="${args.name}.model"/>
+            <param name="viewNamespace" value="${args.name}.view"/>
         </x-generate>
 
         <mkdir dir="${args.path}/app"/>
@@ -102,23 +105,37 @@
         args.path => the target path of the new application
     -->
     <target name="generate-app-impl">
-        <x-load-json-properties file="${args.path}/app.json" prefix="app.json"/>
         <x-guid property="app.json.id"/>
         <property name="app.id" value="${app.json.id}"/>
 
+        <!--default these from args if new app-->
+        <property name="app.dir" value="${args.path}"/>
+        <property name="app.name" value="${args.name}"/>
+
         <property name="app.cmd.version" value="3.0.0.250"/>
         <property name="legacy.template.path" 
-                  value="${cmd.config.dir}/legacy/${app.cmd.version}/touch/current/templates"/>
+                  value="${cmd.config.dir}/legacy/${app.cmd.version}/touch/2.1/templates"/>
                 
+        <local name="app.sencha.cfg"/>
+        <property name="app.sencha.cfg" location="${app.dir}/.sencha/app/sencha.cfg"/>
+        
+        <local name="workspace.sencha.cfg"/>
+        <property name="workspace.sencha.cfg" location="${workspace.dir}/.sencha/workspace/sencha.cfg"/>
+        
         <if>
             <isset property="args.upgrade"/>
             <then>
-                <propertyfile file="${workspace.config.dir}/sencha.cfg">
-                    <entry type="string"
-                           operation="="
-                           key="workspace.build.dir" 
-                           value="$${workspace.dir}/build"/>
-                </propertyfile>
+                <if>
+                    <equals arg1="${workspace.build.dir}" arg2="${workspace.dir}/build/${app.name}"/>
+                    <then>
+                        <x-property-file file="${workspace.config.dir}/sencha.cfg">
+                            <entry type="string" key="workspace.build.dir" operation="="
+                                   value="$${workspace.dir}/build"/>
+                        </x-property-file>
+                    </then>
+                </if>
+                <x-upgrade appcfg="${app.sencha.cfg}"
+                           workspacecfg="${workspace.sencha.cfg}"/>
             </then>
             <else>
                 <antcall target="generate-starter-app"/>
@@ -142,26 +159,18 @@
             <param name="appViews" value=""/>
             <param name="appControllers" value=""/>
             <param name="appStores" value=""/>
+            <param name="controllerNamespace" value="${args.name}.controller"/>
+            <param name="modelNamespace" value="${args.name}.model"/>
+            <param name="viewNamespace" value="${args.name}.view"/>
         </x-generate>
 
-        <propertyfile file="${args.path}/.sencha/app/sencha.cfg">
+        <x-property-file file="${app.dir}/.sencha/app/sencha.cfg">
             <!--apply defaults if not present-->
             <entry type="string" key="app.build.dir" operation="="
                    default="$${workspace.build.dir}/$${app.name}"/>
-              
-            <!--set new values-->
-            <entry type="string" key="app.cmd.version" operation="="
-                   value="${cmd.version}"/>
             <entry type="string" key="app.id" operation="="
-                   value="${app.id}"/>
-        </propertyfile>
-
-        <x-app-update tplpath="${templates.dir}/App"
-                      appjspath="app.js"
-                      appdir="${args.path}"
-                      appname="${args.name}"
-                      legacypath="${legacy.template.path}/App"/>
-
+                   default="${app.id}"/>
+        </x-property-file>
     </target>
 
     <!--
@@ -187,11 +196,8 @@
             <param name="name" value="${args.name}"/>
             <param name="controllerName" value="${args.name}"/>
             <param name="controllerFileName" value="${args.filename}"/>
+            <param name="controllerNamespace" value="${app.name}.controller"/>
         </x-generate>
-        <x-app-update tplpath="${templates.dir}/App"
-                      appjspath="app.js"
-                      appdir="${args.path}"
-                      appname="${app.name}"/>
     </target>
 
     <!--
@@ -209,10 +215,6 @@
             <param name="profileName" value="${args.name}"/>
             <param name="profileFileName" value="${args.filename}"/>
         </x-generate>
-        <x-app-update tplpath="${templates.dir}/App"
-                      appjspath="app.js"
-                      appdir="${args.path}"
-                      appname="${app.name}"/>
     </target>
 
     <!--
@@ -229,13 +231,11 @@
                     basedir="${args.path}">
             <param name="appName" value="${app.name}"/>
             <param name="name" value="${args.name}"/>
+            <param name="baseClass" value="${args.base}"/>
             <param name="modelFileName" value="${args.filename}"/>
+            <param name="modelNamespace" value="${app.name}.model"/>
             <param name="fields" value="${args.fields}"/>
         </x-generate>
-        <x-app-update tplpath="${templates.dir}/App"
-                      appjspath="app.js"
-                      appdir="${args.path}"
-                      appname="${app.name}"/>
     </target>
 
     <!--
@@ -256,10 +256,6 @@
             <param name="fields" value="${args.fields}"/>
             <param name="xtype" value="${args.xtype}"/>
         </x-generate>
-        <x-app-update tplpath="${templates.dir}/App"
-                      appjspath="app.js"
-                      appdir="${args.path}"
-                      appname="${app.name}"/>
     </target>
 
     <!--
@@ -282,40 +278,5 @@
             <script src="${cmd.config.dir}/ant/ant-util.js"/>
         </x-script-def>
         <x-app-upgrade/>
-        
-        <x-app-update tplpath="${templates.dir}/App"
-          appjspath="app.js"
-          appdir="${app.dir}"
-          appname="${app.name}"/>
-
     </target>
-
-    <target name="app-resolve-impl">
-        <script language="javascript">
-            importPackage(java.io);
-            importPackage(com.sencha.util);
-            importPackage(com.sencha.logging);
-            importPackage(com.sencha.tools.external);
-
-            var _logger = SenchaLogManager.getLogger('app-resolve'),
-                runner = new PhantomJsRunner(),
-                args = [
-                    PathUtil.join(project.getProperty("basedir"), "dependencies.js"),
-                    project.getProperty("args.uri")
-                ],
-                runnerOut = runner.run(args),
-                exitCode = runnerOut.getExitCode(),
-                stdout = runnerOut.getOutput();
-
-            if(exitCode > 0) {
-                _logger.error("Failed capturing Dependencies");
-                _logger.error(stdout);
-                throw 'Failed capturing dependencies';
-            }
-
-            FileUtil.writeFile(project.getProperty("args.output"), stdout);
-
-        </script>
-    </target>
-
 </project>

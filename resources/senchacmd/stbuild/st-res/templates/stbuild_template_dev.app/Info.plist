@@ -10,12 +10,12 @@
 	<string>%s</string>
 	<key>CFBundleExecutable</key>
 	<string>stbuild_template</string>
-	%s<key>CFBundleIconFiles</key>
+%s
+	<key>CFBundleIconFiles</key>
 	<array>
-	%s
-	</array>
+%s	</array>
 	<key>CFBundleIconFile</key>
-	%s
+	<string>%s</string>
 	<key>CFBundleIdentifier</key>
 	<string>%s</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -56,11 +56,10 @@
 	<string>%s</string>
 	<key>UIDeviceFamily</key>
 	<array>
-	%s
-	</array>
+%s	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
-	%s
-	</array>
+%s	</array>
+%s
 </dict>
 </plist>

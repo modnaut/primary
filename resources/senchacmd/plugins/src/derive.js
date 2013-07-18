@@ -135,14 +135,6 @@
             cls.extend(base);
             
             proto = cls.prototype;
-    // TODO: should this copy into our prototype, not parents?
-    //        if (!Parent.$isClass) {
-    //            for (i in basePrototype) {
-    //                if (!parentPrototype[i]) {
-    //                    parentPrototype[i] = basePrototype[i];
-    //                }
-    //            }
-    //        }
             
             cls.xtype = data.xtype = xtypes[0];
             
@@ -238,7 +230,7 @@
                 ns[names[i + 1]] = ret;
             }
 
-            ClassManager.classes[cls.$classname] = ret;
+            ClassManager.classes[className] = ret;
             
             targetName = ClassManager.getName(ret);
             nameToAlternates = ClassManager.maps.nameToAlternates;

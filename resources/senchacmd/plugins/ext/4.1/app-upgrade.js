@@ -1,12 +1,22 @@
 var _logger = SenchaLogManager.getLogger("app-upgrade");
 
+function possiblyAddProps (propsToAdd, propObj) {
+    for (var prop in propsToAdd) {
+        if (propsToAdd[prop] != null) {
+            propObj[prop] = propsToAdd[prop];
+        }
+    }
+}
+
 function runAppUpgrade (proj) {
     var //basedir = proj.getProperty("basedir"),
         newSdkPath = proj.getProperty("framework.dir"),
         appPath = proj.getProperty('app.dir'),
         //appConfigPath = proj.getProperty('app.config.dir'),
         workspacePath = proj.getProperty("workspace.dir"),
-        hasSenchaDir = new File(appPath, ".sencha").exists();
+        hasSenchaDir = new File(appPath, ".sencha").exists(),
+        noFramework = (proj.getProperty("args.noframework") + '') == "true",
+        appId = proj.getProperty("app.id");
 
     if (!hasSenchaDir) {
         _logger.error("Unable to locate .sencha folder");
@@ -17,9 +27,9 @@ function runAppUpgrade (proj) {
     var frameworkName = proj.getProperty("framework.name"),
         appName = proj.getProperty("app.name"),
         appSdkPath = resolvePath(proj.getProperty(frameworkName + ".dir")),
-        oldSdkVersion = proj.getProperty("framework.version"),
+        oldSdkVersion = proj.getProperty("base.framework.version"),
         appBackupPath = resolvePath(appPath, ".sencha_backup", appName, oldSdkVersion),
-        sdkBackupPath = resolvePath(workspacePath, ".sencha_backup", frameworkName, oldSdkVersion),
+        noAppJs = proj.getProperty("args.noappjs"),
         generateCmd = [
             "generate",
             "app",
@@ -30,7 +40,6 @@ function runAppUpgrade (proj) {
         appBackupExcludes = [
             ".sencha_backup/**/*"
         ],
-        sencha = new Sencha(),
         appVerStr = proj.getProperty("app.cmd.version") + '' || "3.0.0.250";
 
     if(appVerStr == "null") {
@@ -39,12 +48,9 @@ function runAppUpgrade (proj) {
     
     var appVer = new Version(appVerStr);
 
-    if (!exists(sdkBackupPath)) {
-        _logger.info("Backing up framework files from {} to {}",
-                appSdkPath,
-                sdkBackupPath);
-
-        moveFiles(proj, appSdkPath, sdkBackupPath);
+    if(new Version(proj.getProperty("cmd.version")).compareTo(appVer) === 0) {
+        _logger.info("Application structure already at current cmd version");
+        return;
     }
 
     _logger.info("Backing up application files from {} to {}",
@@ -113,14 +119,17 @@ function runAppUpgrade (proj) {
             deleteFile(srcLocation);
             
             _logger.info("Regenerating theme files for theme {}", themeName);
-            generateTemplates(appTemplatePath, newThemePath, {
+            
+            var props = {
                 'name': newThemeName,
                 'themeName': newThemeName,
                 'appName': appName,
                 'frameworkName': frameworkName,
                 'frameworkPath': frameworkPath
-            });
-        
+            };
+            
+            generateTemplates(appTemplatePath, newThemePath, props);
+            
             var appScssFile = resolvePath(dstLocation, "app.scss"),
                 appScss = readFileContent(appScssFile) + '',
                 themeNameSetter = "$theme-name: '" + newThemeName + "';";
@@ -131,33 +140,30 @@ function runAppUpgrade (proj) {
                     appScssFile, 
                     themeNameSetter + StringUtil.NewLine + appScss);
             }
-
-            // update the app's index.html file to replace references to the old
-            // generated css location
-
-            var appIndex = resolvePath(appPath, "index.html"),
-                appIndexFile = new File(appIndex);
-
-            if (appIndexFile.exists()) {
-                var origRef = "resources/css/" + themeName + "/app.css",
-                    newRef = "resources/" + newThemeName + "/app.css";
-                var appIndexContent = readFileContent(appIndex);
-                _logger.debug(
-                    "Updating all index.html references from {} to {}",
-                    origRef, newRef);
-                appIndexContent = StringUtil.replace(appIndexContent, origRef, newRef);
-                writeFileContent(appIndex, appIndexContent);
-            }
         }
     }
-
+    
     _logger.debug("running command : sencha " + generateCmd.join(" "));
-    runSencha(generateCmd, newSdkPath, false, {
-        'ext.dir': newSdkPath
-    });
+    var props = {
+        'workspace.config.dir': proj.getProperty("workspace.config.dir"),
+        'workspace.dir': proj.getProperty("workspace.dir"),
+        'workspace.build.dir': proj.getProperty("workspace.build.dir"),
+        "ext.dir": noFramework ? appSdkPath : newSdkPath,
+        "framework.name": proj.getProperty("framework.name")
+    };
+    
+    var propsToAdd = {
+        "args.noappjs": noAppJs,
+        "app.id": appId
+    };
 
-    _logger.debug("removing unused app.json file");
-    FileUtil['delete'](resolvePath(appPath, "app.json"));
+    possiblyAddProps(propsToAdd, props);
+    
+    if(noFramework) {
+        props['args.noframework'] = true;
+    }
+            
+    runSencha(generateCmd, newSdkPath, true, props);
 
     _logger.info("A backup of pre-upgrade application files is available at {}",
             appBackupPath);

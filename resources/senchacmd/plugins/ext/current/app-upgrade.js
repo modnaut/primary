@@ -1,12 +1,22 @@
 var _logger = SenchaLogManager.getLogger("app-upgrade");
 
+function possiblyAddProps (propsToAdd, propObj) {
+    for (var prop in propsToAdd) {
+        if (propsToAdd[prop] != null) {
+            propObj[prop] = propsToAdd[prop];
+        }
+    }
+}
+
 function runAppUpgrade(proj) {
     var //basedir = proj.getProperty("basedir"),
         newSdkPath = proj.getProperty("framework.dir"),
         appPath = proj.getProperty('app.dir'),
         //appConfigPath = proj.getProperty('app.config.dir'),
         workspacePath = proj.getProperty("workspace.dir"),
-        hasSenchaDir = new File(appPath, ".sencha").exists();
+        hasSenchaDir = new File(appPath, ".sencha").exists(),
+        noFramework = (proj.getProperty("args.noframework") + '') === "true",
+        appId = proj.getProperty("app.id");
 
     _logger.info("Upgrading to sdk at {}", newSdkPath);
 
@@ -19,9 +29,10 @@ function runAppUpgrade(proj) {
     var frameworkName = proj.getProperty("framework.name"),
         appName = proj.getProperty("app.name"),
         appSdkPath = resolvePath(proj.getProperty(frameworkName + ".dir")),
-        oldSdkVersion = proj.getProperty("framework.version"),
+        oldSdkVersion = proj.getProperty("base.framework.version"),
+        legacySdkVersion = proj.getProperty("legacy.framework.version"),
         appBackupPath = resolvePath(appPath, ".sencha_backup", appName, oldSdkVersion),
-        sdkBackupPath = resolvePath(workspacePath, ".sencha_backup", frameworkName, oldSdkVersion),
+        noAppJs = proj.getProperty("args.noappjs"),
         appBackupExcludes = [
             ".sencha_backup/**/*"
         ],
@@ -32,26 +43,34 @@ function runAppUpgrade(proj) {
                     "legacy",
                     ver,
                     frameworkName,
-                    "current",
+                    legacySdkVersion,
                     "templates"
             );
         },
-        generateArgs = [];
-        
+        generateArgs = [],
+        appFrameworkVerStr = proj.getProperty("app.framework.version") + '';
+    
     if(appVerStr == "null") {
         appVerStr = "3.0.0.250";
     }
+    
+    if(!appFrameworkVerStr || appFrameworkVerStr == "null") {
+        var appThemeName = proj.getProperty("app.theme") + '';
         
+        if(appThemeName && appThemeName != "null") {
+            appFrameworkVerStr = "4.1.1";
+        } else {
+            appFrameworkVerStr = "4.2.0";
+        }
+    }
     
     var appVer = new Version(appVerStr),
+        appFrameworkVer = new Version(appFrameworkVerStr),
         workspacePkgPath = project.getProperty("workspace.packages.dir") + '';
 
-    if (!exists(sdkBackupPath)) {
-        _logger.info("Backing up framework files from {} to {}",
-                appSdkPath,
-                sdkBackupPath);
-
-        moveFiles(proj, appSdkPath, sdkBackupPath);
+    if(new Version(proj.getProperty("cmd.version")).compareTo(appVer) === 0) {
+        _logger.info("Application structure already at current cmd version");
+        return;
     }
 
     _logger.info("Backing up application files from {} to {}",
@@ -67,11 +86,12 @@ function runAppUpgrade(proj) {
 
     _logger.info("Updating application and workspace files");
 
-    if (new Version('3.1.0').compareTo(appVer) > 0) {
+    // 4.1 apps need some theme conversions
+    if (new Version('4.2.0').compareTo(appFrameworkVer) > 0) {
 
         // if this is a pre 3.0.2 app, we'll need to update the theme structure
         if (new Version('3.0.2').compareTo(appVer) > 0) {
-            _logger.info("upgrading pre-3.0.2 app structure");
+            _logger.info("upgrading extjs 4.1 pre-3.0.2 app structure");
 
             _logger.debug("removing unused app.json file");
             FileUtil['delete'](resolvePath(appPath, "app.json"));
@@ -121,10 +141,25 @@ function runAppUpgrade(proj) {
             ];
             
             _logger.debug("running command : sencha " + generateArgs.join(" "));
-            runSencha(generateArgs, newSdkPath, false, {
+            var props = {
+                'workspace.config.dir': proj.getProperty("workspace.config.dir"),
+                'workspace.dir': proj.getProperty("workspace.dir"),
+                'workspace.build.dir': proj.getProperty("workspace.build.dir"),
                 "ext.dir": newSdkPath
-            });
+            };
+            
+            var propsToAdd = {
+                "args.noappjs": noAppJs,
+                "app.id": appId
+            };
 
+            possiblyAddProps(propsToAdd, props);
+            
+            if(noFramework) {
+                props['args.noframework'] = true;
+            }
+            
+            runSencha(generateArgs, newSdkPath, false, props);
 
             if (themeNames.length > 0) {
                 _logger.info([
@@ -166,13 +201,8 @@ function runAppUpgrade(proj) {
 
             }
             
-            setProperty(
-                resolvePath(appPath, ".sencha", "app", "sencha.cfg"),
-                'app.theme',
-                'ext-theme-classic');
-            
         } else {
-            _logger.info("upgrading pre-3.1.0 app structure");
+            _logger.info("upgrading extjs 4.1 app structure");
 
             var appIndex = resolvePath(appPath, "index.html"),
                 appIndexFile = new File(appIndex);
@@ -220,9 +250,25 @@ function runAppUpgrade(proj) {
             ];
 
             _logger.debug("running command : sencha " + generateArgs.join(" "));
-            runSencha(generateArgs, newSdkPath, false, {
+            var props = {
+                'workspace.config.dir': proj.getProperty("workspace.config.dir"),
+                'workspace.dir': proj.getProperty("workspace.dir"),
+                'workspace.build.dir': proj.getProperty("workspace.build.dir"),
                 "ext.dir": newSdkPath
-            });
+            };
+            
+            var propsToAdd = {
+                "args.noappjs": noAppJs,
+                "app.id": appId
+            };
+
+            possiblyAddProps(propsToAdd, props);
+            
+            if(noFramework) {
+                props['args.noframework'] = true;
+            }
+            
+            runSencha(generateArgs, newSdkPath, false, props);
 
             if (themeNames.length > 0) {
                 _logger.info([
@@ -232,8 +278,6 @@ function runAppUpgrade(proj) {
                     'to the name of the theme package to use for this application.'
                 ].join(StringUtil.NewLine));
             }
-
-
 
             for (t = 0; t < len; t++) {
                 themeName = themeNames[t];
@@ -332,9 +376,26 @@ function runAppUpgrade(proj) {
             ];
             
         _logger.debug("running command : sencha " + generateArgs.join(" "));
-        runSencha(generateArgs, newSdkPath, false, {
-            "ext.dir": newSdkPath
-        });
+        var props = {
+            'workspace.config.dir': proj.getProperty("workspace.config.dir"),
+            'workspace.dir': proj.getProperty("workspace.dir"),
+            'workspace.build.dir': proj.getProperty("workspace.build.dir"),
+            "ext.dir": noFramework ? appSdkPath : newSdkPath,
+            "framework.name": proj.getProperty("framework.name")
+        };
+        
+        var propsToAdd = {
+            "args.noappjs": noAppJs,
+            "app.id": appId
+        };
+        
+        possiblyAddProps(propsToAdd, props);
+           
+        if(noFramework) {
+            props['args.noframework'] = true;
+        }
+
+        runSencha(generateArgs, newSdkPath, false, props);
     }
 
 

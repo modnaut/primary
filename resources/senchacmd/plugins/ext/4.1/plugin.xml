@@ -90,8 +90,23 @@
             <param name="appViews" value=""/>
             <param name="appControllers" value=""/>
             <param name="appStores" value=""/>
+            <param name="controllerNamespace" value="${args.name}.controller"/>
+            <param name="modelNamespace" value="${args.name}.model"/>
+            <param name="viewNamespace" value="${args.name}.view"/>
         </x-generate>
-
+        
+        <x-generate dir="${templates.dir}/Controller" 
+                    todir="${args.path}/app/controller"
+                    store="${args.path}/${senchadir}/app/codegen.json"
+                    basedir="${args.path}">
+            <param name="name" value="${args.name}"/>
+            <param name="appName" value="${args.name}"/>
+            <param name="library" value="all"/>
+            <param name="controllerName" value="${args.controllerName}"/>
+            <param name="controllerFileName" value="${args.controllerName}"/>
+            <param name="controllerNamespace" value="${args.name}.controller"/>
+        </x-generate>
+        
         <mkdir dir="${args.path}/app/model"/>
         <mkdir dir="${args.path}/app/store"/>
     </target>
@@ -103,7 +118,6 @@
         args.path => the target path of the new application
     -->
     <target name="generate-app-impl">
-        <x-load-json-properties file="${args.path}/app.json" prefix="app.json"/>
         <x-guid property="app.json.id"/>
         <property name="app.id" value="${app.json.id}"/>
         
@@ -113,8 +127,14 @@
 
         <property name="app.cmd.version" value="3.0.0.250"/>
         <property name="legacy.template.path" 
-                  value="${cmd.config.dir}/legacy/${app.cmd.version}/ext/current/templates"/>
-
+                  value="${cmd.config.dir}/legacy/${app.cmd.version}/ext/4.1/templates"/>
+        
+        <local name="app.sencha.cfg"/>
+        <property name="app.sencha.cfg" location="${app.dir}/.sencha/app/sencha.cfg"/>
+        
+        <local name="workspace.sencha.cfg"/>
+        <property name="workspace.sencha.cfg" location="${workspace.dir}/.sencha/workspace/sencha.cfg"/>
+        
         <if>
             <isset property="args.upgrade"/>
             <then>
@@ -142,11 +162,19 @@
                         </for>
                     </then>
                 </if>
-
-                <propertyfile file="${workspace.config.dir}/sencha.cfg">
-                    <entry type="string" key="workspace.build.dir" operation="="
-                           value="$${workspace.dir}/build"/>
-                </propertyfile>
+                
+                <if>
+                    <equals arg1="${workspace.build.dir}" arg2="${workspace.dir}/build/${app.name}"/>
+                    <then>
+                        <x-property-file file="${workspace.config.dir}/sencha.cfg">
+                            <entry type="string" key="workspace.build.dir" operation="="
+                                   value="$${workspace.dir}/build"/>
+                        </x-property-file>
+                    </then>
+                </if>
+                
+                <x-upgrade appcfg="${app.sencha.cfg}"
+                           workspacecfg="${workspace.sencha.cfg}"/>
             </then>
             <else>
                 <antcall target="generate-starter-app"/>
@@ -175,33 +203,35 @@
             <param name="appViews" value=""/>
             <param name="appControllers" value=""/>
             <param name="appStores" value=""/>
+            <param name="controllerNamespace" value="${args.name}.controller"/>
+            <param name="modelNamespace" value="${args.name}.model"/>
+            <param name="viewNamespace" value="${args.name}.view"/>
         </x-generate>
-
-        <x-app-update 
-            tplpath="${templates.dir}/App"
-            appjspath="app/app.js"
-            appdir="${app.dir}"
-            appname="${app.name}"
-            legacypath="${legacy.template.path}/App"/>
-
-        <propertyfile file="${args.path}/.sencha/app/sencha.cfg">
-            <!--apply defaults if not present-->
-            <entry type="string"
-                   operation="="
-                   key="app.build.dir" 
-                   default="$${workspace.build.dir}/$${app.name}"/>
-            
-            <!--set new values-->
-            <entry type="string"
-                   operation="="
-                   key="app.cmd.version" 
-                   value="${cmd.version}"/>
-            <entry type="string"
-                   operation="="
-                   key="app.id"
-                   value="${app.id}"/>
-        </propertyfile>
-
+        
+        <if>
+            <x-is-merge-conflict file="${app.sencha.cfg}"/>
+            <then>
+                <!-- we must be an upgrade because you can't have a conflict otherwise -->
+                
+                <echo file="${app.sencha.cfg}" append="true"><![CDATA[
+<<<<<<< Generated
+app.build.dir=$${workspace.build.dir}/$${app.name}
+app.cmd.version=${cmd.version}                    
+=======
+>>>>>>> Custom]]>
+                </echo>
+            </then>
+            <else>
+                <x-property-file file="${app.sencha.cfg}">
+                    <!--apply defaults if not present-->
+                    <entry type="string"
+                           operation="="
+                           key="app.build.dir" 
+                           default="$${workspace.build.dir}/$${app.name}"/>
+                </x-property-file>
+            </else>
+        </if>
+        
         <if>
             <isset property="merge.conflicts"/>
             <then>
@@ -248,7 +278,7 @@
             <param name="appName" value="${app.name}"/>
         </x-generate>
 
-        <x-generate dir="${templates.dir}/App/resources" todir="${args.path}/resources">
+        <x-generate dir="${templates.dir}/StarterApp/resources" todir="${args.path}/resources">
             <param name="name" value="${args.name}"/>
             <param name="themeName" value="${args.name}"/>
             <param name="frameworkPath" value="${framework.path}"/>
@@ -264,7 +294,7 @@
         args.path => the target path of the new application
     -->
     <target name="generate-controller-impl">
-        <x-generate dir="${templates.dir}/StarterApp/app/controller"
+        <x-generate dir="${templates.dir}/Controller"
         			todir="${args.path}/app/controller"
                     store="${args.path}/${senchadir}/app/codegen.json"
                     basedir="${args.path}">
@@ -272,11 +302,8 @@
             <param name="name" value="${args.name}"/>
             <param name="controllerName" value="${args.name}"/>
             <param name="controllerFileName" value="${args.filename}"/>
+            <param name="controllerNamespace" value="${app.name}.controller"/>
         </x-generate>
-        <x-app-update tplpath="${templates.dir}/App"
-                      appjspath="app/app.js"
-                      appdir="${args.path}"
-                      appname="${app.name}"/>
     </target>
 
     <!--
@@ -305,13 +332,11 @@
                     basedir="${args.path}">
             <param name="appName" value="${app.name}"/>
             <param name="name" value="${args.name}"/>
+            <param name="baseClass" value="${args.base}"/>
             <param name="modelFileName" value="${args.filename}"/>
+            <param name="modelNamespace" value="${app.name}.model"/>
             <param name="fields" value="${args.fields}"/>
         </x-generate>
-        <x-app-update tplpath="${templates.dir}/App"
-                      appjspath="app/app.js"
-                      appdir="${args.path}"
-                      appname="${app.name}"/>
     </target>
 
     <!--
@@ -325,18 +350,15 @@
     <target name="generate-view-impl">
         <property name="section" value="model"/>
 
-        <x-generate dir="${templates.dir}/StarterApp/app/view" todir="${args.path}/app/view"
+        <x-generate dir="${templates.dir}/View" todir="${args.path}/app/view"
                     store="${args.path}/${senchadir}/app/codegen.json"
                     basedir="${args.path}">
             <param name="appName" value="${app.name}"/>
             <param name="name" value="${args.name}"/>
             <param name="viewName" value="${args.name}"/>
             <param name="viewFileName" value="${args.filename}"/>
+            <param name="viewNamespace" value="${app.name}.view"/>
         </x-generate>
-        <x-app-update tplpath="${templates.dir}/App"
-                      appjspath="app/app.js"
-                      appdir="${args.path}"
-                      appname="${app.name}"/>
     </target>
 
     <target name="app-refresh-impl">
@@ -386,11 +408,6 @@
             <script src="${cmd.config.dir}/ant/ant-util.js"/>
         </x-script-def>
         <x-app-upgrade/>
-
-        <x-app-update tplpath="${templates.dir}/App"
-              appjspath="app/app.js"
-              appdir="${app.dir}"
-              appname="${app.name}"/>
     </target>
 
 </project>

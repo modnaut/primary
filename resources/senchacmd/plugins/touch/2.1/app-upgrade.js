@@ -1,5 +1,13 @@
 var _logger = SenchaLogManager.getLogger("app-upgrade");
 
+function possiblyAddProps (propsToAdd, propObj) {
+    for (var prop in propsToAdd) {
+        if (propsToAdd[prop] != null) {
+            propObj[prop] = propsToAdd[prop];
+        }
+    }
+}
+
 function removeBuildPathsFromConfig(configFile) {
     var configData = readConfig(configFile);
     if(configData.buildPaths) {
@@ -13,7 +21,9 @@ function runAppUpgrade(proj) {
         newSdkPath = proj.getProperty("args.path"),
         appPath = resolvePath("."),
         hasSenchaSdkFile = new File(appPath, ".senchasdk").exists(),
-        hasSenchaDir = new File(appPath, ".sencha").exists();
+        hasSenchaDir = new File(appPath, ".sencha").exists(),
+        noFramework = (proj.getProperty("args.noframework") + '') === "true",
+        appId = proj.getProperty("app.id");
 
     // v2 app
     if(hasSenchaSdkFile && !hasSenchaDir) {
@@ -67,13 +77,29 @@ function runAppUpgrade(proj) {
 
         _logger.info("Creating new application structure");
 
-        _logger.debug(generateCmd.join(" "));
-        runSencha(generateCmd, newSdkPath, false, {
+        var generateCmd = [
+            "generate",
+            "app",
+            "-upgrade",
+            appName,
+            appPath
+        ];
+        
+        var props = {
             'touch.dir': newSdkPath,
             'workspace.config.dir': proj.getProperty("workspace.config.dir"),
             'workspace.dir': proj.getProperty("workspace.dir"),
             'cmd.architect.mode': proj.getProperty('cmd.architect.mode')
-        });
+        };
+        
+        var propsToAdd = {
+            "app.id": appId
+        };
+        
+        possiblyAddProps(propsToAdd, props);
+        
+        _logger.debug(generateCmd.join(" "));
+        runSencha(generateCmd, newSdkPath, false, props);
 
         _logger.info("Updating references to framework files");
 
@@ -126,27 +152,37 @@ function runAppUpgrade(proj) {
             appConfigFile = resolvePath(appPath, "app.json"),
             workspacePath = proj.getProperty("workspace.dir"),
             appSdkPath = resolvePath(proj.getProperty(frameworkName + ".dir")),
-            oldSdkVersion = proj.getProperty("framework.version"),
+            oldSdkVersion = proj.getProperty("base.framework.version"),
+            legacySdkVersion = proj.getProperty("legacy.framework.version"),
             appBackupPath = resolvePath(appPath, ".sencha_backup", appName, oldSdkVersion),
             sdkBackupPath = resolvePath(workspacePath, ".sencha_backup", frameworkName, oldSdkVersion),
-            generateCmd = [
-                "generate",
-                "app",
-                "-upgrade",
-                appName,
-                appPath
-            ],
+            noAppJs = proj.getProperty("args.noappjs"),
             appBackupExcludes = [
                 ".sencha_backup/**/*"
-            ];
+            ],
+            appVerStr = proj.getProperty("app.cmd.version") + '' || "3.0.0.250",
+            getLegacyPath = function(ver) {
+                return resolvePath(
+                        proj.getProperty("cmd.config.dir"),
+                        "legacy",
+                        ver,
+                        frameworkName,
+                        legacySdkVersion,
+                        "templates"
+                );
+            };
 
-        if(!exists(sdkBackupPath)) {
-            _logger.info("Backing up framework files from {} to {}",
-                appSdkPath,
-                sdkBackupPath);
-
-            moveFiles(proj, appSdkPath, sdkBackupPath);
+        if(appVerStr == "null") {
+            appVerStr = "3.0.0.250";
         }
+
+        var appVer = new Version(appVerStr);
+
+        if(new Version(proj.getProperty("cmd.version")).compareTo(appVer) === 0) {
+            _logger.info("Application structure already at current cmd version");
+            return;
+        }
+
 
         _logger.info("Backing up application files from {} to {}",
             appPath,
@@ -160,22 +196,46 @@ function runAppUpgrade(proj) {
         copyFiles(proj, appPath, appBackupPath, ["**/*"].join(','), appBackupExcludes.join(','));
 
         _logger.info("Updating application and workspace files");
-        _logger.debug("running command : sencha " + generateCmd.join(" "));
-
-        runSencha(generateCmd, newSdkPath, false, {
-            'touch.dir': newSdkPath,
+        
+        var props = {
+            'touch.dir': noFramework ? appSdkPath : newSdkPath,
             'workspace.config.dir': proj.getProperty("workspace.config.dir"),
             'workspace.dir': proj.getProperty("workspace.dir"),
-            'cmd.architect.mode': proj.getProperty('cmd.architect.mode')
-        });
+            'workspace.build.dir': proj.getProperty("workspace.build.dir"),
+            'cmd.architect.mode': proj.getProperty('cmd.architect.mode'),
+            "framework.name": proj.getProperty("framework.name")
+        };
+
+        if(noFramework) {
+            props['args.noframework'] = true;
+        }
+        
+        var propsToAdd = {
+            "args.noappjs": noAppJs,
+            "app.id": appId
+        };
+        
+        possiblyAddProps(propsToAdd, props);
+            
+        var generateCmd = [
+            "generate",
+            "-legacy",
+            getLegacyPath(appVerStr),
+            "app",
+            "-upgrade",
+            appName,
+            appPath
+        ];
+
+        _logger.debug("running command : sencha " + generateCmd.join(" "));
+        runSencha(generateCmd, newSdkPath, false, props);
 
         _logger.debug("Removing deprecated 'buildPaths' property from app.json");
         removeBuildPathsFromConfig(appConfigFile);
 
-
         _logger.info("A backup of pre-upgrade application files is available at {}", 
             appBackupPath);
-
+        
     } else if(!hasSenchaSdkFile) {
 
         _logger.error("Unable to locate .senchasdk file or .sencha folder");

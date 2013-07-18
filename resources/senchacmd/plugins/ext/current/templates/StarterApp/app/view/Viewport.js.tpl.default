@@ -1,24 +1,15 @@
-Ext.define('{name}.view.Viewport', {
+Ext.define('{appName}.view.Viewport', {
     extend: 'Ext.container.Viewport',
     requires:[
-        'Ext.tab.Panel',
-        'Ext.layout.container.Border'
+        'Ext.layout.container.Fit',
+        '{appName}.view.Main'
     ],
 
     layout: {
-        type: 'border'
+        type: 'fit'
     },
 
     items: [{
-        region: 'west',
-        xtype: 'panel',
-        title: 'west',
-        width: 150
-    },{
-        region: 'center',
-        xtype: 'tabpanel',
-        items:[{
-            title: 'Center Tab 1'
-        }]
+        xtype: 'app-main'
     }]
 });

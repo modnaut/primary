@@ -13,7 +13,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
 */
 /**
  * Lithuanian Translations (UTF-8)
@@ -21,12 +21,6 @@ Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
  * Vladas Saulis (vladas at prodata dot lt),  10-18-2007
  */
 Ext.onReady(function() {
-    var cm = Ext.ClassManager,
-        exists = Ext.Function.bind(cm.get, cm);
-
-    if (Ext.Updater) {
-        Ext.Updater.defaults.indicatorText = '<div class="loading-indicator">Kraunasi...</div>';
-    }
 
     if (Ext.Date) {
         Ext.Date.monthNames = ["Sausis", "Vasaris", "Kovas", "Balandis", "Gegužė", "Birželis", "Liepa", "Rugpjūtis", "Rugsėjis", "Spalis", "Lapkritis", "Gruodis"];
@@ -71,31 +65,14 @@ Ext.onReady(function() {
             return Ext.Date.dayNames[day].substring(0, 3);
         };
     }
-    if (Ext.MessageBox) {
-        Ext.MessageBox.buttonText = {
-            ok: "Gerai",
-            cancel: "Atsisakyti",
-            yes: "Taip",
-            no: "Ne"
-        };
-    }
 
-    if (exists('Ext.util.Format')) {
+    if (Ext.util && Ext.util.Format) {
         Ext.apply(Ext.util.Format, {
             thousandSeparator: '.',
             decimalSeparator: ',',
             currencySign: 'Lt',
             // Lithuanian Litai
             dateFormat: 'Y-m-d'
-        });
-    }
-
-    if (exists('Ext.form.field.VTypes')) {
-        Ext.apply(Ext.form.field.VTypes, {
-            emailText: 'Šiame lauke turi būti el.pašto adresas formatu "user@example.com"',
-            urlText: 'Šiame lauke turi būti nuoroda (URL) formatu "http:/' + '/www.example.com"',
-            alphaText: 'Šiame lauke gali būti tik raidės ir ženklas "_"',
-            alphanumText: 'Šiame lauke gali būti tik raidės, skaičiai ir ženklas "_"'
         });
     }
 });
@@ -115,8 +92,8 @@ Ext.define("Ext.locale.lt.grid.plugin.DragDrop", {
     dragText: "{0} pažymėtų eilučių"
 });
 
-Ext.define("Ext.locale.lt.TabPanelItem", {
-    override: "Ext.TabPanelItem",
+Ext.define("Ext.locale.lt.tab.Tab", {
+    override: "Ext.tab.Tab",
     closeText: "Uždaryti šią užsklandą"
 });
 
@@ -128,7 +105,7 @@ Ext.define("Ext.locale.lt.form.field.Base", {
 // changing the msg text below will affect the LoadMask
 Ext.define("Ext.locale.lt.view.AbstractView", {
     override: "Ext.view.AbstractView",
-    msg: "Kraunasi..."
+    loadingText: "Kraunasi..."
 });
 
 Ext.define("Ext.locale.lt.picker.Date", {
@@ -138,8 +115,6 @@ Ext.define("Ext.locale.lt.picker.Date", {
     maxText: "Ši data yra didesnė už leistiną",
     disabledDaysText: "",
     disabledDatesText: "",
-    monthNames: Ext.Date.monthNames,
-    dayNames: Ext.Date.dayNames,
     nextText: 'Kitas mėnuo (Control+Right)',
     prevText: 'Ankstesnis mėnuo (Control+Left)',
     monthYearText: 'Pasirinkti mėnesį (Control+Up/Down perėjimui tarp metų)',
@@ -201,6 +176,14 @@ Ext.define("Ext.locale.lt.form.field.ComboBox", {
     Ext.apply(Ext.form.field.ComboBox.prototype.defaultListConfig, {
         loadingText: "Kraunasi..."
     });
+});
+
+Ext.define("Ext.locale.lt.form.field.VTypes", {
+    override: "Ext.form.field.VTypes",
+    emailText: 'Šiame lauke turi būti el.pašto adresas formatu "user@example.com"',
+    urlText: 'Šiame lauke turi būti nuoroda (URL) formatu "http:/' + '/www.example.com"',
+    alphaText: 'Šiame lauke gali būti tik raidės ir ženklas "_"',
+    alphanumText: 'Šiame lauke gali būti tik raidės, skaičiai ir ženklas "_"'
 });
 
 Ext.define("Ext.locale.lt.form.field.HtmlEditor", {
@@ -328,6 +311,16 @@ Ext.define("Ext.locale.lt.form.CheckboxGroup", {
 Ext.define("Ext.locale.lt.form.RadioGroup", {
     override: "Ext.form.RadioGroup",
     blankText: "Jūs turite padaryti bent vieną pasirinkimą šioje grupėje"
+});
+
+Ext.define("Ext.locale.lt.window.MessageBox", {
+    override: "Ext.window.MessageBox",
+    buttonText: {
+        ok: "Gerai",
+        cancel: "Atsisakyti",
+        yes: "Taip",
+        no: "Ne"
+    }    
 });
 
 // This is needed until we can refactor all of the locales into individual files

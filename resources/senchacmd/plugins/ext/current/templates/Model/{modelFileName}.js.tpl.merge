@@ -1,4 +1,4 @@
-Ext.define('{appName}.model.{name}', {
+Ext.define('{modelNamespace}.{name}', {
     extend: '{baseClass}',
     
     fields: [{%
@@ -13,6 +13,6 @@ Ext.define('{appName}.model.{name}', {
         })(values.fields);
     %}<tpl for="fields">
         { name: '{name}', type: '{type}' }{[ (xindex == xcount) ? '' : ',' ]}</tpl>
+{% /* blank line to reduce merge conflicts w/user edits */ %}
     ]
 });
-

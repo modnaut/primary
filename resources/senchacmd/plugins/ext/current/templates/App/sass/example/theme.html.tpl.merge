@@ -27,17 +27,18 @@
     <script type="text/javascript" src="custom.js"></script>
 
     <style>
-        .ext-generator {
-            width: 3000px;
-        }
-
         .widget-container {
             margin: 10px;
             width: 400px;
             position: relative;
             overflow: visible;
         }
+
+        .x-slicer-target,
+        .x-slicer-target * {
+            opacity: 1;
+        }
     </style>
 </head>
-    <body class="ext-generator"></body>
+    <body></body>
 </html>

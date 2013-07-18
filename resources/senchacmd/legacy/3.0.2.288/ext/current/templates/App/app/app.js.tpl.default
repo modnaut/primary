@@ -1,6 +1,0 @@
-Ext.application({
-
-    name: '{name}',
-
-    autoCreateViewport: true
-});

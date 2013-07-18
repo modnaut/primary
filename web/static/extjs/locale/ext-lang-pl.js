@@ -13,7 +13,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
 */
 /**
  * Polish Translations
@@ -22,12 +22,6 @@ Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
  * Encoding: utf-8
  */
 Ext.onReady(function() {
-    var cm = Ext.ClassManager,
-        exists = Ext.Function.bind(cm.get, cm);
-
-    if (Ext.Updater) {
-        Ext.Updater.defaults.indicatorText = '<div class="loading-indicator">Wczytywanie danych...</div>';
-    }
 
     if (Ext.Date) {
         Ext.Date.monthNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
@@ -78,31 +72,14 @@ Ext.onReady(function() {
             }
         };
     }
-    if (Ext.MessageBox) {
-        Ext.MessageBox.buttonText = {
-            ok: "OK",
-            cancel: "Anuluj",
-            yes: "Tak",
-            no: "Nie"
-        };
-    }
 
-    if (exists('Ext.util.Format')) {
+    if (Ext.util && Ext.util.Format) {
         Ext.apply(Ext.util.Format, {
             thousandSeparator: '.',
             decimalSeparator: ',',
             currencySign: '\u007a\u0142',
             // Polish Zloty
             dateFormat: 'Y-m-d'
-        });
-    }
-
-    if (exists('Ext.form.field.VTypes')) {
-        Ext.apply(Ext.form.field.VTypes, {
-            emailText: 'To pole wymaga podania adresu e-mail w formacie: "nazwa@domena.pl"',
-            urlText: 'To pole wymaga podania adresu strony www w formacie: "http:/' + '/www.domena.pl"',
-            alphaText: 'To pole wymaga podania tylko liter i _',
-            alphanumText: 'To pole wymaga podania tylko liter, cyfr i _'
         });
     }
 });
@@ -117,8 +94,8 @@ Ext.define("Ext.locale.pl.grid.plugin.DragDrop", {
     dragText: "{0} wybrano wiersze(y)"
 });
 
-Ext.define("Ext.locale.pl.TabPanelItem", {
-    override: "Ext.TabPanelItem",
+Ext.define("Ext.locale.pl.tab.Tab", {
+    override: "Ext.tab.Tab",
     closeText: "Zamknij zakładkę"
 });
 
@@ -130,7 +107,7 @@ Ext.define("Ext.locale.pl.form.field.Base", {
 // changing the msg text below will affect the LoadMask
 Ext.define("Ext.locale.pl.view.AbstractView", {
     override: "Ext.view.AbstractView",
-    msg: "Wczytywanie danych..."
+    loadingText: "Wczytywanie danych..."
 });
 
 Ext.define("Ext.locale.pl.picker.Date", {
@@ -141,8 +118,6 @@ Ext.define("Ext.locale.pl.picker.Date", {
     maxText: "Data jest późniejsza od daty maksymalnej",
     disabledDaysText: "",
     disabledDatesText: "",
-    monthNames: Ext.Date.monthNames,
-    dayNames: Ext.Date.dayNames,
     nextText: "Następny miesiąc (Control+StrzałkaWPrawo)",
     prevText: "Poprzedni miesiąc (Control+StrzałkaWLewo)",
     monthYearText: "Wybierz miesiąc (Control+Up/Down aby zmienić rok)",
@@ -204,6 +179,14 @@ Ext.define("Ext.locale.pl.form.field.ComboBox", {
     Ext.apply(Ext.form.field.ComboBox.prototype.defaultListConfig, {
         loadingText: "Wczytuję..."
     });
+});
+
+Ext.define("Ext.locale.pl.form.field.VTypes", {
+    override: "Ext.form.field.VTypes",
+    emailText: 'To pole wymaga podania adresu e-mail w formacie: "nazwa@domena.pl"',
+    urlText: 'To pole wymaga podania adresu strony www w formacie: "http:/' + '/www.domena.pl"',
+    alphaText: 'To pole wymaga podania tylko liter i _',
+    alphanumText: 'To pole wymaga podania tylko liter, cyfr i _'
 });
 
 Ext.define("Ext.locale.pl.form.field.HtmlEditor", {
@@ -307,6 +290,16 @@ Ext.define("Ext.locale.pl.grid.PropertyColumnModel", {
     nameText: "Nazwa",
     valueText: "Wartość",
     dateFormat: "Y-m-d"
+});
+
+Ext.define("Ext.locale.pl.window.MessageBox", {
+    override: "Ext.window.MessageBox",
+    buttonText: {
+        ok: "OK",
+        cancel: "Anuluj",
+        yes: "Tak",
+        no: "Nie"
+    }    
 });
 
 // This is needed until we can refactor all of the locales into individual files

@@ -13,7 +13,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
+Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
 */
 /**
  * Danish translation
@@ -24,9 +24,7 @@ Build date: 2013-03-11 22:33:40 (aed16176e68b5e8aa1433452b12805c0ad913836)
  * December, 2007.
  */
 Ext.onReady(function() {
-    var cm = Ext.ClassManager,
-        exists = Ext.Function.bind(cm.get, cm);
-
+    
     if (Ext.Date) {
         Ext.Date.monthNames = ["januar", "februar", "marts", "april", "maj", "juni", "juli", "august", "september", "oktober", "november", "december"];
 
@@ -60,31 +58,13 @@ Ext.onReady(function() {
         };
     }
 
-    if (Ext.MessageBox) {
-        Ext.MessageBox.buttonText = {
-            ok: "OK",
-            cancel: "Fortryd",
-            yes: "Ja",
-            no: "Nej"
-        };
-    }
-
-    if (exists('Ext.util.Format')) {
+    if (Ext.util && Ext.util.Format) {
         Ext.apply(Ext.util.Format, {
             thousandSeparator: '.',
             decimalSeparator: ',',
             currencySign: 'kr',
             // Danish Krone
             dateFormat: 'd/m/Y'
-        });
-    }
-
-    if (exists('Ext.form.field.VTypes')) {
-        Ext.apply(Ext.form.field.VTypes, {
-            emailText: 'Dette felt skal være en email adresse i formatet "xxx@yyy.zzz"',
-            urlText: 'Dette felt skal være en URL i formatet "http:/' + '/xxx.yyy"',
-            alphaText: 'Dette felt kan kun indeholde bogstaver og "_" (understregning)',
-            alphanumText: 'Dette felt kan kun indeholde bogstaver, tal og "_" (understregning)'
         });
     }
 });
@@ -99,8 +79,8 @@ Ext.define("Ext.locale.da.grid.plugin.DragDrop", {
     dragText: "{0} markerede rækker"
 });
 
-Ext.define("Ext.locale.da.TabPanelItem", {
-    override: "Ext.TabPanelItem",
+Ext.define("Ext.locale.da.tab.Tab", {
+    override: "Ext.tab.Tab",
     closeText: "Luk denne fane"
 });
 
@@ -112,7 +92,7 @@ Ext.define("Ext.locale.da.form.field.Base", {
 // changing the msg text below will affect the LoadMask
 Ext.define("Ext.locale.da.view.AbstractView", {
     override: "Ext.view.AbstractView",
-    msg: "Henter..."
+    loadingText: "Henter..."
 });
 
 Ext.define("Ext.locale.da.picker.Date", {
@@ -122,8 +102,6 @@ Ext.define("Ext.locale.da.picker.Date", {
     maxText: "Denne dato er senere end den senest tilladte",
     disabledDaysText: "",
     disabledDatesText: "",
-    monthNames: Ext.Date.monthNames,
-    dayNames: Ext.Date.dayNames,
     nextText: 'Næste måned (Ctrl + højre piltast)',
     prevText: 'Forrige måned (Ctrl + venstre piltast)',
     monthYearText: 'Vælg en måned (Ctrl + op/ned pil for at ændre årstal)',
@@ -186,6 +164,14 @@ Ext.define("Ext.locale.da.form.field.ComboBox", {
     Ext.apply(Ext.form.field.ComboBox.prototype.defaultListConfig, {
         loadingText: "Henter..."
     });
+});
+
+Ext.define("Ext.locale.da.form.field.VTypes", {
+    override: "Ext.form.field.VTypes",
+    emailText: 'Dette felt skal være en email adresse i formatet "xxx@yyy.zzz"',
+    urlText: 'Dette felt skal være en URL i formatet "http:/' + '/xxx.yyy"',
+    alphaText: 'Dette felt kan kun indeholde bogstaver og "_" (understregning)',
+    alphanumText: 'Dette felt kan kun indeholde bogstaver, tal og "_" (understregning)'
 });
 
 Ext.define("Ext.locale.da.form.field.HtmlEditor", {
@@ -291,6 +277,16 @@ Ext.define("Ext.locale.da.grid.PropertyColumnModel", {
     nameText: "Navn",
     valueText: "Værdi",
     dateFormat: "j/m/Y"
+});
+
+Ext.define("Ext.locale.da.window.MessageBox", {
+    override: "Ext.window.MessageBox",
+    buttonText: {
+        ok: "OK",
+        cancel: "Fortryd",
+        yes: "Ja",
+        no: "Nej"
+    }    
 });
 
 // This is needed until we can refactor all of the locales into individual files

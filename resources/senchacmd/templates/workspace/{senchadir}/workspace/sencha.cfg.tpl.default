@@ -23,6 +23,8 @@ workspace.build.dir=$\u007Bworkspace.dir}/build
 
 workspace.packages.dir=$\u007Bworkspace.dir}/packages
 
+workspace.theme.dir=$\u007Bworkspace.packages.dir}/$\u007Bargs.themeName}
+
 # =============================================================================
 # Customizations go below this divider to avoid merge conflicts on upgrade
 # =============================================================================

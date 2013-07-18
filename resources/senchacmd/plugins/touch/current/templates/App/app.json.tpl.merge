@@ -118,6 +118,12 @@
     "archivePath": "archive",
 
     /**
+     * List of package names to require for the cmd build process
+     */
+    "requires": [
+    ],
+
+    /**
      * Uniquely generated id for this application, used as prefix for localStorage keys.
      * Normally you should never change this value.
      */

@@ -15,8 +15,7 @@
 
 //<debug>
 Ext.Loader.setPath({
-    'Ext': '{frameworkPath}/src',
-    '{appName}': 'app'
+    'Ext': '{frameworkPath}/src'
 });
 //</debug>
 
@@ -26,59 +25,11 @@ Ext.application({
     requires: [
         'Ext.MessageBox'
     ],
-<tpl if="appModels">
-    models:[{%
-        values.models = (function (models) {
-            for (var ret = [], parts = models.split(','), i = 0; i < parts.length; ++i) {
-                if(parts[i]) {
-                    ret.push({name : parts[i]});
-                }
-            }
-            return ret;
-        })(values.appModels + '');
-    %}<tpl for="models">
-        '{name}'{[ (xindex == xcount) ? '' : ',' ]}</tpl>
+
+    views: [
+        'Main'
     ],
-</tpl><tpl if="appViews">
-    views: [{%
-        values.views = (function (views) {
-            for (var ret = [], parts = views.split(','), i = 0; i < parts.length; ++i) {
-                if(parts[i]) {
-                    ret.push({name : parts[i]});
-                }
-            }
-            return ret;
-        })(values.appViews + '');
-    %}<tpl for="views">
-        '{name}'{[ (xindex == xcount) ? '' : ',' ]}</tpl>
-    ],
-</tpl><tpl if="appStores">
-    stores: [{%
-        values.stores = (function (stores) {
-            for (var ret = [], parts = stores.split(','), i = 0; i < parts.length; ++i) {
-                if(parts[i]) {
-                    ret.push({name : parts[i]});
-                }
-            }
-            return ret;
-        })(values.appStores + '');
-    %}<tpl for="stores">
-        '{name}'{[ (xindex == xcount) ? '' : ',' ]}</tpl>
-    ],
-</tpl><tpl if="appControllers">
-    controllers: [{%
-        values.controllers = (function (controllers) {
-            for (var ret = [], parts = controllers.split(','), i = 0; i < parts.length; ++i) {
-                if(parts[i]) {
-                    ret.push({name : parts[i]});
-                }
-            }
-            return ret;
-        })(values.appControllers + '');
-    %}<tpl for="controllers">
-        '{name}'{[ (xindex == xcount) ? '' : ',' ]}</tpl>
-    ],
-</tpl>
+
     icon: {
         '57': 'resources/icons/Icon.png',
         '72': 'resources/icons/Icon~ipad.png',

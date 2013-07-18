@@ -7,6 +7,9 @@
     target.
 -->
 <project>
+    <!--
+    IMPORTANT: This file is private and should not be edited.
+    -->
     <target name="init-plugin">
         <!-- nothing to do here... yet -->
     </target>

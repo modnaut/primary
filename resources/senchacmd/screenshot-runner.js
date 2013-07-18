@@ -15,7 +15,7 @@ function handleError(err, stack) {
     phantom.exit(2);
 }
 
-page.onError = phantom.onError = handleError
+page.onError = phantom.onError = handleError;
 
 /* end error handler setup */
 
@@ -102,7 +102,7 @@ page.open(url, function(status){
                                     entry.stretch = path;
                                 } else {
                                     // The path indicates the desired output file to create for this type of slice operation
-                                    if (!!slices[schema] && slices[schema] != path) {
+                                    if (!!slices[schema] && 'url(' + slices[schema] + ')' != path) {
                                         err("The widget " + entry.id + " declares two " + schema + " with two different urls");
                                     }
                                     // From SASS, this path is in the form of url(path), whereas we only want to pass along the inner

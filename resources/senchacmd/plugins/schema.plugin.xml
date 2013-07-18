@@ -1,14 +1,14 @@
 <!--
-    Copyright (c) 2012. Sencha Inc.
+    Copyright (c) 2012-2013. Sencha Inc.
     
-    This file is a Sencha Cmd plugin that manages your DB Schemas.
+    This file is a Sencha Cmd plugin that manages DB Schemas.
 -->
-<project basedir=".">
-    <target name="init-plugin">
-        <!-- nothing to do here... yet -->
+<project name="schema-plugin" basedir=".">
+    <target name="xxx-init-plugin">
+        <!-- nothing to do here... yet... remove "xxx-" to enable -->
     </target>
     
-    <target name="enable-db" unless="db.enabled">
+    <target name="check-schema-plugin" unless="schema-plugin.disabled">
         <if>
             <isset property="app.schema.name"/>
             <then>
@@ -22,10 +22,12 @@
         </if>
     </target>
 
-    <target name="xxx-before-generate-model" depends="enable-db" if="db.enabled">
+    <target name="xxx-before-generate-model" depends="check-schema-plugin"
+                                             if="schema-plugin.active">
     </target>
 
-    <target name="-after-generate-model" depends="enable-db" if="db.enabled">
+    <target name="-after-generate-model" depends="check-schema-plugin"
+                                         if="schema-plugin.active">
         <local name="pkg-dir"/>
         <local name="entities-dir"/>
         <local name="filename"/>
@@ -47,42 +49,68 @@
         </x-generate>
     </target>
 
-    <target name="-after-generate-package">
+    <target name="-after-generate-package" unless="schema-plugin.disabled">
         <if>
             <equals arg1="${args.type}" arg2="schema"/>
             <then>
-                <echo>Generating Schema "${args.name}"</echo>
-                <mkdir dir="${args.path}/entities"/>
+                <antcall target="schema-init">
+                    <param name="args.config.dir" value="${args.path}/.sencha/package"/>
+                    <param name="args.out" value="${args.path}"/>
+                </antcall>
+            </then>
+        </if>
+    </target>
 
-                <x-generate dir="${basedir}/schema/templates/schema"
-                            todir="${args.path}"
-                            store="${args.path}/.sencha/package/codegen.json">
-                    <param name="schemaName" value="${args.name}"/>
-                </x-generate>
+    <target name="schema-init">
+        <local name="configDir"/>
+        <local name="rootDir"/>
+        <local name="schemaDir"/>
 
-                <if>
-                    <isset property="workspace.schemas"/>
-                    <then>
-                        <propertyfile file="${workspace.config.dir}/sencha.cfg">
-                            <entry key="workspace.schemas" value="${workspace.schemas},${args.name}"/>
-                        </propertyfile>
-                    </then>
-                    <else>
-                        <propertyfile file="${workspace.config.dir}/sencha.cfg">
-                            <entry key="workspace.schemas" value="${args.name}"/>
-                        </propertyfile>
-                    </else>
-                </if>
+        <if>
+            <isset property="app.dir"/>
+            <then>
+                <property name="rootDir" value="${app.dir}"/>
+                <property name="configDir" value="${rootDir}/.sencha/app"/>
+                <propertyfile file="${configDir}/sencha.cfg">
+                    <entry key="schema.dir" value="$${app.dir}/schema"/>
+                </propertyfile>
+            </then>
+            <else>
+                <property name="rootDir" value="${package.dir}"/>
+                <property name="configDir" value="${rootDir}/.sencha/package"/>
+                <propertyfile file="${configDir}/sencha.cfg">
+                    <entry key="schema.dir" value="$${package.dir}/schema"/>
+                </propertyfile>
+            </else>
+        </if>
+
+        <property name="schemaDir" value="${rootDir}/schema"/>
+        <echo>Generating Schema to ${schemaDir}</echo>
+
+        <x-generate dir="${basedir}/schema/templates/schema"
+                    todir="${schemaDir}"
+                    basedir="${rootDir}"
+                    store="${configDir}/codegen.json">
+        </x-generate>
+
+        <if>
+            <isset property="args.namespace"/>
+            <then>
+                <propertyfile file="${configDir}/sencha.cfg">
+                    <entry key="schema.namespace" value="${args.namespace}"/>
+                </propertyfile>
             </then>
         </if>
     </target>
 
     <target name="schema-export">
-        <echo>Export Schema ${args.name} from ${args.path} to ${app.dir} as ${args.type}</echo>
+        <echo>Exporting Schema as "${args.format}"</echo>
+        <echo>From ${schema.dir}/database.xml</echo>
+        <echo>To ${args.out}</echo>
 
         <local name="exporterDir"/>
         <local name="exporter"/>
-        <property name="exporterDir" location="${basedir}/schema/exports/${args.type}"/>
+        <property name="exporterDir" location="${basedir}/schema/exports/${args.format}"/>
         <property name="exporter" location="${exporterDir}/main.js"/>
 
         <if>
@@ -92,7 +120,7 @@
                 </resourceexists>
             </not>
             <then>
-                <fail>Unsupported export type: ${args.type} (${exporter})</fail>
+                <fail>Unsupported export type: ${args.format} (${exporter})</fail>
             </then>
         </if>
 
@@ -103,13 +131,26 @@
             <attribute name="file"/>
             <attribute name="dbtype"/>
             <attribute name="out" />
+            <attribute name="namespace"/>
 
             doExport(attributes);
         </x-script-def>
 
-        <x-export file="${workspace.packages.dir}/${args.name}/database.xml"
-                  dbtype="${args.dbtype}"
-                  out="${args.out}"
-                  />
+        <if>
+            <isset property="args.namespace"/>
+            <then>
+                <x-export file="${schema.dir}/database.xml"
+                          dbtype="${args.dbtype}"
+                          out="${args.out}"
+                          namespace="${args.namespace}"
+                          />
+            </then>
+            <else>
+                <x-export file="${schema.dir}/database.xml"
+                          dbtype="${args.dbtype}"
+                          out="${args.out}"
+                          />
+            </else>
+        </if>
     </target>
 </project>

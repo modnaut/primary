@@ -1,5 +1,6 @@
 /*
-    This fine was generated from {src}.
+    This fine was generated from {src}
+    Target database: MS SQL Server
 
     DO NOT EDIT - all edits will be lost when this file is regenerated.
 */
