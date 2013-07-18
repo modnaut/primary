@@ -1,6 +1,6 @@
-Ext.define('LocalConnection.view.UserToolbar', {
+Ext.define('LocalFoodConnection.view.UserToolbar', {
 	extend: 'Ext.toolbar.Toolbar',
-	alias: 'widget.userToolbar',
+	alias: 'widget.usertoolbar',
 	cls: 'userToolbar',
 	items: ['->', {
 		xtype: 'tbtext',

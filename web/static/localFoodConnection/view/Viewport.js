@@ -1,6 +1,6 @@
-Ext.define('LocalConnection.view.Viewport', {
+Ext.define('LocalFoodConnection.view.Viewport', {
 	extend: 'Ext.container.Viewport',
-	requires: ['LocalConnection.view.UserToolbar', 'LocalConnection.view.AppToolbar'],
+	requires: ['LocalFoodConnection.view.UserToolbar', 'LocalFoodConnection.view.AppToolbar'],
 	layout: {
 		type: 'fit'
 	},
@@ -9,11 +9,11 @@ Ext.define('LocalConnection.view.Viewport', {
 		dockedItems: [{
 			dock: 'top',
 			dockWeight: 1,
-			xtype: 'userToolbar',
+			xtype: 'usertoolbar',
 		}, {
 			dock: 'top',
 			dockWeight: 2,
-			xtype: 'appToolbar'
+			xtype: 'apptoolbar'
 		}],
 		html: ''
 	}]

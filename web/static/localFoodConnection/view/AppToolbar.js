@@ -1,7 +1,7 @@
-Ext.define('LocalConnection.view.AppToolbar', {
+Ext.define('LocalFoodConnection.view.AppToolbar', {
 	extend: 'Ext.toolbar.Toolbar',
-	alias: 'widget.appToolbar',
-	requires: ['LocalConnection.view.Search'],
+	alias: 'widget.apptoolbar',
+	requires: ['LocalFoodConnection.view.Search'],
 	cls: 'appToolbar',
 	defaults: {
 		xtype: 'button',

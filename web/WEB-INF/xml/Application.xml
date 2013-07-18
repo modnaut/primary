@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <applications xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/Application.xsd">
 	<application applicationId="1">
-		<pageTitle stringCd="LocalConnection"/>
-		<applicationFolder>localConnection</applicationFolder>
+		<pageTitle stringCd="LocalFoodConnection"/>
+		<applicationFolder>localFoodConnection</applicationFolder>
 	</application>
 	<application applicationId="2">
 		<pageTitle stringCd="Modnaut Application"/>
