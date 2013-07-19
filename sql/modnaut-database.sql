@@ -829,3 +829,299 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2013-07-02  8:43:36
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+-- Dumping database structure for localfoodconnection
+DROP DATABASE IF EXISTS `localfoodconnection`;
+CREATE DATABASE IF NOT EXISTS `localfoodconnection` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `localfoodconnection`;
+
+
+-- Dumping structure for table localfoodconnection.category
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE IF NOT EXISTS `category` (
+  `CategoryId` int(11) NOT NULL AUTO_INCREMENT,
+  `CategoryDescription` varchar(100) NOT NULL,
+  `CategoryTypeId` int(11) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`CategoryId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.category: ~0 rows (approximately)
+/*!40000 ALTER TABLE `category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `category` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.collections
+DROP TABLE IF EXISTS `collections`;
+CREATE TABLE IF NOT EXISTS `collections` (
+  `CollectionsId` int(11) NOT NULL AUTO_INCREMENT,
+  `ProductId` int(11) NOT NULL,
+  `CollectionsTypeId` varchar(45) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`CollectionsId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.collections: ~0 rows (approximately)
+/*!40000 ALTER TABLE `collections` DISABLE KEYS */;
+/*!40000 ALTER TABLE `collections` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.inventory
+DROP TABLE IF EXISTS `inventory`;
+CREATE TABLE IF NOT EXISTS `inventory` (
+  `InventoryId` int(11) NOT NULL AUTO_INCREMENT,
+  `StructureId` int(11) NOT NULL,
+  `ProductId` int(11) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`InventoryId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.inventory: ~0 rows (approximately)
+/*!40000 ALTER TABLE `inventory` DISABLE KEYS */;
+/*!40000 ALTER TABLE `inventory` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.location
+DROP TABLE IF EXISTS `location`;
+CREATE TABLE IF NOT EXISTS `location` (
+  `LocationId` int(11) NOT NULL AUTO_INCREMENT,
+  `StructureId` int(11) NOT NULL,
+  `LocationTypeId` int(11) NOT NULL,
+  `LocationName` varchar(45) DEFAULT NULL,
+  `Address1` varchar(45) NOT NULL,
+  `Address2` varchar(45) DEFAULT NULL,
+  `City` varchar(45) NOT NULL,
+  `State` char(2) NOT NULL,
+  `Zip` int(11) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`LocationId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.location: ~0 rows (approximately)
+/*!40000 ALTER TABLE `location` DISABLE KEYS */;
+/*!40000 ALTER TABLE `location` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.locationtype
+DROP TABLE IF EXISTS `locationtype`;
+CREATE TABLE IF NOT EXISTS `locationtype` (
+  `LocationTypeId` int(11) NOT NULL AUTO_INCREMENT,
+  `LocationTypeDescription` varchar(45) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `LocationTypecol` varchar(45) DEFAULT 'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+  PRIMARY KEY (`LocationTypeId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.locationtype: ~0 rows (approximately)
+/*!40000 ALTER TABLE `locationtype` DISABLE KEYS */;
+/*!40000 ALTER TABLE `locationtype` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.options
+DROP TABLE IF EXISTS `options`;
+CREATE TABLE IF NOT EXISTS `options` (
+  `ProductId` int(11) NOT NULL,
+  `OptionTypeId` int(11) NOT NULL,
+  `OptionValue` varchar(45) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.options: ~0 rows (approximately)
+/*!40000 ALTER TABLE `options` DISABLE KEYS */;
+/*!40000 ALTER TABLE `options` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.optiontype
+DROP TABLE IF EXISTS `optiontype`;
+CREATE TABLE IF NOT EXISTS `optiontype` (
+  `OptionTypeId` int(11) NOT NULL,
+  `OptionTypeDescription` varchar(45) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedByDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedByDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`OptionTypeId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.optiontype: ~0 rows (approximately)
+/*!40000 ALTER TABLE `optiontype` DISABLE KEYS */;
+/*!40000 ALTER TABLE `optiontype` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.packagetype
+DROP TABLE IF EXISTS `packagetype`;
+CREATE TABLE IF NOT EXISTS `packagetype` (
+  `PackageTypeId` int(11) NOT NULL AUTO_INCREMENT,
+  `PackageDescription` varchar(45) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`PackageTypeId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.packagetype: ~0 rows (approximately)
+/*!40000 ALTER TABLE `packagetype` DISABLE KEYS */;
+/*!40000 ALTER TABLE `packagetype` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.packaging
+DROP TABLE IF EXISTS `packaging`;
+CREATE TABLE IF NOT EXISTS `packaging` (
+  `PackageId` int(11) NOT NULL AUTO_INCREMENT,
+  `ProductId` int(11) NOT NULL,
+  `PackageTypeId` int(11) NOT NULL,
+  `Weight` float DEFAULT NULL,
+  `Quantity` int(11) DEFAULT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`PackageId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.packaging: ~0 rows (approximately)
+/*!40000 ALTER TABLE `packaging` DISABLE KEYS */;
+/*!40000 ALTER TABLE `packaging` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.price
+DROP TABLE IF EXISTS `price`;
+CREATE TABLE IF NOT EXISTS `price` (
+  `PriceId` int(11) NOT NULL AUTO_INCREMENT,
+  `PackageId` int(11) NOT NULL,
+  `Price` double NOT NULL,
+  `ValidDateFrom` datetime DEFAULT NULL,
+  `ValidDateTo` datetime DEFAULT NULL,
+  `Active` char(1) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedByDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`PriceId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.price: ~0 rows (approximately)
+/*!40000 ALTER TABLE `price` DISABLE KEYS */;
+/*!40000 ALTER TABLE `price` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.productcategory
+DROP TABLE IF EXISTS `productcategory`;
+CREATE TABLE IF NOT EXISTS `productcategory` (
+  `ProductId` int(11) NOT NULL,
+  `CategoryId` int(11) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.productcategory: ~0 rows (approximately)
+/*!40000 ALTER TABLE `productcategory` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productcategory` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.productpackaging
+DROP TABLE IF EXISTS `productpackaging`;
+CREATE TABLE IF NOT EXISTS `productpackaging` (
+  `PackageId` int(11) NOT NULL,
+  `ProductId` int(11) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.productpackaging: ~0 rows (approximately)
+/*!40000 ALTER TABLE `productpackaging` DISABLE KEYS */;
+/*!40000 ALTER TABLE `productpackaging` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.products
+DROP TABLE IF EXISTS `products`;
+CREATE TABLE IF NOT EXISTS `products` (
+  `ProductId` int(11) NOT NULL AUTO_INCREMENT,
+  `ProductName` varchar(100) NOT NULL,
+  `ProductDescription` varchar(300) DEFAULT NULL,
+  `Unit` char(1) NOT NULL,
+  `Visible` char(1) NOT NULL,
+  `Active` char(1) NOT NULL,
+  `SKU` varchar(15) DEFAULT NULL,
+  `Barcode` int(11) DEFAULT NULL,
+  `Image` blob,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ProductId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.products: ~0 rows (approximately)
+/*!40000 ALTER TABLE `products` DISABLE KEYS */;
+/*!40000 ALTER TABLE `products` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.structure
+DROP TABLE IF EXISTS `structure`;
+CREATE TABLE IF NOT EXISTS `structure` (
+  `StructureId` int(11) NOT NULL,
+  `StructureName` varchar(45) NOT NULL,
+  `StructureTypeId` int(11) NOT NULL,
+  `StructureDescription` varchar(45) DEFAULT NULL,
+  `Website` varchar(45) DEFAULT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`StructureId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.structure: ~0 rows (approximately)
+/*!40000 ALTER TABLE `structure` DISABLE KEYS */;
+/*!40000 ALTER TABLE `structure` ENABLE KEYS */;
+
+
+-- Dumping structure for table localfoodconnection.structuretype
+DROP TABLE IF EXISTS `structuretype`;
+CREATE TABLE IF NOT EXISTS `structuretype` (
+  `StructureTypeId` int(11) NOT NULL,
+  `StructureTypeDescription` varchar(45) NOT NULL,
+  `CreatedByNinjaId` int(11) NOT NULL,
+  `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `LastModifiedByNinjaId` int(11) NOT NULL,
+  `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`StructureTypeId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table localfoodconnection.structuretype: ~0 rows (approximately)
+/*!40000 ALTER TABLE `structuretype` DISABLE KEYS */;
+/*!40000 ALTER TABLE `structuretype` ENABLE KEYS */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
