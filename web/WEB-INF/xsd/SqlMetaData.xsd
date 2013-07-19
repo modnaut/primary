@@ -5,6 +5,7 @@
 			<xs:sequence>
 				<xs:element ref="query" maxOccurs="unbounded"/>
 			</xs:sequence>
+			<xs:attribute name="connection" type="connectionType" use="required"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="query">

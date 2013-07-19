@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sqlMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/SqlMetaData.xsd">
+<sqlMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/SqlMetaData.xsd" connection="MYSQL">
+	<query name="GET_ITEM_LIST" action="SELECT" type="QUERY">
+		<statement value="
+			Select ItemId, ItemName, ItemCategory.ItemCategoryDescription As Category, ItemStorage.StorageDescription As Storage, UnitCd, ActiveFlag
+			From FoodConnection.Item
+			Inner Join FoodConnection.ItemCategory on ItemCategory.ItemCategoryId = Item.CategoryId
+			Inner Join FoodConnection.ItemStorage on ItemStorage.StorageId = Item.StorageId
+			Where ActiveFlag = 'Y'
+			And CompanyId = 1"/>
+	</query>
+	
 	<query name="GET_ALL_MARKETS" action="SELECT" type="QUERY">
 		<statement value="
 			Select
