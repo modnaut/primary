@@ -24,9 +24,11 @@ import org.slf4j.LoggerFactory;
 import com.modnaut.apps.login.InsufficientPrivilegeException;
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
+import com.modnaut.framework.properties.application.Application;
 import com.modnaut.framework.session.NinjaSession;
 import com.modnaut.framework.session.WebSession;
 import com.modnaut.framework.session.WebSessionController;
+import com.modnaut.framework.utilities.ApplicationMethods;
 import com.modnaut.framework.utilities.EnvironmentMethods;
 import com.modnaut.framework.utilities.RequestParameterParser;
 import com.modnaut.framework.utilities.SessionMethods;
@@ -168,8 +170,9 @@ public class ApplicationServlet extends HttpServlet
 			// TODO: Load default class and method from server properties
 			if (StringUtils.isEmpty(className) && StringUtils.isEmpty(methodName))
 			{
-				className = "com.modnaut.common.controllers.ApplicationCtrl";
-				methodName = "defaultAction";
+				Application application = ApplicationMethods.getApplication(EnvironmentMethods.getApplicationId());
+				className = application.getClazz();
+				methodName = "buildPage";
 			}
 
 			if (!className.equals(ICommonConstants.NONE) && !methodName.equals(ICommonConstants.NONE))
@@ -189,7 +192,16 @@ public class ApplicationServlet extends HttpServlet
 				else
 					instance = clazz.newInstance();
 
-				Method method = clazz.getDeclaredMethod(methodName);
+				Method method = null;
+				try
+				{
+					method = clazz.getDeclaredMethod(methodName);
+				}
+				catch (NoSuchMethodException e)
+				{
+					method = clazz.getMethod(methodName);
+				}
+
 				method.invoke(instance);
 
 				UrlMethods.retrievePrettyUrl(webSession, className, methodName);

@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.EnrichableException;
-import com.modnaut.framework.properties.application.Applications;
 import com.modnaut.framework.properties.sqlmetadata.SqlMetaData;
 import com.modnaut.framework.properties.viewmetadata.ViewMetaData;
 
@@ -60,14 +59,6 @@ public class JaxbPool
 			try
 			{
 				put(SqlMetaData.class, new JaxbPoolKey(SqlMetaData.class));
-			}
-			catch (Exception e)
-			{
-			}
-
-			try
-			{
-				put(Applications.class, new JaxbPoolKey(Applications.class));
 			}
 			catch (Exception e)
 			{

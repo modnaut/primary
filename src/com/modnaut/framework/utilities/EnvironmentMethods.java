@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import com.modnaut.common.interfaces.ICommonConstants;
 import com.modnaut.common.utilities.StringMethods;
+import com.modnaut.framework.utilities.EntityAttributeMethods.ATTRIBUTES;
+import com.modnaut.framework.utilities.EntityAttributeMethods.ENTITY_TYPES;
 
 public class EnvironmentMethods
 {
@@ -16,6 +18,7 @@ public class EnvironmentMethods
 	private static String ENVIRONMENT_NAME = null;
 	private static String REAL_PATH = null;
 	private static String SERVER_NAME = null;
+	private static Integer applicationId = null;
 
 	public static void initializeServer(ServletContext context)
 	{
@@ -47,9 +50,18 @@ public class EnvironmentMethods
 	{
 		return ENVIRONMENT_NAME;
 	}
-	
+
 	public static String getServerName()
 	{
 		return SERVER_NAME;
+	}
+
+	public static int getApplicationId()
+	{
+		if (applicationId == null)
+		{
+			applicationId = EntityAttributeMethods.getEntityAttributeInteger(ENTITY_TYPES.ENVIRONMENT, getEnvironmentName(), ATTRIBUTES.APPLICATION_ID);
+		}
+		return applicationId;
 	}
 }

@@ -44,6 +44,7 @@ Ext.define('Globals', {
 		this.callParent(arguments);
     	this.mixins.observable.constructor.call(this, config);
 	},
+	config: {},
 	events: ['SubmitForm'],
     eventListener: function(options) {
     	console.log('eventListener', options);

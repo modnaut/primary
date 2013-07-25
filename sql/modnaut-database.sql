@@ -1,92 +1,24 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               5.5.31-log - MySQL Community Server (GPL)
+-- Server version:               5.6.12-log - MySQL Community Server (GPL)
 -- Server OS:                    Win64
 -- HeidiSQL Version:             8.0.0.4396
 -- --------------------------------------------------------
 
-
-DROP DATABASE IF EXISTS `marketlink`;
-CREATE DATABASE  IF NOT EXISTS `marketlink` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `marketlink`;
-
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `market`
---
-
-DROP TABLE IF EXISTS `market`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `market` (
-  `MarketId` int(10) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(500) NOT NULL,
-  `Url` varchar(500) DEFAULT NULL,
-  `AddressId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`MarketId`),
-  KEY `FK_market_common.address` (`AddressId`),
-  CONSTRAINT `FK_market_common?address` FOREIGN KEY (`AddressId`) REFERENCES `common`.`address` (`AddressId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `market`
---
-
-LOCK TABLES `market` WRITE;
-/*!40000 ALTER TABLE `market` DISABLE KEYS */;
-INSERT INTO `market` VALUES (1,'Y Not Wednesday Farmers Market at Town Center','http://www.sandlercenter.org/index/ynotwednesdays',1),(2,'10:10 Farmers Market','http://www.1010farmersmarket.com',2);
-/*!40000 ALTER TABLE `market` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2013-07-02  8:43:36
-CREATE DATABASE  IF NOT EXISTS `common` /*!40100 DEFAULT CHARACTER SET utf8 */;
+-- Dumping database structure for common
+DROP DATABASE IF EXISTS `common`;
+CREATE DATABASE IF NOT EXISTS `common` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `common`;
--- MySQL dump 10.13  Distrib 5.6.10, for osx10.7 (i386)
---
--- Host: localhost    Database: common
--- ------------------------------------------------------
--- Server version	5.6.10
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `address`
---
-
+-- Dumping structure for table common.address
 DROP TABLE IF EXISTS `address`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `address` (
+CREATE TABLE IF NOT EXISTS `address` (
   `AddressId` int(10) NOT NULL AUTO_INCREMENT,
   `Address1` varchar(500) DEFAULT NULL,
   `Address2` varchar(500) DEFAULT NULL,
@@ -101,54 +33,40 @@ CREATE TABLE `address` (
   KEY `FK_address_city` (`CityId`),
   CONSTRAINT `FK_address_city` FOREIGN KEY (`CityId`) REFERENCES `city` (`CityId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `address`
---
-
-LOCK TABLES `address` WRITE;
+-- Dumping data for table common.address: ~2 rows (approximately)
 /*!40000 ALTER TABLE `address` DISABLE KEYS */;
-INSERT INTO `address` VALUES (1,'201 Market Street',NULL,1,'23462','\0\0\0\0\0\0\0Ù	/Á©SÀÿ>ãÂkB@',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(2,'5960 Stewart Parkway',NULL,2,'30135','\0\0\0\0\0\0\0>yX¨51UÀÎQÚÜ@@',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `address` (`AddressId`, `Address1`, `Address2`, `CityId`, `ZipCode`, `Location`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, '201 Market Street', NULL, 1, '23462', _binary 0x000000000101000000C399092FC381C2A90853C38019C3BF3EC3A3C3826B4240, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(2, '5960 Stewart Parkway', NULL, 2, '30135', _binary 0x0000000001010000003E7958C2A8353155C380C38E1951C39A1BC39C4040, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `address` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `application`
---
 
+-- Dumping structure for table common.application
 DROP TABLE IF EXISTS `application`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `application` (
+CREATE TABLE IF NOT EXISTS `application` (
   `ApplicationId` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(50) NOT NULL,
+  `ApplicationFolder` varchar(500) DEFAULT NULL,
+  `PageTitle` varchar(500) DEFAULT NULL,
+  `Class` varchar(500) DEFAULT NULL,
   `CreatedById` int(11) NOT NULL,
   `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `LastModifiedById` int(11) NOT NULL,
   `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ApplicationId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `application`
---
-
-LOCK TABLES `application` WRITE;
+-- Dumping data for table common.application: ~1 rows (approximately)
 /*!40000 ALTER TABLE `application` DISABLE KEYS */;
-INSERT INTO `application` VALUES (1,'Modnaut Demo',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `application` (`ApplicationId`, `Name`, `ApplicationFolder`, `PageTitle`, `Class`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'LocalFoodConnection Backend', 'localFoodConnection', 'Local Food Connection', 'com.modnaut.apps.localfoodconnection.ApplicationCtrl', 0, '0000-00-00 00:00:00', 0, '2013-07-24 22:21:57');
 /*!40000 ALTER TABLE `application` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `attribute`
---
 
+-- Dumping structure for table common.attribute
 DROP TABLE IF EXISTS `attribute`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `attribute` (
+CREATE TABLE IF NOT EXISTS `attribute` (
   `AttributeId` int(10) NOT NULL AUTO_INCREMENT,
   `AttributeName` varchar(255) NOT NULL,
   `AttributeTypeId` int(10) NOT NULL,
@@ -159,27 +77,19 @@ CREATE TABLE `attribute` (
   PRIMARY KEY (`AttributeId`),
   KEY `FK_attribute_attributetype` (`AttributeTypeId`),
   CONSTRAINT `FK_attribute_attributetype` FOREIGN KEY (`AttributeTypeId`) REFERENCES `attributetype` (`AttributeTypeId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `attribute`
---
-
-LOCK TABLES `attribute` WRITE;
+-- Dumping data for table common.attribute: ~2 rows (approximately)
 /*!40000 ALTER TABLE `attribute` DISABLE KEYS */;
-INSERT INTO `attribute` VALUES (1,'CACHE_XSL',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `attribute` (`AttributeId`, `AttributeName`, `AttributeTypeId`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'CACHE_XSL', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(2, 'APPLICATION_ID', 2, 0, '2013-07-24 21:28:52', 0, '2013-07-24 21:28:53');
 /*!40000 ALTER TABLE `attribute` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `attributetype`
---
 
+-- Dumping structure for table common.attributetype
 DROP TABLE IF EXISTS `attributetype`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `attributetype` (
+CREATE TABLE IF NOT EXISTS `attributetype` (
   `AttributeTypeId` int(10) NOT NULL AUTO_INCREMENT,
   `Description` varchar(50) NOT NULL,
   `CreatedById` int(11) NOT NULL,
@@ -188,26 +98,20 @@ CREATE TABLE `attributetype` (
   `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`AttributeTypeId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `attributetype`
---
-
-LOCK TABLES `attributetype` WRITE;
+-- Dumping data for table common.attributetype: ~4 rows (approximately)
 /*!40000 ALTER TABLE `attributetype` DISABLE KEYS */;
-INSERT INTO `attributetype` VALUES (1,'Text',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(2,'Integer',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(3,'Float',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(4,'Date',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `attributetype` (`AttributeTypeId`, `Description`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'Text', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(2, 'Integer', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(3, 'Float', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(4, 'Date', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `attributetype` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `city`
---
 
+-- Dumping structure for table common.city
 DROP TABLE IF EXISTS `city`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `city` (
+CREATE TABLE IF NOT EXISTS `city` (
   `CityId` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(500) NOT NULL,
   `StateId` int(11) NOT NULL,
@@ -219,26 +123,18 @@ CREATE TABLE `city` (
   KEY `FK_City_state` (`StateId`),
   CONSTRAINT `FK_City_state` FOREIGN KEY (`StateId`) REFERENCES `state` (`StateId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `city`
---
-
-LOCK TABLES `city` WRITE;
+-- Dumping data for table common.city: ~2 rows (approximately)
 /*!40000 ALTER TABLE `city` DISABLE KEYS */;
-INSERT INTO `city` VALUES (1,'Virginia Beach',46,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(2,'Douglasville',10,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `city` (`CityId`, `Name`, `StateId`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'Virginia Beach', 46, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(2, 'Douglasville', 10, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `city` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `clan`
---
 
+-- Dumping structure for table common.clan
 DROP TABLE IF EXISTS `clan`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `clan` (
+CREATE TABLE IF NOT EXISTS `clan` (
   `ClanId` int(10) NOT NULL AUTO_INCREMENT,
   `ClanDescription` varchar(50) NOT NULL,
   `CreatedById` int(11) NOT NULL,
@@ -247,26 +143,17 @@ CREATE TABLE `clan` (
   `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ClanId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `clan`
---
-
-LOCK TABLES `clan` WRITE;
+-- Dumping data for table common.clan: ~1 rows (approximately)
 /*!40000 ALTER TABLE `clan` DISABLE KEYS */;
-INSERT INTO `clan` VALUES (1,'TestGroup',0,'0000-00-00 00:00:00','','0000-00-00 00:00:00');
+INSERT INTO `clan` (`ClanId`, `ClanDescription`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'TestGroup', 0, '0000-00-00 00:00:00', '', '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `clan` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `clanpower`
---
 
+-- Dumping structure for table common.clanpower
 DROP TABLE IF EXISTS `clanpower`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `clanpower` (
+CREATE TABLE IF NOT EXISTS `clanpower` (
   `ClanId` int(10) NOT NULL,
   `PowerId` int(10) NOT NULL,
   `CreatedById` int(11) NOT NULL,
@@ -278,26 +165,18 @@ CREATE TABLE `clanpower` (
   CONSTRAINT `FK_ClanPower_clan` FOREIGN KEY (`ClanId`) REFERENCES `clan` (`ClanId`),
   CONSTRAINT `FK_ClanPower_power` FOREIGN KEY (`PowerId`) REFERENCES `power` (`PowerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `clanpower`
---
-
-LOCK TABLES `clanpower` WRITE;
+-- Dumping data for table common.clanpower: ~2 rows (approximately)
 /*!40000 ALTER TABLE `clanpower` DISABLE KEYS */;
-INSERT INTO `clanpower` VALUES (1,1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,2,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `clanpower` (`ClanId`, `PowerId`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(1, 2, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `clanpower` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `country`
---
 
+-- Dumping structure for table common.country
 DROP TABLE IF EXISTS `country`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `country` (
+CREATE TABLE IF NOT EXISTS `country` (
   `CountryId` int(10) NOT NULL DEFAULT '0',
   `Name` varchar(500) NOT NULL,
   `Abbreviation` varchar(50) NOT NULL,
@@ -310,26 +189,17 @@ CREATE TABLE `country` (
   KEY `FK_country_language` (`DefaultLanguageId`),
   CONSTRAINT `FK_country_language` FOREIGN KEY (`DefaultLanguageId`) REFERENCES `language` (`LanguageId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `country`
---
-
-LOCK TABLES `country` WRITE;
+-- Dumping data for table common.country: ~1 rows (approximately)
 /*!40000 ALTER TABLE `country` DISABLE KEYS */;
-INSERT INTO `country` VALUES (1,'United States of America','USA',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `country` (`CountryId`, `Name`, `Abbreviation`, `DefaultLanguageId`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'United States of America', 'USA', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `country` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `entityattributevalue`
---
 
+-- Dumping structure for table common.entityattributevalue
 DROP TABLE IF EXISTS `entityattributevalue`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `entityattributevalue` (
+CREATE TABLE IF NOT EXISTS `entityattributevalue` (
   `EntityAttributeValueId` int(10) NOT NULL AUTO_INCREMENT,
   `EntityTypeId` int(10) NOT NULL,
   `EntityId` int(10) NOT NULL,
@@ -345,27 +215,20 @@ CREATE TABLE `entityattributevalue` (
   KEY `FK_EntityAttributeValue_attribute` (`AttributeId`),
   CONSTRAINT `FK_EntityAttributeValue_attribute` FOREIGN KEY (`AttributeId`) REFERENCES `attribute` (`AttributeId`),
   CONSTRAINT `FK_EntityAttributeValue_entitytype` FOREIGN KEY (`EntityTypeId`) REFERENCES `entitytype` (`EntityTypeId`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `entityattributevalue`
---
-
-LOCK TABLES `entityattributevalue` WRITE;
+-- Dumping data for table common.entityattributevalue: ~3 rows (approximately)
 /*!40000 ALTER TABLE `entityattributevalue` DISABLE KEYS */;
-INSERT INTO `entityattributevalue` VALUES (1,1,1,1,'Y',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(5,1,2,1,'N',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `entityattributevalue` (`EntityAttributeValueId`, `EntityTypeId`, `EntityId`, `AttributeId`, `AttributeValue`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 1, 1, 1, 'Y', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(5, 1, 2, 1, 'N', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(6, 1, 1, 2, '1', 0, '2013-07-24 21:29:34', 0, '2013-07-24 21:29:35');
 /*!40000 ALTER TABLE `entityattributevalue` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `entitytype`
---
 
+-- Dumping structure for table common.entitytype
 DROP TABLE IF EXISTS `entitytype`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `entitytype` (
+CREATE TABLE IF NOT EXISTS `entitytype` (
   `EntityTypeId` int(10) NOT NULL AUTO_INCREMENT,
   `EntityTypeName` varchar(50) NOT NULL,
   `Table` varchar(255) NOT NULL,
@@ -375,26 +238,17 @@ CREATE TABLE `entitytype` (
   `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`EntityTypeId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `entitytype`
---
-
-LOCK TABLES `entitytype` WRITE;
+-- Dumping data for table common.entitytype: ~1 rows (approximately)
 /*!40000 ALTER TABLE `entitytype` DISABLE KEYS */;
-INSERT INTO `entitytype` VALUES (1,'Environment','Common.Environment',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `entitytype` (`EntityTypeId`, `EntityTypeName`, `Table`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'Environment', 'Common.Environment', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `entitytype` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `environment`
---
 
+-- Dumping structure for table common.environment
 DROP TABLE IF EXISTS `environment`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `environment` (
+CREATE TABLE IF NOT EXISTS `environment` (
   `EnvironmentId` int(10) NOT NULL AUTO_INCREMENT,
   `ParentEnvironmentId` int(10) DEFAULT NULL,
   `EnvironmentName` varchar(200) NOT NULL,
@@ -407,26 +261,18 @@ CREATE TABLE `environment` (
   KEY `FK_environment_environment` (`ParentEnvironmentId`),
   CONSTRAINT `FK_environment_environment` FOREIGN KEY (`ParentEnvironmentId`) REFERENCES `environment` (`EnvironmentId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `environment`
---
-
-LOCK TABLES `environment` WRITE;
+-- Dumping data for table common.environment: ~2 rows (approximately)
 /*!40000 ALTER TABLE `environment` DISABLE KEYS */;
-INSERT INTO `environment` VALUES (1,NULL,'localhost','Local development PC',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(2,1,'localhost-web','Local development PC running web server',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `environment` (`EnvironmentId`, `ParentEnvironmentId`, `EnvironmentName`, `EnvironmentDescription`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, NULL, 'localhost', 'Local development PC', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(2, 1, 'localhost-web', 'Local development PC running web server', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `environment` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `hashpath`
---
 
+-- Dumping structure for table common.hashpath
 DROP TABLE IF EXISTS `hashpath`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `hashpath` (
+CREATE TABLE IF NOT EXISTS `hashpath` (
   `HashPathId` int(10) NOT NULL AUTO_INCREMENT,
   `HashPath` varchar(5000) NOT NULL,
   `Class` varchar(200) NOT NULL,
@@ -438,26 +284,18 @@ CREATE TABLE `hashpath` (
   PRIMARY KEY (`HashPathId`),
   FULLTEXT KEY `Index 2` (`HashPath`,`Class`,`Method`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `hashpath`
---
-
-LOCK TABLES `hashpath` WRITE;
+-- Dumping data for table common.hashpath: 2 rows
 /*!40000 ALTER TABLE `hashpath` DISABLE KEYS */;
-INSERT INTO `hashpath` VALUES (1,'Market/List','com.modnaut.apps.farmarkets.MarketListCtrl','defaultAction',0,'2013-07-02 11:55:53',0,'2013-07-02 11:56:17'),(2,'Market/Detail','com.modnaut.apps.farmarkets.MarketDetailCtrl','defaultAction',0,'2013-07-02 11:55:53',0,'2013-07-02 11:56:17');
+INSERT INTO `hashpath` (`HashPathId`, `HashPath`, `Class`, `Method`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'Market/List', 'com.modnaut.apps.farmarkets.MarketListCtrl', 'defaultAction', 0, '2013-07-02 06:55:53', 0, '2013-07-02 06:56:17'),
+	(2, 'Market/Detail', 'com.modnaut.apps.farmarkets.MarketDetailCtrl', 'defaultAction', 0, '2013-07-02 06:55:53', 0, '2013-07-02 06:56:17');
 /*!40000 ALTER TABLE `hashpath` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `language`
---
 
+-- Dumping structure for table common.language
 DROP TABLE IF EXISTS `language`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `language` (
+CREATE TABLE IF NOT EXISTS `language` (
   `LanguageId` smallint(3) NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) NOT NULL,
   `LocalName` varchar(100) DEFAULT NULL,
@@ -469,26 +307,65 @@ CREATE TABLE `language` (
   `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`LanguageId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `language`
---
-
-LOCK TABLES `language` WRITE;
+-- Dumping data for table common.language: ~3 rows (approximately)
 /*!40000 ALTER TABLE `language` DISABLE KEYS */;
-INSERT INTO `language` VALUES (1,'English','English',NULL,'en',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(2,'Spanish','Espa',NULL,'es',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(3,'Hebrew','?????',NULL,'he',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `language` (`LanguageId`, `Name`, `LocalName`, `FlagFileName`, `IsoLanguageCd`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'English', 'English', NULL, 'en', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(2, 'Spanish', 'Espa', NULL, 'es', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(3, 'Hebrew', '?????', NULL, 'he', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `language` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `ninja`
---
 
+-- Dumping structure for table common.menu
+DROP TABLE IF EXISTS `menu`;
+CREATE TABLE IF NOT EXISTS `menu` (
+  `MenuId` int(10) NOT NULL AUTO_INCREMENT,
+  `ApplicationId` int(10) NOT NULL,
+  `MenuDescription` varchar(250) NOT NULL,
+  PRIMARY KEY (`MenuId`),
+  KEY `FK_Menu_application` (`ApplicationId`),
+  CONSTRAINT `FK_Menu_application` FOREIGN KEY (`ApplicationId`) REFERENCES `application` (`ApplicationId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.menu: ~1 rows (approximately)
+/*!40000 ALTER TABLE `menu` DISABLE KEYS */;
+INSERT INTO `menu` (`MenuId`, `ApplicationId`, `MenuDescription`) VALUES
+	(1, 1, 'LocalFoodConnection Backend Top Menu');
+/*!40000 ALTER TABLE `menu` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.menuitem
+DROP TABLE IF EXISTS `menuitem`;
+CREATE TABLE IF NOT EXISTS `menuitem` (
+  `MenuItemId` int(10) NOT NULL AUTO_INCREMENT,
+  `MenuId` int(10) NOT NULL,
+  `ParentMenuItemId` int(10) DEFAULT NULL,
+  `Description` varchar(255) NOT NULL,
+  `DisplayText` varchar(255) NOT NULL,
+  `IconCls` varchar(255) DEFAULT NULL,
+  `Class` varchar(255) DEFAULT NULL,
+  `Method` varchar(255) DEFAULT NULL,
+  `URL` varchar(255) DEFAULT NULL,
+  `ActiveFlag` char(1) NOT NULL DEFAULT 'Y',
+  `PowerId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`MenuItemId`),
+  KEY `FK_MenuItem_menu` (`MenuId`),
+  KEY `FK_MenuItem_menuitem` (`ParentMenuItemId`),
+  CONSTRAINT `FK_MenuItem_menu` FOREIGN KEY (`MenuId`) REFERENCES `menu` (`MenuId`),
+  CONSTRAINT `FK_MenuItem_menuitem` FOREIGN KEY (`ParentMenuItemId`) REFERENCES `menuitem` (`MenuItemId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.menuitem: ~1 rows (approximately)
+/*!40000 ALTER TABLE `menuitem` DISABLE KEYS */;
+INSERT INTO `menuitem` (`MenuItemId`, `MenuId`, `ParentMenuItemId`, `Description`, `DisplayText`, `IconCls`, `Class`, `Method`, `URL`, `ActiveFlag`, `PowerId`) VALUES
+	(1, 1, NULL, 'Dashboard', 'Dashboard', NULL, NULL, NULL, NULL, 'Y', NULL);
+/*!40000 ALTER TABLE `menuitem` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.ninja
 DROP TABLE IF EXISTS `ninja`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ninja` (
+CREATE TABLE IF NOT EXISTS `ninja` (
   `NinjaId` int(10) NOT NULL AUTO_INCREMENT,
   `FirstName` varchar(50) NOT NULL,
   `LastName` varchar(50) NOT NULL,
@@ -505,26 +382,20 @@ CREATE TABLE `ninja` (
   KEY `FK_Ninja_ninjatype` (`NinjaTypeCd`),
   CONSTRAINT `FK_Ninja_ninjatype` FOREIGN KEY (`NinjaTypeCd`) REFERENCES `ninjatype` (`NinjaTypeCd`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ninja`
---
-
-LOCK TABLES `ninja` WRITE;
+-- Dumping data for table common.ninja: ~4 rows (approximately)
 /*!40000 ALTER TABLE `ninja` DISABLE KEYS */;
-INSERT INTO `ninja` VALUES (1,'guest','guest','','kLxNpX+0w9lWcamR3wSZ8O/828A=','C',0,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(2,'Jamie','LaMarche','jlamarche@modnaut.com','kLxNpX+0w9lWcamR3wSZ8O/828A=','C',0,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(3,'Danny','Cohn','dcohn@modnaut.com','kLxNpX+0w9lWcamR3wSZ8O/828A=','C',0,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(4,'Ben','Dalgaardfasdfsa','bdalgaard@modnaut.com','kLxNpX+0w9lWcamR3wSZ8O/828A=','C',0,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `ninja` (`NinjaId`, `FirstName`, `LastName`, `EmailAddress`, `Password`, `NinjaTypeCd`, `InvalidLoginAttempts`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'guest', 'guest', '', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', 'C', 0, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(2, 'Jamie', 'LaMarche', 'jlamarche@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', 'C', 0, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(3, 'Danny', 'Cohn', 'dcohn@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', 'C', 0, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(4, 'Ben', 'Dalgaardfasdfsa', 'bdalgaard@modnaut.com', 'kLxNpX+0w9lWcamR3wSZ8O/828A=', 'C', 0, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `ninja` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `ninjaclan`
---
 
+-- Dumping structure for table common.ninjaclan
 DROP TABLE IF EXISTS `ninjaclan`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ninjaclan` (
+CREATE TABLE IF NOT EXISTS `ninjaclan` (
   `NinjaId` int(10) NOT NULL,
   `ClanId` int(10) NOT NULL,
   `CreatedByNinjaId` int(10) NOT NULL DEFAULT '4',
@@ -538,26 +409,17 @@ CREATE TABLE `ninjaclan` (
   CONSTRAINT `FK_ninjaclan_ninja` FOREIGN KEY (`NinjaId`) REFERENCES `ninja` (`NinjaId`),
   CONSTRAINT `FK_ninjaclan_ninja_2` FOREIGN KEY (`CreatedByNinjaId`) REFERENCES `ninja` (`NinjaId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ninjaclan`
---
-
-LOCK TABLES `ninjaclan` WRITE;
+-- Dumping data for table common.ninjaclan: ~1 rows (approximately)
 /*!40000 ALTER TABLE `ninjaclan` DISABLE KEYS */;
-INSERT INTO `ninjaclan` VALUES (3,1,3,'0000-00-00 00:00:00','','2013-04-09 03:24:18');
+INSERT INTO `ninjaclan` (`NinjaId`, `ClanId`, `CreatedByNinjaId`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(3, 1, 3, '0000-00-00 00:00:00', '', '2013-04-08 22:24:18');
 /*!40000 ALTER TABLE `ninjaclan` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `ninjapower`
---
 
+-- Dumping structure for table common.ninjapower
 DROP TABLE IF EXISTS `ninjapower`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ninjapower` (
+CREATE TABLE IF NOT EXISTS `ninjapower` (
   `NinjaId` int(10) NOT NULL,
   `PowerId` int(10) NOT NULL,
   `CreatedByNinjaId` int(10) NOT NULL DEFAULT '0',
@@ -571,26 +433,19 @@ CREATE TABLE `ninjapower` (
   CONSTRAINT `FK_ninjapower_ninja_2` FOREIGN KEY (`CreatedByNinjaId`) REFERENCES `ninja` (`NinjaId`),
   CONSTRAINT `FK_ninjapower_power` FOREIGN KEY (`PowerId`) REFERENCES `power` (`PowerId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ninjapower`
---
-
-LOCK TABLES `ninjapower` WRITE;
+-- Dumping data for table common.ninjapower: ~3 rows (approximately)
 /*!40000 ALTER TABLE `ninjapower` DISABLE KEYS */;
-INSERT INTO `ninjapower` VALUES (1,1,1,'0000-00-00 00:00:00',0,'2013-02-26 17:12:16'),(1,2,1,'0000-00-00 00:00:00',0,'2013-02-26 17:12:59'),(4,1,4,'0000-00-00 00:00:00',0,'2013-04-18 05:19:26');
+INSERT INTO `ninjapower` (`NinjaId`, `PowerId`, `CreatedByNinjaId`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 1, 1, '0000-00-00 00:00:00', 0, '2013-02-26 11:12:16'),
+	(1, 2, 1, '0000-00-00 00:00:00', 0, '2013-02-26 11:12:59'),
+	(4, 1, 4, '0000-00-00 00:00:00', 0, '2013-04-18 00:19:26');
 /*!40000 ALTER TABLE `ninjapower` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `ninjasession`
---
 
+-- Dumping structure for table common.ninjasession
 DROP TABLE IF EXISTS `ninjasession`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ninjasession` (
+CREATE TABLE IF NOT EXISTS `ninjasession` (
   `NinjaId` int(10) NOT NULL DEFAULT '1',
   `SessionId` bigint(19) NOT NULL,
   `CreatedById` int(11) NOT NULL,
@@ -601,26 +456,15 @@ CREATE TABLE `ninjasession` (
   KEY `FK_ninja` (`NinjaId`),
   CONSTRAINT `FK_ninjasession_ninja` FOREIGN KEY (`NinjaId`) REFERENCES `ninja` (`NinjaId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ninjasession`
---
-
-LOCK TABLES `ninjasession` WRITE;
+-- Dumping data for table common.ninjasession: ~242 rows (approximately)
 /*!40000 ALTER TABLE `ninjasession` DISABLE KEYS */;
-INSERT INTO `ninjasession` VALUES (1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,309872317084956,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,1111757612856216064,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,476311019084451968,0,'2013-07-02 12:25:49',0,'2013-07-02 12:25:49'),(1,476311019084451968,0,'2013-07-02 12:25:52',0,'2013-07-02 12:25:52'),(1,476311019084451968,0,'2013-07-02 12:26:06',0,'2013-07-02 12:26:06'),(1,476311019084451968,0,'2013-07-02 12:26:21',0,'2013-07-02 12:26:21'),(1,476311019084451968,0,'2013-07-02 12:26:21',0,'2013-07-02 12:26:21'),(1,476311019084451968,0,'2013-07-02 12:26:35',0,'2013-07-02 12:26:35'),(1,476311019084451968,0,'2013-07-02 12:26:36',0,'2013-07-02 12:26:36'),(1,476311019084451968,0,'2013-07-02 12:26:40',0,'2013-07-02 12:26:40'),(1,476311019084451968,0,'2013-07-02 12:26:41',0,'2013-07-02 12:26:41'),(1,476311019084451968,0,'2013-07-02 12:26:46',0,'2013-07-02 12:26:46');
 /*!40000 ALTER TABLE `ninjasession` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `ninjatype`
---
 
+-- Dumping structure for table common.ninjatype
 DROP TABLE IF EXISTS `ninjatype`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ninjatype` (
+CREATE TABLE IF NOT EXISTS `ninjatype` (
   `NinjaTypeCd` char(1) NOT NULL,
   `NinjaTypeDescription` varchar(50) NOT NULL,
   `CreatedById` int(11) NOT NULL,
@@ -629,26 +473,18 @@ CREATE TABLE `ninjatype` (
   `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`NinjaTypeCd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ninjatype`
---
-
-LOCK TABLES `ninjatype` WRITE;
+-- Dumping data for table common.ninjatype: ~2 rows (approximately)
 /*!40000 ALTER TABLE `ninjatype` DISABLE KEYS */;
-INSERT INTO `ninjatype` VALUES ('A','Administrator',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),('C','Customer',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `ninjatype` (`NinjaTypeCd`, `NinjaTypeDescription`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	('A', 'Administrator', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	('C', 'Customer', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `ninjatype` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `power`
---
 
+-- Dumping structure for table common.power
 DROP TABLE IF EXISTS `power`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `power` (
+CREATE TABLE IF NOT EXISTS `power` (
   `PowerId` int(10) NOT NULL AUTO_INCREMENT,
   `PowerDescription` varchar(100) NOT NULL,
   `PowerStatusCd` char(1) NOT NULL DEFAULT 'A',
@@ -658,52 +494,33 @@ CREATE TABLE `power` (
   `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`PowerId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `power`
---
-
-LOCK TABLES `power` WRITE;
+-- Dumping data for table common.power: ~2 rows (approximately)
 /*!40000 ALTER TABLE `power` DISABLE KEYS */;
-INSERT INTO `power` VALUES (1,'Application Access','A',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(2,'Admin Access','A',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `power` (`PowerId`, `PowerDescription`, `PowerStatusCd`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'Application Access', 'A', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(2, 'Admin Access', 'A', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `power` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `session`
---
 
+-- Dumping structure for table common.session
 DROP TABLE IF EXISTS `session`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `session` (
+CREATE TABLE IF NOT EXISTS `session` (
   `SessionId` bigint(19) NOT NULL,
   `SessionObject` varbinary(65500) NOT NULL,
   `CreatedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `LastModifiedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`SessionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `session`
---
-
-LOCK TABLES `session` WRITE;
+-- Dumping data for table common.session: ~4 rows (approximately)
 /*!40000 ALTER TABLE `session` DISABLE KEYS */;
-INSERT INTO `session` VALUES (309872317084956,'¬í\0sr\0*com.modnaut.framework.session.NinjaSessionÆÓyÒ­ñ?\0Z\0is_authenticatedI\0ninja_idJ\0\nsession_idL\0emailt\0Ljava/lang/String;L\0	firstNameq\0~\0L\0lastNameq\0~\0L\0mapt\0Ljava/util/HashMap;xp\0\0\0\0\0ÓÅbµt\0\0t\0guestq\0~\0sr\0java.util.HashMapÚÁÃ`Ñ\0F\0\nloadFactorI\0	thresholdxp?@\0\0\0\0\0w\0\0\0\0\0\0t\0filesr\0/org.apache.commons.fileupload.disk.DiskFileItem\rr&???q\0\nZ\0isFormFieldJ\0sizeI\0\rsizeThreshold[\0\rcachedContentt\0[BL\0contentTypeq\0~\0L\0dfosFilet\0Ljava/io/File;L\0	fieldNameq\0~\0L\0fileNameq\0~\0L\0headerst\0/Lorg/apache/commons/fileupload/FileItemHeaders;L\0\nrepositoryq\0~\0xp\0ÿÿÿÿÿÿÿÿ\0\0(\0ur\0[B¬óøTà\0\0xp\0\0\"?PHByb2plY3QgbmFtZT0icHJpbWFyeSIgZGVmYXVsdD0iIiBiYXNlZGlyPSIuIj4NCgk8IS0tID09PT09PT09PT09PT09PT09PT09PSBQcm9wZXJ0eSBEZWZpbml0aW9ucyA9PT09PT09PT09PT09PT09PT09PT09PT09PT0gLS0+DQoJPHByb3BlcnR5IGZpbGU9ImJ1aWxkLWxvY2FsLnByb3BlcnRpZXMiLz4NCgk8cHJvcGVydHkgZmlsZT0iJHtiYXNlZGlyfS9idWlsZC5wcm9wZXJ0aWVzIi8+DQoJPCEtLSA9PT09PT09PT09PT09PT09PT09PSBDb21waWxhdGlvbiBDbGFzc3BhdGggPT09PT09PT09PT09PT09PT09PT09PT09PT09IC0tPg0KCTxwYXRoIGlkPSJjb21waWxlLmNsYXNzcGF0aCI+DQoJCTxmaWxlc2V0IGRpcj0iJHtjYXRhbGluYS5ob21lfS9iaW4iPg0KCQkJPGluY2x1ZGUgbmFtZT0iKi5qYXIiLz4NCgkJPC9maWxlc2V0Pg0KCQk8cGF0aGVsZW1lbnQgbG9jYXRpb249IiR7Y2F0YWxpbmEuaG9tZX0vbGliIi8+DQoJCTxmaWxlc2V0IGRpcj0iJHtjYXRhbGluYS5ob21lfS9saWIiPg0KCQkJPGluY2x1ZGUgbmFtZT0iKi5qYXIiLz4NCgkJPC9maWxlc2V0Pg0KCQk8cGF0aGVsZW1lbnQgbG9jYXRpb249IiR7YmFzZWRpcn0vd2ViL1dFQi1JTkYvbGliIi8+DQoJCTxmaWxlc2V0IGRpcj0iJHtiYXNlZGlyfS93ZWIvV0VCLUlORi9saWIiPg0KCQkJPGluY2x1ZGUgbmFtZT0iKi5qYXIiLz4NCgkJPC9maWxlc2V0Pg0KCTwvcGF0aD4NCgk8dGFza2RlZiByZXNvdXJjZT0ibmV0L3NmL2FudGNvbnRyaWIvYW50Y29udHJpYi5wcm9wZXJ0aWVzIiBjbGFzc3BhdGhyZWY9ImNvbXBpbGUuY2xhc3NwYXRoIi8+DQoJPHRhc2tkZWYgbmFtZT0ieGpjIiBjbGFzc25hbWU9ImNvbS5zdW4udG9vbHMueGpjLlhKQ1Rhc2siIGNsYXNzcGF0aHJlZj0iY29tcGlsZS5jbGFzc3BhdGgiLz4NCgk8cHJvcGVydHkgbmFtZT0iZGF0YWJhc2UudXJsIiB2YWx1ZT0iamRiYzpteXNxbDovL2xvY2FsaG9zdDozMzA2LyIvPg0KCTxwcm9wZXJ0eSBuYW1lPSJkYXRhYmFzZS51c2VyaWQiIHZhbHVlPSJtb2RuYXV0MDAiLz4NCgk8cHJvcGVydHkgbmFtZT0iZGF0YWJhc2UucGFzc3dvcmQiIHZhbHVlPSJ6cDRYMjYzdFRTdjA2T24iLz4NCgk8Y29uZGl0aW9uIHByb3BlcnR5PSJpc01hY09TIj4NCgkgICAgPG9zIGZhbWlseT0ibWFjIi8+DQoJPC9jb25kaXRpb24+DQoJPGlmPg0KCQk8ZXF1YWxzIGFyZzE9IiR7aXNNYWNPU30iIGFyZzI9InRydWUiLz4NCgkJPHRoZW4+DQoJCQk8cHJvcGVydHkgbmFtZT0ic2VuY2hhLmRpciIgdmFsdWU9IiR7YmFzZWRpcn0vcmVzb3VyY2VzL3NlbmNoYWNtZG1hYyIvPgkNCgkJPC90aGVuPg0KCQk8ZWxzZT4NCgkJCTxwcm9wZXJ0eSBuYW1lPSJzZW5jaGEuZGlyIiB2YWx1ZT0iJHtiYXNlZGlyfS9yZXNvdXJjZXMvc2VuY2hhY21kIi8+DQoJCTwvZWxzZT4NCgk8L2lmPg0KCTxwcm9wZXJ0eSBuYW1lPSJleHRqcy5kaXIiIHZhbHVlPSIke2Jhc2VkaXJ9L3dlYi9zdGF0aWMvZXh0anMiLz4NCgk8cHJvcGVydHkgbmFtZT0icnVieS5kaXIiIHZhbHVlPSIke2Jhc2VkaXJ9L3Jlc291cmNlcy9ydWJ5L2JpbiIvPg0KCTx0YXJnZXQgbmFtZT0iZ2VuZXJhdGUtY2xhc3NlcyIgZGVzY3JpcHRpb249IkdlbmVyYXRlcyBhbGwgZHluYW1pYyBKYXZhIGNsYXNzZXMiPg0KCQk8YW50Y2FsbCB0YXJnZXQ9ImdlbmVyYXRlLXNxbHF1ZXJ5LWNsYXNzZXMiLz4NCgkJPGFudGNhbGwgdGFyZ2V0PSJnZW5lcmF0ZS12aWV3LWNsYXNzZXMiLz4NCgk8L3RhcmdldD4NCgk8dGFyZ2V0IG5hbWU9ImdlbmVyYXRlLXNxbHF1ZXJ5LWNsYXNzZXMiPg0KCQk8eGpjIHJlbW92ZU9sZE91dHB1dD0ieWVzIiBzY2hlbWE9IndlYi9XRUItSU5GL3hzZC9TcWxNZXRhRGF0YS54c2QiIGRlc3RkaXI9InNyYyIgcGFja2FnZT0iY29tLm1vZG5hdXQuZnJhbWV3b3JrLnByb3BlcnRpZXMuc3FsbWV0YWRhdGEiLz4NCgk8L3RhcmdldD4NCgk8dGFyZ2V0IG5hbWU9ImdlbmVyYXRlLXZpZXctY2xhc3NlcyI+DQoJCTxkZWxldGUgZmlsZT0id2ViL1dFQi1JTkYveHNkL1N0cmluZy5lcGlzb2RlIi8+DQoJCTx4amMgcmVtb3ZlT2xkT3V0cHV0PSJ5ZXMiIHNjaGVtYT0id2ViL1dFQi1JTkYveHNkL1N0cmluZy54c2QiIGRlc3RkaXI9InNyYyIgcGFja2FnZT0iY29tLm1vZG5hdXQuZnJhbWV3b3JrLnByb3BlcnRpZXMuc3RyaW5nIj4NCgkJCTxhcmcgdmFsdWU9Ii1leHRlbnNpb24iLz4NCgkJCTxhcmcgdmFsdWU9Ii1lcGlzb2RlIi8+DQoJCQk8YXJnIHZhbHVlPSJ3ZWIvV0VCLUlORi94c2QvU3RyaW5nLmVwaXNvZGUiLz4NCgkJPC94amM+DQoJCTx4amMgcmVtb3ZlT2xkT3V0cHV0PSJ5ZXMiIHNjaGVtYT0id2ViL1dFQi1JTkYveHNkL0FwcGxpY2F0aW9uLnhzZCIgZGVzdGRpcj0ic3JjIiBwYWNrYWdlPSJjb20ubW9kbmF1dC5mcmFtZXdvcmsucHJvcGVydGllcy5hcHBsaWNhdGlvbiI+DQoJCQk8YXJnIHZhbHVlPSItZXh0ZW5zaW9uIi8+DQoJCQk8YXJnIHZhbHVlPSItYiIvPg0KCQkJPGFyZyB2YWx1ZT0id2ViL1dFQi1JTkYveHNkL1N0cmluZy5lcGlzb2RlIi8+DQoJCTwveGpjPg0KCQk8eGpjIHJlbW92ZU9sZE91dHB1dD0ieWVzIiBzY2hlbWE9IndlYi9XRUItSU5GL3hzZC9WaWV3TWV0YURhdGEueHNkIiBkZXN0ZGlyPSJzcmMiIHBhY2thZ2U9ImNvbS5tb2RuYXV0LmZyYW1ld29yay5wcm9wZXJ0aWVzLnZpZXdtZXRhZGF0YSI+DQoJCQk8YXJnIHZhbHVlPSItZXh0ZW5zaW9uIi8+DQoJCQk8YXJnIHZhbHVlPSItYiIvPg0KCQkJPGFyZyB2YWx1ZT0id2ViL1dFQi1JTkYveHNkL1N0cmluZy5lcGlzb2RlIi8+DQoJCTwveGpjPg0KCQk8ZGVsZXRlIGZpbGU9IndlYi9XRUItSU5GL3hzZC9TdHJpbmcuZXBpc29kZSIvPg0KCTwvdGFyZ2V0Pg0KCTx0YXJnZXQgbmFtZT0ibXlzcWwiIGRlc2NyaXB0aW9uPSJSZWdlbmVyYXRlcyBlbnRpcmUgTXlTUUwgc3RydWN0dXJlIGZyb20gZmlsZSI+DQoJCTxhbnRjYWxsIHRhcmdldD0iZ2VuZXJhdGUtbXlzcWwtc3RydWN0dXJlIi8+DQoJCTxhbnRjYWxsIHRhcmdldD0iZ2VuZXJhdGUtbXlzcWwtcHJvY2VkdXJlcyIvPg0KCTwvdGFyZ2V0Pg0KCTx0YXJnZXQgbmFtZT0iZ2VuZXJhdGUtbXlzcWwtc3RydWN0dXJlIj4NCgkJPCEtLWRlbGV0ZXMgYW5kIHJlYnVpbGRzIG15c3FsIGRhdGFiYXNlIHN0cnVjdHVyZS0tPg0KCQk8c3FsIGRyaXZlcj0iY29tLm15c3FsLmpkYmMuRHJpdmVyIiBjbGFzc3BhdGhyZWY9ImNvbXBpbGUuY2xhc3NwYXRoIiB1cmw9IiR7ZGF0YWJhc2UudXJsfSIgdXNlcmlkPSIke2RhdGFiYXNlLnVzZXJpZH0iIHBhc3N3b3JkPSIke2RhdGFiYXNlLnBhc3N3b3JkfSI+DQoJCQk8dHJhbnNhY3Rpb24gc3JjPSJzcWwvbW9kbmF1dC1kYXRhYmFzZS5zcWwiLz4NCgkJPC9zcWw+DQoJPC90YXJnZXQ+DQoJPHRhcmdldCBuYW1lPSJnZW5lcmF0ZS1teXNxbC1wcm9jZWR1cmVzIj4NCgkJPCEtLVJ1bnMgbXlzcWwgcHJvY2VkdXJlcy4gIFNlcGVyYXRlIHNvIHRoYXQgd2UgY2FuIGRlZmluZSBhIHJvdyBkZWxpbWV0ZXIgd2l0aG91dCBjaGFuZ2luZyBtb2RuYXV0LWRhdGFiYXNlLnNxbC0tPg0KCQk8c3FsIGRyaXZlcj0iY29tLm15c3FsLmpkYmMuRHJpdmVyIiBjbGFzc3BhdGhyZWY9ImNvbXBpbGUuY2xhc3NwYXRoIiB1cmw9IiR7ZGF0YWJhc2UudXJsfSIgdXNlcmlkPSIke2RhdGFiYXNlLnVzZXJpZH0iIHBhc3N3b3JkPSIke2RhdGFiYXNlLnBhc3N3b3JkfSIgZGVsaW1pdGVyVHlwZT0icm93Ij4NCgkJCTx0cmFuc2FjdGlvbiBzcmM9InNxbC91cF9BdXRoZW50aWNhdGVOaW5qYS5zcWwiLz4NCgkJCTx0cmFuc2FjdGlvbiBzcmM9InNxbC91cF9HZXROaW5qYVNlc3Npb24uc3FsIi8+DQoJCQk8dHJhbnNhY3Rpb24gc3JjPSJzcWwvdXBfSW5zZXJ0VXBkYXRlU2Vzc2lvbi5zcWwiLz4NCgkJCTx0cmFuc2FjdGlvbiBzcmM9InNxbC91Zl9OaW5qYUhhc1Bvd2VyLnNxbCIvPg0KCQkJPHRyYW5zYWN0aW9uIHNyYz0ic3FsL3VwX05pbmphSGFzUG93ZXIuc3FsIi8+DQoJCQk8dHJhbnNhY3Rpb24gc3JjPSJzcWwvdXBfTmluamFIYXNQb3dlcnMuc3FsIi8+DQoJCQk8dHJhbnNhY3Rpb24gc3JjPSJzcWwvdWZfSXNOdW1lcmljLnNxbCIvPg0KCQkJPHRyYW5zYWN0aW9uIHNyYz0ic3FsL3VmX0lzSW50ZWdlci5zcWwiLz4NCgkJCTx0cmFuc2FjdGlvbiBzcmM9InNxbC91cF9QYXJzZUNvbW1hRGVsaW1pdGVkLnNxbCIvPg0KCQkJPHRyYW5zYWN0aW9uIHNyYz0ic3FsL3VwX0dldE11bHRpcGxlU3RyaW5nc0Zvckxhbmd1YWdlLnNxbCIvPg0KCQkJPHRyYW5zYWN0aW9uIHNyYz0ic3FsL3VmX0dldEVudGl0eUF0dHJpYnV0ZVZhbHVlLnNxbCIvPg0KCQkJPHRyYW5zYWN0aW9uIHNyYz0ic3FsL3VmX0dldEVudGl0eVR5cGVJZEJ5TmFtZS5zcWwiLz4NCgkJCTx0cmFuc2FjdGlvbiBzcmM9InNxbC91Zl9HZXRFbnZpcm9ubWVudElkQnlOYW1lLnNxbCIvPg0KCQkJPHRyYW5zYWN0aW9uIHNyYz0ic3FsL3VmX0dldEVudGl0eUlkQnlOYW1lLnNxbCIvPg0KCQkJPHRyYW5zYWN0aW9uIHNyYz0ic3FsL3VmX0dldEF0dHJpYnV0ZUlkQnlOYW1lLnNxbCIvPg0KCQkJPHRyYW5zYWN0aW9uIHNyYz0ic3FsL3VmX0dldEVudGl0eUF0dHJpYnV0ZVZhbHVlQnlOYW1lcy5zcWwiLz4NCgkJCTx0cmFuc2FjdGlvbiBzcmM9InNxbC91Zl9HZXRQYXJlbnRFbnZpcm9ubWVudElkLnNxbCIvPg0KCQkJPHRyYW5zYWN0aW9uIHNyYz0ic3FsL3VmX0dldFBhcmVudEVudGl0eUlkLnNxbCIvPg0KCQkJPHRyYW5zYWN0aW9uIHNyYz0ic3FsL3VwX1Vwc2VydEF0dHJpYnV0ZVZhbHVlQnlOYW1lLnNxbCIvPg0KCQk8L3NxbD4NCgk8L3RhcmdldD4NCgk8dGFyZ2V0IG5hbWU9ImJ1aWxkLWFsbC1leHRqcy1wYWNrYWdlcyIgZGVzY3JpcHRpb249IkJ1aWxkcyBhbGwgRXh0SlMgdGhlbWUgcGFja2FnZXMiPg0KCQk8YW50Y2FsbCB0YXJnZXQ9ImJ1aWxkLWV4dGpzLXBhY2thZ2UiPg0KCQkJPHBhcmFtIG5hbWU9InBhY2thZ2UubmFtZSIgdmFsdWU9ImV4dC10aGVtZS1hY2Nlc3MiLz4NCgkJPC9hbnRjYWxsPg0KCQk8YW50Y2FsbCB0YXJnZXQ9ImJ1aWxkLWV4dGpzLXBhY2thZ2UiPg0KCQkJPHBhcmFtIG5hbWU9InBhY2thZ2UubmFtZSIgdmFsdWU9ImV4dC10aGVtZS1jbGFzc2ljIi8+DQoJCTwvYW50Y2FsbD4NCgkJPGFudGNhbGwgdGFyZ2V0PSJidWlsZC1leHRqcy1wYWNrYWdlIj4NCgkJCTxwYXJhbSBuYW1lPSJwYWNrYWdlLm5hbWUiIHZhbHVlPSJleHQtdGhlbWUtY2xhc3NpYy1zYW5kYm94Ii8+DQoJCTwvYW50Y2FsbD4NCgkJPGFudGNhbGwgdGFyZ2V0PSJidWlsZC1leHRqcy1wYWNrYWdlIj4NCgkJCTxwYXJhbSBuYW1lPSJwYWNrYWdlLm5hbWUiIHZhbHVlPSJleHQtdGhlbWUtZ3JheSIvPg0KCQk8L2FudGNhbGw+DQoJCTxhbnRjYWxsIHRhcmdldD0iYnVpbGQtZXh0anMtcGFja2FnZSI+DQoJCQk8cGFyYW0gbmFtZT0icGFja2FnZS5uYW1lIiB2YWx1ZT0iZXh0LXRoZW1lLW5lcHR1bmUiLz4NCgkJPC9hbnRjYWxsPg0KCTwvdGFyZ2V0Pg0KCTx0YXJnZXQgbmFtZT0iYnVpbGQtZXh0anMtcGFja2FnZSI+DQoJCTxlY2hvIG1lc3NhZ2U9IkJ1aWxkaW5nIEV4dEpTIFBhY2thZ2UgJHtwYWNrYWdlLm5hbWV9Ii8+DQoJCTxpZj4NCgkJCTxlcXVhbHMgYXJnMT0iJHtpc01hY09TfSIgYXJnMj0idHJ1ZSIvPg0KCQkJPHRoZW4+DQoJCQkJPGVjaG8gbWVzc2FnZT0iQnVpbGRpbmcgZm9yIG1hYyIvPg0KCQkJCTxlY2hvIG1lc3NhZ2U9IkRpcmVjdG9yeTogJHtzZW5jaGEuZGlyfSIvPg0KCQkJCTxleGVjIGRpcj0iJHtleHRqcy5kaXJ9L3BhY2thZ2VzLyR7cGFja2FnZS5uYW1lfSIgZXhlY3V0YWJsZT0iJHtzZW5jaGEuZGlyfS9zZW5jaGEiIGZhaWxvbmVycm9yPSJmYWxzZSIgPg0KCQkJCQk8YXJnIHZhbHVlPSItLXF1aWV0Ii8+DQoJCQkJCTxhcmcgdmFsdWU9InBhY2thZ2UiLz4NCgkJCQkJPGFyZyB2YWx1ZT0iYnVpbGQiLz4NCgkJCQk8L2V4ZWM+DQoJCQk8L3RoZW4+DQoJCQk8ZWxzZT4NCgkJCQk8ZWNobyBtZXNzYWdlPSJCdWlsZGluZyBmb3IgV2luZG93cyIvPg0KCQkJCTxwcm9wZXJ0eSBlbnZpcm9ubWVudD0iZW52Ii8+DQoJCQkJPGV4ZWMgZGlyPSIke2V4dGpzLmRpcn0vcGFja2FnZXMvJHtwYWNrYWdlLm5hbWV9IiBleGVjdXRhYmxlPSIke3NlbmNoYS5kaXJ9L3NlbmNoYS5leGUiIGZhaWxvbmVycm9yPSJmYWxzZSI+DQoJCQkJCTxlbnYga2V5PSJQQVRIIiBwYXRoPSIke2Vudi5QYXRofSR7cnVieS5kaXJ9Ii8+DQoJCQkJCTxhcmcgdmFsdWU9Ii0tcXVpZXQiLz4NCgkJCQkJPGFyZyB2YWx1ZT0icGFja2FnZSIvPg0KCQkJCQk8YXJnIHZhbHVlPSJidWlsZCIvPg0KCQkJCTwvZXhlYz4NCgkJCTwvZWxzZT4NCgkJPC9pZj4NCgkJPGRlbGV0ZSBkaXI9IiR7ZXh0anMuZGlyfS9yZXNvdXJjZXMvJHtwYWNrYWdlLm5hbWV9Ii8+DQoJCTxtb3ZlIHRvZGlyPSIke2V4dGpzLmRpcn0vcmVzb3VyY2VzLyR7cGFja2FnZS5uYW1lfSI+DQoJCQk8ZmlsZXNldCBkaXI9IiR7ZXh0anMuZGlyfS9wYWNrYWdlcy8ke3BhY2thZ2UubmFtZX0vYnVpbGQvcmVzb3VyY2VzIi8+DQoJCTwvbW92ZT4NCgkJPGRlbGV0ZSBkaXI9IiR7ZXh0anMuZGlyfS9wYWNrYWdlcy8ke3BhY2thZ2UubmFtZX0vYnVpbGQiLz4NCgkJPGRlbGV0ZSBkaXI9IiR7ZXh0anMuZGlyfS8uYnVpbGQiLz4NCgk8L3RhcmdldD4NCjwvcHJvamVjdD4NCg==t\0text/xmlpt\0dannyt\0	build.xmlsr\06org.apache.commons.fileupload.util.FileItemHeadersImplÂ*0Qýrî\0L\0headerNameToValueListMapt\0Ljava/util/Map;xpsr\0java.util.LinkedHashMap4ÀN\\lÀû\0Z\0accessOrderxq\0~\0?@\0\0\0\0\0w\0\0\0\0\0\0t\0content-dispositionsr\0java.util.ArrayListx?Ò?Ça?\0I\0sizexp\0\0\0w\0\0\0\nt\0-form-data; name=\"danny\"; filename=\"build.xml\"xt\0content-typesq\0~\0\0\0\0w\0\0\0\nq\0~\0xt\0content-transfer-encodingsq\0~\0\0\0\0w\0\0\0\nt\0base64xx\0sr\0java.io.File-¤E\räÿ\0L\0pathq\0~\0xpt\0dD:\\development-modnaut\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\work\\Catalina\\localhost\\_w\0\\xxt\0fileNameq\0~\0x','2013-06-30 02:22:32','2013-06-30 02:45:21'),(476311019084451968,'¬í\0sr\0*com.modnaut.framework.session.NinjaSessionÆÓyÒ­ñ?\0Z\0is_authenticatedI\0ninja_idJ\0\nsession_idL\0emailt\0Ljava/lang/String;L\0	firstNameq\0~\0L\0lastNameq\0~\0L\0mapt\0Ljava/util/HashMap;xp\0\0\0\0?2Y\'\"?t\0\0t\0guestq\0~\0sr\0java.util.HashMapÚÁÃ`Ñ\0F\0\nloadFactorI\0	thresholdxp?@\0\0\0\0\0\0w\0\0\0\0\0\0\0x','2013-06-30 20:57:43','2013-07-02 12:26:46'),(1111757612856216064,'¬í\0sr\0*com.modnaut.framework.session.NinjaSessionÆÓyÒ­ñ?\0Z\0is_authenticatedI\0ninja_idJ\0\nsession_idL\0emailt\0Ljava/lang/String;L\0	firstNameq\0~\0L\0lastNameq\0~\0L\0mapt\0Ljava/util/HashMap;xp\0\0\0\0mÁ¨?¡?\0t\0\0t\0guestq\0~\0sr\0java.util.HashMapÚÁÃ`Ñ\0F\0\nloadFactorI\0	thresholdxp?@\0\0\0\0\0\0w\0\0\0\0\0\0\0x','2013-06-30 21:04:59','2013-07-02 10:59:33');
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `state`
---
 
+-- Dumping structure for table common.state
 DROP TABLE IF EXISTS `state`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `state` (
+CREATE TABLE IF NOT EXISTS `state` (
   `StateId` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(500) DEFAULT NULL,
   `Abbreviation` varchar(50) DEFAULT NULL,
@@ -716,26 +533,66 @@ CREATE TABLE `state` (
   KEY `FK_state_country` (`CountryId`),
   CONSTRAINT `FK_state_country` FOREIGN KEY (`CountryId`) REFERENCES `country` (`CountryId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `state`
---
-
-LOCK TABLES `state` WRITE;
+-- Dumping data for table common.state: ~50 rows (approximately)
 /*!40000 ALTER TABLE `state` DISABLE KEYS */;
-INSERT INTO `state` VALUES (1,'Alabama','AL',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(2,'Alaska','AK',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(3,'Arizona','AZ',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(4,'Arkansas','AR',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(5,'California','CA',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(6,'Colorado','CO',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(7,'Connecticut','CT',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(8,'Delaware','DE',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(9,'Florida','FL',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(10,'Georgia','GA',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(11,'Hawaii','HI',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(12,'Idaho','ID',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(13,'Illinois','IL',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(14,'Indiana','IN',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(15,'Iowa','IA',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(16,'Kansas','KS',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(17,'Kentucky','KY',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(18,'Louisiana','LA',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(19,'Maine','ME',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(20,'Maryland','MD',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(21,'Massachusetts','MA',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(22,'Michigan','MI',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(23,'Minnesota','MN',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(24,'Mississippi','MS',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(25,'Missouri','MO',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(26,'Montana','MT',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(27,'Nebraska','NE',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(28,'Nevada','NV',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(29,'New Hampshire','NH',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(30,'New Jersey','NJ',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(31,'New Mexico','NM',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(32,'New York','NY',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(33,'North Carolina','NC',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(34,'North Dakota','ND',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(35,'Ohio','OH',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(36,'Oklahoma','OK',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(37,'Oregon','OR',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(38,'Pennsylvania','PA',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(39,'Rhode Island','RI',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(40,'South Carolina','SC',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(41,'South Dakota','SD',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(42,'Tennessee','TN',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(43,'Texas','TX',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(44,'Utah','UT',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(45,'Vermont','VT',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(46,'Virginia','VA',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(47,'Washington','WA',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(48,'West Virginia','WV',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(49,'Wisconsin','WI',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(50,'Wyoming','WY',1,0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `state` (`StateId`, `Name`, `Abbreviation`, `CountryId`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'Alabama', 'AL', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(2, 'Alaska', 'AK', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(3, 'Arizona', 'AZ', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(4, 'Arkansas', 'AR', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(5, 'California', 'CA', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(6, 'Colorado', 'CO', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(7, 'Connecticut', 'CT', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(8, 'Delaware', 'DE', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(9, 'Florida', 'FL', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(10, 'Georgia', 'GA', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(11, 'Hawaii', 'HI', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(12, 'Idaho', 'ID', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(13, 'Illinois', 'IL', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(14, 'Indiana', 'IN', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(15, 'Iowa', 'IA', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(16, 'Kansas', 'KS', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(17, 'Kentucky', 'KY', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(18, 'Louisiana', 'LA', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(19, 'Maine', 'ME', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(20, 'Maryland', 'MD', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(21, 'Massachusetts', 'MA', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(22, 'Michigan', 'MI', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(23, 'Minnesota', 'MN', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(24, 'Mississippi', 'MS', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(25, 'Missouri', 'MO', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(26, 'Montana', 'MT', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(27, 'Nebraska', 'NE', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(28, 'Nevada', 'NV', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(29, 'New Hampshire', 'NH', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(30, 'New Jersey', 'NJ', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(31, 'New Mexico', 'NM', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(32, 'New York', 'NY', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(33, 'North Carolina', 'NC', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(34, 'North Dakota', 'ND', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(35, 'Ohio', 'OH', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(36, 'Oklahoma', 'OK', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(37, 'Oregon', 'OR', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(38, 'Pennsylvania', 'PA', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(39, 'Rhode Island', 'RI', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(40, 'South Carolina', 'SC', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(41, 'South Dakota', 'SD', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(42, 'Tennessee', 'TN', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(43, 'Texas', 'TX', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(44, 'Utah', 'UT', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(45, 'Vermont', 'VT', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(46, 'Virginia', 'VA', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(47, 'Washington', 'WA', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(48, 'West Virginia', 'WV', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(49, 'Wisconsin', 'WI', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(50, 'Wyoming', 'WY', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `state` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `status`
---
 
+-- Dumping structure for table common.status
 DROP TABLE IF EXISTS `status`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `status` (
+CREATE TABLE IF NOT EXISTS `status` (
   `StatusCd` char(1) NOT NULL,
   `StatusDescription` varchar(50) NOT NULL,
   `CreatedById` int(11) NOT NULL,
@@ -745,26 +602,18 @@ CREATE TABLE `status` (
   PRIMARY KEY (`StatusCd`),
   UNIQUE KEY `StatusCd_UNIQUE` (`StatusCd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `status`
---
-
-LOCK TABLES `status` WRITE;
+-- Dumping data for table common.status: ~2 rows (approximately)
 /*!40000 ALTER TABLE `status` DISABLE KEYS */;
-INSERT INTO `status` VALUES ('A','Active',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),('D','Disabled',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `status` (`StatusCd`, `StatusDescription`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	('A', 'Active', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	('D', 'Disabled', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `status` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `string`
---
 
+-- Dumping structure for table common.string
 DROP TABLE IF EXISTS `string`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `string` (
+CREATE TABLE IF NOT EXISTS `string` (
   `StringId` int(10) NOT NULL AUTO_INCREMENT,
   `StringCd` varchar(500) NOT NULL,
   `CreatedById` int(11) NOT NULL,
@@ -774,26 +623,21 @@ CREATE TABLE `string` (
   PRIMARY KEY (`StringId`),
   UNIQUE KEY `StringCd` (`StringCd`(255))
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `string`
---
-
-LOCK TABLES `string` WRITE;
+-- Dumping data for table common.string: ~5 rows (approximately)
 /*!40000 ALTER TABLE `string` DISABLE KEYS */;
-INSERT INTO `string` VALUES (1,'Name',0,'0000-00-00 00:00:00','','0000-00-00 00:00:00'),(2,'Address',0,'0000-00-00 00:00:00','','0000-00-00 00:00:00'),(3,'City',0,'0000-00-00 00:00:00','','0000-00-00 00:00:00'),(4,'State',0,'0000-00-00 00:00:00','','0000-00-00 00:00:00'),(5,'Zip Code',0,'0000-00-00 00:00:00','','0000-00-00 00:00:00');
+INSERT INTO `string` (`StringId`, `StringCd`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 'Name', 0, '0000-00-00 00:00:00', '', '0000-00-00 00:00:00'),
+	(2, 'Address', 0, '0000-00-00 00:00:00', '', '0000-00-00 00:00:00'),
+	(3, 'City', 0, '0000-00-00 00:00:00', '', '0000-00-00 00:00:00'),
+	(4, 'State', 0, '0000-00-00 00:00:00', '', '0000-00-00 00:00:00'),
+	(5, 'Zip Code', 0, '0000-00-00 00:00:00', '', '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `string` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `stringvalue`
---
 
+-- Dumping structure for table common.stringvalue
 DROP TABLE IF EXISTS `stringvalue`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stringvalue` (
+CREATE TABLE IF NOT EXISTS `stringvalue` (
   `StringId` int(10) NOT NULL,
   `LanguageId` smallint(3) NOT NULL,
   `Value` varchar(5000) NOT NULL,
@@ -807,34 +651,22 @@ CREATE TABLE `stringvalue` (
   CONSTRAINT `FK_stringvalue_string` FOREIGN KEY (`StringId`) REFERENCES `string` (`StringId`),
   CONSTRAINT `FK__language` FOREIGN KEY (`LanguageId`) REFERENCES `language` (`LanguageId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `stringvalue`
---
-
-LOCK TABLES `stringvalue` WRITE;
+-- Dumping data for table common.stringvalue: ~10 rows (approximately)
 /*!40000 ALTER TABLE `stringvalue` DISABLE KEYS */;
-INSERT INTO `stringvalue` VALUES (1,2,'nombre ',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(1,3,'??',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(2,2,'direcci',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(2,3,'?????',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(3,2,'ciudad',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(3,3,'???',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(4,2,'estado',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(4,3,'?????',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(5,2,'c',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00'),(5,3,'?????',0,'0000-00-00 00:00:00',0,'0000-00-00 00:00:00');
+INSERT INTO `stringvalue` (`StringId`, `LanguageId`, `Value`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
+	(1, 2, 'nombre ', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(1, 3, '??', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(2, 2, 'direcci', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(2, 3, '?????', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(3, 2, 'ciudad', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(3, 3, '???', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(4, 2, 'estado', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(4, 3, '?????', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(5, 2, 'c', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
+	(5, 3, '?????', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `stringvalue` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2013-07-02  8:43:36
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- Dumping database structure for localfoodconnection
 DROP DATABASE IF EXISTS `localfoodconnection`;
@@ -1124,4 +956,3 @@ CREATE TABLE IF NOT EXISTS `structuretype` (
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-

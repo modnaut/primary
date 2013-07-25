@@ -93,4 +93,7 @@
 			<parameter name="attributeValue" type="VARCHAR"/>
 		</parameters>
 	</query>
+	<query name="GET_ALL_APPLICATIONS" action="SELECT" type="QUERY">
+		<statement value="Select ApplicationId, ApplicationFolder, PageTitle, Class From Common.Application"/>
+	</query>
 </sqlMetaData>

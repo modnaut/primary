@@ -42,7 +42,8 @@ public class EntityAttributeMethods
 
 	public static enum ATTRIBUTES
 	{
-		CACHE_XSL
+		CACHE_XSL,
+		APPLICATION_ID
 	};
 
 	public static String getEntityAttribute(ENTITY_TYPES entityType, String entityName, ATTRIBUTES attribute)
