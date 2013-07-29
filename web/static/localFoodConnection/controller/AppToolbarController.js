@@ -4,12 +4,14 @@ Ext.define('LocalFoodConnection.controller.AppToolbarController', {
 	init: function () {
 		var controller = this;
 		controller.control({
-			'apptoolbar button#dashboard': {
-				click: controller.dashboardClicked
+			'apptoolbar>button': {
+				click: controller.menuButtonClicked
 			}
 		});
 	},
-	dashboardClicked: function(button, event, opts) {
+	menuButtonClicked: function(button, event, opts) {
+		console.log(arguments);
+		return;
 		Globals.fireEvent('openWindow', {
 			Class: 'com.modnaut.apps.localfoodconnection.InventoryCtrl',
 			Method: 'defaultAction',

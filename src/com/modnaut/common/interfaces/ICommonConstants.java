@@ -146,4 +146,5 @@ public interface ICommonConstants
 	public static final String ENVIRONMENT_NAME = "environmentName";
 	public static final String SERVER_NAME = "serverName";
 	public static final String APPLICATION_ID = "applicationId";
+	public static final String MENU_ID = "menuId";
 }

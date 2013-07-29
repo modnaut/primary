@@ -31,7 +31,7 @@
 	
 	<!-- This is how to set a different logging level by class/package than the rest of the project.  Print trace information for SessionMethods class only. -->
 	<logger name="com.modnaut.common.utilities.SessionMethods" level="TRACE" />
-	
+	<logger name="com.modnaut.framework.utilities.RequestParameterParser" level="INFO"/>
 	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="ROLLING_FILE" />

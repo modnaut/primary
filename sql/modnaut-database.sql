@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `attribute` (
   CONSTRAINT `FK_attribute_attributetype` FOREIGN KEY (`AttributeTypeId`) REFERENCES `attributetype` (`AttributeTypeId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.attribute: ~2 rows (approximately)
+-- Dumping data for table common.attribute: ~0 rows (approximately)
 /*!40000 ALTER TABLE `attribute` DISABLE KEYS */;
 INSERT INTO `attribute` (`AttributeId`, `AttributeName`, `AttributeTypeId`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
 	(1, 'CACHE_XSL', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `clan` (
   PRIMARY KEY (`ClanId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.clan: ~1 rows (approximately)
+-- Dumping data for table common.clan: ~0 rows (approximately)
 /*!40000 ALTER TABLE `clan` DISABLE KEYS */;
 INSERT INTO `clan` (`ClanId`, `ClanDescription`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
 	(1, 'TestGroup', 0, '0000-00-00 00:00:00', '', '0000-00-00 00:00:00');
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `country` (
   CONSTRAINT `FK_country_language` FOREIGN KEY (`DefaultLanguageId`) REFERENCES `language` (`LanguageId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.country: ~1 rows (approximately)
+-- Dumping data for table common.country: ~0 rows (approximately)
 /*!40000 ALTER TABLE `country` DISABLE KEYS */;
 INSERT INTO `country` (`CountryId`, `Name`, `Abbreviation`, `DefaultLanguageId`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
 	(1, 'United States of America', 'USA', 1, 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `entityattributevalue` (
   CONSTRAINT `FK_EntityAttributeValue_entitytype` FOREIGN KEY (`EntityTypeId`) REFERENCES `entitytype` (`EntityTypeId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.entityattributevalue: ~3 rows (approximately)
+-- Dumping data for table common.entityattributevalue: ~2 rows (approximately)
 /*!40000 ALTER TABLE `entityattributevalue` DISABLE KEYS */;
 INSERT INTO `entityattributevalue` (`EntityAttributeValueId`, `EntityTypeId`, `EntityId`, `AttributeId`, `AttributeValue`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
 	(1, 1, 1, 1, 'Y', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00'),
@@ -239,7 +239,7 @@ CREATE TABLE IF NOT EXISTS `entitytype` (
   PRIMARY KEY (`EntityTypeId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.entitytype: ~1 rows (approximately)
+-- Dumping data for table common.entitytype: ~0 rows (approximately)
 /*!40000 ALTER TABLE `entitytype` DISABLE KEYS */;
 INSERT INTO `entitytype` (`EntityTypeId`, `EntityTypeName`, `Table`, `CreatedById`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
 	(1, 'Environment', 'Common.Environment', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00');
@@ -328,7 +328,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
   CONSTRAINT `FK_Menu_application` FOREIGN KEY (`ApplicationId`) REFERENCES `application` (`ApplicationId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.menu: ~1 rows (approximately)
+-- Dumping data for table common.menu: ~0 rows (approximately)
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
 INSERT INTO `menu` (`MenuId`, `ApplicationId`, `MenuDescription`) VALUES
 	(1, 1, 'LocalFoodConnection Backend Top Menu');
@@ -342,25 +342,61 @@ CREATE TABLE IF NOT EXISTS `menuitem` (
   `MenuId` int(10) NOT NULL,
   `ParentMenuItemId` int(10) DEFAULT NULL,
   `Description` varchar(255) NOT NULL,
-  `DisplayText` varchar(255) NOT NULL,
+  `DisplayTextStringCd` varchar(255) NOT NULL,
   `IconCls` varchar(255) DEFAULT NULL,
   `Class` varchar(255) DEFAULT NULL,
   `Method` varchar(255) DEFAULT NULL,
   `URL` varchar(255) DEFAULT NULL,
   `ActiveFlag` char(1) NOT NULL DEFAULT 'Y',
   `PowerId` int(11) DEFAULT NULL,
+  `DisplayOrder` int(10) NOT NULL,
   PRIMARY KEY (`MenuItemId`),
+  UNIQUE KEY `Index 4` (`ParentMenuItemId`,`MenuId`,`DisplayOrder`),
   KEY `FK_MenuItem_menu` (`MenuId`),
-  KEY `FK_MenuItem_menuitem` (`ParentMenuItemId`),
   CONSTRAINT `FK_MenuItem_menu` FOREIGN KEY (`MenuId`) REFERENCES `menu` (`MenuId`),
   CONSTRAINT `FK_MenuItem_menuitem` FOREIGN KEY (`ParentMenuItemId`) REFERENCES `menuitem` (`MenuItemId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.menuitem: ~1 rows (approximately)
+-- Dumping data for table common.menuitem: ~10 rows (approximately)
 /*!40000 ALTER TABLE `menuitem` DISABLE KEYS */;
-INSERT INTO `menuitem` (`MenuItemId`, `MenuId`, `ParentMenuItemId`, `Description`, `DisplayText`, `IconCls`, `Class`, `Method`, `URL`, `ActiveFlag`, `PowerId`) VALUES
-	(1, 1, NULL, 'Dashboard', 'Dashboard', NULL, NULL, NULL, NULL, 'Y', NULL);
+INSERT INTO `menuitem` (`MenuItemId`, `MenuId`, `ParentMenuItemId`, `Description`, `DisplayTextStringCd`, `IconCls`, `Class`, `Method`, `URL`, `ActiveFlag`, `PowerId`, `DisplayOrder`) VALUES
+	(1, 1, NULL, 'Dashboard', 'Dashboard', 'icon-chart_pie', 'com.modnaut.apps.localfoodconnection.InventoryCtrl', 'defaultAction', NULL, 'Y', 1, 1),
+	(2, 1, 1, 'Sub Dashboard', 'Sub Dashboard', NULL, NULL, NULL, NULL, 'Y', 2, 1),
+	(3, 1, 2, 'Sub Sub Dashboard', 'Sub Sub Dashboard', NULL, NULL, NULL, NULL, 'Y', 1, 1),
+	(4, 1, 1, 'SUB DB 2', 'SUB DB 2', ' ', NULL, NULL, NULL, 'Y', 1, 2),
+	(5, 1, 4, 'SSDB 3', 'SSDB 3', ' ', NULL, NULL, NULL, 'Y', 1, 1),
+	(6, 1, 4, 'SSDB 4', 'SSDB 4', ' ', NULL, NULL, NULL, 'Y', 1, 2),
+	(7, 1, NULL, 'Reporting', 'Reporting', ' ', NULL, NULL, NULL, 'Y', 1, 2),
+	(8, 1, 7, 'Sub Reporting 1', 'Sub Reporting 1', ' ', NULL, NULL, NULL, 'Y', 1, 1),
+	(9, 1, 7, 'Sub Reporting 2', 'Sub Reporting 2', ' ', NULL, NULL, NULL, 'Y', 1, 2),
+	(10, 1, 9, 'SUB SUB Reporting', 'SUB SUB Reporting', ' ', NULL, NULL, NULL, 'Y', 1, 2);
 /*!40000 ALTER TABLE `menuitem` ENABLE KEYS */;
+
+
+-- Dumping structure for table common.menuitemordinal
+DROP TABLE IF EXISTS `menuitemordinal`;
+CREATE TABLE IF NOT EXISTS `menuitemordinal` (
+  `MenuItemId` int(10) NOT NULL,
+  `Level` int(11) DEFAULT NULL,
+  `Ordinal` int(10) DEFAULT NULL,
+  PRIMARY KEY (`MenuItemId`),
+  CONSTRAINT `FK_MenuItemOrder_menuitem` FOREIGN KEY (`MenuItemId`) REFERENCES `menuitem` (`MenuItemId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Dumping data for table common.menuitemordinal: ~10 rows (approximately)
+/*!40000 ALTER TABLE `menuitemordinal` DISABLE KEYS */;
+INSERT INTO `menuitemordinal` (`MenuItemId`, `Level`, `Ordinal`) VALUES
+	(1, 1, 1),
+	(2, 2, 2),
+	(3, 3, 3),
+	(4, 2, 4),
+	(5, 3, 5),
+	(6, 3, 6),
+	(7, 1, 7),
+	(8, 2, 8),
+	(9, 2, 9),
+	(10, 3, 10);
+/*!40000 ALTER TABLE `menuitemordinal` ENABLE KEYS */;
 
 
 -- Dumping structure for table common.ninja
@@ -410,7 +446,7 @@ CREATE TABLE IF NOT EXISTS `ninjaclan` (
   CONSTRAINT `FK_ninjaclan_ninja_2` FOREIGN KEY (`CreatedByNinjaId`) REFERENCES `ninja` (`NinjaId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.ninjaclan: ~1 rows (approximately)
+-- Dumping data for table common.ninjaclan: ~0 rows (approximately)
 /*!40000 ALTER TABLE `ninjaclan` DISABLE KEYS */;
 INSERT INTO `ninjaclan` (`NinjaId`, `ClanId`, `CreatedByNinjaId`, `CreatedDate`, `LastModifiedById`, `LastModifiedDate`) VALUES
 	(3, 1, 3, '0000-00-00 00:00:00', '', '2013-04-08 22:24:18');
@@ -457,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `ninjasession` (
   CONSTRAINT `FK_ninjasession_ninja` FOREIGN KEY (`NinjaId`) REFERENCES `ninja` (`NinjaId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.ninjasession: ~242 rows (approximately)
+-- Dumping data for table common.ninjasession: ~0 rows (approximately)
 /*!40000 ALTER TABLE `ninjasession` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ninjasession` ENABLE KEYS */;
 
@@ -513,7 +549,7 @@ CREATE TABLE IF NOT EXISTS `session` (
   PRIMARY KEY (`SessionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table common.session: ~4 rows (approximately)
+-- Dumping data for table common.session: ~0 rows (approximately)
 /*!40000 ALTER TABLE `session` DISABLE KEYS */;
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 

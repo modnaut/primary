@@ -96,4 +96,11 @@
 	<query name="GET_ALL_APPLICATIONS" action="SELECT" type="QUERY">
 		<statement value="Select ApplicationId, ApplicationFolder, PageTitle, Class From Common.Application"/>
 	</query>
+	<query name="GET_MENU" action="SELECT" type="SP">
+		<statement value="Common.up_GetMenu(?,?,'en')"/>
+		<parameters>
+			<parameter name="menuId" type="INT"/>
+			<parameter name="ninjaId" type="INT"/>
+		</parameters>
+	</query>
 </sqlMetaData>
