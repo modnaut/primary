@@ -7,23 +7,11 @@ Ext.define('LocalFoodConnection.view.AppToolbar', {
 		xtype: 'button',
 		scale: 'large'
 	},
-	items: [{
-		text: 'Dashboard',
-		itemId: 'dashboard',
-		iconCls: 'icon-chart_pie'
-	}, {
-		text: 'Inventory',
-		itemId: 'inventory',
-		iconCls: 'icon-chart_organisation'
-	}, {
-		text: 'Reports',
-		itemId: 'reports',
-		iconCls: 'icon-chart_line'
-	}, {
-		text: 'Contacts',
-		itemId: 'contacts',
-		iconCls: 'icon-vcard'
-	}, '->', {
+	initComponent: function() {
+		this.items = Globals.config.mainMenu.menu.concat(this.items);//push on config menu items
+		this.callParent(arguments);
+	},
+	items: ['->', {
 		xtype: 'search'
 	}]
 });
