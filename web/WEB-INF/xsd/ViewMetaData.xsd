@@ -583,9 +583,27 @@
 			<xs:extension base="Column"/>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="ActionColumnItem">
+		<xs:complexContent>
+			<xs:extension base="Item">
+				<xs:sequence>
+					<xs:element name="tooltip" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="icon" type="xs:string"/>
+				<xs:attribute name="iconCls" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="ActionColumn">
 		<xs:complexContent>
-			<xs:extension base="Column"/>
+			<xs:extension base="Column">
+				<xs:sequence>
+					<xs:element name="altText" type="str:String" minOccurs="0" maxOccurs="1"/>
+				</xs:sequence>
+				<xs:attribute name="icon" type="xs:string"/>
+				<xs:attribute name="iconCls" type="xs:string"/>
+				<xs:attribute name="stopSelection" type="xs:boolean" default="true"/>
+			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="BooleanColumn">
@@ -610,6 +628,13 @@
 		<xs:complexContent>
 			<xs:extension base="Column">
 				<xs:attribute name="format" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CheckColumn">
+		<xs:complexContent>
+			<xs:extension base="Column">
+				<xs:attribute name="stopSelection" type="xs:boolean"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

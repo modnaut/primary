@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 
+import com.modnaut.framework.servlet.RestVerb;
 import com.modnaut.framework.utilities.RequestParameterParser;
 
 /**
@@ -81,5 +82,20 @@ public class WebSession
 	public FileItem getUploadedFile()
 	{
 		return requestParameterParser.getUploadedFile();
+	}
+
+	public String getRequestBody()
+	{
+		return requestParameterParser.getRequestBody();
+	}
+
+	public RestVerb getRestVerb()
+	{
+		return requestParameterParser.getRestVerb();
+	}
+
+	public Integer getRestResourceId()
+	{
+		return requestParameterParser.getRestResourceId();
 	}
 }

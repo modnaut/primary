@@ -1,4 +1,4 @@
-package com.modnaut.apps.localfoodconnection;
+package com.modnaut.apps.localfoodconnection.inventory;
 
 import com.modnaut.common.controllers.ExtJsScreenCtrl;
 import com.modnaut.framework.session.WebSession;

@@ -1,4 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <viewMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../xsd/viewmetadata.xsd">
-	<item xsi:type="Xtype" xtype="inventory"/>
+	<item xsi:type="Panel">
+		<items>
+			<item xsi:type="GridPanel">
+				<column dataIndex="id">
+					<text stringCd="ID"/>
+				</column>
+				<column dataIndex="product">
+					<text stringCd="Product"/>
+				</column>
+				<column dataIndex="description">
+					<text stringCd="Description"/>
+				</column>
+				<column dataIndex="category">
+					<text stringCd="Category"/>
+				</column>
+				<column dataIndex="storage">
+					<text stringCd="Storage"/>
+				</column>
+				<column dataIndex="source">
+					<text stringCd="Source"/>
+				</column>
+				<column dataIndex="unit">
+					<text stringCd="Unit"/>
+				</column>
+				<column dataIndex="Quantity">
+					<text stringCd="Quantity"/>
+				</column>
+				<column xsi:type="CheckColumn" dataIndex="active">
+					<text stringCd="Active"/>
+				</column>
+				<column xsi:type="ActionColumn">
+					<items>
+						<item xsi:type="ActionColumnItem" iconCls="icon-money">
+							<tooltip stringCd="Details"/>
+						</item>
+						<item xsi:type="ActionColumnItem" iconCls="icon-delete"/>
+					</items>
+				</column>
+				<store xsi:type="Store" modelName="LocalFoodConnection.model.Item"/>
+			</item>
+		</items>
+		<layout xsi:type="FitLayout"/>
+		<toolbar position="top">
+			<items>
+				<item xsi:type="TextField" id="inventorySearch" width="400">
+					<emptyText stringCd="Search"/>
+				</item>
+				<item xsi:type="ToolbarFill"/>
+				<item xsi:type="Button" enableToggle="true" toggleGroup="inventoryViewType" pressed="true" id="inventoryViewTypeGrid" iconCls="icon-application_view_columns"/>
+				<item xsi:type="Button" enableToggle="true" toggleGroup="inventoryViewType" id="inventoryViewTypeList" iconCls="icon-application_view_list"/>
+				<item xsi:type="Button" id="inventoryExport">
+					<text stringCd="Export"/>
+				</item>
+				<item xsi:type="Button" id="addProduct" iconCls="icon-add">
+					<text stringCd="Add Product"/>
+				</item>
+			</items>
+		</toolbar>
+	</item>
 </viewMetaData>

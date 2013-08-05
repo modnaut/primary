@@ -63,6 +63,7 @@
 					<xsl:value-of select="mn:attribute(., 'flex', ',')"/>
 					<xsl:value-of select="mn:attribute(., 'hidden', ',')"/>
 					<xsl:value-of select="mn:attribute(., 'hideable', ',')"/>
+					<xsl:apply-templates select="items"/>
 					<xsl:value-of select="mn:attribute(., 'lockable', ',')"/>
 					<xsl:value-of select="mn:attribute(., 'locked', ',')"/>
 					<xsl:value-of select="mn:attribute(., 'menuDisabled', ',')"/>
@@ -88,6 +89,10 @@
 	</xsl:template>
 	
 	<xsl:template match="column[@xsi:type='ActionColumn']" mode="columnType">
+		<xsl:value-of select="mn:childString(., 'altText', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'icon', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'iconCls', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'stopSelection', ',')"/>
 		"xtype": "actioncolumn",
 	</xsl:template>
 	
@@ -106,6 +111,17 @@
 	<xsl:template match="column[@xsi:type='NumberColumn']" mode="columnType">
 		<xsl:value-of select="mn:attribute(., 'format', ',')"/>
 		"xtype": "numbercolumn",
+	</xsl:template>
+	
+	<xsl:template match="column[@xsi:type='CheckColumn']" mode="columnType">
+		<xsl:value-of select="mn:attribute(., 'stopSelection', ',')"/>
+		"xtype": "checkcolumn",
+	</xsl:template>
+	
+	<xsl:template match="item[@xsi:type='ActionColumnItem']">
+		<xsl:value-of select="mn:attribute(., 'icon', ',')"/>
+		<xsl:value-of select="mn:attribute(., 'iconCls', ',')"/>
+		<xsl:value-of select="mn:childString(., 'tooltip', ',')"/>
 	</xsl:template>
 
 	<xsl:template match="item[@xsi:type='GridPanel']">

@@ -85,14 +85,16 @@ public class ApplicationServlet extends HttpServlet
 	 * 
 	 * @param HttpServletRequest
 	 * @param HttpServletResponse
+	 * @param RestVerb
 	 * 
 	 * @exception ServletException
 	 * @exception IOException
 	 * 
 	 */
-	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	public void service(HttpServletRequest request, HttpServletResponse response, RestVerb verb) throws ServletException, IOException
 	{
-		requestParameterParser = new RequestParameterParser(request);
+
+		requestParameterParser = new RequestParameterParser(request, verb);
 
 		// sets output response shown in browser to html
 		response.setContentType(ICommonConstants.CONTENT_TYPE_HTML);// Set to HTML by default. ExtJS screens will set it to JSON
@@ -257,7 +259,7 @@ public class ApplicationServlet extends HttpServlet
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		service(request, response);
+		service(request, response, RestVerb.Post);
 	}
 
 	/**
@@ -273,7 +275,39 @@ public class ApplicationServlet extends HttpServlet
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		service(request, response);
+		service(request, response, RestVerb.Get);
+	}
+
+	/**
+	 * Calls service method for processing and logic.
+	 * 
+	 * @param HttpServletRequest
+	 * @param HttpServletResponse
+	 * 
+	 * @exception ServletException
+	 *                , IOException
+	 * 
+	 */
+	@Override
+	public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		service(request, response, RestVerb.Put);
+	}
+
+	/**
+	 * Calls service method for processing and logic.
+	 * 
+	 * @param HttpServletRequest
+	 * @param HttpServletResponse
+	 * 
+	 * @exception ServletException
+	 *                , IOException
+	 * 
+	 */
+	@Override
+	public void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		service(request, response, RestVerb.Delete);
 	}
 
 	private void sendErrorResponse(HttpServletResponse response, String errorMessage, int warning_code)

@@ -1,12 +1,15 @@
 package com.modnaut.framework.utilities;
 
 import java.io.File;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -15,15 +18,19 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.modnaut.framework.pools.XslPool;
+import com.modnaut.framework.servlet.RestVerb;
 
 public class RequestParameterParser
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(RequestParameterParser.class);
 	private static final String CLASS_NAME_PATH = XslPool.class.getCanonicalName();
+	private static final Pattern REST_RESOURCE_ID_PATTERN = Pattern.compile("/([0-9]*)");
 	private static final String REQUEST_ID_ATTRIBUTE = CLASS_NAME_PATH + ".requestId";
 	private static HashMap<String, HashMap<String, String>> MULTI_PART_FIELDS = new HashMap<String, HashMap<String, String>>();
 	private static HashMap<String, List<FileItem>> FILES = new HashMap<String, List<FileItem>>();
@@ -31,16 +38,21 @@ public class RequestParameterParser
 	private static HashMap<String, HashMap<String, String>> HEADER_PARAMETERS = new HashMap<String, HashMap<String, String>>();
 
 	private HttpServletRequest request;
+	private RestVerb verb;
+	private boolean restResourceIdParsed = false;
+	private Integer restResourceId = null;
 	private boolean isMultiPart = false;
+	private String requestBody;
 	private HashMap<String, String> multiPartFields;
 	private HashMap<String, String> headerParameters;
 	private List<FileItem> files;
 	private HashMap<String, FileItem> filesByName;
 	private HashMap<String, String> extraParameters;
 
-	public RequestParameterParser(HttpServletRequest request)
+	public RequestParameterParser(HttpServletRequest request, RestVerb verb)
 	{
 		this.request = request;
+		this.verb = verb;
 
 		isMultiPart = ServletFileUpload.isMultipartContent(request);
 		LOGGER.debug("Is multipart upload: {}", isMultiPart);
@@ -66,6 +78,8 @@ public class RequestParameterParser
 			HEADER_PARAMETERS.put(requestId, headerParameters);
 			if (isMultiPart)
 				parseMultiPartParameters();
+			else
+				parseRequestBody();
 			parseHeaderParameters();
 		}
 	}
@@ -117,6 +131,24 @@ public class RequestParameterParser
 		return fileItem;
 	}
 
+	public String getRequestBody()
+	{
+		return requestBody;
+	}
+
+	public RestVerb getRestVerb()
+	{
+		return verb;
+	}
+
+	public Integer getRestResourceId()
+	{
+		if (!restResourceIdParsed)
+			parseRestResourceId();
+
+		return restResourceId;
+	}
+
 	private void parseMultiPartParameters()
 	{
 		LOGGER.debug("Parsing multipart parameters");
@@ -153,6 +185,24 @@ public class RequestParameterParser
 		}
 	}
 
+	private void parseRequestBody()
+	{
+		/*
+		 * force parameters to be pulled before getting the reader, otherwise subsequent calls to getParameter will return null
+		 */
+		request.getParameter("test");
+		try
+		{
+			Reader reader = request.getReader();
+			List<String> lines = IOUtils.readLines(reader);
+			requestBody = StringUtils.join(lines, "\n");
+		}
+		catch (Exception e)
+		{
+			LOGGER.error(e.getMessage(), e);
+		}
+	}
+
 	private void parseHeaderParameters()
 	{
 		Enumeration<String> headerNames = request.getHeaderNames();
@@ -166,6 +216,16 @@ public class RequestParameterParser
 				headerParameters.put(headerName.substring(11), request.getHeader(headerName));
 			}
 		}
+	}
+
+	private void parseRestResourceId()
+	{
+		Matcher matcher = REST_RESOURCE_ID_PATTERN.matcher(StringUtils.trimToEmpty(request.getPathInfo()));
+		if (matcher.find())
+		{
+			restResourceId = Integer.parseInt(matcher.group(1));
+		}
+		restResourceIdParsed = true;
 	}
 
 	private String getMultiPartParameter(String name)

@@ -16,6 +16,19 @@ Ext.define('LocalFoodConnection.model.Item', {
 	}, {
 		name: 'unit'
 	}, {
-		name: 'available'
-	}]
+		name: 'active',
+		type: 'boolean'
+	}],
+	proxy: {
+		type: 'rest',
+		url: 'ApplicationServlet',
+		extraParams: {
+			Class: 'com.modnaut.apps.localfoodconnection.inventory.Item',
+			Method: 'rest'
+		},
+		reader: {
+			type: 'json',
+			root: 'data'
+		}
+	}
 });
